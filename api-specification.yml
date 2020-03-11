@@ -10,68 +10,24 @@ tags:
   - name: blablabla
     description: blablabla
 paths:
-  /test:
-    get:
+  /userAuthentication:
+    post:
       description: faefeqf
       responses:
         "200":
           description: OK
 components:
   schemas:
+    # reference to User
     User:
-      type: object
-      description: Data requested to login
-      ## mail is unique
-      discriminator:
-        propertyName: mail
-      properties:
-        id:
-          type: integer
-          format: uint32
-        mail:
-          type: string
-          format: mail
-          pattern: /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9])+$/
-          example: mariorossi@gmail.com
-        ## password must be between 8 and 32 characters
-        password:
-          type: string
-          format: password
-          pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]$/
-          minLength: 8
-          maxLength: 32
-        data:
-          $ref: "#/components/schemas/UserData"
-      ## both email and password required to login
-      required:
-        - mail
-        - password
-    UserData:
-      type: object
-      description: User's personal data
-      properties:
-        firstName:
-          type: string
-          minLength: 3
-          example: Mario
-        lastName:
-          type: string
-          example: Rossi
-        birthDate:
-          type: string
-          format: date
-          example: 1990-01-01
-        createdDate:
-          type: string
-          format: date-time
-        lastModifiedDate:
-          type: string
-          format: date-time
-      ## @createdDate and @lastModifiedDate are set when a row is inserted and/or updated
-      required:
-        - firstName
-        - lastName
-        - birthDate
+      $ref: "./resources/user.yml"
+    # reference to Organization
+    Organization:
+      $ref: "./resources/organization.yml"
+    # reference to AppConnections
+    AppConnections:
+      $ref: "./resources/appConnections.yml"
+
     #TODO
     UserAccessToPlace:
       type: object
@@ -84,116 +40,3 @@ components:
       properties:
         property:
           type: integer
-    Organization:
-      type: object
-      description: Organization's data
-      discriminator:
-        propertyName: id
-      properties:
-        id:
-          type: integer
-          format: uint32
-        name:
-          type: string
-        description:
-          type: string
-        #TODO reference to LdapConf.id
-        ldapConf:
-          $ref: "#/components/schemas/LdapConfiguration"
-        ## reference to Place
-        places:
-          type: array
-          description: list of places within this organization
-          items:
-            $ref: "#/components/schemas/Place"
-        ## if @private == 1 a user can't be anonymous
-        private:
-          type: boolean
-        createdDate:
-          type: string
-          format: date-time
-        lastModifiedDate:
-          type: string
-          format: date-time
-      ## @createdDate and @lastModifiedDate are set when a row is inserted and/or updated
-      required:
-        - name
-        - description
-        - places
-        - private
-    #FIXME mettere polyline in una sezione adeguata
-    #TODO almeno 3 items DIVERSI tra loro
-    ## Polyline
-    Polyline:
-      type: array
-      description: array of points
-      items:
-        type: object
-        description: geographical point
-        properties:
-          latitude:
-            type: number
-            format: double
-          longitude:
-            type: number
-            format: double
-        required:
-          - latitude
-          - longitude
-    Place:
-      type: object
-      description: Reference to places data and lat-lng informations
-      discriminator:
-        propertyName: id
-      properties:
-        id:
-          type: integer
-          format: uint64
-        name:
-          type: string
-        position:
-          #FIXME mettere il percorso corretto per Polyline
-          $ref: "#/components/schemas/Polyline"
-        data:
-          $ref: "#/components/schemas/PlaceData"
-      required:
-        - name
-        - position
-    PlaceData:
-      type: object
-      description: More informations about a place
-      properties:
-        address:
-          type: string
-          example: via Garibaldi, 1
-        city:
-          type: string
-          example: Padova
-        #FIXME pensare a che fare con zipcode + state
-        zipcode:
-          type: string
-          minLength: 5
-          maxLength: 5
-        state:
-          type: string
-      required:
-        - address
-        - city
-        #FIXME togliere se non si mettono più
-        - zipcode
-        - state
-    AppConnections:
-      type: object
-      description: Connections between users and organizations
-      properties:
-        ## reference to Organization.id
-        organizationId:
-          $ref: "#/components/schemas/Organization"
-        ## reference to User.id
-        userId:
-          $ref: "#/components/schemas/User"
-        createdDate:
-          type: string
-          format: date-time
-      required:
-        - organizationId
