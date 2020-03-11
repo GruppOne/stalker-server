@@ -1,0 +1,28 @@
+type: object
+description: Data requested to login
+# mail is unique
+discriminator:
+  propertyName: mail
+properties:
+  id:
+    type: integer
+    format: uint32
+  mail:
+    type: string
+    format: mail
+    pattern: /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9])+$/
+    example: mariorossi@gmail.com
+  # password must be between 8 and 32 characters
+  password:
+    type: string
+    format: password
+    pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]$/
+    minLength: 8
+    maxLength: 32
+  # reference to User's data
+  userData:
+    $ref: "userData.yml"
+# both email and password required to login
+required:
+  - mail
+  - password

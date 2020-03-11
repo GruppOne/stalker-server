@@ -3,8 +3,10 @@ description: Name of the place and reference to geographical informations and pl
 properties:
   name:
     type: string
+  # reference to Polyline
   polyline:
     $ref: "polyline.yml"
+  # reference to place's data
   placeData:
     $ref: "placeData.yml"
 required:

@@ -1,0 +1,36 @@
+type: object
+description: Organization's data
+discriminator:
+  propertyName: id
+properties:
+  id:
+    type: integer
+    format: uint32
+  name:
+    type: string
+  description:
+    type: string
+  # reference to LDAP configuration
+  ldapConfiguration:
+    $ref: "ldapConfiguration.yml"
+  # reference to Place
+  places:
+    type: array
+    description: list of places within this organization
+    items:
+      $ref: "place.yml"
+  # if @private == 1 a user can't be anonymous
+  private:
+    type: boolean
+  createdDate:
+    type: string
+    format: date-time
+  lastModifiedDate:
+    type: string
+    format: date-time
+# @createdDate and @lastModifiedDate are set when a row is inserted and/or updated
+required:
+  - name
+  - description
+  - places
+  - private
