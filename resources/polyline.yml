@@ -1,0 +1,16 @@
+#TODO almeno 3 items DIVERSI tra loro
+type: array
+description: An array of points that constitutes the perimeter of a place
+items:
+  type: object
+  description: Two coordinates that constitute a geographical point
+  properties:
+    latitude:
+      type: number
+      format: double
+    longitude:
+      type: number
+      format: double
+  required:
+    - latitude
+    - longitude

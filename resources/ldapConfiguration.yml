@@ -1,0 +1,14 @@
+type: object
+description: LDAP server configuration
+properties:
+  host:
+    type: string
+  username:
+    type: string
+  password:
+    type: string
+    format: password
+required:
+  - host
+  - username
+  - password

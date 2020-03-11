@@ -1,0 +1,22 @@
+type: object
+description: More informations about a place
+properties:
+  address:
+    type: string
+    example: via Garibaldi, 1
+  city:
+    type: string
+    example: Padova
+  #FIXME pensare a che fare con zipcode + state
+  zipcode:
+    type: string
+    minLength: 5
+    maxLength: 5
+  state:
+    type: string
+required:
+  - address
+  - city
+  #FIXME togliere se non si mettono più
+  - zipcode
+  - state

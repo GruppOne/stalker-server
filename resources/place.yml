@@ -1,0 +1,13 @@
+type: object
+description: Name of the place and reference to geographical informations and places data
+properties:
+  name:
+    type: string
+  polyline:
+    $ref: "polyline.yml"
+  placeData:
+    $ref: "placeData.yml"
+required:
+  - name
+  - position
+  - data
