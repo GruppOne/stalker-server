@@ -1,0 +1,21 @@
+User:
+  $ref: "./resourceSchemas/user.yml"
+
+Organization:
+  $ref: "./resourceSchemas/organization.yml"
+
+AppConnections:
+  $ref: "./resourceSchemas/appConnections.yml"
+
+#TODO
+UserAccessToPlace:
+  type: object
+  properties:
+    property:
+      type: integer
+#TODO
+UserExitFromPlace:
+  type: object
+  properties:
+    property:
+      type: integer

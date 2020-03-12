@@ -26,3 +26,5 @@ properties:
 required:
   - mail
   - password
+  # TODO should this be required?
+  # - userData
