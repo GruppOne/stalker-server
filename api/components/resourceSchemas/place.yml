@@ -1,6 +1,11 @@
 type: object
 description: Name of the place and reference to geographical informations and places data
+discriminator:
+  propertyName: id
 properties:
+  id:
+    type: integer
+    format: uint64
   name:
     type: string
   # reference to Polyline
@@ -10,6 +15,7 @@ properties:
   placeData:
     $ref: "placeData.yml"
 required:
+  - id
   - name
   - position
   - data

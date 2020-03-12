@@ -1,0 +1,94 @@
+openapi: "3.0.2"
+info:
+  title: Stalker API
+  version: "0.1.0"
+  description: "Stalker API - GruppOne for Imola Informatica"
+
+servers:
+  - url: http://localhost:8080/
+    description: Development server
+  # - url: https://{environment}.GruppOne.com/v1
+  #     variables:
+  #       environment:
+  #         default: api    # Production server
+  #         enum:
+  #           - api         # Production server
+  #           - api.dev     # Development server
+  #           - api.staging # Staging server
+
+tags:
+  - name: users
+  - name: organizations
+  - name: movement tracking
+
+paths:
+  /users:
+    get:
+      summary: Get the list of registered users
+      responses:
+        "200":
+          description: Success
+    post:
+      summary: Register a new user
+      responses:
+        "200":
+          description: User successfully registered
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+
+  /users/{userId}:
+    get:
+      summary: Get information about a specific user
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the user
+      responses:
+        "200":
+          description: Success
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # TODO is it needed?
+  # /users/{userId}/userData:
+  #   post:
+  #     responses:
+  #       "200"
+
+  # /users/findByOrganization/{organizationId}:
+  #   get:
+  #     responses:
+  #       "200":
+  #         responseBody:
+
+  /users/login:
+    post:
+      summary: User login in Stalker's app
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Login was successful
+        "400":
+          description: Incorrect credentials
+
+components:
+  responses:
+    $ref: "./components/responses.yml"
+
+  schemas:
+    $ref: "./components/schemas.yml"
+
+  securitySchemes:
+    $ref: "./components/securitySchemes.yml"

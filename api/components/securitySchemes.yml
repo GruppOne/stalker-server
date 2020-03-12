@@ -1,0 +1,12 @@
+DevelopmentKey:
+  type: apiKey
+  name: api_key
+  in: query
+UserAuthorizations:
+  type: oauth2
+  flows:
+    implicit:
+      authorizationUrl: "https://domain.test/api/oauth/dialog"
+      scopes:
+        read: example read scope
+        write: example write scope
