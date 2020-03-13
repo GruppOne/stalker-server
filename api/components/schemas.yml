@@ -7,6 +7,9 @@ Organization:
 AppConnections:
   $ref: "./resourceSchemas/appConnections.yml"
 
+CloseSession:
+  $ref: "./resourceSchemas/closeSession.yml"
+
 #TODO
 UserAccessToPlace:
   type: object

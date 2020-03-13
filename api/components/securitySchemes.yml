@@ -1,7 +1,7 @@
 DevelopmentKey:
   type: apiKey
   name: api_key
-  in: query
+  in: header
 UserAuthorizations:
   type: oauth2
   flows:
