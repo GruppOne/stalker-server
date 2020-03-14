@@ -96,22 +96,22 @@ paths:
               description: the email address of the account that needs to recover the password
       responses:
         "200":
-          description: an email was sent to the specified address
+          description: An email was sent to the specified address
         "406":
-          description: email does not match an account
+          description: Email does not match an account
 
   /user/{userId}:
+    parameters: #use 'parameters' at the top, if they are shared by all the operations in a particular endpoint --> save bytes
+      - in: path
+        name: userId
+        schema:
+          type: integer
+        required: true
+        description: numeric id of the user
     get:
       tags:
         - users
       summary: Get information about a specific user
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the user
       responses:
         "200":
           description: Success
@@ -119,13 +119,6 @@ paths:
           $ref: "#/components/responses/NotFound"
     delete:
       summary: delete the specified user account
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the user
       responses:
         "200":
           description: Success
@@ -151,6 +144,42 @@ paths:
           description: Success
         "404":
           description: User has no history
+
+  # connect/disconnect to/from an organization
+  /user/{userId}/{organizationId}:
+    parameters:
+      - in: path
+        name: userId
+        schema:
+          type: integer
+        required: true
+        description: id of the user
+      - in: path
+        name: organizationId
+        schema:
+          type: integer
+        required: true
+        description: id of the organization
+    get:
+      tags:
+        - users
+        - organization
+      summary: Connect the current user into a specified organization
+      responses:
+        "200":
+          description: Successful connection
+        "408":
+          description: Requested timed out
+    delete:
+      tags:
+        - users
+        - organization
+      summary: Disconnect the current user from a specified organization
+      responses:
+        "200":
+          description: Successful disconnection
+        "408":
+          description: Requested timed out
 
   /user/{userId}/findConnectedOrganizations:
     get:
@@ -183,72 +212,154 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Organization"
-
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /organization/{organizationId}:
+    parameters:
+      - in: path
+        name: organizationId
+        schema:
+          type: integer
+        required: true
+        description: numeric id of the organization
     get:
-     tags:
-      - organization
-     summary: Get information about a specific organization
-     parameters:
-       - in: path
-         name: userId
-         schema:
-            type: integer
-         required: true
-         description: numeric id of the organization
-     responses:
+      tags:
+        - organization
+      summary: Get information about a specific organization
+      responses:
         "200":
           description: Success
         "404":
           $ref: "#/components/responses/NotFound"
-
     delete:
-      summary:  delete the specified organization
+      summary: the admininstrator wants to delete the specified organization
       operationId: organizationId
-      parameters:
-        - in: path
-          name: organizationID
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the organization
       responses:
         "200":
-          description: success, the organization will be deleted
+          description: Success, the organization has been deleted
         "400":
-          description: organization not found
+          description: Organization not found
         "408":
-          description: request timed out
+          description: Request timed out
 
   /organization/addOrganization:
     post:
       tags:
         - organizations
-      summary: a owner wants to create a new organization
+      summary: the administrator wants to create a new organization
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/resourceSchemas/organization.yaml"
+              $ref: "#/components/schemas/Organization"
       responses:
         "200":
-          description: success, the organization will be created
+          description: Success, the organization has been created
         "400":
-          description: the organization already exists
+          description: The organization already exists
 
+  #the administrator modify an organization
+  /organization/{organizationId}/modify:
+    parameters:
+      - in: path
+        name: organizationId
+        schema:
+          type: integer
+        required: true
+        description: numeric id of the organization
+    get: # if the administrator wants to change organization data, the server must return the current organization data, otherwise the administrator can't modify them
+      tags:
+        - organization
+      summary: get data about a specific organization
+      responses:
+        "200":
+          description: Success
+        "400":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags:
+        - organization
+      summary: the administrator wants to send the changed data about a specific organization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: Success, the place has been modified
+        "408":
+          description: Requested timed out
 
-  ##/organization/updateOrganization:
-  ##  put:
-  ##    responses:
+  # add a place into an organization
+  /organization/addPlace:
+    post:
+      tags:
+        - organization
+      summary: a manager wants to add a place into the organization who manages himself
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: Success, the place has been created
+        "400":
+          description: The place already exists inside the current organization
 
+  # modify place data or remove place by an organization
+  /organization/{placeId}:
+    parameters:
+      - in: path
+        name: placeId
+        schema:
+          type: integer
+        required: true
+        description: numeric id of the place
+    get: # if a manager wants to change place data, the server must return the current place data, otherwise the manager can't modify them
+      tags:
+        - organization
+      summary: get data about a specific place
+      responses:
+        "200":
+          description: Success
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags:
+        - organization
+      summary: a manager wants to send the changed data about a specific place
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: Success, the place has been modified
+        "400":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: delete the specified place
+      responses:
+        "200":
+          description: Success, the place has been deleted
+        "404":
+          description: Place not found
 
-
-  # /user/{userId}/placeCurrentTime/{placeId}:
-  #   get:
-  #     tags:
-  #       - users
+  #TODO endpoint to monitor an organization? (AUC5)
+  #TODO endpoint to monitor an employee? (AUC6)
+  #TODO endpoint (AUC7 - AUC12) --> user/{userId}/organizationRole
+  #TODO endpoint to update organitazions (is it needed?)
+  #/organization/updateOrganization:
+  #  put:
+  #    responses:
   # TODO is it needed?
   # /user/{userId}/userData:
   #   post:
