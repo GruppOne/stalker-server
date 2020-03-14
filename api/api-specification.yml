@@ -29,13 +29,13 @@ paths:
     get:
       tags:
         - users
-      summary: Get the list of registered users
+      summary: get the list of registered users
       responses:
         "200":
           description: Success
-    ###################################################################################### new user registration
+    # new user registration
     post:
-      summary: Register a new user
+      summary: register a new user
       responses:
         "200":
           description: User successfully registered
@@ -52,7 +52,7 @@ paths:
     post:
       tags:
         - users
-      summary: User login in Stalker's app
+      summary: user login in Stalker's app
       requestBody:
         required: true
         content:
@@ -69,7 +69,7 @@ paths:
     post:
       tags:
         - users
-      summary: An user wants to log out from his client
+      summary: an user wants to log out from his client
       requestBody:
         required: true
         content:
@@ -86,7 +86,7 @@ paths:
     post:
       tags:
         - users
-      summary: An user requires to reset his Stalker account's password
+      summary: an user requires to reset his Stalker account's password
       requestBody:
         required: true
         content:
@@ -101,7 +101,7 @@ paths:
           description: Email does not match an account
 
   /user/{userId}:
-    parameters: #use 'parameters' at the top, if they are shared by all the operations in a particular endpoint --> save bytes
+    parameters: # we need insert 'parameters' at the top, if 'parameters' are shared by all the operations in a particular endpoint --> save bytes!
       - in: path
         name: userId
         schema:
@@ -111,7 +111,7 @@ paths:
     get:
       tags:
         - users
-      summary: Get information about a specific user
+      summary: get information about a specific user
       responses:
         "200":
           description: Success
@@ -131,7 +131,7 @@ paths:
     get:
       tags:
         - users
-      summary: Get the history of the current user's accesses to organizations
+      summary: get the history of the current user's accesses to organizations
       parameters:
         - in: path
           name: userId
@@ -163,8 +163,8 @@ paths:
     get:
       tags:
         - users
-        - organization
-      summary: Connect the current user into a specified organization
+        - organizations
+      summary: connect the current user into a specified organization
       responses:
         "200":
           description: Successful connection
@@ -173,8 +173,8 @@ paths:
     delete:
       tags:
         - users
-        - organization
-      summary: Disconnect the current user from a specified organization
+        - organizations
+      summary: disconnect the current user from a specified organization
       responses:
         "200":
           description: Successful disconnection
@@ -186,14 +186,14 @@ paths:
       tags:
         - users
         - organizations
-      summary: Returns the list of organizations that a user has connected to
+      summary: returns the list of organizations that a user has connected to
       parameters:
         - in: path
           name: userId
           schema:
             type: integer
           required: true
-          description: Id of the user
+          description: id of the user
       responses:
         "200":
           description: The list of the ids of the organizations the user is connected to
@@ -214,6 +214,23 @@ paths:
                   $ref: "#/components/schemas/Organization"
         "404":
           $ref: "#/components/responses/NotFound"
+    put: # request updating organizations
+      tags:
+        - organizations
+      summary: A mobile application's user requires an updating of the organizations's list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: List of organization updated
+        "405":
+          description: Validation exception
+        "408":
+          description: Request timed out
 
   /organization/{organizationId}:
     parameters:
@@ -225,7 +242,7 @@ paths:
         description: numeric id of the organization
     get:
       tags:
-        - organization
+        - organizations
       summary: Get information about a specific organization
       responses:
         "200":
@@ -271,7 +288,7 @@ paths:
         description: numeric id of the organization
     get: # if the administrator wants to change organization data, the server must return the current organization data, otherwise the administrator can't modify them
       tags:
-        - organization
+        - organizations
       summary: get data about a specific organization
       responses:
         "200":
@@ -280,7 +297,7 @@ paths:
           $ref: "#/components/responses/NotFound"
     post:
       tags:
-        - organization
+        - organizations
       summary: the administrator wants to send the changed data about a specific organization
       requestBody:
         required: true
@@ -298,7 +315,7 @@ paths:
   /organization/addPlace:
     post:
       tags:
-        - organization
+        - organizations
       summary: a manager wants to add a place into the organization who manages himself
       requestBody:
         required: true
@@ -323,7 +340,7 @@ paths:
         description: numeric id of the place
     get: # if a manager wants to change place data, the server must return the current place data, otherwise the manager can't modify them
       tags:
-        - organization
+        - organizations
       summary: get data about a specific place
       responses:
         "200":
@@ -332,7 +349,7 @@ paths:
           $ref: "#/components/responses/NotFound"
     post:
       tags:
-        - organization
+        - organizations
       summary: a manager wants to send the changed data about a specific place
       requestBody:
         required: true
@@ -355,21 +372,67 @@ paths:
 
   #TODO endpoint to monitor an organization? (AUC5)
   #TODO endpoint to monitor an employee? (AUC6)
-  #TODO endpoint (AUC7 - AUC12) --> user/{userId}/organizationRole
-  #TODO endpoint to update organitazions (is it needed?)
-  #/organization/updateOrganization:
-  #  put:
-  #    responses:
-  # TODO is it needed?
-  # /user/{userId}/userData:
-  #   post:
-  #     responses:
-  #       "200"
+
+  # unique endpoint to describe adding/deleting web app users (i.e. an admin create/delete an owner exc.)
+  /user/{userId}/organizationRole:
+    parameters:
+      - in: path
+        name: userId
+        schema:
+          type: integer
+        required: true
+        description: id of the user
+    post:
+      tags:
+        - users
+      summary: the operation which describes the creation of all new users for web application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Success, a new user has been created
+        "408":
+          description: Request timed out
+    delete:
+      tags:
+        - users
+      summary: the operation which describes the deletion of all new users for web application
+      responses:
+        "200":
+          description: Success, an user has been deleted
+        "404":
+          description: User not found
+
+  #an user required his personal data in "My profile"
+  /user/{userId}/userData:
+    get:
+      tags:
+        - users
+      summary: an user required the visualization of his personal data
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: id of the user
+      responses:
+        "200":
+          description: Success
+        "408":
+          description: Request timed out
+
+  #TODO is it needed?
   # /user/findByOrganization/{organizationId}:
   #   get:
   #     responses:
   #       "200":
   #         responseBody:
+  #TODO endpoints for UserAccessToPlace e UserExitFromPlace for known/unknown tracking user
 
 components:
   responses:
