@@ -184,6 +184,67 @@ paths:
                 items:
                   $ref: "#/components/schemas/Organization"
 
+
+  /organization/{organizationId}:
+    get:
+     tags:
+      - organization
+     summary: Get information about a specific organization
+     parameters:
+       - in: path
+         name: userId
+         schema:
+            type: integer
+         required: true
+         description: numeric id of the organization
+     responses:
+        "200":
+          description: Success
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      summary:  delete the specified organization
+      operationId: organizationId
+      parameters:
+        - in: path
+          name: organizationID
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the organization
+      responses:
+        "200":
+          description: success, the organization will be deleted
+        "400":
+          description: organization not found
+        "408":
+          description: request timed out
+
+  /organization/addOrganization:
+    post:
+      tags:
+        - organizations
+      summary: a owner wants to create a new organization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/resourceSchemas/organization.yaml"
+      responses:
+        "200":
+          description: success, the organization will be created
+        "400":
+          description: the organization already exists
+
+
+  ##/organization/updateOrganization:
+  ##  put:
+  ##    responses:
+
+
+
   # /user/{userId}/placeCurrentTime/{placeId}:
   #   get:
   #     tags:
