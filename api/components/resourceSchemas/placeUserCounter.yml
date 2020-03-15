@@ -1,0 +1,15 @@
+type: object
+description: return the total number of users currently inside a specific place of a specific PRIVATE organization
+discriminator:
+  propertyName: placeId
+properties:
+  organizationId:
+    type: integer
+    format: int64
+  counter:
+    type: integer
+    format: int32
+    description: indicates the number of users currently inside a specific place of a specific PRIVATE organization
+required:
+  - placeId
+  - counter
