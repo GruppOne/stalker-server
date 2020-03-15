@@ -10,6 +10,12 @@ AppConnections:
 CloseSession:
   $ref: "./resourceSchemas/closeSession.yml"
 
+OrganizationUserCounter:
+  $ref: "./resourceSchemas/organizationUserCounter.yml"
+
+PlaceUserCounter:
+  $ref: "./resourceSchemas/placeUserCounter.yml"
+
 #TODO
 UserAccessToPlace:
   type: object

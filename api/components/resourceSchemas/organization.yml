@@ -13,13 +13,14 @@ properties:
   # reference to LDAP configuration
   ldapConfiguration:
     $ref: "ldapConfiguration.yml"
+    description: URL or IP address of the LDAP server of the organization. Useful only if the organization is private.
   # reference to Place
   places:
     type: array
     description: list of places within this organization
     items:
       $ref: "place.yml"
-  # if @private == 1 a user can't be anonymous
+  # if @private == true a user can't be anonymous
   private:
     type: boolean
   createdDate:

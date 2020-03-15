@@ -21,6 +21,8 @@ tags:
     description: Operations concerning users
   - name: organizations
     description: Operations concerning organizations
+  - name: monitor
+    description: Operations concerning monitoring organizations and places
   - name: movement tracking
     description: Updates to an user's current position
 
@@ -30,12 +32,14 @@ paths:
       tags:
         - users
       summary: get the list of registered users
+      operationId: getUsers
       responses:
         "200":
           description: Success
     # new user registration
     post:
       summary: register a new user
+      operationId: registerNewUser
       responses:
         "200":
           description: User successfully registered
@@ -53,6 +57,7 @@ paths:
       tags:
         - users
       summary: user login in Stalker's app
+      operationId: userLogin
       requestBody:
         required: true
         content:
@@ -70,6 +75,7 @@ paths:
       tags:
         - users
       summary: an user wants to log out from his client
+      operationId: userLogout
       requestBody:
         required: true
         content:
@@ -87,6 +93,7 @@ paths:
       tags:
         - users
       summary: an user requires to reset his Stalker account's password
+      operationId: userPasswordRecovery
       requestBody:
         required: true
         content:
@@ -112,6 +119,7 @@ paths:
       tags:
         - users
       summary: get information about a specific user
+      operationId: getUserById
       responses:
         "200":
           description: Success
@@ -119,6 +127,7 @@ paths:
           $ref: "#/components/responses/NotFound"
     delete:
       summary: delete the specified user account
+      operationId: deleteUserById
       responses:
         "200":
           description: Success
@@ -132,6 +141,7 @@ paths:
       tags:
         - users
       summary: get the history of the current user's accesses to organizations
+      operationId: userHistoryById
       parameters:
         - in: path
           name: userId
@@ -165,6 +175,7 @@ paths:
         - users
         - organizations
       summary: connect the current user into a specified organization
+      operationId: userConnectionIntoAnOrganization
       responses:
         "200":
           description: Successful connection
@@ -175,18 +186,21 @@ paths:
         - users
         - organizations
       summary: disconnect the current user from a specified organization
+      operationId: userDisonnectionByAnOrganization
       responses:
         "200":
           description: Successful disconnection
         "408":
           description: Requested timed out
 
+  #FIXME is it needed??
   /user/{userId}/findConnectedOrganizations:
     get:
       tags:
         - users
         - organizations
       summary: returns the list of organizations that a user has connected to
+      operationId: getConnectedOrganizationsByUserId
       parameters:
         - in: path
           name: userId
@@ -203,6 +217,7 @@ paths:
       tags:
         - organizations
       summary: Returns the list of all the organizations registered to Stalker
+      operationId: getOrganizations
       responses:
         "200":
           description: The list of organizations registered to Stalker
@@ -218,6 +233,7 @@ paths:
       tags:
         - organizations
       summary: A mobile application's user requires an updating of the organizations's list
+      operationId: updateOrganizations
       requestBody:
         required: true
         content:
@@ -244,6 +260,7 @@ paths:
       tags:
         - organizations
       summary: Get information about a specific organization
+      operationId: getOrganizationById
       responses:
         "200":
           description: Success
@@ -251,7 +268,7 @@ paths:
           $ref: "#/components/responses/NotFound"
     delete:
       summary: the admininstrator wants to delete the specified organization
-      operationId: organizationId
+      operationId: deleteOrganizationById
       responses:
         "200":
           description: Success, the organization has been deleted
@@ -265,6 +282,7 @@ paths:
       tags:
         - organizations
       summary: the administrator wants to create a new organization
+      operationId: addOrganization
       requestBody:
         required: true
         content:
@@ -279,26 +297,18 @@ paths:
 
   #the administrator modify an organization
   /organization/{organizationId}/modify:
-    parameters:
-      - in: path
-        name: organizationId
-        schema:
-          type: integer
-        required: true
-        description: numeric id of the organization
-    get: # if the administrator wants to change organization data, the server must return the current organization data, otherwise the administrator can't modify them
-      tags:
-        - organizations
-      summary: get data about a specific organization
-      responses:
-        "200":
-          description: Success
-        "400":
-          $ref: "#/components/responses/NotFound"
     post:
       tags:
         - organizations
       summary: the administrator wants to send the changed data about a specific organization
+      operationId: modifyOrganizationById
+      parameters:
+        - in: path
+          name: organizationId
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the organization
       requestBody:
         required: true
         content:
@@ -312,11 +322,19 @@ paths:
           description: Requested timed out
 
   # add a place into an organization
-  /organization/addPlace:
+  /organization/{organizationId}/addPlace:
     post:
       tags:
         - organizations
       summary: a manager wants to add a place into the organization who manages himself
+      operationId: addPlaceIntoAnOrganizationById
+      parameters:
+        - in: path
+          name: organizationId
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the organization
       requestBody:
         required: true
         content:
@@ -330,7 +348,7 @@ paths:
           description: The place already exists inside the current organization
 
   # modify place data or remove place by an organization
-  /organization/{placeId}:
+  /organization/{organizationId}/{placeId}:
     parameters:
       - in: path
         name: placeId
@@ -338,19 +356,17 @@ paths:
           type: integer
         required: true
         description: numeric id of the place
-    get: # if a manager wants to change place data, the server must return the current place data, otherwise the manager can't modify them
-      tags:
-        - organizations
-      summary: get data about a specific place
-      responses:
-        "200":
-          description: Success
-        "404":
-          $ref: "#/components/responses/NotFound"
+      - in: path
+        name: organizationId
+        schema:
+          type: integer
+        required: true
+        description: numeric id of the organization
     post:
       tags:
         - organizations
       summary: a manager wants to send the changed data about a specific place
+      operationId: modifyPlaceOfAnOrganization
       requestBody:
         required: true
         content:
@@ -364,14 +380,93 @@ paths:
           $ref: "#/components/responses/NotFound"
     delete:
       summary: delete the specified place
+      operationId: deletePlaceOfAnOrganization
       responses:
         "200":
           description: Success, the place has been deleted
         "404":
           description: Place not found
 
-  #TODO endpoint to monitor an organization? (AUC5)
-  #TODO endpoint to monitor an employee? (AUC6)
+  # monitor a specific organization
+  /monitor/organization/{organizationId}:
+    get:
+      tags:
+        - monitor
+        - organization
+      summary: a viewer wants to know the number of users in an specific organization
+      operationId: getNumberUserInAnOrganitazion
+      parameters:
+        - in: path
+          name: organizationId
+          description: numeric id of the organization.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success, the number of users has been received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationUserCounter"
+        "404":
+          description: Organization not found
+
+  # monitor a specific place in a private organization
+  /monitor/organization/{organizationId}/place/{placeId}:
+    get:
+      tags:
+        - monitor
+        - organization
+      summary: a viewer wants to know the number of users in a specific place of a specific PRIVATE organization
+      operationId: getNumberUserInAPlace
+      parameters:
+        - in: path
+          name: placeId
+          description: numeric id of the place
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Success, the number of users has been received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlaceUserCounter"
+        "404":
+          description: Place inside the organization not found
+
+  # monitor a specific employee
+  /monitor/{userId}:
+    get:
+      tags:
+        - monitor
+        - organization
+      summary: a viewer wants to know all the data concerning the accesses of a specific employee
+      description: this operation is permitted only if the user is inside a private organization
+      operationId: getAccessInformationByUserId
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: id of the user
+      responses:
+        "200":
+          description: Place presence counter returned successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OrganizationUserCounter"
+                  - $ref: "#/components/schemas/PlaceUserCounter"
+        "404":
+          description: "Operation not allowed: the specified user is inside a public organization"
+
+  #TODO There should be an other endpoint concerning the entire report of user accesses, but this requirements is optional. So, go on
 
   # unique endpoint to describe adding/deleting web app users (i.e. an admin create/delete an owner exc.)
   /user/{userId}/organizationRole:
@@ -386,6 +481,7 @@ paths:
       tags:
         - users
       summary: the operation which describes the creation of all new users for web application
+      operationId: createNewUserInAnOrganization
       requestBody:
         required: true
         content:
@@ -401,6 +497,7 @@ paths:
       tags:
         - users
       summary: the operation which describes the deletion of all new users for web application
+      operationId: deleteUserInAnOrganization
       responses:
         "200":
           description: Success, an user has been deleted
@@ -413,6 +510,7 @@ paths:
       tags:
         - users
       summary: an user required the visualization of his personal data
+      operationId: personalUserDataById
       parameters:
         - in: path
           name: userId
@@ -426,13 +524,55 @@ paths:
         "408":
           description: Request timed out
 
+  # an user become anonymous into an organization
+  /tracking/{userId}/{organizationId}/unknown:
+    post:
+      tags:
+        - movement tracking
+        - users
+        - organization
+      summary: the operation which permits to a specific users to make unknown his identity into a current specific PRIVATE organization
+      operationId: UnknownUserTracking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppConnections"
+      responses:
+        "200":
+          description: Success, now the identity user is unknown
+        "408":
+          description: Request timed out
+
+  # an user become known into an organization
+  /tracking/{userId}/{organizationId}/known:
+    post:
+      tags:
+        - movement tracking
+        - users
+        - organization
+      summary: the operation which permits to a specific users to make known his identity into a current specific PRIVATE organization
+      operationId: KnownUserTracking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppConnections"
+      responses:
+        "200":
+          description: Success, now the identity user is known
+        "408":
+          description: Request timed out
+
+  #TODO to add the entry/exit into/by an organization and places (necessary for the comunication with InfluxDB)
   #TODO is it needed?
   # /user/findByOrganization/{organizationId}:
   #   get:
   #     responses:
   #       "200":
   #         responseBody:
-  #TODO endpoints for UserAccessToPlace e UserExitFromPlace for known/unknown tracking user
 
 components:
   responses:
