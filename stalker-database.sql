@@ -81,7 +81,6 @@ CREATE TABLE `organizations` (
   `name` varchar(50) DEFAULT NULL,
   `description` tinytext,
   `ldap_conf` int(11) DEFAULT NULL,
-  `places` int(11) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `last_modified_date` timestamp NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
@@ -100,10 +99,11 @@ CREATE TABLE `placedata` (
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `places`
+-- Struttura della tabella `place`
 --
-CREATE TABLE `places` (
+CREATE TABLE `place` (
   `id` int(11) NOT NULL,
+  `organization_id` int(11) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `position` linestring DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
@@ -178,7 +178,9 @@ ALTER TABLE
 ADD
   KEY `organization_id` (`organization_id`),
 ADD
-  KEY `user_id` (`user_id`);
+  KEY `user_id` (`user_id`),
+ADD
+  KEY `admin_type` (`admin_type`);
 
 --
 -- Indici per le tabelle `organizations`
@@ -188,9 +190,7 @@ ALTER TABLE
 ADD
   PRIMARY KEY (`id`),
 ADD
-  KEY `ldap_conf` (`ldap_conf`),
-ADD
-  KEY `places` (`places`);
+  KEY `ldap_conf` (`ldap_conf`);
 
 --
 -- Indici per le tabelle `placedata`
@@ -201,12 +201,14 @@ ADD
   KEY `id` (`id`);
 
 --
--- Indici per le tabelle `places`
+-- Indici per le tabelle `place`
 --
 ALTER TABLE
-  `places`
+  `place`
 ADD
-  PRIMARY KEY (`id`);
+  PRIMARY KEY (`id`),
+ADD
+  KEY `organization_id` (`organization_id`);
 
 --
 -- Indici per le tabelle `userdata`
@@ -253,7 +255,9 @@ ALTER TABLE
 ADD
   CONSTRAINT `organizationrole_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
 ADD
-  CONSTRAINT `organizationrole_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `admintype` (`id`);
+  CONSTRAINT `organizationrole_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+ADD
+  CONSTRAINT `organizationrole_ibfk_3` FOREIGN KEY (`admin_type`) REFERENCES `admintype` (`id`);
 
 --
 -- Limiti per la tabella `organizations`
@@ -261,9 +265,7 @@ ADD
 ALTER TABLE
   `organizations`
 ADD
-  CONSTRAINT `organizations_ibfk_1` FOREIGN KEY (`ldap_conf`) REFERENCES `ldapconfiguration` (`id`),
-ADD
-  CONSTRAINT `organizations_ibfk_2` FOREIGN KEY (`places`) REFERENCES `places` (`id`);
+  CONSTRAINT `organizations_ibfk_1` FOREIGN KEY (`ldap_conf`) REFERENCES `ldapconfiguration` (`id`);
 
 --
 -- Limiti per la tabella `placedata`
@@ -271,7 +273,15 @@ ADD
 ALTER TABLE
   `placedata`
 ADD
-  CONSTRAINT `placedata_ibfk_1` FOREIGN KEY (`id`) REFERENCES `places` (`id`);
+  CONSTRAINT `placedata_ibfk_1` FOREIGN KEY (`id`) REFERENCES `place` (`id`);
+
+--
+-- Limiti per la tabella `place`
+--
+ALTER TABLE
+  `place`
+ADD
+  CONSTRAINT `place_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`);
 
 --
 -- Limiti per la tabella `userdata`
