@@ -23,10 +23,11 @@ tags:
     description: Operations concerning organizations
   - name: monitor
     description: Operations concerning monitoring organizations and places
-  - name: movement tracking
-    description: Updates to an user's current position
+  - name: tracking
+    description: Operation concerning users tracking
 
 paths:
+  #FIXME is this path needed? In which cases?
   /user:
     get:
       tags:
@@ -36,21 +37,22 @@ paths:
       responses:
         "200":
           description: Success
-    # new user registration
+
+  /user/signUp:
     post:
-      summary: register a new user
-      operationId: registerNewUser
-      responses:
-        "200":
-          description: User successfully registered
-        "406":
-          description: Email already registered
+      summary: register a new user, both mobile application and web application
+      operationId: userSignUp
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: User successfully registered
+        "406":
+          description: Email already registered
 
   /user/login:
     post:
@@ -130,7 +132,7 @@ paths:
       operationId: deleteUserById
       responses:
         "200":
-          description: Success
+          description: Success, an user has been deleted
         "400":
           description: Invalid username supplied
         "404":
@@ -151,7 +153,7 @@ paths:
           description: Id of the user
       responses:
         "200":
-          description: Success
+          description: Success, an user get his history
         "404":
           description: User has no history
 
@@ -193,7 +195,7 @@ paths:
         "408":
           description: Requested timed out
 
-  #FIXME is it needed??
+  #FIXME is it needed?? Because this action is client-side (a filter in mobile application)
   /user/{userId}/findConnectedOrganizations:
     get:
       tags:
@@ -229,10 +231,11 @@ paths:
                   $ref: "#/components/schemas/Organization"
         "404":
           $ref: "#/components/responses/NotFound"
-    put: # request updating organizations
+    # to update/refresh organizations list
+    put:
       tags:
         - organizations
-      summary: A mobile application's user requires an updating of the organizations's list
+      summary: A mobile application's user requires an updating of the organizations list
       operationId: updateOrganizations
       requestBody:
         required: true
@@ -296,12 +299,12 @@ paths:
           description: The organization already exists
 
   #the administrator modify an organization
-  /organization/{organizationId}/modify:
+  /organization/{organizationId}/changeData:
     post:
       tags:
         - organizations
       summary: the administrator wants to send the changed data about a specific organization
-      operationId: modifyOrganizationById
+      operationId: changeOrganizationData
       parameters:
         - in: path
           name: organizationId
@@ -348,7 +351,7 @@ paths:
           description: The place already exists inside the current organization
 
   # modify place data or remove place by an organization
-  /organization/{organizationId}/{placeId}:
+  /organization/{organizationId}/{placeId}/changeData:
     parameters:
       - in: path
         name: placeId
@@ -366,7 +369,7 @@ paths:
       tags:
         - organizations
       summary: a manager wants to send the changed data about a specific place
-      operationId: modifyPlaceOfAnOrganization
+      operationId: changePlaceData
       requestBody:
         required: true
         content:
@@ -380,7 +383,7 @@ paths:
           $ref: "#/components/responses/NotFound"
     delete:
       summary: delete the specified place
-      operationId: deletePlaceOfAnOrganization
+      operationId: deletePlace
       responses:
         "200":
           description: Success, the place has been deleted
@@ -456,7 +459,7 @@ paths:
           description: id of the user
       responses:
         "200":
-          description: Place presence counter returned successfully.
+          description: Success, the informations about the user has been received
           content:
             application/json:
               schema:
@@ -466,22 +469,22 @@ paths:
         "404":
           description: "Operation not allowed: the specified user is inside a public organization"
 
-  #TODO There should be an other endpoint concerning the entire report of user accesses, but this requirements is optional. So, go on
+  #FIXME There should be an other endpoint concerning the entire report of user accesses, but this requirements is optional. So, go on
 
   # unique endpoint to describe adding/deleting web app users (i.e. an admin create/delete an owner exc.)
-  /user/{userId}/organizationRole:
-    parameters:
-      - in: path
-        name: userId
-        schema:
-          type: integer
-        required: true
-        description: id of the user
+  /user/{userId}/createUser:
     post:
       tags:
         - users
       summary: the operation which describes the creation of all new users for web application
       operationId: createNewUserInAnOrganization
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: id of the user
       requestBody:
         required: true
         content:
@@ -491,20 +494,31 @@ paths:
       responses:
         "200":
           description: Success, a new user has been created
+        "404":
+          description: "Operation not allowed: the current user has no creation permission"
         "408":
           description: Request timed out
+
+  /user/{userId}/deleteUser:
     delete:
       tags:
         - users
       summary: the operation which describes the deletion of all new users for web application
       operationId: deleteUserInAnOrganization
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: id of the user
       responses:
         "200":
           description: Success, an user has been deleted
         "404":
-          description: User not found
+          description: "Operation not allowed: the current user has no deletion permission"
 
-  #an user required his personal data in "My profile"
+  #FIXME an user required his personal data in "My profile": optional?
   /user/{userId}/userData:
     get:
       tags:
@@ -524,15 +538,88 @@ paths:
         "408":
           description: Request timed out
 
-  # an user become anonymous into an organization
-  /tracking/{userId}/{organizationId}/unknown:
+  # enter/exit in an organization (necessary for the comunication with InfluxDB)
+  /tracking/organization:
     post:
       tags:
-        - movement tracking
-        - users
-        - organization
+        - tracking
+      summary: an user accesses into an organization
+      operationId: AccessOrganization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Users"
+                - $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: Success, an user has entered into an organization
+        "408":
+          description: Request timed out
+    delete:
+      tags:
+        - tracking
+      summary: an user exits from an organization
+      operationId: ExitOrganization
+      responses:
+        "200":
+          description: Success, an user has exited by an organization
+        "408":
+          description: Request timed out
+
+  # enter/exit in a place of an organization (necessary for the comunication with InfluxDB)
+  /tracking/organization/place:
+    post:
+      tags:
+        - tracking
+      summary: an user accesses into a place of an organization
+      operationId: AccessOrganization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Users"
+                - $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: Success, an user has entered into an organization
+        "408":
+          description: Request timed out
+    delete:
+      tags:
+        - tracking
+      summary: an user exits from a place of an organization
+      operationId: ExitOrganization
+      responses:
+        "200":
+          description: Success, an user has exited by a place of an organization
+        "408":
+          description: Request timed out
+
+  # an user become anonymous into an organization
+  /tracking/{userId}/{organizationId}/unknownIdentity:
+    post:
+      tags:
+        - tracking
       summary: the operation which permits to a specific users to make unknown his identity into a current specific PRIVATE organization
       operationId: UnknownUserTracking
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: id of the user
+        - in: path
+          name: organizationId
+          schema:
+            type: integer
+          required: true
+          description: id of the organization
       requestBody:
         required: true
         content:
@@ -546,14 +633,25 @@ paths:
           description: Request timed out
 
   # an user become known into an organization
-  /tracking/{userId}/{organizationId}/known:
+  /tracking/{userId}/{organizationId}/knownIdentity:
     post:
       tags:
-        - movement tracking
-        - users
-        - organization
+        - tracking
       summary: the operation which permits to a specific users to make known his identity into a current specific PRIVATE organization
       operationId: KnownUserTracking
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: id of the user
+        - in: path
+          name: organizationId
+          schema:
+            type: integer
+          required: true
+          description: id of the organization
       requestBody:
         required: true
         content:
@@ -566,8 +664,7 @@ paths:
         "408":
           description: Request timed out
 
-  #TODO to add the entry/exit into/by an organization and places (necessary for the comunication with InfluxDB)
-  #TODO is it needed?
+  #TODO is it needed? What does it mean?
   # /user/findByOrganization/{organizationId}:
   #   get:
   #     responses:
