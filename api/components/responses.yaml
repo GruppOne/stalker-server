@@ -3,11 +3,11 @@ NotFound:
   # content:
   #   application/json:
   #     schema:
-  #       $ref: "../api-specification.yml#/components/schemas/Error"
+  #       $ref: "../api-specification.yaml#/components/schemas/Error"
 
 Unauthorized:
   description: Unauthorized
   # content:
   #   application/json:
   #     schema:
-  #       $ref: "../api-specification.yml#/components/schemas/Error"
+  #       $ref: "../api-specification.yaml#/components/schemas/Error"
