@@ -1,3 +1,4 @@
+#TODO check ldapConfiguration.yaml: is it correct?
 openapi: "3.0.2"
 
 info:
