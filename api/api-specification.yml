@@ -109,7 +109,7 @@ paths:
         "406":
           description: Email does not match an account
 
-  /user/{id}:
+  /user/{userId}:
     parameters: # we need insert 'parameters' at the top, if 'parameters' are shared by all the operations in a particular endpoint --> save bytes!
       - $ref: "#/components/parameters/userId"
     get:
@@ -133,7 +133,7 @@ paths:
         "404":
           description: User not found
 
-  /user/{id}/history:
+  /user/{userId}/history:
     get:
       tags:
         - users
@@ -148,7 +148,7 @@ paths:
           description: User has no history
 
   # connect/disconnect to/from an organization
-  /user/{id}/{organizationId}:
+  /user/{userId}/{organizationId}:
     parameters:
       - $ref: "#/components/parameters/userId"
       - $ref: "#/components/parameters/organizationId"
@@ -176,7 +176,7 @@ paths:
           description: Requested timed out
 
   #FIXME is it needed?? Because this action is client-side (a filter in mobile application)
-  /user/{id}/findConnectedOrganizations:
+  /user/{userId}/findConnectedOrganizations:
     get:
       tags:
         - users
@@ -382,7 +382,7 @@ paths:
           description: Place inside the organization not found
 
   # monitor a specific employee
-  /monitor/{id}:
+  /monitor/{userId}:
     get:
       tags:
         - monitor
@@ -407,7 +407,7 @@ paths:
   #FIXME There should be an other endpoint concerning the entire report of user accesses, but this requirements is optional. So, go on
 
   # unique endpoint to describe adding/deleting web app users (i.e. an admin create/delete an owner exc.)
-  /user/{id}/createUser:
+  /user/{userId}/createUser:
     post:
       tags:
         - users
@@ -429,7 +429,7 @@ paths:
         "408":
           description: Request timed out
 
-  /user/{id}/deleteUser:
+  /user/{userId}/deleteUser:
     delete:
       tags:
         - users
@@ -444,7 +444,7 @@ paths:
           description: "Operation not allowed: the current user has no deletion permission"
 
   #FIXME an user required his personal data in "My profile": optional?
-  /user/{id}/userData:
+  /user/{userId}/userData:
     get:
       tags:
         - users
@@ -521,7 +521,7 @@ paths:
           description: Request timed out
 
   # an user become anonymous into an organization
-  /tracking/{id}/{organizationId}/unknownIdentity:
+  /tracking/{userId}/{organizationId}/unknownIdentity:
     post:
       tags:
         - tracking
@@ -543,7 +543,7 @@ paths:
           description: Request timed out
 
   # an user become known into an organization
-  /tracking/{id}/{organizationId}/knownIdentity:
+  /tracking/{userId}/{organizationId}/knownIdentity:
     post:
       tags:
         - tracking
