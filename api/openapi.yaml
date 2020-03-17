@@ -38,9 +38,6 @@ tags:
   - name: users
     description: Operations concerning users.
 
-# TODO all descriptions should be capitalized, use the imperative mode (like commit messages) and end with a "."
-# TODO all operationIds should start with a lowercase letter
-# TODO all operationIds should start with a verb: createNewUser OK, newUser BAD
 paths:
   /user:
     # TODO is it actually needed to get ALL users?
@@ -49,7 +46,7 @@ paths:
       tags:
         - stalker web app
         - users
-      description: Return the list of registered users. This is a reserved operation.
+      description: Return the list of registered users. Operation reserved only to the administrator.
       operationId: getAllUsers
       responses:
         "200":
@@ -86,7 +83,7 @@ paths:
         - stalker web app
         - users
       description: Log in an existing user.
-      operationId: login
+      operationId: loginUser
       requestBody:
         required: true
         content:
@@ -107,7 +104,7 @@ paths:
         - stalker web app
         - users
       description: Log out an user from a client.
-      operationId: logout
+      operationId: logoutUser
       requestBody:
         required: true
         content:
@@ -126,7 +123,7 @@ paths:
         - stalker mobile app
         - users
       description: Reset a password of a user account.
-      operationId: userPasswordRecovery
+      operationId: recoveryUserPassword
       requestBody:
         required: true
         content:
@@ -186,7 +183,7 @@ paths:
         - stalker web app
         - users
       description: Get the history of this user accesses to all organizations.
-      operationId: userHistoryById
+      operationId: getUserHistory
       parameters:
         - $ref: "#/components/parameters/userId"
       responses:
@@ -250,7 +247,7 @@ paths:
         - stalker web app
         - organizations
       description: Return the list of all the organizations registered to Stalker.
-      operationId: getOrganizations
+      operationId: getAllOrganizations
       responses:
         "200":
           description: The list of organizations registered to Stalker.
@@ -421,7 +418,7 @@ paths:
         - monitor
         - organizations
       description: Return the number of users for the given organization. Operation reserved only to the viewers and up.
-      operationId: getNumberUserInAnOrganitazion
+      operationId: getNumberOfUserInAnOrganitazion
       parameters:
         - $ref: "#/components/parameters/organizationId"
       responses:
@@ -556,7 +553,7 @@ paths:
         # - stalker web app
         - tracking
       description: Track accesses of a users into an organization. Operation reserved only to the administrator.
-      operationId: accessOrganization
+      operationId: trackUserAccessOrganization
       requestBody:
         required: true
         content:
@@ -577,7 +574,7 @@ paths:
         # - stalker web app
         - tracking
       description: Disconnect a user from an organization. Operation reserved only to the viewers and up.
-      operationId: exitOrganization
+      operationId: trackUserExitOrganization
       responses:
         "200":
           description: Success, an user has exited by an organization.
@@ -593,7 +590,7 @@ paths:
         - stalker mobile app
         - tracking
       description: Track an user accessing an organization's place. Operation reserved only to the viewers and up.
-      operationId: accessPlace
+      operationId: trackUserAccessPlace
       requestBody:
         required: true
         content:
@@ -612,7 +609,7 @@ paths:
         - stalker mobile app
         - tracking
       description: Track an user exiting from an organization's place. Operation reserved only to the viewers and up.
-      operationId: exitPlace
+      operationId: trackUserExitPlace
       responses:
         "200":
           description: Success, an user has exited by a place of an organization.
@@ -627,7 +624,7 @@ paths:
         - tracking
       # TODO rephrase?
       description: Make unknown the identity user, into a current specific private organization.
-      operationId: unknownUserTracking
+      operationId: trackUnknownUser
       parameters:
         - $ref: "#/components/parameters/userId"
         - $ref: "#/components/parameters/organizationId"
@@ -651,7 +648,7 @@ paths:
         - tracking
       # TODO rephrase?
       description: Make known the identity user, to a current specific private organization.
-      operationId: knownUserTracking
+      operationId: trackKnownUser
       parameters:
         - $ref: "#/components/parameters/userId"
         - $ref: "#/components/parameters/organizationId"
