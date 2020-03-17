@@ -21,7 +21,7 @@ properties:
     maxLength: 32
   # reference to User's data
   userData:
-    $ref: "userData.yml"
+    $ref: "userData.yaml"
 # both email and password required to login
 required:
   - mail

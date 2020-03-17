@@ -10,10 +10,10 @@ properties:
     type: string
   # reference to Polyline
   polyline:
-    $ref: "polyline.yml"
+    $ref: "polyline.yaml"
   # reference to place's data
   placeData:
-    $ref: "placeData.yml"
+    $ref: "placeData.yaml"
 required:
   - id
   - name
