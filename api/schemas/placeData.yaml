@@ -1,5 +1,6 @@
 type: object
 description: More informations about a place
+# TODO decide which geocoding API we use and have this resource match its type
 properties:
   address:
     type: string
@@ -7,7 +8,6 @@ properties:
   city:
     type: string
     example: Padova
-  #FIXME pensare a che fare con zipcode + state
   zipcode:
     type: string
     minLength: 5
@@ -17,6 +17,5 @@ properties:
 required:
   - address
   - city
-  #FIXME togliere se non si mettono più
   - zipcode
   - state

@@ -1,4 +1,4 @@
-#TODO almeno 3 items DIVERSI tra loro
+#TODO at least three unique items
 type: array
 description: An array of points that constitutes the perimeter of a place
 items:

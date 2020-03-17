@@ -524,6 +524,7 @@ paths:
   #         description: Request timed out.
 
   # FIXME this probably should not be logged to InfluxDB but to the SQL DB
+  # TODO missing user parameter?
   # enter/exit in an organization (necessary for the communication with InfluxDB)
   /tracking/organization:
     post:
@@ -711,20 +712,6 @@ components:
     PlaceUserCounter:
       $ref: "./schemas/placeUserCounter.yaml"
 
-    #TODO
-    UserAccessToPlace:
-      type: object
-      properties:
-        property:
-          type: integer
-
-    #TODO
-    UserExitFromPlace:
-      type: object
-      properties:
-        property:
-          type: integer
-
   securitySchemes:
     # arbitrary name for the security scheme
     AdminKey:
@@ -734,18 +721,18 @@ components:
       # name of the header, query parameter or cookie
       name: X-ADMIN-API-KEY
 
-    # TODO find a way to restrict scopes to specific organizations and users. E.G. a user can only get his own info
+    # TODO oauth2 is probably wrong. maybe user openID connect?
     UserAuthorization:
       type: oauth2
       flows:
+        # FIXME this is the wrong flow
         implicit:
           # TODO write our oauth server url
           authorizationUrl: "https://domain.test/api/oauth/dialog"
+          # TODO find a way to restrict scopes to specific organizations and users. A user can only get his own info!
           scopes:
-            # TODO maybe this could only be allowed through api key?
-            admin: A Stalker administrator
+            # TODO these should match in some way our organization roles
             owner: An organization's owner authorized operations
             manager: An organization's manager authorized operations
             viewer: An organization's viewer authorized operations
-
             user: Generic app user
