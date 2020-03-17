@@ -109,14 +109,9 @@ paths:
         "406":
           description: Email does not match an account
 
-  /user/{userId}:
+  /user/{id}:
     parameters: # we need insert 'parameters' at the top, if 'parameters' are shared by all the operations in a particular endpoint --> save bytes!
-      - in: path
-        name: userId
-        schema:
-          type: integer
-        required: true
-        description: numeric id of the user
+      $ref: "#/components/parameters/id"
     get:
       tags:
         - users
@@ -138,19 +133,14 @@ paths:
         "404":
           description: User not found
 
-  /user/{userId}/history:
+  /user/{id}/history:
     get:
       tags:
         - users
       summary: get the history of the current user's accesses to organizations
       operationId: userHistoryById
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: Id of the user
+        $ref: "#/components/parameters/id"
       responses:
         "200":
           description: Success, an user get his history
@@ -158,20 +148,10 @@ paths:
           description: User has no history
 
   # connect/disconnect to/from an organization
-  /user/{userId}/{organizationId}:
+  /user/{id}/{organizationId}:
     parameters:
-      - in: path
-        name: userId
-        schema:
-          type: integer
-        required: true
-        description: id of the user
-      - in: path
-        name: organizationId
-        schema:
-          type: integer
-        required: true
-        description: id of the organization
+      $ref: "#/components/parameters/id"
+      $ref: "#/components/parameters/organizationId"
     get:
       tags:
         - users
@@ -196,7 +176,7 @@ paths:
           description: Requested timed out
 
   #FIXME is it needed?? Because this action is client-side (a filter in mobile application)
-  /user/{userId}/findConnectedOrganizations:
+  /user/{id}/findConnectedOrganizations:
     get:
       tags:
         - users
@@ -204,12 +184,7 @@ paths:
       summary: returns the list of organizations that a user has connected to
       operationId: getConnectedOrganizationsByUserId
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: id of the user
+        $ref: '#/components/parameters/id'
       responses:
         "200":
           description: The list of the ids of the organizations the user is connected to
@@ -253,12 +228,7 @@ paths:
 
   /organization/{organizationId}:
     parameters:
-      - in: path
-        name: organizationId
-        schema:
-          type: integer
-        required: true
-        description: numeric id of the organization
+      $ref: '#/components/parameters/organizationId'
     get:
       tags:
         - organizations
@@ -306,12 +276,7 @@ paths:
       summary: the administrator wants to send the changed data about a specific organization
       operationId: changeOrganizationData
       parameters:
-        - in: path
-          name: organizationId
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the organization
+        $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -332,12 +297,7 @@ paths:
       summary: a manager wants to add a place into the organization who manages himself
       operationId: addPlaceIntoAnOrganizationById
       parameters:
-        - in: path
-          name: organizationId
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the organization
+        $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -353,18 +313,8 @@ paths:
   # modify place data or remove place by an organization
   /organization/{organizationId}/{placeId}/changeData:
     parameters:
-      - in: path
-        name: placeId
-        schema:
-          type: integer
-        required: true
-        description: numeric id of the place
-      - in: path
-        name: organizationId
-        schema:
-          type: integer
-        required: true
-        description: numeric id of the organization
+      $ref: "#/components/parameters/organizationId"
+      $ref: "#/components/parameters/placeId"
     post:
       tags:
         - organizations
@@ -399,12 +349,7 @@ paths:
       summary: a viewer wants to know the number of users in an specific organization
       operationId: getNumberUserInAnOrganitazion
       parameters:
-        - in: path
-          name: organizationId
-          description: numeric id of the organization.
-          required: true
-          schema:
-            type: integer
+         $ref: "#/components/parameters/organizationId"
       responses:
         "200":
           description: Success, the number of users has been received
@@ -424,13 +369,8 @@ paths:
       summary: a viewer wants to know the number of users in a specific place of a specific PRIVATE organization
       operationId: getNumberUserInAPlace
       parameters:
-        - in: path
-          name: placeId
-          description: numeric id of the place
-          required: true
-          schema:
-            type: integer
-            format: int64
+        $ref: "#/components/parameters/organizationId"
+        $ref: "#/components/parameters/placeId"
       responses:
         "200":
           description: Success, the number of users has been received
@@ -442,7 +382,7 @@ paths:
           description: Place inside the organization not found
 
   # monitor a specific employee
-  /monitor/{userId}:
+  /monitor/{id}:
     get:
       tags:
         - monitor
@@ -451,12 +391,7 @@ paths:
       description: this operation is permitted only if the user is inside a private organization
       operationId: getAccessInformationByUserId
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: id of the user
+         $ref: "#/components/parameters/id"
       responses:
         "200":
           description: Success, the informations about the user has been received
@@ -472,19 +407,14 @@ paths:
   #FIXME There should be an other endpoint concerning the entire report of user accesses, but this requirements is optional. So, go on
 
   # unique endpoint to describe adding/deleting web app users (i.e. an admin create/delete an owner exc.)
-  /user/{userId}/createUser:
+  /user/{id}/createUser:
     post:
       tags:
         - users
       summary: the operation which describes the creation of all new users for web application
       operationId: createNewUserInAnOrganization
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: id of the user
+        $ref: "#/components/parameters/id"
       requestBody:
         required: true
         content:
@@ -499,19 +429,14 @@ paths:
         "408":
           description: Request timed out
 
-  /user/{userId}/deleteUser:
+  /user/{id}/deleteUser:
     delete:
       tags:
         - users
       summary: the operation which describes the deletion of all new users for web application
       operationId: deleteUserInAnOrganization
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: id of the user
+        $ref: "#/components/parameters/id"
       responses:
         "200":
           description: Success, an user has been deleted
@@ -519,19 +444,14 @@ paths:
           description: "Operation not allowed: the current user has no deletion permission"
 
   #FIXME an user required his personal data in "My profile": optional?
-  /user/{userId}/userData:
+  /user/{id}/userData:
     get:
       tags:
         - users
       summary: an user required the visualization of his personal data
       operationId: personalUserDataById
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: id of the user
+        $ref: "#/components/parameters/id"
       responses:
         "200":
           description: Success
@@ -601,25 +521,15 @@ paths:
           description: Request timed out
 
   # an user become anonymous into an organization
-  /tracking/{userId}/{organizationId}/unknownIdentity:
+  /tracking/{id}/{organizationId}/unknownIdentity:
     post:
       tags:
         - tracking
       summary: the operation which permits to a specific users to make unknown his identity into a current specific PRIVATE organization
       operationId: UnknownUserTracking
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: id of the user
-        - in: path
-          name: organizationId
-          schema:
-            type: integer
-          required: true
-          description: id of the organization
+        $ref: "#/components/parameters/id"
+        $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -633,25 +543,15 @@ paths:
           description: Request timed out
 
   # an user become known into an organization
-  /tracking/{userId}/{organizationId}/knownIdentity:
+  /tracking/{id}/{organizationId}/knownIdentity:
     post:
       tags:
         - tracking
       summary: the operation which permits to a specific users to make known his identity into a current specific PRIVATE organization
       operationId: KnownUserTracking
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: id of the user
-        - in: path
-          name: organizationId
-          schema:
-            type: integer
-          required: true
-          description: id of the organization
+        $ref: "#/components/parameters/id"
+        $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -672,6 +572,32 @@ paths:
   #         responseBody:
 
 components:
+  parameters:
+    id:
+      in: path
+      name: id
+      schema:
+          type: integer
+      required: true
+      description: id of the user
+
+    organizationId:
+      in: path
+      name: organizationId
+      schema:
+         type: integer
+      required: true
+      description: numeric id of the organization
+
+    placeId:
+      in: path
+      name: placeId
+      description: numeric id of the place
+      required: true
+      schema:
+        type: integer
+        format: int64
+
   responses:
     $ref: "./components/responses.yml"
 
