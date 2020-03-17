@@ -111,7 +111,7 @@ paths:
 
   /user/{id}:
     parameters: # we need insert 'parameters' at the top, if 'parameters' are shared by all the operations in a particular endpoint --> save bytes!
-      $ref: "#/components/parameters/id"
+      - $ref: "#/components/parameters/userId"
     get:
       tags:
         - users
@@ -140,7 +140,7 @@ paths:
       summary: get the history of the current user's accesses to organizations
       operationId: userHistoryById
       parameters:
-        $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/userId"
       responses:
         "200":
           description: Success, an user get his history
@@ -150,8 +150,8 @@ paths:
   # connect/disconnect to/from an organization
   /user/{id}/{organizationId}:
     parameters:
-      $ref: "#/components/parameters/id"
-      $ref: "#/components/parameters/organizationId"
+      - $ref: "#/components/parameters/userId"
+      - $ref: "#/components/parameters/organizationId"
     get:
       tags:
         - users
@@ -184,7 +184,7 @@ paths:
       summary: returns the list of organizations that a user has connected to
       operationId: getConnectedOrganizationsByUserId
       parameters:
-        $ref: '#/components/parameters/id'
+        - $ref: "#/components/parameters/userId"
       responses:
         "200":
           description: The list of the ids of the organizations the user is connected to
@@ -228,7 +228,7 @@ paths:
 
   /organization/{organizationId}:
     parameters:
-      $ref: '#/components/parameters/organizationId'
+      - $ref: "#/components/parameters/organizationId"
     get:
       tags:
         - organizations
@@ -276,7 +276,7 @@ paths:
       summary: the administrator wants to send the changed data about a specific organization
       operationId: changeOrganizationData
       parameters:
-        $ref: "#/components/parameters/organizationId"
+        - $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -297,7 +297,7 @@ paths:
       summary: a manager wants to add a place into the organization who manages himself
       operationId: addPlaceIntoAnOrganizationById
       parameters:
-        $ref: "#/components/parameters/organizationId"
+        - $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -313,8 +313,8 @@ paths:
   # modify place data or remove place by an organization
   /organization/{organizationId}/{placeId}/changeData:
     parameters:
-      $ref: "#/components/parameters/organizationId"
-      $ref: "#/components/parameters/placeId"
+      - $ref: "#/components/parameters/organizationId"
+      - $ref: "#/components/parameters/placeId"
     post:
       tags:
         - organizations
@@ -349,7 +349,7 @@ paths:
       summary: a viewer wants to know the number of users in an specific organization
       operationId: getNumberUserInAnOrganitazion
       parameters:
-         $ref: "#/components/parameters/organizationId"
+        - $ref: "#/components/parameters/organizationId"
       responses:
         "200":
           description: Success, the number of users has been received
@@ -369,8 +369,8 @@ paths:
       summary: a viewer wants to know the number of users in a specific place of a specific PRIVATE organization
       operationId: getNumberUserInAPlace
       parameters:
-        $ref: "#/components/parameters/organizationId"
-        $ref: "#/components/parameters/placeId"
+        - $ref: "#/components/parameters/organizationId"
+        - $ref: "#/components/parameters/placeId"
       responses:
         "200":
           description: Success, the number of users has been received
@@ -391,7 +391,7 @@ paths:
       description: this operation is permitted only if the user is inside a private organization
       operationId: getAccessInformationByUserId
       parameters:
-         $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/userId"
       responses:
         "200":
           description: Success, the informations about the user has been received
@@ -414,7 +414,7 @@ paths:
       summary: the operation which describes the creation of all new users for web application
       operationId: createNewUserInAnOrganization
       parameters:
-        $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/userId"
       requestBody:
         required: true
         content:
@@ -436,7 +436,7 @@ paths:
       summary: the operation which describes the deletion of all new users for web application
       operationId: deleteUserInAnOrganization
       parameters:
-        $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/userId"
       responses:
         "200":
           description: Success, an user has been deleted
@@ -451,7 +451,7 @@ paths:
       summary: an user required the visualization of his personal data
       operationId: personalUserDataById
       parameters:
-        $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/userId"
       responses:
         "200":
           description: Success
@@ -471,7 +471,7 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Users"
+                - $ref: "#/components/schemas/User"
                 - $ref: "#/components/schemas/Organization"
       responses:
         "200":
@@ -502,7 +502,7 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Users"
+                - $ref: "#/components/schemas/User"
                 - $ref: "#/components/schemas/Organization"
       responses:
         "200":
@@ -528,8 +528,8 @@ paths:
       summary: the operation which permits to a specific users to make unknown his identity into a current specific PRIVATE organization
       operationId: UnknownUserTracking
       parameters:
-        $ref: "#/components/parameters/id"
-        $ref: "#/components/parameters/organizationId"
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -550,8 +550,8 @@ paths:
       summary: the operation which permits to a specific users to make known his identity into a current specific PRIVATE organization
       operationId: KnownUserTracking
       parameters:
-        $ref: "#/components/parameters/id"
-        $ref: "#/components/parameters/organizationId"
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/organizationId"
       requestBody:
         required: true
         content:
@@ -573,11 +573,11 @@ paths:
 
 components:
   parameters:
-    id:
+    userId:
       in: path
-      name: id
+      name: userId
       schema:
-          type: integer
+        type: integer
       required: true
       description: id of the user
 
@@ -585,7 +585,7 @@ components:
       in: path
       name: organizationId
       schema:
-         type: integer
+        type: integer
       required: true
       description: numeric id of the organization
 
