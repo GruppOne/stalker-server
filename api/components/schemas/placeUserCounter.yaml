@@ -1,7 +1,5 @@
 type: object
 description: return the total number of users currently inside a specific place of a specific PRIVATE organization
-discriminator:
-  propertyName: placeId
 properties:
   organizationId:
     type: integer

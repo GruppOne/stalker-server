@@ -1,7 +1,5 @@
 type: object
 description: return the total number of users currently inside a specific organization
-discriminator:
-  propertyName: organizationId
 properties:
   organizationId:
     type: integer

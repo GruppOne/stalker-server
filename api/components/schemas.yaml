@@ -22,6 +22,7 @@ UserAccessToPlace:
   properties:
     property:
       type: integer
+
 #TODO
 UserExitFromPlace:
   type: object

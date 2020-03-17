@@ -1,8 +1,5 @@
 type: object
 description: Data requested to login
-# mail is unique
-discriminator:
-  propertyName: mail
 properties:
   id:
     type: integer
