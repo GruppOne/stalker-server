@@ -24,5 +24,17 @@
   "java.referencesCodeLens.enabled": true,
   "java.saveActions.organizeImports": true,
   "java.showBuildStatusOnStart.enabled": true,
-  "vsintellicode.java.completionsEnabled": true
+  "vsintellicode.java.completionsEnabled": true,
+  // SPELLING
+  "spellright.language": [
+    "en",
+    "it"
+  ],
+  "spellright.documentTypes": [
+    "diagram",
+    "latex",
+    "markdown",
+    "plaintext",
+    "yaml"
+  ]
 }

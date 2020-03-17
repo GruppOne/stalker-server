@@ -1,22 +1,26 @@
 {
   "recommendations": [
+    // API
     "42Crunch.vscode-openapi",
+    "arjun.swagger-viewer",
+    "redhat.vscode-yaml",
+    // DOCKER
+    "exiasr.hadolint",
+    "ms-azuretools.vscode-docker",
+    // DOCUMENTATION
     "ban.spellright",
     "DavidAnson.vscode-markdownlint",
-    "eamodio.gitlens",
-    "GabrielBB.vscode-lombok",
-    "GitHub.vscode-pull-request-github",
-    "Gruntfuggly.todo-tree",
     "jebbs.plantuml",
-    "mermade.openapi-lint",
+    "yzhang.markdown-all-in-one",
+    // GIT
+    "GitHub.vscode-pull-request-github",
+    "eamodio.gitlens",
     "mhutchie.git-graph",
-    "ms-azuretools.vscode-docker",
+    // JAVA + SPRING
+    "GabrielBB.vscode-lombok",
     "pflannery.vscode-versionlens",
     "pivotal.vscode-spring-boot",
     "redhat.java",
-    "redhat.vscode-xml",
-    "redhat.vscode-yaml",
-    "ryanluker.vscode-coverage-gutters",
     "shengchen.vscode-checkstyle",
     "VisualStudioExptTeam.vscodeintellicode",
     "vscjava.vscode-java-debug",
@@ -24,8 +28,10 @@
     "vscjava.vscode-java-test",
     "vscjava.vscode-maven",
     "vscjava.vscode-spring-boot-dashboard",
-    "vscjava.vscode-spring-initializr",
+    // OTHER
+    "Gruntfuggly.todo-tree",
+    "redhat.vscode-xml",
+    "ryanluker.vscode-coverage-gutters",
     "wmaurer.vscode-jumpy",
-    "yzhang.markdown-all-in-one"
   ]
 }

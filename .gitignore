@@ -36,3 +36,6 @@ buildNumber.properties
 
 # ignore Intellij .idea files
 .idea
+
+# Ignore vscode dictionary file
+.vscode/spellright.dict
