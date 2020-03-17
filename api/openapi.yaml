@@ -599,10 +599,10 @@ components:
         format: int64
 
   responses:
-    $ref: "./components/responses.yml"
+    $ref: "responses.yaml"
 
   schemas:
-    $ref: "./components/schemas.yml"
+    $ref: "schemas.yaml"
 
   securitySchemes:
-    $ref: "./components/securitySchemes.yml"
+    $ref: "securitySchemes.yaml"

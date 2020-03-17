@@ -1,20 +1,20 @@
 User:
-  $ref: "./resourceSchemas/user.yml"
+  $ref: "user.yaml"
 
 Organization:
-  $ref: "./resourceSchemas/organization.yml"
+  $ref: "organization.yaml"
 
 AppConnections:
-  $ref: "./resourceSchemas/appConnections.yml"
+  $ref: "appConnections.yaml"
 
 CloseSession:
-  $ref: "./resourceSchemas/closeSession.yml"
+  $ref: "closeSession.yaml"
 
 OrganizationUserCounter:
-  $ref: "./resourceSchemas/organizationUserCounter.yml"
+  $ref: "organizationUserCounter.yaml"
 
 PlaceUserCounter:
-  $ref: "./resourceSchemas/placeUserCounter.yml"
+  $ref: "placeUserCounter.yaml"
 
 #TODO
 UserAccessToPlace:

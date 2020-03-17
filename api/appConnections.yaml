@@ -3,10 +3,10 @@ description: Connections between users and organizations
 properties:
   # reference to Organization
   organization:
-    $ref: "organization.yml"
+    $ref: "organization.yaml"
   # reference to User
   user:
-    $ref: "user.yml"
+    $ref: "user.yaml"
   createdDate:
     type: string
     format: date-time
