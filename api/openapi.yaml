@@ -384,22 +384,26 @@ paths:
           description: Success, the place has been modified
         "400":
           $ref: "#/components/responses/NotFound"
+
     delete:
-      summary: delete the specified place
+      tags:
+        - organizations
+      description: Delete the specified place.
       operationId: deletePlace
       responses:
         "200":
-          description: Success, the place has been deleted
+          description: Success.
         "404":
-          description: Place not found
+          description: Place was not found.
 
   # monitor a specific organization
+  # TODO can be done by viewers
   /monitor/organization/{organizationId}:
     get:
       tags:
         - monitor
-        - organization
-      summary: a viewer wants to know the number of users in an specific organization
+        - organizations
+      description: Return the number of users for the given organization.
       operationId: getNumberUserInAnOrganitazion
       parameters:
         - $ref: "#/components/parameters/organizationId"
@@ -414,13 +418,14 @@ paths:
           description: Organization not found
 
   # monitor a specific place in a private organization
+  # TODO can be done by viewers
   /monitor/organization/{organizationId}/place/{placeId}:
     get:
       tags:
         - monitor
-        - organization
-      summary: a viewer wants to know the number of users in a specific place of a specific PRIVATE organization
-      operationId: getNumberUserInAPlace
+        - organizations
+      description: Get the number of users in a specific place of a specific PRIVATE organization.
+      operationId: getNumberOfUsersInAPlace
       parameters:
         - $ref: "#/components/parameters/organizationId"
         - $ref: "#/components/parameters/placeId"
@@ -434,14 +439,14 @@ paths:
         "404":
           description: Place inside the organization not found
 
-  # monitor a specific employee
+  # TODO This endpoint should probably also work with public organizations and non-anonymous users
   /monitor/{userId}:
     get:
       tags:
         - monitor
-        - organization
-      summary: a viewer wants to know all the data concerning the accesses of a specific employee
-      description: this operation is permitted only if the user is inside a private organization
+        - organizations
+        - stalker web app
+      description: Get all the data concerning the accesses of a specific employee. Permitted only if the user is inside a private organization.
       operationId: getAccessInformationByUserId
       parameters:
         - $ref: "#/components/parameters/userId"
@@ -457,14 +462,17 @@ paths:
         "404":
           description: "Operation not allowed: the specified user is inside a public organization"
 
-  #FIXME There should be an other endpoint concerning the entire report of user accesses, but this requirements is optional. So, go on
+  # FIXME There should be another endpoint concerning the entire report of user accesses, but this requirement is optional. So, go on
 
   # unique endpoint to describe adding/deleting web app users (i.e. an admin create/delete an owner exc.)
   /user/{userId}/createUser:
     post:
       tags:
         - users
-      summary: the operation which describes the creation of all new users for web application
+        - stalker web app
+      description: Create all new users for an organization
+      # TODO clarify this
+      # description: the operation which describes the creation of all new users for web application
       operationId: createNewUserInAnOrganization
       parameters:
         - $ref: "#/components/parameters/userId"
@@ -486,37 +494,45 @@ paths:
     delete:
       tags:
         - users
-      summary: the operation which describes the deletion of all new users for web application
+      description: Remove all new users for an organization.
+      # TODO clarify this
+      # description: the operation which describes the deletion of all new users for web application
       operationId: deleteUserInAnOrganization
       parameters:
         - $ref: "#/components/parameters/userId"
       responses:
         "200":
           description: Success, an user has been deleted
+        # FIXME this should probably use a different code. maybe not authorized?
         "404":
-          description: "Operation not allowed: the current user has no deletion permission"
+          description: "Operation not allowed: the current user has no permission to delete users."
 
   #FIXME an user required his personal data in "My profile": optional?
-  /user/{userId}/userData:
-    get:
-      tags:
-        - users
-      summary: an user required the visualization of his personal data
-      operationId: personalUserDataById
-      parameters:
-        - $ref: "#/components/parameters/userId"
-      responses:
-        "200":
-          description: Success
-        "408":
-          description: Request timed out
+  # FIXME this is probably redundant; GET /user/{userId} already returns all the user's data
+  # /user/{userId}/userData:
+  #   get:
+  #     tags:
+  #       - users
+  #     description: Get an user's his personal data.
+  #     operationId: personalUserDataById
+  #     parameters:
+  #       - $ref: "#/components/parameters/userId"
+  #     responses:
+  #       "200":
+  #         description: Success.
+  #       "408":
+  #         description: Request timed out.
 
-  # enter/exit in an organization (necessary for the comunication with InfluxDB)
+  # FIXME this probably should not be logged to InfluxDB but to the SQL DB
+  # enter/exit in an organization (necessary for the communication with InfluxDB)
   /tracking/organization:
     post:
       tags:
+        - stalker mobile app
+        # TODO can a user be removed from an org by a manager? if so keep the following line
+        # - stalker web app
         - tracking
-      summary: an user accesses into an organization
+      description: an user accesses into an organization
       operationId: AccessOrganization
       requestBody:
         required: true
@@ -533,8 +549,11 @@ paths:
           description: Request timed out
     delete:
       tags:
+        - stalker mobile app
+        # TODO can a user be removed from an org by a manager? if so keep the following line
+        # - stalker web app
         - tracking
-      summary: an user exits from an organization
+      description: Disconnect a user from an organization
       operationId: ExitOrganization
       responses:
         "200":
@@ -542,13 +561,15 @@ paths:
         "408":
           description: Request timed out
 
-  # enter/exit in a place of an organization (necessary for the comunication with InfluxDB)
+  # TODO this should probably be refactored to 2 separate endpoints (access/exit?)
+  # TODO add missing parameters?
+  # enter/exit in a place of an organization (necessary for the communication with InfluxDB)
   /tracking/organization/place:
     post:
       tags:
         - tracking
-      summary: an user accesses into a place of an organization
-      operationId: AccessOrganization
+      description: Track an user accessing an organization's place.
+      operationId: AccessPlace
       requestBody:
         required: true
         content:
@@ -559,14 +580,14 @@ paths:
                 - $ref: "#/components/schemas/Organization"
       responses:
         "200":
-          description: Success, an user has entered into an organization
+          description: Success, an user has entered into an organizations.
         "408":
-          description: Request timed out
+          description: Request timed out.
     delete:
       tags:
         - tracking
-      summary: an user exits from a place of an organization
-      operationId: ExitOrganization
+      description: Track an user exiting from an organization's place.
+      operationId: ExitPlace
       responses:
         "200":
           description: Success, an user has exited by a place of an organization
@@ -578,7 +599,9 @@ paths:
     post:
       tags:
         - tracking
-      summary: the operation which permits to a specific users to make unknown his identity into a current specific PRIVATE organization
+      # TODO rephrase?
+      description: |
+        Allow a user to make his identity unknown into a current specific PRIVATE organization.
       operationId: UnknownUserTracking
       parameters:
         - $ref: "#/components/parameters/userId"
@@ -600,7 +623,9 @@ paths:
     post:
       tags:
         - tracking
-      summary: the operation which permits to a specific users to make known his identity into a current specific PRIVATE organization
+      # TODO rephrase?
+      description: |
+        Allow a user to make his identity known to a current specific PRIVATE organization.
       operationId: KnownUserTracking
       parameters:
         - $ref: "#/components/parameters/userId"
@@ -629,18 +654,18 @@ components:
     userId:
       in: path
       name: userId
+      description: Numeric id of the user
+      required: true
       schema:
         type: integer
-      required: true
-      description: id of the user
 
     organizationId:
       in: path
       name: organizationId
+      description: Numeric id of the organization
+      required: true
       schema:
         type: integer
-      required: true
-      description: numeric id of the organization
 
     placeId:
       in: path
@@ -651,20 +676,21 @@ components:
         type: integer
         format: int64
 
+  # TODO do we actually have reusable responses?
   responses:
     NotFound:
       description: The specified resource was not found
       # content:
       #   application/json:
       #     schema:
-      #       $ref: "../api-specification.yaml#/components/schemas/Error"
+      #       $ref: "../api-specification.yaml#/schemas/Error"
 
     Unauthorized:
       description: Unauthorized
       # content:
       #   application/json:
       #     schema:
-      #       $ref: "../api-specification.yaml#/components/schemas/Error"
+      #       $ref: "../api-specification.yaml#/schemas/Error"
 
   schemas:
     User:
@@ -707,16 +733,18 @@ components:
       in: header
       # name of the header, query parameter or cookie
       name: X-ADMIN-API-KEY
+
+    # TODO find a way to restrict scopes to specific organizations and users. E.G. a user can only get his own info
     UserAuthorization:
       type: oauth2
       flows:
         implicit:
+          # TODO write our oauth server url
           authorizationUrl: "https://domain.test/api/oauth/dialog"
           scopes:
             # TODO maybe this could only be allowed through api key?
             admin: A Stalker administrator
             owner: An organization's owner authorized operations
-            # TODO is this the name we decided?
             manager: An organization's manager authorized operations
             viewer: An organization's viewer authorized operations
 
