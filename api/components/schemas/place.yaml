@@ -1,7 +1,5 @@
 type: object
 description: Name of the place and reference to geographical informations and places data
-discriminator:
-  propertyName: id
 properties:
   id:
     type: integer

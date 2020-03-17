@@ -1,7 +1,5 @@
 type: object
 description: Organization's data
-discriminator:
-  propertyName: id
 properties:
   id:
     type: integer
