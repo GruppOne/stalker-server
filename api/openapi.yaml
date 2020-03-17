@@ -645,17 +645,79 @@ components:
     placeId:
       in: path
       name: placeId
-      description: numeric id of the place
+      description: Numeric id of the place.
       required: true
       schema:
         type: integer
         format: int64
 
   responses:
-    $ref: "./components/responses.yaml"
+    NotFound:
+      description: The specified resource was not found
+      # content:
+      #   application/json:
+      #     schema:
+      #       $ref: "../api-specification.yaml#/components/schemas/Error"
+
+    Unauthorized:
+      description: Unauthorized
+      # content:
+      #   application/json:
+      #     schema:
+      #       $ref: "../api-specification.yaml#/components/schemas/Error"
 
   schemas:
-    $ref: "./components/schemas.yaml"
+    User:
+      $ref: "./schemas/user.yaml"
+
+    Organization:
+      $ref: "./schemas/organization.yaml"
+
+    AppConnections:
+      $ref: "./schemas/appConnections.yaml"
+
+    CloseSession:
+      $ref: "./schemas/closeSession.yaml"
+
+    OrganizationUserCounter:
+      $ref: "./schemas/organizationUserCounter.yaml"
+
+    PlaceUserCounter:
+      $ref: "./schemas/placeUserCounter.yaml"
+
+    #TODO
+    UserAccessToPlace:
+      type: object
+      properties:
+        property:
+          type: integer
+
+    #TODO
+    UserExitFromPlace:
+      type: object
+      properties:
+        property:
+          type: integer
 
   securitySchemes:
-    $ref: "./components/securitySchemes.yaml"
+    # arbitrary name for the security scheme
+    AdminKey:
+      type: apiKey
+      # can be "header", "query" or "cookie"
+      in: header
+      # name of the header, query parameter or cookie
+      name: X-ADMIN-API-KEY
+    UserAuthorization:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: "https://domain.test/api/oauth/dialog"
+          scopes:
+            # TODO maybe this could only be allowed through api key?
+            admin: A Stalker administrator
+            owner: An organization's owner authorized operations
+            # TODO is this the name we decided?
+            manager: An organization's manager authorized operations
+            viewer: An organization's viewer authorized operations
+
+            user: Generic app user
