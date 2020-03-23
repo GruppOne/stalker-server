@@ -25,4 +25,7 @@
   "java.referencesCodeLens.enabled": true,
   "java.saveActions.organizeImports": true,
   "java.showBuildStatusOnStart.enabled": true,
+  "prettier.singleQuote": false,
+  "todo-tree.regex.regex": "((//|#|<!--|;|%|/\\*|^|--)\\s*($TAGS)|^\\s*- \\[ \\])",
+  "yaml.format.enable": false
 }
