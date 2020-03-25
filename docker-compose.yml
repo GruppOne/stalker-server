@@ -1,35 +1,69 @@
-version: "3"
+version: "3.7"
+
+#################### THIS SECTIONS CONTAINS SOME EXPLANATIONS AND TIPS ON HOW TO WORK WITH DOCKER-COMPOSE ##############
+
+# The environment variables (including passwords) required to configure our services are specified inside a .env file in the repository root directory. The .env
+
+# Removed container_name properties because if they're set we cannot start multiple copies of the service
+
+# The "ports" mapping exposes the given ports to the HOST. The "expose" mapping only exposes given the ports to other services, which is what we want because only the server talks to the external world
+
+# We use named volumes short syntax: [SOURCE:]TARGET[:MODE].
+# SOURCE is the named volume, TARGET is the folder inside the container MODE is ro (read-only),
+
+# To get an interactive shell inside a RUNNING container, use:
+# 'docker-compose exec <service-mapping-key> <shell-command>'
+#
+### EXAMPLES
+#
+# generic bash shell:
+# docker-compose exec <...> bash
+#
+# MariaDB shell:
+# docker-compose exec rdb mariadb
+#
+# InfluxDB shell:
+# docker-compose exec tsdb influx
+
+########################################################################################################################
+
+# TODO how do i define a REQUIRED environment variable?
+# TODO how do we define external services like our web-app?
+# TODO use restart policy On-failure to restart container when stopped by errors?
 services:
-  mysql:
-    container_name: mysqlc
+  # TODO add server container configuration
+  # server:
+  #   build: ...
+
+  rdb:
+    # TODO use build: target: prod to specify target stage with multi-stage dockerfiles
     build: ./db/relational
-    #restart: always
+
     env_file:
       - mysql.env
-    ports:
-      # <Port exposed> : < MySQL Port running inside container>
-      - "3306:3306"
-    expose:
-      # Opens port 3306 on the container
-      - "3306"
-    # Where our data will be persisted
+
     volumes:
       - ./db/relational/mysqldb:/var/lib/mysql
-    #after docker-compose, run 'docker exec -it mysqlc /bin/bash'
-  influxdb:
-    container_name: influxdbc
+
+    # Opens port 3306 to the other services
+    expose:
+      - "3306"
+
+  tsdb:
     build: ./db/time-series
-    #restart: always
+
     env_file:
       - influxdb.env
-    ports:
-      - "8086:8086"
-    expose:
-      - "8086"
+
     volumes:
       - .db/time-series/influxdb:/var/lib/influxdb/data
-    #after docker-compose, run 'docker exec -it influxdbc /bin/bash' and after digits 'influx'
-# Names our volume
+
+    # Opens port 8086 to the other services
+    expose:
+      - "8086"
+
+# TODO how to use this?
+# Names our volumes
 volumes:
-  mysqldb:
-  influxdb:
+  data-rdb:
+  data-tsdb:

@@ -1,8 +1,9 @@
 # InfluxDB
 
-We should find a way to serialize containing some kind of schema definition describing our influxdb instance
-
-We also should prepare some sample data to use when testing.
+<!-- ref: https://hub.docker.com/_/influxdb -->
+<!-- TODO We should find a way to serialize containing some kind of schema definition describing our influxdb instance -->
+<!-- TODO We also should prepare some sample data to use when testing. -->
+<!-- TODO write influxdb readme -->
 
 Please, copy all the content of influxdb.conf so that InfluxDB works properly.
 

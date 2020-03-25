@@ -29,6 +29,8 @@ SET
 /*!40101 SET NAMES utf8mb4 */
 ;
 
+-- FIXME THIS FILE DUMP DOES NOT CREATE THE DATABASE
+
 --
 -- Database: `stalker-db`
 --
