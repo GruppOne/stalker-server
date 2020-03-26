@@ -29,18 +29,21 @@ SET
 /*!40101 SET NAMES utf8mb4 */
 ;
 
--- FIXME THIS FILE DUMP DOES NOT CREATE THE DATABASE
-
+-- --------------------------------------------------------
 --
 -- Database: `stalker-db`
 --
+CREATE DATABASE IF NOT EXISTS `stalker-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE `stalker-db`;
+
 -- --------------------------------------------------------
 --
 -- Struttura della tabella `admintype`
 --
 CREATE TABLE `admintype` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL
+  `name` varchar(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -48,9 +51,9 @@ CREATE TABLE `admintype` (
 -- Struttura della tabella `connections`
 --
 CREATE TABLE `connections` (
-  `organization_id` int(11) DEFAULT NULL,
+  `organization_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -59,8 +62,8 @@ CREATE TABLE `connections` (
 --
 CREATE TABLE `ldapconfiguration` (
   `id` int(11) NOT NULL,
-  `host` varchar(50) DEFAULT NULL,
-  `username` varchar(50) DEFAULT NULL,
+  `host` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL,
   `password` char(64) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -69,9 +72,10 @@ CREATE TABLE `ldapconfiguration` (
 -- Struttura della tabella `organizationrole`
 --
 CREATE TABLE `organizationrole` (
-  `organization_id` int(11) DEFAULT NULL,
+  `organization_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `admin_type` int(11) DEFAULT NULL
+  `admin_type` int(11) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -80,10 +84,10 @@ CREATE TABLE `organizationrole` (
 --
 CREATE TABLE `organizations` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `description` tinytext,
-  `ldap_conf` int(11) DEFAULT NULL,
-  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` varchar(50) NOT NULL,
+  `description` tinytext NOT NULL,
+  `ldap_conf` int(11) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_modified_date` timestamp NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -93,10 +97,10 @@ CREATE TABLE `organizations` (
 --
 CREATE TABLE `placedata` (
   `id` int(11) NOT NULL,
-  `address` varchar(150) DEFAULT NULL,
-  `city` varchar(50) DEFAULT NULL,
-  `zipcode` varchar(10) DEFAULT NULL,
-  `state` varchar(50) DEFAULT NULL
+  `address` varchar(150) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `zipcode` varchar(10) NOT NULL,
+  `state` varchar(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -105,9 +109,9 @@ CREATE TABLE `placedata` (
 --
 CREATE TABLE `place` (
   `id` int(11) NOT NULL,
-  `organization_id` int(11) DEFAULT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `position` linestring DEFAULT NULL
+  `organization_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `position` linestring NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -116,10 +120,10 @@ CREATE TABLE `place` (
 --
 CREATE TABLE `userdata` (
   `user_id` int(11) NOT NULL,
-  `firstname` varchar(50) DEFAULT NULL,
-  `lastname` varchar(50) DEFAULT NULL,
-  `birth_date` date DEFAULT NULL,
-  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `firstname` varchar(50) NOT NULL,
+  `lastname` varchar(50) NOT NULL,
+  `birth_date` date NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_modified_date` timestamp NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -129,8 +133,8 @@ CREATE TABLE `userdata` (
 --
 CREATE TABLE `userlog` (
   `user_id` int(11) NOT NULL,
-  `ip` varchar(50) DEFAULT NULL,
-  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `ip` varchar(50) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -139,7 +143,7 @@ CREATE TABLE `userlog` (
 --
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
   `password` char(64) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -235,6 +239,49 @@ ALTER TABLE
   `users`
 ADD
   PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT per le tabelle scaricate
+--
+--
+-- AUTO_INCREMENT per la tabella `admintype`
+--
+ALTER TABLE
+  `admintype`
+MODIFY
+  `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `ldapconfiguration`
+--
+ALTER TABLE
+  `ldapconfiguration`
+MODIFY
+  `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `organizations`
+--
+ALTER TABLE
+  `organizations`
+MODIFY
+  `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `place`
+--
+ALTER TABLE
+  `place`
+MODIFY
+  `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `users`
+--
+ALTER TABLE
+  `users`
+MODIFY
+  `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Limiti per le tabelle scaricate
