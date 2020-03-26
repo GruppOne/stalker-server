@@ -30,39 +30,54 @@ version: "3.7"
 # TODO how do i define a REQUIRED environment variable?
 # TODO how do we define external services like our web-app?
 # TODO use restart policy On-failure to restart container when stopped by errors?
+# TODO https://docs.docker.com/compose/compose-file/#environment
 services:
   # TODO add server container configuration
   # server:
   #   build: ...
 
   rdb:
-    # TODO use build: target: prod to specify target stage with multi-stage dockerfiles
-    build: ./db/relational
+    build:
+      context: ./db/relational
+      # # XXX we will use build: target: prod to specify the target stage with multi-stage dockerfiles
+      # target: name-of-stage
 
-    env_file:
-      - mysql.env
+      restart: unless-stopped
 
-    volumes:
-      - ./db/relational/mysqldb:/var/lib/mysql
+    environment:
+      # empty values mean "get it from the .env file"
+      MYSQL_DATABASE:
+      MYSQL_ROOT_PASSWORD:
 
     # Opens port 3306 to the other services
     expose:
       - "3306"
 
-  tsdb:
-    build: ./db/time-series
-
-    env_file:
-      - influxdb.env
-
     volumes:
-      - .db/time-series/influxdb:/var/lib/influxdb/data
+      - ./db/relational/mysqldb:/var/lib/mysql
+
+  tsdb:
+    build:
+      context: ./db/time-series
+      # # XXX we will use build: target: prod to specify the target stage with multi-stage dockerfiles
+      # target: name-of-stage
+
+    restart: unless-stopped
+
+    environment:
+      # empty values mean "get it from the .env file"
+      INFLUXDB_DB:
+      INFLUXDB_ADMIN_USER:
+      INFLUXDB_ADMIN_PASSWORD:
 
     # Opens port 8086 to the other services
     expose:
       - "8086"
 
-# TODO how to use this?
+    volumes:
+      - .db/time-series/influxdb:/var/lib/influxdb/data
+
+# TODO should use this on the left side of tsdb and rdb volumes syntax ([SOURCE:]TARGET[:MODE])
 # Names our volumes
 volumes:
   data-rdb:
