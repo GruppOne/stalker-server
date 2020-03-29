@@ -53,7 +53,7 @@ CREATE TABLE `admintype` (
 CREATE TABLE `connections` (
   `organization_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -75,7 +75,7 @@ CREATE TABLE `organizationrole` (
   `organization_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `admin_type` int(11) NOT NULL,
-  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -87,8 +87,8 @@ CREATE TABLE `organizations` (
   `name` varchar(50) NOT NULL,
   `description` tinytext NOT NULL,
   `ldap_conf` int(11) NOT NULL,
-  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_modified_date` timestamp NULL DEFAULT NULL
+  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_modified_date` DATETIME NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -123,8 +123,8 @@ CREATE TABLE `userdata` (
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `birth_date` date NOT NULL,
-  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_modified_date` timestamp NULL DEFAULT NULL
+  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_modified_date` DATETIME NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -134,7 +134,7 @@ CREATE TABLE `userdata` (
 CREATE TABLE `userlog` (
   `user_id` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL,
-  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
