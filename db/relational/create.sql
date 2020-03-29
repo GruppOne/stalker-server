@@ -31,11 +31,11 @@ SET
 
 -- --------------------------------------------------------
 --
--- Database: `stalker-db`
+-- Database: `stalker-rdb`
 --
-CREATE DATABASE IF NOT EXISTS `stalker-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `stalker-rdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-USE `stalker-db`;
+USE `stalker-rdb`;
 
 -- --------------------------------------------------------
 --

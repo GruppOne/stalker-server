@@ -1,9 +1,9 @@
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
+### Gradle ###
 HELP.md
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
 
@@ -23,10 +23,17 @@ build/
 *.ipr
 out/
 
-# ENVIRONMENT FILE
+### DOTENV FILE ###
 .env
 
-# we need to ignore both bin/ and build/ because vscode and gradle compile classes to different folders
+### VS Code ###
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/scripts/
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# vscode builds java projects to bin/
 bin/
-# this file needs to be ignored because the extension works differently across OSes
-.vscode/spellright.dict
