@@ -1,3 +1,4 @@
+#TODO check ldapConfiguration.yaml: is it correct?
 type: object
 description: LDAP server configuration
 properties:

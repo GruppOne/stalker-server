@@ -1,2 +1,0 @@
-type: string
-description: Signal that an active user session is being closed by a client
