@@ -1,4 +1,11 @@
 {
   "version": "2.0.0",
-  "tasks": []
+  "tasks": [
+    {
+      "label": "Run spectral linter",
+      "type": "shell",
+      "command": "npx spectral lint ./api/**.yaml",
+      "problemMatcher": []
+    }
+  ]
 }

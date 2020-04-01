@@ -2,8 +2,18 @@
   "recommendations": [
     // API
     "42Crunch.vscode-openapi",
-    "arjun.swagger-viewer",
-    "redhat.vscode-yaml",
+    "travisillig.vscode-spectral",
+    // JAVA + SPRING
+    "GabrielBB.vscode-lombok",
+    "pivotal.vscode-spring-boot",
+    "redhat.java",
+    "shengchen.vscode-checkstyle",
+    "vscjava.vscode-java-debug",
+    "vscjava.vscode-java-dependency",
+    "vscjava.vscode-java-test",
+    "vscjava.vscode-maven",
+    "vscjava.vscode-spring-boot-dashboard",
+    // -------- COMMONS --------
     // DOCKER
     "exiasr.hadolint",
     "ms-azuretools.vscode-docker",
@@ -16,22 +26,14 @@
     "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "mhutchie.git-graph",
-    // JAVA + SPRING
-    "GabrielBB.vscode-lombok",
-    "pflannery.vscode-versionlens",
-    "pivotal.vscode-spring-boot",
-    "redhat.java",
-    "shengchen.vscode-checkstyle",
-    "VisualStudioExptTeam.vscodeintellicode",
-    "vscjava.vscode-java-debug",
-    "vscjava.vscode-java-dependency",
-    "vscjava.vscode-java-test",
-    "vscjava.vscode-maven",
-    "vscjava.vscode-spring-boot-dashboard",
     // OTHER
+    "editorconfig.editorconfig",
     "Gruntfuggly.todo-tree",
+    "pflannery.vscode-versionlens",
     "redhat.vscode-xml",
+    "redhat.vscode-yaml",
     "ryanluker.vscode-coverage-gutters",
+    "VisualStudioExptTeam.vscodeintellicode",
     "wmaurer.vscode-jumpy",
   ]
 }
