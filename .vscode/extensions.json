@@ -2,17 +2,16 @@
   "recommendations": [
     // API
     "42Crunch.vscode-openapi",
-    "arjun.swagger-viewer",
     "travisillig.vscode-spectral",
     // JAVA + SPRING
     "GabrielBB.vscode-lombok",
-    "pivotal.vscode-manifest-yaml",
     "pivotal.vscode-spring-boot",
     "redhat.java",
     "shengchen.vscode-checkstyle",
     "vscjava.vscode-java-debug",
     "vscjava.vscode-java-dependency",
     "vscjava.vscode-java-test",
+    "vscjava.vscode-maven",
     "vscjava.vscode-spring-boot-dashboard",
     // -------- COMMONS --------
     // DOCKER
@@ -35,6 +34,6 @@
     "redhat.vscode-yaml",
     "ryanluker.vscode-coverage-gutters",
     "VisualStudioExptTeam.vscodeintellicode",
-    "wmaurer.vscode-jumpy",
+    "wmaurer.vscode-jumpy"
   ]
 }

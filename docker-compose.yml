@@ -2,7 +2,11 @@ version: "3.7"
 
 #################### THIS SECTIONS CONTAINS SOME EXPLANATIONS AND TIPS ON HOW TO WORK WITH DOCKER-COMPOSE ##############
 
-# The environment variables (including passwords) required to configure our services are specified inside a .env file in the repository root directory. The .env
+# To start the graphical interfaces for the db services, use the following command in the root workspace folder:
+
+# docker-compose -f ./docker-compose.yml -f .docker-compose.db-gui.yml <compose-command>
+
+# The password required to access our services are specified inside a .env file in the repository root directory. The env structure is documented in the .env.example file.
 
 # Removed container_name properties because if they're set we cannot start multiple copies of the service
 
@@ -27,50 +31,52 @@ version: "3.7"
 
 ########################################################################################################################
 
-# TODO how do i define a REQUIRED environment variable?
+# TODO use this command to dump a running container's db contents:
+# docker exec rdb sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > ./db/relational/dump/all-databases.sql
 # TODO how do we define external services like our web-app?
-# TODO use restart policy On-failure to restart container when stopped by errors?
-# TODO https://docs.docker.com/compose/compose-file/#environment
+# TODO use docker/kube secrets to manage passwords
 services:
   # TODO add server container configuration
   # server:
   #   build: ...
+  #   depends_on:
+  #     - rdb
+  #     - tsdb
 
+  # TODO add health check
   rdb:
     build:
       context: ./db/relational
       # # XXX we will use build: target: prod to specify the target stage with multi-stage dockerfiles
       # target: name-of-stage
 
-      restart: unless-stopped
+    restart: always
 
     environment:
-      # empty values mean "get it from the .env file"
-      MYSQL_DATABASE:
-      MYSQL_ROOT_PASSWORD:
+      # TODO add a regular user to be used by spring
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
 
-    # Opens port 3306 to the other services
     expose:
       - "3306"
 
     volumes:
       - ./db/relational/mysqldb:/var/lib/mysql
 
+  # TODO add health check
   tsdb:
     build:
       context: ./db/time-series
-      # # XXX we will use build: target: prod to specify the target stage with multi-stage dockerfiles
       # target: name-of-stage
 
-    restart: unless-stopped
+    restart: always
 
     environment:
-      # empty values mean "get it from the .env file"
-      INFLUXDB_DB:
-      INFLUXDB_ADMIN_USER:
-      INFLUXDB_ADMIN_PASSWORD:
+      # TODO we should not create the db here
+      INFLUXDB_DB: stalker-tsdb
+      # TODO add a regular user to be used by spring
+      INFLUXDB_ADMIN_USER: root
+      INFLUXDB_ADMIN_PASSWORD: ${INFLUXDB_ADMIN_PASSWORD:?err}
 
-    # Opens port 8086 to the other services
     expose:
       - "8086"
 

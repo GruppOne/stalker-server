@@ -29,6 +29,12 @@ SET
 /*!40101 SET NAMES utf8mb4 */
 ;
 
+-- FIXME tables and column names ARE NOT CONSISTENT
+-- admintype <- missing word separator
+-- place <- all other tables have plural names
+
+-- TODO create db via spring properties or something like that
+
 -- --------------------------------------------------------
 --
 -- Database: `stalker-rdb`

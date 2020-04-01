@@ -10,3 +10,7 @@ npx standard-version --skip.tag $args
 if ($LASTEXITCODE) {
   Write-Error "Something wrong with standard-version"
 }
+else {
+  $tagRelease = Join-Path $PSScriptRoot "tag-current-ps1"
+  Write-Output "when ready, run $tagRelease"
+}

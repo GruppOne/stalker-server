@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  rdb-gui:
+    image: phpmyadmin/phpmyadmin:fpm-alpine
+    depends_on:
+      - rdb
+
+    environment:
+      - PMA_HOST=rdb
+
+    ports:
+      - 8888:80
+
+  # FIXME not working
+  tsdb-gui:
+    image: chronograf:alpine
+    depends_on:
+      - tsdb
+    ports:
+      - 8889:8888
