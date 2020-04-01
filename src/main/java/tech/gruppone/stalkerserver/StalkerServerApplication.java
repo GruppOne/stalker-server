@@ -6,8 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class StalkerServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(StalkerServerApplication.class, args);
-	}
+  // TODO print app name and version
+  public static void main(String[] args) {
+
+    SpringApplication.run(StalkerServerApplication.class, args);
+  }
 
 }

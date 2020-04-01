@@ -8,12 +8,13 @@ version: "3.7"
 
 # The password required to access our services are specified inside a .env file in the repository root directory. The env structure is documented in the .env.example file.
 
-# Removed container_name properties because if they're set we cannot start multiple copies of the service
-
 # The "ports" mapping exposes the given ports to the HOST. The "expose" mapping only exposes given the ports to other services, which is what we want because only the server talks to the external world
 
 # We use named volumes short syntax: [SOURCE:]TARGET[:MODE].
 # SOURCE is the named volume, TARGET is the folder inside the container MODE is ro (read-only),
+
+# We can use this command to dump the currently running mariadb instance to a file:
+# docker exec rdb sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > ./db/relational/dump/all-databases.sql
 
 # To get an interactive shell inside a RUNNING container, use:
 # 'docker-compose exec <service-mapping-key> <shell-command>'
@@ -31,8 +32,6 @@ version: "3.7"
 
 ########################################################################################################################
 
-# TODO use this command to dump a running container's db contents:
-# docker exec rdb sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > ./db/relational/dump/all-databases.sql
 # TODO how do we define external services like our web-app?
 # TODO use docker/kube secrets to manage passwords
 services:
@@ -84,7 +83,6 @@ services:
       - .db/time-series/influxdb:/var/lib/influxdb/data
 
 # TODO should use this on the left side of tsdb and rdb volumes syntax ([SOURCE:]TARGET[:MODE])
-# Names our volumes
 volumes:
   data-rdb:
   data-tsdb:

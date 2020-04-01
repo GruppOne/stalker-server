@@ -2,7 +2,7 @@
   "packageFiles": [],
   "bumpFiles": [
     {
-      // "filename": "pom.xml",
+      "filename": "build.gradle",
       "updater": ".release/updater.js"
     }
   ],
