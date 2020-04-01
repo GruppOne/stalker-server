@@ -1,9 +1,9 @@
-#TODO check ldapConfiguration.yaml: is it correct?
 openapi: "3.0.2"
 
 info:
   title: Stalker API
-  description: The API specification developed by GruppOne for the Stalker project.
+  description: |
+    The API specification developed by GruppOne for the Stalker project.
   contact:
     name: GruppOne
     email: gruppone.swe@gmail.com
@@ -12,7 +12,7 @@ info:
   version: "0.1.0"
 
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api/v0
     description: Development server
   # TODO specify servers using an appropriate variable
   # - url: https://{environment}.GruppOne.com/v1
@@ -23,66 +23,18 @@ servers:
   #           - api         # Production server
   #           - api.dev     # Development server
   #           - api.staging # Staging server
-
-# TODO clarify the difference between monitor and tracking
 tags:
-  - name: monitor
-    description: Operations concerning monitoring organizations and places.
-  - name: organizations
-    description: Operations concerning organizations.
   - name: stalker mobile app
     description: This operation should be available to mobile app users.
   - name: stalker web app
     description: This operation should be available to web app users (owners, managers, viewers).
-  - name: tracking
-    description: Operations concerning users tracking.
-  - name: users
-    description: Operations concerning users.
 
 paths:
-  /user:
-    # TODO is it actually needed to get ALL users?
-    # TODO only admins should be authorized to do this
-    get:
-      tags:
-        - stalker web app
-        - users
-      description: Return the list of registered users. Operation reserved only to the administrator.
-      operationId: getAllUsers
-      responses:
-        "200":
-          description: Success
-          # TODO specify response schema (array of users)
-        "404":
-          description: No users are currently registered in the server.
-
-    post:
-      tags:
-        - stalker mobile app
-        - stalker web app
-        - users
-      description: Register a new user. This operation is only available from the mobile app.
-      operationId: createNewUser
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              # FIXME this reference does not work correctly.
-              $ref: "#/components/schemas/User"
-      responses:
-        "200":
-          description: User was registered successfully.
-        "406":
-          description: Another user was already registered with the given email.
-
-  # TODO should this path use a {userId} parameter? --> Alberto G said: "No, because an user who wants to login in Stalker isn't recognizable by the system"
   /user/login:
     post:
       tags:
         - stalker mobile app
         - stalker web app
-        - users
       description: Log in an existing user.
       operationId: loginUser
       requestBody:
@@ -96,143 +48,14 @@ paths:
           description: Login was successful.
         "400":
           description: Incorrect credentials.
+        default:
+          $ref: "#/components/responses/DefaultResponse"
 
-  # TODO should this path use a {userId} parameter? Alberto G said: "Yes, it should, otherwise without adding {userId}, every user logout by the system"
-  /user/logout:
-    post:
-      tags:
-        - stalker mobile app
-        - stalker web app
-        - users
-      description: Log out an user from a client.
-      operationId: logoutUser
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CloseSession"
-      responses:
-        "200":
-          description: Successfully logged out
-        "408":
-          description: Request timed out
-
-  /user/passwordRecovery:
-    post:
-      tags:
-        - stalker mobile app
-        - users
-      description: Reset a password of a user account.
-      operationId: recoveryUserPassword
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: string
-              description: The email address of the account that needs to recover the password.
-      responses:
-        "200":
-          description: An email was sent to the specified address.
-        "406":
-          description: Email does not match an account.
-
-  /user/{userId}:
-    # if a parameter is shared between all operations, it should be placed outside the operations
-    parameters:
-      - $ref: "#/components/parameters/userId"
-    get:
-      tags:
-        - stalker web app
-        - users
-      description: Get all information for the given user.
-      operationId: getUser
-      responses:
-        "200":
-          description: Success.
-        "404":
-          $ref: "#/components/responses/NotFound"
-    delete:
-      tags:
-        - stalker web app
-        - users
-      description: Delete the specified user account.
-      operationId: deleteUser
-      responses:
-        "200":
-          description: Success, an user has been deleted.
-        "400":
-          description: Invalid username supplied.
-        "404":
-          description: User not found.
-    put:
-      tags:
-        - stalker web app
-        - users
-      description: Update information for an user.
-      # TODO specify request body. It should be a subset with ONLY THE USER INFORMATION THAT CHANGED
-      responses:
-        "200":
-          description: Success.
-        "404":
-          description: Requested user was not found.
-
-  /user/{userId}/history:
-    get:
-      tags:
-        - stalker web app
-        - users
-      description: Get the history of this user accesses to all organizations.
-      operationId: getUserHistory
-      parameters:
-        - $ref: "#/components/parameters/userId"
-      responses:
-        "200":
-          description: Success.
-        "404":
-          description: User has no history.
-
-  # connect/disconnect to/from an organization
-  # TODO this path should be "/user/{userId}/organization/{organizationId}" because of clarity
-  # if "/organization/" is not specified the URL becomes ugly to read --> Alberto G said: "Luca's right"
-  /user/{userId}/organization/{organizationId}:
-    parameters:
-      - $ref: "#/components/parameters/userId"
-      - $ref: "#/components/parameters/organizationId"
-    get:
-      tags:
-        - stalker mobile app
-        - users
-        - organizations
-      description: Connect the current user to the given organization.
-      operationId: connectUserToOrganization
-      responses:
-        "200":
-          description: Successful connection.
-        "408":
-          description: Requested timed out.
-    delete:
-      tags:
-        - stalker mobile app
-        - users
-        - organizations
-      description: Disconnect the current user from a specified organization.
-      operationId: disconnectUserFromOrganization
-      responses:
-        "200":
-          description: Successful disconnection.
-        "408":
-          description: Requested timed out.
-
-  #FIXME is it needed?? Because this action is client-side (a filter in mobile application)
-  /user/{userId}/findConnectedOrganizations:
+  /user/{userId}/subscribed:
     get:
       tags:
         - stalker mobile app
         - stalker web app
-        - users
-        - organizations
       description: Return the list of organizations that a user has connected to.
       operationId: getConnectedOrganizationsByUserId
       parameters:
@@ -240,13 +63,22 @@ paths:
       responses:
         "200":
           description: The list of the ids of the organizations the user is connected to.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Organization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
 
   /organization:
     get:
       tags:
         - stalker mobile app
         - stalker web app
-        - organizations
       description: Return the list of all the organizations registered to Stalker.
       operationId: getAllOrganizations
       responses:
@@ -260,107 +92,15 @@ paths:
                   $ref: "#/components/schemas/Organization"
         "404":
           $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
 
-    # XXX only an administrator should be able to do this
-    post:
-      tags:
-        - stalker web app
-        - organizations
-      description: Create a new organization.
-      operationId: createNewOrganization
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Organization"
-      responses:
-        "200":
-          description: Success, the organization has been created.
-        "400":
-          description: The organization already exists.
-
-    put:
-      tags:
-        - stalker mobile app
-        - stalker web app
-        - organizations
-      description: Update an organization's information.
-      operationId: updateOrganization
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Organization"
-      responses:
-        "200":
-          description: List of organization updated.
-        "405":
-          description: Validation exception.
-        "408":
-          description: Request timed out.
-
-  /organization/{organizationId}:
-    parameters:
-      - $ref: "#/components/parameters/organizationId"
-    get:
-      tags:
-        - stalker mobile app
-        - stalker web app
-        - organizations
-      description: Get information about a specific organization.
-      operationId: getOrganizationById
-      responses:
-        "200":
-          description: Success.
-        "404":
-          $ref: "#/components/responses/NotFound"
-    delete:
-      tags:
-        - stalker web app
-        - organizations
-      description: Delete the specified organization. Operation reserved only to the administrator.
-      operationId: deleteOrganizationById
-      responses:
-        "200":
-          description: Success, the organization has been deleted.
-        "400":
-          description: Organization not found.
-        "408":
-          description: Request timed out
-
-  /organization/{organizationId}/changeData:
-    put:
-      tags:
-        - stalker web app
-        - organizations
-      description: Send the changed data about a specific organization. Operation reserved only to the administrator.
-      operationId: changeOrganizationData
-      parameters:
-        - $ref: "#/components/parameters/organizationId"
-      # TODO request body should include ONLY the changed info
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Organization"
-      responses:
-        "200":
-          description: Success, the place has been modified.
-        "408":
-          description: Request timed out.
-
-  # TODO this maybe should be /organization/{organizationId}/place: --> Alberto G. said: "I disagree. In my opinion, it's better to specify the action of adding a place, otherwise it can seem a simple research of all places in an specific organization"
-  # TODO this can only be done by manager and up
-  /organization/{organizationId}/addPlace:
+  /organization/{organizationId}/place:
     parameters:
       - $ref: "#/components/parameters/organizationId"
     post:
       tags:
         - stalker web app
-        - organizations
       description: Add a new place to the given organization. Operation reserved only to the managers and up.
       operationId: addPlaceIntoAnOrganizationById
       requestBody:
@@ -374,303 +114,55 @@ paths:
           description: Success, the place has been created.
         "400":
           description: The place already exists inside the current organization.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
 
-  /organization/{organizationId}/{placeId}/changeData:
-    parameters:
-      - $ref: "#/components/parameters/organizationId"
-      - $ref: "#/components/parameters/placeId"
-    # TODO managers and up
-    put:
-      tags:
-        - stalker web app
-        - organizations
-      description: Change data for a place. Operation reserved only to the managers and up.
-      operationId: changePlaceData
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Organization"
-      responses:
-        "200":
-          description: Success, the place has been modified.
-        "400":
-          $ref: "#/components/responses/NotFound"
-    #TODO shouldn't it be better to specify this action with an other path, like: "/organization/{organizationId}/{placeId}/removePlace"?
-    delete:
-      tags:
-        - stalker web app
-        - organizations
-      description: Delete the specified place. Operation reserved only to the managers and up.
-      operationId: deletePlace
-      responses:
-        "200":
-          description: Success.
-        "404":
-          description: Place was not found.
-
-  # monitor a specific organization
-  # TODO can be done by viewers
-  /monitor/organization/{organizationId}:
-    get:
-      tags:
-        - stalker web app
-        - monitor
-        - organizations
-      description: Return the number of users for the given organization. Operation reserved only to the viewers and up.
-      operationId: getNumberOfUserInAnOrganitazion
-      parameters:
-        - $ref: "#/components/parameters/organizationId"
-      responses:
-        "200":
-          description: Success, the number of users has been received.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrganizationUserCounter"
-        "404":
-          description: Organization not found.
-
-  # monitor a specific place in a private organization
-  # TODO can be done by viewers
-  /monitor/organization/{organizationId}/place/{placeId}:
-    get:
-      tags:
-        - stalker web app
-        - monitor
-        - organizations
-      description: Get the number of users in a specific place of a specific PRIVATE organization. Operation reserved only to the viewers and up.
-      operationId: getNumberOfUsersInAPlace
-      parameters:
-        - $ref: "#/components/parameters/organizationId"
-        - $ref: "#/components/parameters/placeId"
-      responses:
-        "200":
-          description: Success, the number of users has been received.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PlaceUserCounter"
-        "404":
-          description: Place inside the organization not found.
-
-  # TODO This endpoint should probably also work with public organizations and non-anonymous users --> Alberto G. said: "According to the CAPITOLATO, you must monitor only the employee of a private organization. An other consideration: an anonymous user can't be recognizable by an userId, at least by the system (except InfluxDB)"
-  /monitor/{userId}:
-    get:
-      tags:
-        - stalker web app
-        - monitor
-        - organizations
-      description: Get all the data concerning the accesses of a specific employee. Operation permitted only if the user is inside a private organization, and reserved only to the viewers and up.
-      operationId: getAccessInformationByUserId
-      parameters:
-        - $ref: "#/components/parameters/userId"
-      responses:
-        "200":
-          description: Success, the informations about the user has been received.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/OrganizationUserCounter"
-                  - $ref: "#/components/schemas/PlaceUserCounter"
-        "404":
-          description: "Operation not allowed: the specified user is inside a public organization."
-
-  # FIXME There should be another endpoint concerning the entire report of user accesses, but this requirement is optional. So, go on
-
-  #FIXME? unique endpoint to describe adding/deleting web app users (i.e. an admin create/delete an owner exc.)
-  /user/{userId}/createUser:
+  /tracking/inside:
     post:
-      tags:
-        - stalker web app
-        - users
-      description: Create web app users (owners, managers, viewers). Operation reserved only to the administrator.
-      # TODO an alternative description
-      # description: Create all new users for an organization.
-      operationId: createNewUserInAnOrganization
-      parameters:
-        - $ref: "#/components/parameters/userId"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-      responses:
-        "200":
-          description: Success, a new user has been created.
-        "404":
-          description: "Operation not allowed: the current user has no creation permission."
-        "408":
-          description: Request timed out.
-
-  /user/{userId}/deleteUser:
-    delete:
-      tags:
-        - stalker web app
-        - users
-      description: Remove all users for an organization.
-      # TODO clarify this
-      # description: the operation which describes the deletion of all new users for web application
-      operationId: deleteUserInAnOrganization
-      parameters:
-        - $ref: "#/components/parameters/userId"
-      responses:
-        "200":
-          description: Success, an user has been deleted.
-        # FIXME this should probably use a different code. maybe not authorized?
-        "404":
-          description: "Operation not allowed: the current user has no permission to delete users."
-
-  # FIXME an user required his personal data in "My profile": optional?
-  # FIXME this is probably redundant; GET /user/{userId} already returns all the user's data --> Alberto G said: "I'm stupid, you're right"
-  # /user/{userId}/userData:
-  #   get:
-  #     tags:
-  #       - stalker web app
-  #       - users
-  #     description: Get an user's his personal data.
-  #     operationId: personalUserDataById
-  #     parameters:
-  #       - $ref: "#/components/parameters/userId"
-  #     responses:
-  #       "200":
-  #         description: Success.
-  #       "408":
-  #         description: Request timed out.
-
-  # FIXME this probably should not be logged to InfluxDB but to the SQL DB
-  # TODO this should probably be refactored to 2 separate endpoints (access/exit?)
-  # TODO add missing parameters?
-  # enter/exit in an organization (necessary for the communication with InfluxDB)
-  /tracking/organization:
-    post:
-      #TODO is LDAP a problem for post? Have you to provide an other endpoint?
       tags:
         - stalker mobile app
-        # TODO can a user be removed from an org by an owner? if so keep the following line --> Alberto G said: "We could decide this detail, but I think that an owner wouldn't have any interest to remove an user by his organization"
-        # - stalker web app
-        - tracking
-      description: Track accesses of a users into an organization. Operation reserved only to the administrator.
-      operationId: trackUserAccessOrganization
+      description: Report an user who has entered into a place.
+      operationId: reportUserEnteredInAPlace
       requestBody:
         required: true
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/User"
-                - $ref: "#/components/schemas/Organization"
-      responses:
-        "200":
-          description: Success, an user has entered into an organization.
-        "408":
-          description: Request timed out.
-    delete:
-      tags:
-        - stalker mobile app
-        # TODO can a user be removed from an org by an owner? if so keep the following line --> Alberto G said: "Look up"
-        # - stalker web app
-        - tracking
-      description: Disconnect a user from an organization. Operation reserved only to the viewers and up.
-      operationId: trackUserExitOrganization
-      responses:
-        "200":
-          description: Success, an user has exited by an organization.
-        "408":
-          description: Request timed out.
-
-  # TODO this should probably be refactored to 2 separate endpoints (access/exit?)
-  # TODO add missing parameters?
-  # enter/exit in a place of an organization (necessary for the communication with InfluxDB)
-  /tracking/organization/place:
-    post:
-      tags:
-        - stalker mobile app
-        - tracking
-      description: Track an user accessing an organization's place. Operation reserved only to the viewers and up.
-      operationId: trackUserAccessPlace
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/User"
-                - $ref: "#/components/schemas/Organization"
+                - $ref: "#/components/schemas/PlaceUserCounter"
       responses:
         "200":
           description: Success, an user has entered into an organizations.
         "408":
           description: Request timed out.
-    delete:
-      tags:
-        - stalker mobile app
-        - tracking
-      description: Track an user exiting from an organization's place. Operation reserved only to the viewers and up.
-      operationId: trackUserExitPlace
-      responses:
-        "200":
-          description: Success, an user has exited by a place of an organization.
-        "408":
-          description: Request timed out.
+        default:
+          $ref: "#/components/responses/DefaultResponse"
 
-  #FIXME? an user become anonymous into an organization
-  /tracking/{userId}/{organizationId}/unknownIdentity:
+  /tracking/outside:
     post:
       tags:
         - stalker mobile app
-        - tracking
-      # TODO rephrase?
-      description: Make unknown the identity user, into a current specific private organization.
-      operationId: trackUnknownUser
-      parameters:
-        - $ref: "#/components/parameters/userId"
-        - $ref: "#/components/parameters/organizationId"
+      description: Report an user who has exited by a place.
+      operationId: reportUserExitedInAPlace
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AppConnections"
+              allOf:
+                - $ref: "#/components/schemas/PlaceUserCounter"
       responses:
         "200":
-          description: Success, now the identity user is unknown.
+          description: Success, an user has entered into an organizations.
         "408":
           description: Request timed out.
+        default:
+          $ref: "#/components/responses/DefaultResponse"
 
-  #FIXME? an user become known into an organization
-  /tracking/{userId}/{organizationId}/knownIdentity:
-    post:
-      tags:
-        - stalker mobile app
-        - tracking
-      # TODO rephrase?
-      description: Make known the identity user, to a current specific private organization.
-      operationId: trackKnownUser
-      parameters:
-        - $ref: "#/components/parameters/userId"
-        - $ref: "#/components/parameters/organizationId"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AppConnections"
-      responses:
-        "200":
-          description: Success, now the identity user is known.
-        "408":
-          description: Request timed out.
-
-  #TODO is it needed? What does it mean?
-  # /user/findByOrganization/{organizationId}:
-  #   get:
-  #     responses:
-  #       "200":
-  #         responseBody:
+security:
+  - AdminKey: []
 
 components:
   parameters:
@@ -699,34 +191,28 @@ components:
         type: integer
         format: int64
 
-  # TODO do we actually have reusable responses?
   responses:
+    DefaultResponse:
+      description: Unexpected error
+
     NotFound:
       description: The specified resource was not found
-      # content:
-      #   application/json:
-      #     schema:
-      #       $ref: "../api-specification.yaml#/schemas/Error"
+
+    NotImplemented:
+      description: This endpoint has not been implemented yet.
 
     Unauthorized:
       description: Unauthorized
-      # content:
-      #   application/json:
-      #     schema:
-      #       $ref: "../api-specification.yaml#/schemas/Error"
 
   schemas:
-    User:
-      $ref: "./schemas/user.yaml"
-
-    Organization:
-      $ref: "./schemas/organization.yaml"
-
     AppConnections:
       $ref: "./schemas/appConnections.yaml"
 
-    CloseSession:
-      $ref: "./schemas/closeSession.yaml"
+    LdapConfiguration:
+      $ref: "./schemas/ldapConfiguration.yaml"
+
+    Organization:
+      $ref: "./schemas/organization.yaml"
 
     OrganizationUserCounter:
       $ref: "./schemas/organizationUserCounter.yaml"
@@ -734,27 +220,16 @@ components:
     PlaceUserCounter:
       $ref: "./schemas/placeUserCounter.yaml"
 
+    User:
+      $ref: "./schemas/user.yaml"
+
+    UserData:
+      $ref: "./schemas/userData.yaml"
+
   securitySchemes:
-    # arbitrary name for the security scheme
+    # TODO we could add a developer key
     AdminKey:
       type: apiKey
-      # can be "header", "query" or "cookie"
       in: header
-      # name of the header, query parameter or cookie
+      # name of the header
       name: X-ADMIN-API-KEY
-
-    # TODO oauth2 is probably wrong. maybe user openID connect?
-    UserAuthorization:
-      type: oauth2
-      flows:
-        # FIXME this is the wrong flow
-        implicit:
-          # TODO write our oauth server url
-          authorizationUrl: "https://domain.test/api/oauth/dialog"
-          # TODO find a way to restrict scopes to specific organizations and users. A user can only get his own info!
-          scopes:
-            # TODO these should match in some way our organization roles
-            owner: An organization's owner authorized operations
-            manager: An organization's manager authorized operations
-            viewer: An organization's viewer authorized operations
-            user: Generic app user

@@ -1,0 +1,36 @@
+# TODO find a better name
+type: object
+description: The root schema comprises the entire JSON document.
+required:
+  - userId
+  - organizationIds
+  - placeIds
+properties:
+  userId:
+    type: string
+    description: An explanation about the purpose of this instance.
+    examples:
+      - 3QkZeneU39
+      - RNTG0xtyjl
+      - g9XEQ7R8G7
+  organizationIds:
+    type: array
+    description: An explanation about the purpose of this instance.
+    items:
+      type: string
+      description: An explanation about the purpose of this instance.
+      examples:
+        - zzSgpLYnFm
+        - FMIvYqor80
+        - NgOMTsfiCe
+        - O155qK9suH
+  placeIds:
+    type: array
+    description: An explanation about the purpose of this instance.
+    items:
+      type: string
+      description: An explanation about the purpose of this instance.
+      examples:
+        - DaEey3nEqF
+        - hJyPzPpyrg
+        - P2xItgoQpJ

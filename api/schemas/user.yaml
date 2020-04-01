@@ -1,5 +1,5 @@
 type: object
-description: Data requested to login
+description: Data requested to login.
 properties:
   id:
     type: integer
@@ -7,21 +7,17 @@ properties:
   mail:
     type: string
     format: mail
+    # XXX we do NOT offer the possibility to change the email
     pattern: /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9])+$/
     example: mariorossi@gmail.com
-  # password must be between 8 and 32 characters
   password:
     type: string
     format: password
+    # password must be between 8 and 32 characters
     pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]$/
     minLength: 8
     maxLength: 32
-  # reference to User's data
   userData:
     $ref: "userData.yaml"
-# both email and password required to login
 required:
-  - mail
-  - password
-  # TODO should this be required?
-  # - userData
+  - id

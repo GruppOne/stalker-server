@@ -1,6 +1,6 @@
-#TODO at least three unique items
 type: array
 description: An array of points that constitutes the perimeter of a place
+minItems: 3
 items:
   type: object
   description: Two coordinates that constitute a geographical point

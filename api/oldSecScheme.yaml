@@ -1,0 +1,20 @@
+# TODO should we use basic auth over https?
+Basic:
+  type: http
+  scheme: bearer
+
+# TODO oauth2 is probably wrong. maybe user openID connect?
+UserAuthorization:
+  type: oauth2
+  flows:
+    # FIXME this is the wrong flow
+    implicit:
+      # TODO write our oauth2 server url
+      authorizationUrl: "https://domain.test/api/oauth/dialog"
+      # TODO find a way to restrict scopes to specific organizations and users. A user can only get his own info!
+      # TODO these should match in some way our organization roles
+      scopes:
+        user: Generic app user
+        viewer: An organization's viewer authorized operations
+        manager: An organization's manager authorized operations
+        owner: An organization's owner authorized operations
