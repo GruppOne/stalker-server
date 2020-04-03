@@ -45,28 +45,28 @@ USE `stalker-rdb`;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `admintype`
+-- Struttura della tabella `AdminType`
 --
-CREATE TABLE `admintype` (
+CREATE TABLE `AdminType` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `connections`
+-- Struttura della tabella `Connections`
 --
-CREATE TABLE `connections` (
-  `organization_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE `Connections` (
+  `organizationId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `ldapconfiguration`
+-- Struttura della tabella `LdapConfiguration`
 --
-CREATE TABLE `ldapconfiguration` (
+CREATE TABLE `LdapConfiguration` (
   `id` int(11) NOT NULL,
   `host` varchar(50) NOT NULL,
   `username` varchar(50) NOT NULL,
@@ -75,33 +75,33 @@ CREATE TABLE `ldapconfiguration` (
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `organizationrole`
+-- Struttura della tabella `OrganizationRole`
 --
-CREATE TABLE `organizationrole` (
-  `organization_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `admin_type` int(11) NOT NULL,
-  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE `OrganizationRole` (
+  `organizationId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `adminType` int(11) NOT NULL,
+  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `organizations`
+-- Struttura della tabella `Organizations`
 --
-CREATE TABLE `organizations` (
+CREATE TABLE `Organizations` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` tinytext NOT NULL,
-  `ldap_conf` int(11) NOT NULL,
-  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_modified_date` DATETIME NULL DEFAULT NULL
+  `ldapConf` int(11) NOT NULL,
+  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastModifiedDate` DATETIME NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `placedata`
+-- Struttura della tabella `PlaceData`
 --
-CREATE TABLE `placedata` (
+CREATE TABLE `PlaceData` (
   `id` int(11) NOT NULL,
   `address` varchar(150) NOT NULL,
   `city` varchar(50) NOT NULL,
@@ -111,43 +111,43 @@ CREATE TABLE `placedata` (
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `place`
+-- Struttura della tabella `Place`
 --
-CREATE TABLE `place` (
+CREATE TABLE `Place` (
   `id` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL,
+  `organizationId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `position` linestring NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `userdata`
+-- Struttura della tabella `UserData`
 --
-CREATE TABLE `userdata` (
-  `user_id` int(11) NOT NULL,
-  `firstname` varchar(50) NOT NULL,
-  `lastname` varchar(50) NOT NULL,
-  `birth_date` date NOT NULL,
-  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_modified_date` DATETIME NULL DEFAULT NULL
+CREATE TABLE `UserData` (
+  `userId` int(11) NOT NULL,
+  `firstName` varchar(50) NOT NULL,
+  `lastName` varchar(50) NOT NULL,
+  `birthDate` date NOT NULL,
+  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastModifiedDate` DATETIME NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `userlog`
+-- Struttura della tabella `UserLog`
 --
-CREATE TABLE `userlog` (
-  `user_id` int(11) NOT NULL,
+CREATE TABLE `UserLog` (
+  `userId` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL,
-  `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `users`
+-- Struttura della tabella `Users`
 --
-CREATE TABLE `users` (
+CREATE TABLE `Users` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` char(64) NOT NULL
@@ -157,92 +157,92 @@ CREATE TABLE `users` (
 -- Indici per le tabelle scaricate
 --
 --
--- Indici per le tabelle `admintype`
+-- Indici per le tabelle `AdminType`
 --
 ALTER TABLE
-  `admintype`
+  `AdminType`
 ADD
   PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `connections`
+-- Indici per le tabelle `Connections`
 --
 ALTER TABLE
-  `connections`
+  `Connections`
 ADD
-  KEY `organization_id` (`organization_id`),
+  KEY `organizationId` (`organizationId`),
 ADD
-  KEY `user_id` (`user_id`);
+  KEY `userId` (`userId`);
 
 --
--- Indici per le tabelle `ldapconfiguration`
+-- Indici per le tabelle `LdapConfiguration`
 --
 ALTER TABLE
-  `ldapconfiguration`
+  `LdapConfiguration`
 ADD
   PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `organizationrole`
+-- Indici per le tabelle `OrganizationRole`
 --
 ALTER TABLE
-  `organizationrole`
+  `OrganizationRole`
 ADD
-  KEY `organization_id` (`organization_id`),
+  KEY `organizationId` (`organizationId`),
 ADD
-  KEY `user_id` (`user_id`),
+  KEY `userId` (`userId`),
 ADD
-  KEY `admin_type` (`admin_type`);
+  KEY `adminType` (`adminType`);
 
 --
--- Indici per le tabelle `organizations`
+-- Indici per le tabelle `Organizations`
 --
 ALTER TABLE
-  `organizations`
+  `Organizations`
 ADD
   PRIMARY KEY (`id`),
 ADD
-  KEY `ldap_conf` (`ldap_conf`);
+  KEY `ldapConf` (`ldapConf`);
 
 --
--- Indici per le tabelle `placedata`
+-- Indici per le tabelle `PlaceData`
 --
 ALTER TABLE
-  `placedata`
+  `PlaceData`
 ADD
   KEY `id` (`id`);
 
 --
--- Indici per le tabelle `place`
+-- Indici per le tabelle `Place`
 --
 ALTER TABLE
-  `place`
+  `Place`
 ADD
   PRIMARY KEY (`id`),
 ADD
-  KEY `organization_id` (`organization_id`);
+  KEY `organizationId` (`organizationId`);
 
 --
--- Indici per le tabelle `userdata`
+-- Indici per le tabelle `UserData`
 --
 ALTER TABLE
-  `userdata`
+  `UserData`
 ADD
-  KEY `user_id` (`user_id`);
+  KEY `userId` (`userId`);
 
 --
--- Indici per le tabelle `userlog`
+-- Indici per le tabelle `UserLog`
 --
 ALTER TABLE
-  `userlog`
+  `UserLog`
 ADD
-  KEY `user_id` (`user_id`);
+  KEY `userId` (`userId`);
 
 --
--- Indici per le tabelle `users`
+-- Indici per le tabelle `Users`
 --
 ALTER TABLE
-  `users`
+  `Users`
 ADD
   PRIMARY KEY (`id`);
 
@@ -250,42 +250,42 @@ ADD
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 --
--- AUTO_INCREMENT per la tabella `admintype`
+-- AUTO_INCREMENT per la tabella `AdminType`
 --
 ALTER TABLE
-  `admintype`
+  `AdminType`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `ldapconfiguration`
+-- AUTO_INCREMENT per la tabella `LdapConfiguration`
 --
 ALTER TABLE
-  `ldapconfiguration`
+  `LdapConfiguration`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `organizations`
+-- AUTO_INCREMENT per la tabella `Organizations`
 --
 ALTER TABLE
-  `organizations`
+  `Organizations`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `place`
+-- AUTO_INCREMENT per la tabella `Place`
 --
 ALTER TABLE
-  `place`
+  `Place`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `users`
+-- AUTO_INCREMENT per la tabella `Users`
 --
 ALTER TABLE
-  `users`
+  `Users`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -293,66 +293,66 @@ MODIFY
 -- Limiti per le tabelle scaricate
 --
 --
--- Limiti per la tabella `connections`
+-- Limiti per la tabella `Connections`
 --
 ALTER TABLE
-  `connections`
+  `Connections`
 ADD
-  CONSTRAINT `connections_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  CONSTRAINT `Connections_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organizations` (`id`),
 ADD
-  CONSTRAINT `connections_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  CONSTRAINT `Connections_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`);
 
 --
--- Limiti per la tabella `organizationrole`
+-- Limiti per la tabella `OrganizationRole`
 --
 ALTER TABLE
-  `organizationrole`
+  `OrganizationRole`
 ADD
-  CONSTRAINT `organizationrole_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  CONSTRAINT `OrganizationRole_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organizations` (`id`),
 ADD
-  CONSTRAINT `organizationrole_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `OrganizationRole_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`),
 ADD
-  CONSTRAINT `organizationrole_ibfk_3` FOREIGN KEY (`admin_type`) REFERENCES `admintype` (`id`);
+  CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`adminType`) REFERENCES `AdminType` (`id`);
 
 --
--- Limiti per la tabella `organizations`
+-- Limiti per la tabella `Organizations`
 --
 ALTER TABLE
-  `organizations`
+  `Organizations`
 ADD
-  CONSTRAINT `organizations_ibfk_1` FOREIGN KEY (`ldap_conf`) REFERENCES `ldapconfiguration` (`id`);
+  CONSTRAINT `Organizations_ibfk_1` FOREIGN KEY (`ldapConf`) REFERENCES `LdapConfiguration` (`id`);
 
 --
--- Limiti per la tabella `placedata`
+-- Limiti per la tabella `PlaceData`
 --
 ALTER TABLE
-  `placedata`
+  `PlaceData`
 ADD
-  CONSTRAINT `placedata_ibfk_1` FOREIGN KEY (`id`) REFERENCES `place` (`id`);
+  CONSTRAINT `PlaceData_ibfk_1` FOREIGN KEY (`id`) REFERENCES `Place` (`id`);
 
 --
--- Limiti per la tabella `place`
+-- Limiti per la tabella `Place`
 --
 ALTER TABLE
-  `place`
+  `Place`
 ADD
-  CONSTRAINT `place_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`);
+  CONSTRAINT `Place_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organizations` (`id`);
 
 --
--- Limiti per la tabella `userdata`
+-- Limiti per la tabella `UserData`
 --
 ALTER TABLE
-  `userdata`
+  `UserData`
 ADD
-  CONSTRAINT `userdata_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  CONSTRAINT `UserData_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`);
 
 --
--- Limiti per la tabella `userlog`
+-- Limiti per la tabella `UserLog`
 --
 ALTER TABLE
-  `userlog`
+  `UserLog`
 ADD
-  CONSTRAINT `userlog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  CONSTRAINT `UserLog_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`);
 
 COMMIT;
 
