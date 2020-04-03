@@ -22,7 +22,7 @@ version: "3.7"
 ########################################################################################################################
 
 # TODO how do we define external services like our web-app?
-# TODO use docker/kube secrets to manage passwords
+# TODO we should manage permissions differently in the production db (e.g. use docker/kube secrets to manage passwords)
 services:
   # TODO add server container configuration
   # server:
@@ -43,6 +43,7 @@ services:
 
     environment:
       # TODO add server-specific user credentials
+      # The username is root (default)
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
 
     expose:
@@ -78,7 +79,7 @@ services:
     volumes:
       - type: volume
         source: tsdb-data
-        target: :/var/lib/influxdb/data
+        target: /var/lib/influxdb/data
 
 volumes:
   rdb-data:

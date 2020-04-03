@@ -1,6 +1,0 @@
-# Declare files that will always have LF line endings on checkout.
-* text eol=lf
-
-# TODO check if it works as expected
-# Declare files that will always have CRLF line endings on checkout.
-gradlew.bat text eol=crlf

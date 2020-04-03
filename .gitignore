@@ -82,15 +82,11 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-### Maven ###
-
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
-
 ### DOTENV FILE ###
 .env
+
+### Spring private properties file ###
+src/main/resources/local.properties
 
 ### VS Code ###
 
