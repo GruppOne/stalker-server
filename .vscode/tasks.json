@@ -10,7 +10,7 @@
     {
       "label": "docker-compose up with GUIs",
       "type": "shell",
-      "command": "docker-compose -f ./docker-compose.yml -f ./docker-compose.db-gui.yml up -d",
+      "command": "docker-compose -f ./docker-compose.yml -f ./docker-compose.gui.yml up -d",
       "problemMatcher": []
     }
   ]

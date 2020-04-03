@@ -89,6 +89,9 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+### DOTENV FILE ###
+.env
+
 ### VS Code ###
 
 .vscode/*
@@ -99,5 +102,8 @@ target/
 !.vscode/extensions.json
 # vscode builds java projects to bin/
 bin/
+
+### Docker Compose ###
+docker-compose.override.yml
 
 HELP.md
