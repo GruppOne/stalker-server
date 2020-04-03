@@ -16,7 +16,8 @@ I tipi consentiti da InfluxDB sono
 - integer (82i)
 - Boolean(true,false)
 
-Non possono essere prefissati tipi, se non nel momento in cui si fa il primo insert. Da quel punto sono possibili solo alcuni cast.
+Non possono essere prefissati tipi, se non nel momento in cui si fa il primo insert. Da quel punto sono possibili solo
+alcuni cast.
 E non è possibile inserire elementi nulli (NULL), in quanto da sintassi non è previsto.
 
 ## Fields set schema

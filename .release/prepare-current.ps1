@@ -1,11 +1,18 @@
-if (($args -match " -h") -or ($args -match " --help")) {
-  npx standard-version -h
-  return
+# TODO handle unclean git status
+
+if (-not (Test-Path ".versionrc.json")) {
+  throw "you need to be in the repository root folder to run this script"
 }
+
+if (($args -join "  ") -notmatch "--release-as") {
+  throw "you should declare an explicit target version with the --release-as parameter"
+}
+
+# TODO convert both scripts to a module...
 
 Write-Output "Preparing current release..."
 
-npx standard-version --config "$PSScriptRoot/.versionrc.json" --skip.tag $args
+npx standard-version --skip.tag $args
 
 if ($LASTEXITCODE) {
   Write-Error "Something wrong with standard-version"
