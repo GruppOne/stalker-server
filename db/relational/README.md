@@ -1,4 +1,4 @@
 # MariaDB
 
-<!-- ref: https://hub.docker.com/_/mariadb -->
 <!-- TODO write mariadb readme -->
+<!-- TODO add db diagram and keep it up to date (how?) -->
