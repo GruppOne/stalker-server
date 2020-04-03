@@ -5,7 +5,7 @@ if (($args -match " -h") -or ($args -match " --help")) {
 
 Write-Output "Preparing current release..."
 
-npx standard-version --skip.tag $args
+npx standard-version --config "$PSScriptRoot/.versionrc.json" --skip.tag $args
 
 if ($LASTEXITCODE) {
   Write-Error "Something wrong with standard-version"
