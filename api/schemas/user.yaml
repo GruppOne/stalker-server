@@ -8,13 +8,13 @@ properties:
     type: string
     format: mail
     # XXX we do NOT offer the possibility to change the email
-    pattern: /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9])+$/
+    pattern: /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9])+$/
     example: mariorossi@gmail.com
   password:
     type: string
     format: password
-    # password must be between 8 and 32 characters
-    pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]$/
+    # Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+    pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/
     minLength: 8
     maxLength: 32
   userData:
