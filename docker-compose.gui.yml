@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  # FIXME not working
+  rdb-gui:
+    image: phpmyadmin/phpmyadmin:fpm-alpine
+    depends_on:
+      - rdb
+
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: stalker-rdb
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+
+    ports:
+      - 8080:80
+
+  # FIXME not working
+  tsdb-gui:
+    image: chronograf:alpine
+    depends_on:
+      - tsdb
+    ports:
+      - 8889:8888

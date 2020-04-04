@@ -1,0 +1,5 @@
+[mysqld]
+
+# FIXME should find a way to add this back
+# default_time_zone = 'Europe/Rome'
+lower_case_table_names = 0

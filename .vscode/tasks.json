@@ -1,4 +1,17 @@
 {
   "version": "2.0.0",
-  "tasks": []
+  "tasks": [
+    {
+      "label": "run spectral linter",
+      "type": "shell",
+      "command": "npx spectral lint ./api/**.yaml",
+      "problemMatcher": []
+    },
+    {
+      "label": "docker-compose up with GUIs",
+      "type": "shell",
+      "command": "docker-compose -f ./docker-compose.yml -f ./docker-compose.gui.yml up -d",
+      "problemMatcher": []
+    }
+  ]
 }

@@ -1,0 +1,75 @@
+plugins {
+  // TODO consider switching to M4 version in order to get async db dependency
+  id 'org.springframework.boot' version '2.2.6.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+  id 'java'
+}
+
+group = 'tech.gruppone'
+version = '0.1.0'
+
+sourceCompatibility = '11'
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+  options.compilerArgs = [
+    '-Xlint:all',
+    '-Xlint:-processing',
+    '-Werror'
+  ]
+}
+
+configurations {
+  developmentOnly
+
+  runtimeClasspath {
+    extendsFrom developmentOnly
+  }
+
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  // TODO is this needed?
+  // implementation 'org.springframework.boot:spring-boot-starter'
+
+  // TODO probably unneeded; is hibernate included here or in data rest?
+  // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  // TODO not needed for minimal functionality
+  // implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+  implementation 'org.springframework.boot:spring-boot-starter-mail'
+  implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+  // TODO this should be useful if we use HATEOAS. Probably NOT ALLOWED WITH WEBFLUX.
+  // implementation 'org.springframework.data:spring-data-rest-hal-browser'
+
+  // // influxdb 1.7 java client
+  // implementation 'org.influxdb:influxdb-java:2.17'
+
+  // this enables some production-ready features (mainly health checks?).
+  // ref: https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-enabling
+  compile("org.springframework.boot:spring-boot-starter-actuator")
+
+  compileOnly 'org.projectlombok:lombok'
+
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+  annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+  annotationProcessor 'org.projectlombok:lombok'
+
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+  }
+  testImplementation 'com.unboundid:unboundid-ldapsdk'
+  testImplementation 'io.projectreactor:reactor-test'
+}
+
+test {
+  useJUnitPlatform()
+}

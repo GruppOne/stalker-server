@@ -1,0 +1,5 @@
+# ref: https://docs.docker.com/compose/production/
+# TODO this file should overwrite mappings necessary to configure a production build
+version: "3.7"
+
+services:
