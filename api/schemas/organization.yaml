@@ -2,8 +2,7 @@ type: object
 description: Organization's data
 properties:
   id:
-    type: integer
-    format: uint32
+    $ref: "genericId.yaml"
   name:
     type: string
   description:
