@@ -12,6 +12,34 @@
       "type": "shell",
       "command": "docker-compose -f ./docker-compose.yml -f ./docker-compose.gui.yml up -d",
       "problemMatcher": []
+    },
+    {
+      "label": "build plantuml images",
+      "type": "shell",
+      "command": "java",
+      "args": [
+        "-jar",
+        "${env:PLANTUML_JAR}",
+        "-progress",
+        "-failfast",
+        "-checkmetadata",
+        "-charset",
+        "UTF-8",
+        "-x",
+        "${workspaceRoot}/docs/style/*.pu",
+        "-o",
+        "img",
+        "${workspaceRoot}/docs/diagrams/*.pu"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": []
     }
   ]
 }
