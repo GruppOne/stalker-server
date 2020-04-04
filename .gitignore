@@ -2,7 +2,7 @@
 .gradle
 build/
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties!gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
 
@@ -82,12 +82,11 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-### Maven ###
+### DOTENV FILE ###
+.env
 
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+### Spring private properties file ###
+src/main/resources/local.properties
 
 ### VS Code ###
 
@@ -99,3 +98,8 @@ target/
 !.vscode/extensions.json
 # vscode builds java projects to bin/
 bin/
+
+### Docker Compose ###
+
+# temporarily committing override file
+# docker-compose.override.yml

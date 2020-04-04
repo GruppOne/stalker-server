@@ -69,7 +69,7 @@ module.exports = {
       emptyScope,
       depsScope,
       "docker",
-      "mvn",
+      "gradle",
       "idea",
     ],
     ci: [
