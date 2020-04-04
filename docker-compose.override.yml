@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  rdb:
+    ports:
+      - "3306:3306"
+
+  tsdb:
+    ports:
+      - "8086:8086"

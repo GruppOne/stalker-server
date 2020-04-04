@@ -13,7 +13,7 @@ version: "3.7"
 # We use named volumes short syntax: [SOURCE:]TARGET[:MODE].
 # SOURCE is the named volume, TARGET is the folder inside the container MODE is ro (read-only),
 
-# We can use this command to dump the currently running mariadb instance to a file:
+# We can use this command to dump the currently running mysql instance to a file:
 # docker exec rdb sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > ./db/relational/dump/all-databases.sql
 
 # To get an interactive shell inside a RUNNING container, use:
@@ -33,11 +33,10 @@ services:
 
   # TODO add health check
   rdb:
-    build: ./db/relational
-    # build:
-    #   context: ./db/relational
-    #   # XXX we will use target: prod to specify the target stage with multi-stage dockerfiles
-    #   target: name-of-stage
+    build:
+      context: ./db/relational
+      # XXX we will use target: prod to specify the target stage with multi-stage dockerfiles
+      # target: name-of-stage
 
     restart: always
 
@@ -53,16 +52,17 @@ services:
       - type: volume
         source: rdb-data
         target: /var/lib/mysql
-        volume:
-          nocopy: true
+        # TODO should we use this?
+        # volume:
+        #   nocopy: true
 
+  # TODO check if this influxdb configuration works
   # TODO add health check
   tsdb:
-    build: ./db/time-series
-    # build:
-    #   context: ./db/time-series
-    #   # XXX we will use target: prod to specify the target stage with multi-stage dockerfiles
-    #   target: name-of-stage
+    build:
+      context: ./db/time-series
+      # XXX we will use target: prod to specify the target stage with multi-stage dockerfiles
+      # target: name-of-stage
 
     restart: always
 

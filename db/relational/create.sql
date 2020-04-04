@@ -6,6 +6,8 @@
 -- Creato il: Mar 16, 2020 alle 13:09
 -- Versione del server: 10.1.37-MariaDB
 -- Versione PHP: 7.2.12
+-- FIXME should dump this from mysql!
+
 SET
   SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
@@ -13,9 +15,6 @@ SET
   AUTOCOMMIT = 0;
 
 START TRANSACTION;
-
-SET
-  time_zone = "+00:00";
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */
 ;
@@ -28,12 +27,6 @@ SET
 
 /*!40101 SET NAMES utf8mb4 */
 ;
-
--- FIXME tables and column names ARE NOT CONSISTENT
--- admintype <- missing word separator
--- place <- all other tables have plural names
-
--- TODO create db via spring properties or something like that
 
 -- --------------------------------------------------------
 --

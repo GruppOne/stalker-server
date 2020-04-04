@@ -100,6 +100,8 @@ src/main/resources/local.properties
 bin/
 
 ### Docker Compose ###
-docker-compose.override.yml
+
+# temporarily committing override file
+# docker-compose.override.yml
 
 HELP.md
