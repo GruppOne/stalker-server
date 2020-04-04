@@ -1,34 +1,56 @@
 type: object
 description: Organization's data
+required:
+  - name
+  - description
+  - places
+  - private
 properties:
   id:
     $ref: "genericId.yaml"
+
   name:
     type: string
+
   description:
     type: string
+
   # reference to LDAP configuration
   ldapConfiguration:
-    $ref: "ldapConfiguration.yaml"
+    #TODO check ldapConfiguration: are these properties enough?
+    type: object
     description: URL or IP address of the LDAP server of the organization. Useful only if the organization is private.
+    required:
+      - host
+      - username
+      - password
+    properties:
+      host:
+        type: string
+
+      username:
+        type: string
+
+      password:
+        type: string
+        format: password
+
   # reference to Place
   places:
     type: array
     description: list of places within this organization
     items:
       $ref: "place.yaml"
+
   # if @private == true a user can't be anonymous
   private:
     type: boolean
+
   createdDate:
     type: string
     format: date-time
+
   lastModifiedDate:
     type: string
     format: date-time
 # @createdDate and @lastModifiedDate are set when a row is inserted and/or updated
-required:
-  - name
-  - description
-  - places
-  - private

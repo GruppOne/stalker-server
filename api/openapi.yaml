@@ -1,28 +1,37 @@
-openapi: "3.0.2"
+# The extension of this file needs to be ".yaml" and not ".yml"
+openapi: "3.0.3"
 
 info:
   title: Stalker API
   description: |
     The API specification developed by GruppOne for the Stalker project.
+
   contact:
     name: GruppOne
     email: gruppone.swe@gmail.com
     url: https://github.com/GruppOne
 
+  license:
+    name: GNU GPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0-standalone.html
+
   version: "0.1.0"
 
 servers:
-  - url: http://localhost:8080/api/v0
+  - url: http://localhost:8080
     description: Development server
-  # TODO specify servers using an appropriate variable
-  # - url: https://{environment}.GruppOne.com/v1
-  #     variables:
-  #       environment:
-  #         default: api    # Production server
-  #         enum:
-  #           - api         # Production server
-  #           - api.dev     # Development server
-  #           - api.staging # Staging server
+  - url: https://{environment}.gruppone.tech/v{majorVersion}
+    variables:
+      environment:
+        enum:
+          # Production server
+          - api
+          # Staging server
+          - api.staging
+        default: api
+      majorVersion:
+        # TODO this needs to be managed by .release scripts
+        default: "0"
 
 tags:
   - name: stalker mobile app
@@ -72,7 +81,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "./schemas/genericId.yaml"
+                  $ref: "#/components/schemas/GenericId"
         "404":
           $ref: "#/components/responses/NotFound"
         default:
@@ -178,7 +187,7 @@ components:
       description: The id of an user.
       required: true
       schema:
-        $ref: "./schemas/genericId.yaml"
+        $ref: "#/components/schemas/GenericId"
 
     organizationId:
       in: path
@@ -186,7 +195,7 @@ components:
       description: The id of an organization.
       required: true
       schema:
-        $ref: "./schemas/genericId.yaml"
+        $ref: "#/components/schemas/GenericId"
 
     placeId:
       in: path
@@ -194,7 +203,7 @@ components:
       description: The id of a place.
       required: true
       schema:
-        $ref: "./schemas/genericId.yaml"
+        $ref: "#/components/schemas/GenericId"
 
   # TODO add explicit json content to errors
   responses:
@@ -212,25 +221,25 @@ components:
 
   schemas:
     AppConnections:
-      $ref: "./schemas/appConnections.yaml"
+      $ref: "./schemas/appConnections.yaml#"
 
-    LdapConfiguration:
-      $ref: "./schemas/ldapConfiguration.yaml"
+    GenericId:
+      $ref: "./schemas/genericId.yaml#"
+
+    LocationInfo:
+      $ref: "./schemas/locationInfo.yaml#"
 
     Organization:
-      $ref: "./schemas/organization.yaml"
+      $ref: "./schemas/organization.yaml#"
 
-    OrganizationUserCounter:
-      $ref: "./schemas/organizationUserCounter.yaml"
+    Place:
+      $ref: "./schemas/place.yaml#"
 
-    PlaceUserCounter:
-      $ref: "./schemas/placeUserCounter.yaml"
+    PlaceData:
+      $ref: "./schemas/placeData.yaml#"
 
     User:
-      $ref: "./schemas/user.yaml"
-
-    UserData:
-      $ref: "./schemas/userData.yaml"
+      $ref: "./schemas/user.yaml#"
 
   securitySchemes:
     AdminKey:
