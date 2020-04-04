@@ -1,15 +1,13 @@
 type: object
 description: Connections between users and organizations
-properties:
-  # reference to Organization
-  organization:
-    $ref: "organization.yaml"
-  # reference to User
-  user:
-    $ref: "user.yaml"
-  createdDate:
-    type: string
-    format: date-time
 required:
   - organization
   - user
+properties:
+  organization:
+    $ref: "organization.yaml"
+  user:
+    $ref: "./user.yaml#"
+  createdDate:
+    type: string
+    format: date-time

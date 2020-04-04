@@ -1,19 +1,34 @@
 type: object
 description: Name of the place and reference to geographical informations and places data
+required:
+  - id
+  - name
+  - position
+  - data
 properties:
   id:
     type: integer
     format: uint64
   name:
     type: string
-  # reference to Polyline
-  polyline:
-    $ref: "polyline.yaml"
-  # reference to place's data
+  # TODO check validity of this data type compared to leaflet's polygons
+  polygon:
+    type: array
+    description: An array of points that constitutes the perimeter of a place
+    minItems: 3
+    items:
+      type: object
+      description: Two coordinates that constitute a geographical point
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+
   placeData:
     $ref: "placeData.yaml"
-required:
-  - id
-  - name
-  - position
-  - data

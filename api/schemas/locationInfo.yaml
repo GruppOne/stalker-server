@@ -16,7 +16,7 @@ required:
   - anonymous
   - inside
   - placeIds
-# TODO properties description?
+# TODO add properties description and examples?
 properties:
   timestampMs:
     type: integer
