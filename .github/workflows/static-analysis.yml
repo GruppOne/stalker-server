@@ -1,0 +1,20 @@
+
+name: Documentation
+
+on:
+  pull_request:
+  # push:
+  #   branches:
+  #     - '!master'
+
+jobs:
+
+  lint:
+    name: Lint API definitiond
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run spectral linter
+        uses: stoplightio/spectral-action@v0.5.5

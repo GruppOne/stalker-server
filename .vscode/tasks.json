@@ -2,10 +2,13 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "run spectral linter",
+      "label": "run spectral lint",
       "type": "shell",
       "command": "npx spectral lint ./api/**.yaml",
-      "problemMatcher": []
+      "problemMatcher": {
+        "base": "$eslint-stylish",
+        "source": "spectral"
+      }
     },
     {
       "label": "docker-compose up with GUIs",

@@ -1,0 +1,30 @@
+extends: [[spectral:oas, all]]
+
+# to see detailed rules explanations go to:
+# https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md?srn=gh/stoplightio/spectral/docs/reference/openapi-rules.md
+rules:
+  operation-singular-tag: false
+
+  operation-summary-formatted:
+    description: "Operation `summary` should start with upper case and end with a dot."
+    recommended: false
+    type: style
+    given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]"
+    then:
+      field: summary
+      function: pattern
+      functionOptions:
+        match: "^[A-Z].*\\.$"
+    tags:
+      - operation
+
+    # Require 3-part Semantic Versions as the spec versions
+  semver:
+    severity: error
+    recommended: true
+    message: Specs should follow semantic versioning. {{value}} is not a valid version.
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: "^([0-9]+.[0-9]+.[0-9]+)$"
