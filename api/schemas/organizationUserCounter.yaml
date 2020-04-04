@@ -2,11 +2,10 @@ type: object
 description: return the total number of users currently inside a specific organization
 properties:
   organizationId:
-    type: integer
-    format: int64
+    $ref: "./genericId.yaml"
   counter:
     type: integer
-    format: int32
+    format: uint32
     description: indicates the number of users currently inside the organization
 required:
   - organizationId

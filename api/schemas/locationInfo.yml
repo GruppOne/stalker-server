@@ -1,0 +1,33 @@
+# {
+#  "timestamp-ms": 1585906080346,
+#  "userId": 34753543,
+#  "anonymous":false,
+#  "inside": true,
+#  "placeIds": [
+#    453785436,
+#    71984147938
+#  ]
+# }
+type: object
+description: Specifics of an user's current location relative to a place.
+required:
+  - timestampMs
+  - userId
+  - anonymous
+  - inside
+  - placeIds
+# TODO properties description?
+properties:
+  timestampMs:
+    type: integer
+    format: uint64
+  userId:
+    $ref: "genericId.yaml"
+  anonymous:
+    type: boolean
+  inside:
+    type: boolean
+  placeIds:
+    type: array
+    items:
+      $ref: "genericId.yaml"

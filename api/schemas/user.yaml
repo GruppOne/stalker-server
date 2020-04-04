@@ -1,9 +1,9 @@
+# TODO find a way to have these regexes be the source of truth across every component
 type: object
 description: Data requested to login.
 properties:
   id:
-    type: integer
-    format: uint32
+    $ref: "genericId.yaml"
   mail:
     type: string
     format: mail
