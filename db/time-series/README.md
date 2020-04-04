@@ -3,6 +3,7 @@
 <!-- TODO We should find a way to serialize containing some kind of schema definition describing our influxdb instance -->
 <!-- TODO We also should prepare some sample data to use when testing. -->
 <!-- TODO write influxdb readme -->
+<!-- TODO tradurre da inglese a italiano -->
 
 Please, copy all the content of influxdb.conf so that InfluxDB works properly.
 
@@ -26,10 +27,10 @@ E non è possibile inserire elementi nulli (NULL), in quanto da sintassi non è 
 
 #### Measurement 'access_log'
 
-| time      | timestamp-ms (via locationInfo) | userId       | anonymous | placeId      | inside  |
-| --------- | ------------------------------- | ------------ | --------- | ------------ | ------- |
-| TIMESTAMP | TIMESTAMP                       | unsigned int | Boolean   | unsigned int | Boolean |
-| ...       | ...                             | ...          | ...       | ...          | ...     |
+| time      | timestampMs | userId       | anonymous | placeId      | inside  |
+| --------- | ----------- | ------------ | --------- | ------------ | ------- |
+| TIMESTAMP | TIMESTAMP   | unsigned int | Boolean   | unsigned int | Boolean |
+| ...       | ...         | ...          | ...       | ...          | ...     |
 
 ### v2
 
