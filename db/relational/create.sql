@@ -85,7 +85,7 @@ CREATE TABLE `Organizations` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` tinytext NOT NULL,
-  `ldapConf` int(11) NOT NULL,
+  `ldapConf` int(11) NULL DEFAULT NULL,
   `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastModifiedDate` DATETIME NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
