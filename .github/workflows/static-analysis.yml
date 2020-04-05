@@ -1,5 +1,5 @@
 
-name: Documentation
+name: Static code analysis
 
 on:
   pull_request:
@@ -10,11 +10,15 @@ on:
 jobs:
 
   lint:
-    name: Lint API definitiond
+    name: Lint API definition
     runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run spectral linter
-        uses: stoplightio/spectral-action@v0.5.5
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Run spectral linter via npx
+        run: npx spectral lint ./api/**.yaml
