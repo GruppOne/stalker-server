@@ -11,12 +11,17 @@ public class InfluxDBPoint{
     @Column(name = "time")
     private Instant time;
 
+    // TAG
+    @Column(name = "userId")
+    private int userId;
+
+    // TAG
+    @Column(name = "placeId")
+    private int placeId;
+
     // to change type "String" in "java.sql.Timestamp" after POC
     @Column(name = "timestampMs")
     private String timestampMs;
-
-    @Column(name = "userId")
-    private int userId;
 
     //@Column(name = "anonymous") after POC
     //private String anonymous;
@@ -24,8 +29,6 @@ public class InfluxDBPoint{
     @Column(name = "anonymous")
     private boolean anonymous;
 
-    @Column(name = "placeId")
-    private int placeId;
 
     @Column(name = "inside")
     private boolean inside;
@@ -35,12 +38,16 @@ public class InfluxDBPoint{
         return "accessLog";
     }
 
-    public String nameTimestampMs(){
-        return "timestampMs";
-    }
-
     public String nameUserId(){
         return "userId";
+    }
+
+    public String namePlaceId(){
+      return "placeId";
+    }
+
+    public String nameTimestampMs(){
+      return "timestampMs";
     }
 
     /*public String nameAnonymousKey(){
@@ -49,10 +56,6 @@ public class InfluxDBPoint{
 
     public String nameAnonymous(){
         return "anonymous";
-    }
-
-    public String namePlaceId(){
-        return "placeId";
     }
 
     public String nameInside(){
