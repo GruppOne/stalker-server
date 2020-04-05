@@ -9,6 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
+// FIXME what is this for?
+@CrossOrigin
 @Configuration
 @PropertySource("classpath:application.properties")
 @lombok.Value
