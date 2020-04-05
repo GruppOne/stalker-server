@@ -49,6 +49,8 @@ dependencies {
 //  Highly customizable authentication and access-control framework for Spring applications.
 // implementation 'org.springframework.boot:spring-boot-starter-security'
 
+
+
 //  Java annotation library which helps to reduce boilerplate code.
   compileOnly 'org.projectlombok:lombok'
 
@@ -84,7 +86,10 @@ dependencies {
 
   // influxdb 1.x java client
   implementation 'org.influxdb:influxdb-java:2.17'
+
+  compile "com.influxdb:influxdb-spring:1.6.0"
 }
+
 
 test {
   useJUnitPlatform()
