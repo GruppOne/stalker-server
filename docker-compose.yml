@@ -56,7 +56,6 @@ services:
         # volume:
         #   nocopy: true
 
-  # TODO check if this influxdb configuration works
   # TODO add health check
   tsdb:
     build:
@@ -67,8 +66,7 @@ services:
     restart: always
 
     environment:
-      # TODO we probably should not create the db here
-      INFLUXDB_DB: stalker-tsdb
+      INFLUXDB_DB: stalker_tsdb
       # TODO add server-specific user credentials
       INFLUXDB_ADMIN_USER: root
       INFLUXDB_ADMIN_PASSWORD: ${INFLUXDB_ADMIN_PASSWORD:?err}
