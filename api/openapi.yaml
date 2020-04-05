@@ -221,25 +221,25 @@ components:
 
   schemas:
     AppConnections:
-      $ref: "./schemas/appConnections.yaml#"
+      $ref: "./schemas/AppConnection.yaml#"
 
     GenericId:
-      $ref: "./schemas/genericId.yaml#"
+      $ref: "./schemas/GenericId.yaml#"
 
     LocationInfo:
-      $ref: "./schemas/locationInfo.yaml#"
+      $ref: "./schemas/LocationInfo.yaml#"
 
     Organization:
-      $ref: "./schemas/organization.yaml#"
+      $ref: "./schemas/Organization.yaml#"
 
     Place:
-      $ref: "./schemas/place.yaml#"
+      $ref: "./schemas/Place.yaml#"
 
     PlaceData:
-      $ref: "./schemas/placeData.yaml#"
+      $ref: "./schemas/PlaceData.yaml#"
 
     User:
-      $ref: "./schemas/user.yaml#"
+      $ref: "./schemas/User.yaml#"
 
   securitySchemes:
     AdminKey:
