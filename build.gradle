@@ -49,12 +49,14 @@ dependencies {
   // TODO this should be useful if we use HATEOAS. Probably NOT ALLOWED WITH WEBFLUX.
   // implementation 'org.springframework.data:spring-data-rest-hal-browser'
 
-  // // influxdb 1.7 java client
-  // implementation 'org.influxdb:influxdb-java:2.17'
+  // influxdb 1.7 java client
+  implementation 'org.influxdb:influxdb-java:2.17'
 
   // this enables some production-ready features (mainly health checks?).
   // ref: https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-enabling
   compile("org.springframework.boot:spring-boot-starter-actuator")
+
+  compile "com.influxdb:influxdb-spring:1.6.0"
 
   compileOnly 'org.projectlombok:lombok'
 
