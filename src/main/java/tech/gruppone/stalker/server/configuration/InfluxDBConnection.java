@@ -26,7 +26,7 @@ public class InfluxDBConnection {
   @Getter(AccessLevel.PRIVATE)
   private final String password;
   @Getter(AccessLevel.PUBLIC)
-  private final String databaseName = "stalker_tsdb";
+  private final String databaseName = "stalker-tsdb";
 
   public InfluxDBConnection(@NonNull @Value("${spring.influxdb.password}") String password) {
     this.password = password;
