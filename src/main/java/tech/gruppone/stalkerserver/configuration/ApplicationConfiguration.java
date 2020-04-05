@@ -70,11 +70,11 @@ public class ApplicationConfiguration {
       for(int i = 0; i < listPlaceData.size(); i++) {
         influxDB.write(Point.measurement(point.nameMeasurement())
           .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+          .tag(point.nameUserId(), body.get(point.nameUserId()).toString())
+          .tag(point.namePlaceId(), listPlaceData.get(i))
           //.addField(point.nameTimestampMs(), java.sql.Timestamp.valueOf(body.get(point.nameTimestampMs()).toString())) -> not available addField(String, Timestamp)
           .addField(point.nameTimestampMs(), body.get(point.nameTimestampMs()).toString())
-          .addField(point.nameUserId(), Integer.parseInt(body.get(point.nameUserId()).toString()))
           .addField(point.nameAnonymous(), Boolean.parseBoolean((body.get(point.nameAnonymous()).toString())))
-          .addField(point.namePlaceId(), Integer.parseInt(listPlaceData.get(i)))
           .addField(point.nameInside(), Boolean.parseBoolean(body.get(point.nameInside()).toString()))
           .build());
       }
@@ -82,10 +82,10 @@ public class ApplicationConfiguration {
       for(int i = 0; i < listPlaceData.size(); i++) {
         influxDB.write(Point.measurement(point.nameMeasurement())
           .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+          .tag(point.namePlaceId(), listPlaceData.get(i))
           //.addField(point.nameTimestampMs(), java.sql.Timestamp.valueOf(body.get(point.nameTimestampMs()).toString())) -> not available addField(String, Timestamp)
           .addField(point.nameTimestampMs(), body.get(point.nameTimestampMs()).toString())
           .addField(point.nameAnonymous(), Boolean.parseBoolean((body.get(point.nameAnonymous()).toString())))
-          .addField(point.namePlaceId(), Integer.parseInt(listPlaceData.get(i)))
           .addField(point.nameInside(), Boolean.parseBoolean(body.get(point.nameInside()).toString()))
           .build());
       }
