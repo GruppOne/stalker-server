@@ -4,7 +4,7 @@ required:
   - name
   - description
   - places
-  - private
+  - isPrivate
 properties:
   id:
     $ref: "./GenericId.yaml#"
@@ -42,8 +42,8 @@ properties:
     items:
       $ref: "./Place.yaml#"
 
-  # if @private == true a user can't be anonymous
-  private:
+  # if private == true a user can't be anonymous
+  isPrivate:
     type: boolean
 
   createdDate:
