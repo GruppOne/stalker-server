@@ -1,13 +1,13 @@
 type: object
-description: Connections between users and organizations
+description: Represents the fact that an user has connected to an organization.
 required:
   - organization
   - user
 properties:
-  organization:
-    $ref: "organization.yaml"
-  user:
-    $ref: "./user.yaml#"
+  organizationId:
+    $ref: "./GenericId.yaml#"
+  userId:
+    $ref: "./GenericId.yaml#"
   createdDate:
     type: string
     format: date-time

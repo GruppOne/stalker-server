@@ -1,5 +1,5 @@
 # {
-#  "timestamp-ms": 1585906080346,
+#  "timestampMs": 1585906080346,
 #  "userId": 34753543,
 #  "anonymous":false,
 #  "inside": true,
@@ -22,7 +22,7 @@ properties:
     type: integer
     format: uint64
   userId:
-    $ref: "genericId.yaml"
+    $ref: "./GenericId.yaml#"
   anonymous:
     type: boolean
   inside:
@@ -30,4 +30,4 @@ properties:
   placeIds:
     type: array
     items:
-      $ref: "genericId.yaml"
+      $ref: "./GenericId.yaml#"

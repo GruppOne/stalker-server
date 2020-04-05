@@ -1,5 +1,5 @@
 type: object
-description: Name of the place and reference to geographical informations and places data
+description: Represents a location relative to which an organization wants to track its users movements.
 required:
   - id
   - name
@@ -7,8 +7,7 @@ required:
   - data
 properties:
   id:
-    type: integer
-    format: uint64
+    $ref: "./GenericId.yaml#"
   name:
     type: string
   # TODO check validity of this data type compared to leaflet's polygons
@@ -18,7 +17,7 @@ properties:
     minItems: 3
     items:
       type: object
-      description: Two coordinates that constitute a geographical point
+      description: Angular coordinates that represent a point on Earth's surface.
       required:
         - latitude
         - longitude
@@ -31,4 +30,4 @@ properties:
           format: double
 
   placeData:
-    $ref: "placeData.yaml"
+    $ref: "./PlaceData.yaml#"
