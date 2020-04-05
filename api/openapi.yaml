@@ -71,7 +71,7 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-      description: Return the list of organizations that a user has connected to.
+      description: Get the list of organizations that a user has connected to.
       operationId: getConnectedOrganizationsByUserId
       responses:
         "200":
@@ -92,8 +92,7 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-      # TODO rename to "get the list etc"
-      description: Return the list of all the organizations registered to Stalker.
+      description: Get the list of all the organizations registered to Stalker.
       operationId: getAllOrganizations
       responses:
         "200":
@@ -133,47 +132,47 @@ paths:
         default:
           $ref: "#/components/responses/DefaultResponse"
 
-  /tracking/inside:
-    post:
-      tags:
-        - stalker mobile app
-      description: Signal that an user has entered into a place.
-      operationId: reportUserEnteredInAPlace
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/PlaceUserCounter"
-      responses:
-        "200":
-          description: Success, an user has entered into an organizations.
-        "408":
-          description: Request timed out.
-        default:
-          $ref: "#/components/responses/DefaultResponse"
+  # /tracking/inside:
+  #   post:
+  #     tags:
+  #       - stalker mobile app
+  #     description: Signal that an user has entered into a place.
+  #     operationId: reportUserEnteredInAPlace
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             allOf:
+  #               - $ref: "#/components/schemas/PlaceUserCounter"
+  #     responses:
+  #       "200":
+  #         description: Success, an user has entered into an organizations.
+  #       "408":
+  #         description: Request timed out.
+  #       default:
+  #         $ref: "#/components/responses/DefaultResponse"
 
-  /tracking/outside:
-    post:
-      tags:
-        - stalker mobile app
-      description: Report an user who has exited by a place.
-      operationId: reportUserExitedInAPlace
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/PlaceUserCounter"
-      responses:
-        "200":
-          description: Success, an user has entered into an organizations.
-        "408":
-          description: Request timed out.
-        default:
-          $ref: "#/components/responses/DefaultResponse"
+  # /tracking/outside:
+  #   post:
+  #     tags:
+  #       - stalker mobile app
+  #     description: Report an user who has exited by a place.
+  #     operationId: reportUserExitedInAPlace
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             allOf:
+  #               - $ref: "#/components/schemas/PlaceUserCounter"
+  #     responses:
+  #       "200":
+  #         description: Success, an user has entered into an organizations.
+  #       "408":
+  #         description: Request timed out.
+  #       default:
+  #         $ref: "#/components/responses/DefaultResponse"
 
 # Apply security scheme globally
 security:
@@ -207,17 +206,25 @@ components:
 
   # TODO add explicit json content to errors
   responses:
-    DefaultResponse:
-      description: Unexpected error
+    # 401
+    Unauthorized:
+      description: The user is not authenticated.
 
+    # 403
+    Forbidden:
+      description: The user is authenticated but not authorized.
+
+    # 404
     NotFound:
       description: The specified resource was not found
 
+    # 500
+    DefaultResponse:
+      description: Unexpected error
+
+    # 501
     NotImplemented:
       description: This endpoint has not been implemented yet.
-
-    Unauthorized:
-      description: Unauthorized
 
   schemas:
     AppConnections:
