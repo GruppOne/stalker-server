@@ -39,9 +39,34 @@ tags:
   - name: stalker web app
     description: This operation should be available to web app users (owners, managers, viewers).
 
+# TODO define links https://swagger.io/docs/specification/links/ to reach the full glory of REST
 # TODO explicitly declare permissions schema for admin roles
 # TODO use plurals: /users, not /user
+# TODO use http status 202 "accepted" for long async operations
 paths:
+  /location/update:
+    post:
+      tags:
+        - stalker mobile app
+      description: Send an update for an user's current location.
+      operationId: postLocationUpdate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationInfo"
+      responses:
+        # TODO did i forget some responses?
+        "200":
+          $ref: "#/components/responses/Ok"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
   /user/login:
     post:
       tags:
@@ -49,17 +74,23 @@ paths:
         - stalker web app
       description: Log in an existing user.
       operationId: loginUser
+      # Disable security for this endpoint
+      security: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/UnauthenticatedUser"
       responses:
         "200":
-          description: Login was successful.
+          description: Ok. returns the user's information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
         "401":
-          description: Not Authorized because of incorrect credentials.
+          $ref: "#/components/responses/Unauthorized"
         default:
           $ref: "#/components/responses/DefaultResponse"
 
@@ -132,48 +163,6 @@ paths:
         default:
           $ref: "#/components/responses/DefaultResponse"
 
-  # /tracking/inside:
-  #   post:
-  #     tags:
-  #       - stalker mobile app
-  #     description: Signal that an user has entered into a place.
-  #     operationId: reportUserEnteredInAPlace
-  #     requestBody:
-  #       required: true
-  #       content:
-  #         application/json:
-  #           schema:
-  #             allOf:
-  #               - $ref: "#/components/schemas/PlaceUserCounter"
-  #     responses:
-  #       "200":
-  #         description: Success, an user has entered into an organizations.
-  #       "408":
-  #         description: Request timed out.
-  #       default:
-  #         $ref: "#/components/responses/DefaultResponse"
-
-  # /tracking/outside:
-  #   post:
-  #     tags:
-  #       - stalker mobile app
-  #     description: Report an user who has exited by a place.
-  #     operationId: reportUserExitedInAPlace
-  #     requestBody:
-  #       required: true
-  #       content:
-  #         application/json:
-  #           schema:
-  #             allOf:
-  #               - $ref: "#/components/schemas/PlaceUserCounter"
-  #     responses:
-  #       "200":
-  #         description: Success, an user has entered into an organizations.
-  #       "408":
-  #         description: Request timed out.
-  #       default:
-  #         $ref: "#/components/responses/DefaultResponse"
-
 # Apply security scheme globally
 security:
   - AdminKey: []
@@ -204,8 +193,15 @@ components:
       schema:
         $ref: "#/components/schemas/GenericId"
 
+  # TODO reuse bodies?
+  # requestBodies:
+
   # TODO add explicit json content to errors
   responses:
+    # 200
+    Ok:
+      description: Ok.
+
     # 401
     Unauthorized:
       description: The user is not authenticated.
@@ -227,7 +223,7 @@ components:
       description: This endpoint has not been implemented yet.
 
   schemas:
-    AppConnections:
+    AppConnection:
       $ref: "./schemas/AppConnection.yaml#"
 
     GenericId:
@@ -244,6 +240,9 @@ components:
 
     PlaceData:
       $ref: "./schemas/PlaceData.yaml#"
+
+    UnauthenticatedUser:
+      $ref: "./schemas/UnauthenticatedUser.yaml#"
 
     User:
       $ref: "./schemas/User.yaml#"

@@ -1,6 +1,11 @@
 type: object
 description: More informations about a place
 # TODO decide which geocoding API we use and have this resource match its type
+required:
+  - address
+  - city
+  - zipcode
+  - state
 properties:
   address:
     type: string
@@ -14,8 +19,3 @@ properties:
     maxLength: 5
   state:
     type: string
-required:
-  - address
-  - city
-  - zipcode
-  - state

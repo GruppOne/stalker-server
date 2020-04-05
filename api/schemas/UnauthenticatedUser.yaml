@@ -1,0 +1,16 @@
+type: object
+description: Minimal data required for authenticating an user.
+required:
+  - mail
+  - password
+# FIXME BAD duplication
+properties:
+  mail:
+    type: string
+    format: mail
+    example: mariorossi@gmail.com
+
+  password:
+    type: string
+    format: password
+    example: ArelativelysecurePassw0rd!

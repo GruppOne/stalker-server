@@ -7,7 +7,7 @@ required:
   - private
 properties:
   id:
-    $ref: "genericId.yaml"
+    $ref: "./GenericId.yaml#"
 
   name:
     type: string
@@ -19,7 +19,7 @@ properties:
   ldapConfiguration:
     #TODO check ldapConfiguration: are these properties enough?
     type: object
-    description: URL or IP address of the LDAP server of the organization. Useful only if the organization is private.
+    description: The information required to allow the configuration of LDAP authentication for private organizations
     required:
       - host
       - username
@@ -40,7 +40,7 @@ properties:
     type: array
     description: list of places within this organization
     items:
-      $ref: "place.yaml"
+      $ref: "./Place.yaml#"
 
   # if @private == true a user can't be anonymous
   private:
