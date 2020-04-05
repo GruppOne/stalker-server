@@ -1,4 +1,4 @@
-package com.example.Stalkerserver.security;
+/*package com.example.Stalkerserver.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@EnableWebSecurity
+@EnableWebFluxSecurity
 @Configuration
 @PropertySource("classpath:application.properties")
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
 
   @Value("${my.api.key}")
@@ -27,7 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   private String api_value;
 
   @Override
-  protected void configure(HttpSecurity http) throws Exception{
+  protected void configure(ServerHttpSecurity http) throws Exception{
     ApiKeyAuthenticationFilter filter  = new ApiKeyAuthenticationFilter(api_key);
     filter.setAuthenticationManager(new AuthenticationManager() {
 
@@ -51,4 +51,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
 
-}
+}*/

@@ -1,4 +1,4 @@
-package com.example.Stalkerserver.security;
+/*package com.example.Stalkerserver.security;
 
 
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -24,4 +24,4 @@ public class ApiKeyAuthenticationFilter extends AbstractPreAuthenticatedProcessi
   }
 
 
-}
+}*/
