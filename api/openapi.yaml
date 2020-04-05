@@ -1,6 +1,7 @@
-# The extension of this file needs to be ".yaml" and not ".yml"
 openapi: "3.0.3"
 
+# TODO remove all comments from these files or we can't use stoplight studio
+# The extension of this file needs to be ".yaml" and not ".yml"
 info:
   title: Stalker API
   description: |
@@ -9,29 +10,27 @@ info:
   contact:
     name: GruppOne
     email: gruppone.swe@gmail.com
-    url: https://github.com/GruppOne
+    url: "https://github.com/GruppOne"
 
   license:
     name: GNU GPLv3
-    url: https://www.gnu.org/licenses/gpl-3.0-standalone.html
+    url: "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
 
   version: "0.1.0"
 
 servers:
-  - url: http://localhost:8080
+  - url: "http://localhost:8080"
     description: Development server
-  - url: https://{environment}.gruppone.tech/v{majorVersion}
+  - url: "https://{environment}.gruppone.tech/v{majorVersion}"
     variables:
       environment:
         enum:
-          # Production server
-          - api
-          # Staging server
           - api.staging
+          - api
         default: api
       majorVersion:
-        # TODO this needs to be managed by .release scripts
         default: "0"
+    description: Staging and Production servers
 
 tags:
   - name: stalker mobile app
@@ -48,7 +47,9 @@ paths:
     post:
       tags:
         - stalker mobile app
-      description: Send an update for an user's current location.
+      description: "Send an update for an user's current location."
+      summary: |
+        This is the cornerstone of our tracking mechanism. Sending "inside/outside" updates on the user's position relative to the places of the organizations he's connected to gives the server enough information to estimate the number of people currently inside a building, using the power of MATH and STATISTICS.
       operationId: postLocationUpdate
       requestBody:
         required: true
@@ -57,7 +58,6 @@ paths:
             schema:
               $ref: "#/components/schemas/LocationInfo"
       responses:
-        # TODO did i forget some responses?
         "200":
           $ref: "#/components/responses/Ok"
         "401":
@@ -72,9 +72,8 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-      description: Log in an existing user.
-      operationId: loginUser
-      # Disable security for this endpoint
+      description: Log in an existing user. This endpoint should not have a security scheme.
+      operationId: postUserLoginCredentials
       security: []
       requestBody:
         required: true
@@ -84,7 +83,7 @@ paths:
               $ref: "#/components/schemas/UnauthenticatedUser"
       responses:
         "200":
-          description: Ok. returns the user's information
+          description: Ok.
           content:
             application/json:
               schema:
@@ -94,7 +93,7 @@ paths:
         default:
           $ref: "#/components/responses/DefaultResponse"
 
-  /user/{userId}/subscribed:
+  /users/{userId}/subscribed:
     parameters:
       - $ref: "#/components/parameters/userId"
 
@@ -103,7 +102,7 @@ paths:
         - stalker mobile app
         - stalker web app
       description: Get the list of organizations that a user has connected to.
-      operationId: getConnectedOrganizationsByUserId
+      operationId: getUserSubscriptions
       responses:
         "200":
           description: The list of the ids of the organizations the user is connected to.
@@ -112,19 +111,23 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/GenericId"
-        "404":
-          $ref: "#/components/responses/NotFound"
+                  $ref: "#/components/schemas/AppConnection"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "501":
+          $ref: "#/components/responses/NotImplemented"
         default:
           $ref: "#/components/responses/DefaultResponse"
 
-  /organization:
+  /organizations:
     get:
       tags:
         - stalker mobile app
         - stalker web app
       description: Get the list of all the organizations registered to Stalker.
-      operationId: getAllOrganizations
+      operationId: getOrganizations
       responses:
         "200":
           description: The list of organizations registered to Stalker.
@@ -134,19 +137,20 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Organization"
-        "404":
-          $ref: "#/components/responses/NotFound"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         default:
           $ref: "#/components/responses/DefaultResponse"
 
-  /organization/{organizationId}/place:
+  /organizations/{organizationId}:
     parameters:
       - $ref: "#/components/parameters/organizationId"
-    post:
+
+    put:
       tags:
         - stalker web app
-      description: Add a new place to the given organization. Operation reserved only to the managers and up.
-      operationId: addPlaceIntoAnOrganizationById
+      operationId: putOrganizationsSpecificOrganization
+      description: "Update an organization's data."
       requestBody:
         required: true
         content:
@@ -155,11 +159,15 @@ paths:
               $ref: "#/components/schemas/Organization"
       responses:
         "200":
-          description: Success, the place has been created.
-        "400":
-          description: The place already exists inside the current organization.
+          description: Ok. The response contains the full organization info including the updates.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericId"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/DefaultResponse"
 

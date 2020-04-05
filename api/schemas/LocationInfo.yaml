@@ -16,11 +16,11 @@ required:
   - anonymous
   - inside
   - placeIds
-# TODO add properties description and examples?
+
 properties:
   timestampMs:
-    type: integer
-    format: uint64
+    type: string
+    format: date-time
   userId:
     $ref: "./GenericId.yaml#"
   anonymous:

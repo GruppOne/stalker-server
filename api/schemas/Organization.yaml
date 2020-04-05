@@ -15,7 +15,7 @@ properties:
   description:
     type: string
 
-  # reference to LDAP configuration
+  # FIXME WE SHOULD NOT GIVE THIS PROPERTY TO USERS!
   ldapConfiguration:
     #TODO check ldapConfiguration: are these properties enough?
     type: object
