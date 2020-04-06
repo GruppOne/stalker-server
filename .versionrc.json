@@ -2,8 +2,8 @@
   "packageFiles": [],
   "bumpFiles": [
     {
-      "filename": "../build.gradle",
-      "updater": "updater.js"
+      "filename": "./build.gradle",
+      "updater": "./.release/updater.js"
     }
   ],
   "types": [

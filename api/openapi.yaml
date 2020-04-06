@@ -158,6 +158,7 @@ paths:
       description: Create a new organization.
       operationId: postOrganizations
       requestBody:
+        required: true
         content:
           application/json:
             schema:
