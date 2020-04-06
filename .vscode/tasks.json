@@ -2,15 +2,69 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "run spectral linter",
+      "label": "run spectral lint",
       "type": "shell",
-      "command": "npx spectral lint ./api/**.yaml",
+      "command": "spectral lint ./api/**.yaml",
+      // "command": "npx --package @stoplight/spectral spectral lint ./api/**.yaml",
+      // "options": {
+      //   "shell": {
+      //     "executable": "wsl.exe",
+      //     "args": [
+      //       "--"
+      //     ]
+      //   }
+      // },
+      "problemMatcher": {
+        "base": "$eslint-stylish",
+        "source": "spectral"
+      }
+    },
+    {
+      "label": "run prism mock on port 11111",
+      "type": "shell",
+      "command": "prism mock --port 11111 --dynamic ./api/openapi.yaml ",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
       "problemMatcher": []
     },
     {
       "label": "docker-compose up with GUIs",
       "type": "shell",
       "command": "docker-compose -f ./docker-compose.yml -f ./docker-compose.gui.yml up -d",
+      "problemMatcher": []
+    },
+    {
+      "label": "build plantuml images",
+      "type": "shell",
+      "command": "java",
+      "args": [
+        "-jar",
+        "${env:PLANTUML_JAR}",
+        "-progress",
+        "-failfast",
+        "-checkmetadata",
+        "-charset",
+        "UTF-8",
+        "-x",
+        "${workspaceRoot}/docs/style/*.pu",
+        "-o",
+        "img",
+        "${workspaceRoot}/docs/diagrams/*.pu"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
       "problemMatcher": []
     }
   ]

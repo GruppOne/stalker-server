@@ -1,0 +1,325 @@
+openapi: "3.0.3"
+
+# TODO remove all comments from these files or we can't use stoplight studio
+# The extension of this file needs to be ".yaml" and not ".yml"
+info:
+  title: Stalker API
+  description: |
+    The API specification developed by GruppOne for the Stalker project.
+
+  contact:
+    name: GruppOne
+    email: gruppone.swe@gmail.com
+    url: "https://github.com/GruppOne"
+
+  license:
+    name: GNU GPLv3
+    url: "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
+
+  version: "0.1.0"
+
+servers:
+  - url: "http://localhost:8080"
+    description: Development server.
+  - url: "https://{environment}.gruppone.tech/v{majorVersion}"
+    variables:
+      environment:
+        enum:
+          - api.staging
+          - api
+        default: api
+      majorVersion:
+        default: "0"
+    description: Staging and Production servers.
+
+tags:
+  - name: stalker mobile app
+    description: This operation should be available to mobile app users.
+  - name: stalker web app
+    description: This operation should be available to web app users (owners, managers, viewers).
+
+# TODO define links https://swagger.io/docs/specification/links/ to reach the full glory of REST
+# TODO explicitly declare permissions schema for admin roles
+# TODO use plurals: /users, not /user
+# TODO use http status 202 "accepted" for long async operations
+paths:
+  /location/update:
+    post:
+      tags:
+        - stalker mobile app
+      description: "Send an update for an user's current location."
+      summary: |
+        This is the cornerstone of our tracking mechanism. Sending "inside/outside" updates on the user's position relative to the places of the organizations he's connected to gives the server enough information to estimate the number of people currently inside a building, using the power of MATH and STATISTICS.
+      operationId: postLocationUpdate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationInfo"
+      responses:
+        "200":
+          $ref: "#/components/responses/Ok"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
+  /user/login:
+    post:
+      tags:
+        - stalker mobile app
+        - stalker web app
+      description: Log in an existing user. This endpoint should not have a security scheme.
+      operationId: postUserLoginCredentials
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnauthenticatedUser"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
+  /users/{userId}/subscribed:
+    parameters:
+      - $ref: "#/components/parameters/userId"
+
+    get:
+      tags:
+        - stalker mobile app
+        - stalker web app
+      description: Get the list of organizations that a user has connected to.
+      operationId: getSpecificUserSubscriptions
+      responses:
+        "200":
+          description: The list of the ids of the organizations the user is connected to.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - connected
+                properties:
+                  connected:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AppConnection"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "501":
+          $ref: "#/components/responses/NotImplemented"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
+  /organizations:
+    get:
+      tags:
+        - stalker mobile app
+        - stalker web app
+      description: Get the list of all the organizations registered to Stalker.
+      operationId: getOrganizations
+      responses:
+        "200":
+          description: The list of organizations registered to Stalker.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - organizations
+                properties:
+                  organizations:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Organization"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
+    post:
+      tags:
+        - stalker web app
+      description: Create a new organization.
+      operationId: postOrganizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: The id of the newly created organization.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
+  /organizations/{organizationId}:
+    parameters:
+      - $ref: "#/components/parameters/organizationId"
+
+    put:
+      tags:
+        - stalker web app
+      operationId: putSpecificOrganization
+      description: Update an organization's data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Organization"
+      responses:
+        "200":
+          description: Ok. The response contains the full organization info including the updates.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
+  /organizations/{organizationId}/place:
+    parameters:
+      - $ref: "#/components/parameters/organizationId"
+
+    post:
+      tags:
+        - stalker web app
+      operationId: postSpecificOrganizationPlace
+      description: Create a new place that is connected to an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Place"
+      responses:
+        "200":
+          description: Ok. The response contains the id of the newly created place.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        default:
+          $ref: "#/components/responses/DefaultResponse"
+
+# Apply security scheme globally
+security:
+  - AdminKey: []
+
+components:
+  parameters:
+    userId:
+      in: path
+      name: userId
+      description: The id of an user.
+      required: true
+      schema:
+        $ref: "#/components/schemas/GenericId"
+
+    organizationId:
+      in: path
+      name: organizationId
+      description: The id of an organization.
+      required: true
+      schema:
+        $ref: "#/components/schemas/GenericId"
+
+    placeId:
+      in: path
+      name: placeId
+      description: The id of a place.
+      required: true
+      schema:
+        $ref: "#/components/schemas/GenericId"
+
+  # TODO reuse bodies?
+  # requestBodies:
+
+  # TODO add explicit json content to errors
+  responses:
+    # 200
+    Ok:
+      description: Ok.
+
+    # 401
+    Unauthorized:
+      description: The user is not authenticated.
+
+    # 403
+    Forbidden:
+      description: The user is authenticated but not authorized.
+
+    # 404
+    NotFound:
+      description: The specified resource was not found.
+
+    # 500
+    DefaultResponse:
+      description: Unexpected error.
+
+    # 501
+    NotImplemented:
+      description: This endpoint has not been implemented yet.
+
+  schemas:
+    AppConnection:
+      $ref: "./schemas/AppConnection.yaml#"
+
+    GenericId:
+      $ref: "./schemas/GenericId.yaml#"
+
+    LocationInfo:
+      $ref: "./schemas/LocationInfo.yaml#"
+
+    Organization:
+      $ref: "./schemas/Organization.yaml#"
+
+    # we keep this here because it's an "important" entity
+    Place:
+      $ref: "./schemas/Place.yaml#"
+
+    UnauthenticatedUser:
+      $ref: "./schemas/UnauthenticatedUser.yaml#"
+
+    User:
+      $ref: "./schemas/User.yaml#"
+
+  securitySchemes:
+    AdminKey:
+      type: apiKey
+      in: header
+      # name of the header
+      name: STALKER-ADMIN-API-KEY

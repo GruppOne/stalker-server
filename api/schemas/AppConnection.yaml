@@ -1,0 +1,14 @@
+type: object
+description: Represents the fact that an user has connected to an organization.
+required:
+  - organizationId
+  - userId
+  - createdDate
+properties:
+  organizationId:
+    $ref: "./GenericId.yaml#"
+  userId:
+    $ref: "./GenericId.yaml#"
+  createdDate:
+    type: string
+    format: date-time

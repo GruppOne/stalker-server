@@ -7,6 +7,11 @@
   "editor.tabSize": 2,
   "files.encoding": "utf8",
   "files.eol": "\n",
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true
+  },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "git-graph.dialog.rebase.ignoreDate": false,
@@ -21,7 +26,6 @@
   "java.format.enabled": true,
   "java.format.onType.enabled": true,
   "java.format.comments.enabled": true,
-  // "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
   "java.codeGeneration.generateComments": true,
   "java.codeGeneration.useBlocks": true,
   "java.completion.guessMethodArguments": true,

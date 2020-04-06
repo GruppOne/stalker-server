@@ -103,5 +103,3 @@ bin/
 
 # temporarily committing override file
 # docker-compose.override.yml
-
-HELP.md
