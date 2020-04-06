@@ -4,13 +4,21 @@
     {
       "label": "run spectral lint",
       "type": "shell",
-      "command": "npx spectral lint ./api/**.yaml",
+      "command": "spectral lint ./api/**.yaml",
+      // "command": "npx --package @stoplight/spectral spectral lint ./api/**.yaml",
+      // "options": {
+      //   "shell": {
+      //     "executable": "wsl.exe",
+      //     "args": [
+      //       "--"
+      //     ]
+      //   }
+      // },
       "problemMatcher": {
         "base": "$eslint-stylish",
         "source": "spectral"
       }
     },
-
     {
       "label": "run prism mock on port 11111",
       "type": "shell",

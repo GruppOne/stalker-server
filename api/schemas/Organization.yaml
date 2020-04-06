@@ -19,7 +19,7 @@ properties:
   ldapConfiguration:
     #TODO check ldapConfiguration: are these properties enough?
     type: object
-    description: The information required to allow the configuration of LDAP authentication for private organizations
+    description: The information required to allow the configuration of LDAP authentication for private organizations.
     required:
       - host
       - username
