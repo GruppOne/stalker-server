@@ -30,7 +30,7 @@ properties:
 
   placeData:
     type: object
-    description: More information on a place
+    description: More information on a place.
     # TODO decide which geocoding API we use and have this resource match its type
     required:
       - address

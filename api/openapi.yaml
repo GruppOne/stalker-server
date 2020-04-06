@@ -20,7 +20,7 @@ info:
 
 servers:
   - url: "http://localhost:8080"
-    description: Development server
+    description: Development server.
   - url: "https://{environment}.gruppone.tech/v{majorVersion}"
     variables:
       environment:
@@ -30,7 +30,7 @@ servers:
         default: api
       majorVersion:
         default: "0"
-    description: Staging and Production servers
+    description: Staging and Production servers.
 
 tags:
   - name: stalker mobile app
@@ -165,7 +165,7 @@ paths:
               $ref: "#/components/schemas/Organization"
       responses:
         "200":
-          description: The list of organizations registered to Stalker.
+          description: The id of the newly created organization.
           content:
             application/json:
               schema:
@@ -185,7 +185,7 @@ paths:
       tags:
         - stalker web app
       operationId: putSpecificOrganization
-      description: "Update an organization's data."
+      description: Update an organization's data.
       requestBody:
         required: true
         content:
@@ -214,7 +214,7 @@ paths:
       tags:
         - stalker web app
       operationId: postSpecificOrganizationPlace
-      description: Create a new place that is connected to an organization
+      description: Create a new place that is connected to an organization.
       requestBody:
         required: true
         content:
@@ -284,11 +284,11 @@ components:
 
     # 404
     NotFound:
-      description: The specified resource was not found
+      description: The specified resource was not found.
 
     # 500
     DefaultResponse:
-      description: Unexpected error
+      description: Unexpected error.
 
     # 501
     NotImplemented:

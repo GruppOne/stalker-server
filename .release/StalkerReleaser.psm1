@@ -33,7 +33,7 @@ function Invoke-PrepareRelease {
   Write-Output "Preparing the current release ..."
 
   Write-Output "------------------------------------------------------------------"
-  Write-Warning "this is a dry run to check if everything is fine"
+  Write-Warning "---------- please check that everything is fine ----------------- "
   Write-Output "------------------------------------------------------------------"
   Write-Output ""
 
@@ -96,7 +96,7 @@ function Invoke-TagRelease {
   git pull origin
 
   Write-Output "------------------------------------------------------------------"
-  Write-Warning "this is a dry run to check if everything is fine"
+  Write-Warning "---------- please check that everything is fine ----------------- "
   Write-Output "------------------------------------------------------------------"
   Write-Output ""
 
