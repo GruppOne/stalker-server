@@ -1,3 +1,4 @@
 # create a file here named local.properties and put the actual passwords there
 spring.datasource.password=example-root-password
+apiKey.value = fF6*Ul4jnHsFnmxQux@dTUwf@
 influxdb.password=example-admin-password

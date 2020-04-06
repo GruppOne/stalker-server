@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.security;
+/*package tech.gruppone.stalkerserver.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -41,4 +41,4 @@ public class WebApiKeyFilter implements WebFilter {
     }
 
   }
-}
+}*/

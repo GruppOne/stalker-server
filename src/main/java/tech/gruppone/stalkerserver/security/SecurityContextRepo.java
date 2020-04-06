@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.security;
+/*package tech.gruppone.stalkerserver.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,11 +13,8 @@ import reactor.core.publisher.Mono;
 
 public class SecurityContextRepo  implements ServerSecurityContextRepository {
 
-  @Value("${my.api.value}")
-  private String api_value;
 
-  @Autowired
-  private Authentication authenticationManager;
+  private String api_value = "xD";
 
   @Override
   public Mono<Void> save(ServerWebExchange exchange,
@@ -29,9 +26,5 @@ public class SecurityContextRepo  implements ServerSecurityContextRepository {
   public Mono<SecurityContext> load(ServerWebExchange exchange) {
     ServerHttpRequest request= exchange.getRequest();
     String Header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-    if(Header.equals(api_value)){
-      return this.authenticationManager.
-    }
-
-  }
-}
+    if(header)
+}*/
