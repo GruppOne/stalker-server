@@ -2,6 +2,63 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/GruppOne/stalker-server/compare/v0.1.0...v0.2.0) (2020-04-06)
+
+
+### Features
+
+* add 'organizationid' foreign key to 'place' ([e90743a](https://github.com/GruppOne/stalker-server/commit/e90743a34656636cc6b5bb0e0549cc073690e2bb))
+* add monitor endpoints and several tracking endpoinst ([24840f5](https://github.com/GruppOne/stalker-server/commit/24840f5421904ae208618c446db6659d9e666ebd))
+* add several endpoints \organization ([4f576bf](https://github.com/GruppOne/stalker-server/commit/4f576bf6c1228407ab5472f46e18d393f9ce3cf8))
+* add sql code to generate the database ([92b680f](https://github.com/GruppOne/stalker-server/commit/92b680f20b62d5608dd309247de03134867cec6b))
+* add the missing stalker mobile/web app tags ([19b8e8f](https://github.com/GruppOne/stalker-server/commit/19b8e8f116de5775f9422b3f83e5247e6e3f4e02))
+* add tracking endpoints ([77f8f3a](https://github.com/GruppOne/stalker-server/commit/77f8f3a93865b50e8aeadc186817b1944e953d85))
+* adding two organization endpoints and one user endpoint ([f6e2af7](https://github.com/GruppOne/stalker-server/commit/f6e2af7c29990f59c4bf087d4adbd75005b0a9d2))
+* change reference path ([c5c4754](https://github.com/GruppOne/stalker-server/commit/c5c47545a298dbe2691fa8c37afc195d3f88f4cb))
+* continue designing user endpoints ([238c340](https://github.com/GruppOne/stalker-server/commit/238c340caf6cc29df9dc6f6386498ea718930761))
+* group dependencies into /resources subfolder ([185f40c](https://github.com/GruppOne/stalker-server/commit/185f40c9a22fa5b683499ec8bcbcaef64552f6cc))
+* implement correct location update endpoint ([4cb317f](https://github.com/GruppOne/stalker-server/commit/4cb317f08522c8917713b05b858e41f125394baa))
+* improvements to API ([af2a876](https://github.com/GruppOne/stalker-server/commit/af2a876bc06909f4029012d3893c9e8c0c36514c))
+* modify openapi.yaml, ready to use for POC ([0d98dfa](https://github.com/GruppOne/stalker-server/commit/0d98dfae027d509194d36634a9f9a9e379774d0d))
+* start API design ([b24c48e](https://github.com/GruppOne/stalker-server/commit/b24c48e02e22ab91ba2a2434d00f7667b5fd4e23))
+* start cleaning up the poc endpoints ([2a853d6](https://github.com/GruppOne/stalker-server/commit/2a853d621d10301e439e439dfd6e518d3b201633))
+* update and add new endpoint for organizations ([8b74b57](https://github.com/GruppOne/stalker-server/commit/8b74b57566e401dd7f1e316bcfcd68ccf8bdb9af))
+
+
+### Bug Fixes
+
+* add a verb at the start of the operationIds ([7839854](https://github.com/GruppOne/stalker-server/commit/7839854bf3ae0d1d954cf6368b46ce8b21984fd8))
+* always respond with valid json ([13952eb](https://github.com/GruppOne/stalker-server/commit/13952ebd8617dd4b3e7cb3d5ea90be8feb02e291))
+* fix descriptions and operationsIds ([a292bdd](https://github.com/GruppOne/stalker-server/commit/a292bdd31cce4dcb25055f70a910240d267555d1))
+* fix some irregularities in api documents ([5e889be](https://github.com/GruppOne/stalker-server/commit/5e889be6840038301ec0da2f31784b914d92275b))
+* remove misused discriminator property ([805a03c](https://github.com/GruppOne/stalker-server/commit/805a03ca75da30421f4d2010bcfac5295bb426d2))
+* replace id with userId in the paths ([5fed6bb](https://github.com/GruppOne/stalker-server/commit/5fed6bb3c1530f9a0095d5085d741ae19731a29e))
+* resolve some fixme and add new ones ([e7e3151](https://github.com/GruppOne/stalker-server/commit/e7e31516552d7798dda293925c2030904ef693fe))
+* solve refs problems ([d0ade6e](https://github.com/GruppOne/stalker-server/commit/d0ade6e969b8c1c985a7be9e4a730d7177bfad5c))
+* solve warnings and syntax errors, replace id with userId ([d157951](https://github.com/GruppOne/stalker-server/commit/d1579518e89b80b50a9f85b7be8f7879fba8f84a))
+
+
+### Documentation
+
+* start writing the api style guide ([3c80103](https://github.com/GruppOne/stalker-server/commit/3c80103675469d00024171b73b6e4d9a34d06d21))
+
+
+### Configuration
+
+* add docs scope to chore type for git cz ([148e306](https://github.com/GruppOne/stalker-server/commit/148e306d69cc0f70504d44ceacbe3f3eb3c51e1e))
+* add linter for openapi documents ([c8730da](https://github.com/GruppOne/stalker-server/commit/c8730dae2512d1250e91329c570de2b49910241c))
+* fix errors from last review ([32dfd9a](https://github.com/GruppOne/stalker-server/commit/32dfd9aca6bd15f6333127e28a3468dd7d8f523f))
+* fix releaser script ([329f580](https://github.com/GruppOne/stalker-server/commit/329f580d5dda60e7e3f4cc348172b24f97c0560d))
+* **docs:** add documentation specific gitignore ([42b72e9](https://github.com/GruppOne/stalker-server/commit/42b72e9bbd6af604c72cc5ff24e455536fe7251d))
+* **docs:** add style for uml class diagrams ([ec291d5](https://github.com/GruppOne/stalker-server/commit/ec291d51793ca31f91f0dfbea4c983312931c30a))
+* **docs:** add task for image generatin with plantuml ([7620bb6](https://github.com/GruppOne/stalker-server/commit/7620bb6113d079b43b761c4f101447f2f576d955))
+* add .idea to .gitignore ([a4c4b1f](https://github.com/GruppOne/stalker-server/commit/a4c4b1f1608a38670505d1f5234df412e43e2472))
+* add folder structure for database related files ([4f87777](https://github.com/GruppOne/stalker-server/commit/4f8777722b5aa3cfa3ca52353ccf815e217232ae))
+* checkout configuration from other branch ([fae6726](https://github.com/GruppOne/stalker-server/commit/fae67269fece6d0a3704d0371e91c569ed38b584))
+* update configuration ([5d935c0](https://github.com/GruppOne/stalker-server/commit/5d935c065c6a8e422f753340e99d375ed3a763bd))
+* update password and email pattern with the ones used in webapp ([8f32fab](https://github.com/GruppOne/stalker-server/commit/8f32fab2e807ef0598fddf53cd0b10fc6e71a80f))
+* update vscode settings ([9add93a](https://github.com/GruppOne/stalker-server/commit/9add93a8098805230ef2c332e594e2ec889059a9))
+
 ## 0.1.0 (2020-04-04)
 
 
