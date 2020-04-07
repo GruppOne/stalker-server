@@ -1,15 +1,13 @@
 package tech.gruppone.stalkerserver.user;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import reactor.core.publisher.Mono;
 
 public class UserRepository {
 
-  private User user = User.builder().email("ciao").password("password").build();
+  private User user = User.builder().email("mario.rossi@example.com").password("hashedPassword").build();
 
-  public Boolean findByEmail(String email) {
-    return user.getEmail() == email;
+  public Mono<User> findByEmail(String email) {
+    return Mono.just(user);
   }
 
 }

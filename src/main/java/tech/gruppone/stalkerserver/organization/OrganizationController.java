@@ -2,26 +2,42 @@ package tech.gruppone.stalkerserver.organization;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import tech.gruppone.stalkerserver.user.UserController;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RequestMapping("/organizations")
-@Controller
+@RestController
 public class OrganizationController {
-  private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-  /*
-  @GetMapping("/")
-  public Type getOrganizations(){}
-  */
+  private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
 
-  /*
-  @PutMapping("/{id}")
-  @RequestBody
-  public Type nameMethod(@PathVariable int id){}
-   */
+  private final OrganizationRepository organizationRepository = new OrganizationRepository();
+
+
+  @GetMapping
+  public Flux<Organization> getOrganizations() {
+    logger.info("returning list of all organizations");
+
+    return organizationRepository.findAllOrganizations();
+  }
+
+  @GetMapping("/{id}")
+  Mono<Organization> getOrganizationById(@PathVariable int id) {
+
+    return organizationRepository.findOrganizationById(id);
+  }
+
+//  @PutMapping("/{id}")
+//  public Mono<ServerResponse> putOrganizationById(@PathVariable int id, @RequestBody Organization updatedOrganization
+//  ) {
+//    Mono<Organization> organizationMono = organizationRepository.findOrganizationById(id);
+//
+//    System.out.printf("body of request is {}", updatedOrganization);
+//
+//    return Mono.just(new HttpServerResponse(HttpStatus.OK));
+//  }
 }

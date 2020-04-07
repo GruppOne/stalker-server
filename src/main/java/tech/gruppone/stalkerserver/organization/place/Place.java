@@ -9,7 +9,7 @@ import lombok.Value;
 @Value
 public class Place {
 
-  @NonNull int id;
+  int id;
   @NonNull String name;
   @NonNull Polygon polygon;
   @NonNull PlaceData placeData;

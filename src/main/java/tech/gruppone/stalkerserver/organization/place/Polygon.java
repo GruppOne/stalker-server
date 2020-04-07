@@ -12,7 +12,6 @@ public class Polygon {
   @Singular
   Set<GeographicalPoint> geographicalPoints;
 
-
   @Value
   public static class GeographicalPoint {
 

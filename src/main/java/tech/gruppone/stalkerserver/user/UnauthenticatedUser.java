@@ -1,11 +1,11 @@
 package tech.gruppone.stalkerserver.user;
 
 import lombok.Data;
-import lombok.Getter;
+import lombok.NonNull;
 
 @Data
 public class UnauthenticatedUser {
 
-    @Getter String email;
-    @Getter String password;
+  @NonNull String email;
+  @NonNull String password;
 }

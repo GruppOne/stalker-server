@@ -22,9 +22,11 @@ public class ApplicationConfiguration {
     this.version = version;
   }
 
-  @GetMapping("/version")
+  @GetMapping(value = {"/", "/version"})
   public Mono<String> currentServerVersion() {
 
-    return Mono.just(version);
+//    FIXME should not be done like this
+    final String versionObject = "{\"version\":\"" + version + "\"}";
+    return Mono.just(versionObject);
   }
 }
