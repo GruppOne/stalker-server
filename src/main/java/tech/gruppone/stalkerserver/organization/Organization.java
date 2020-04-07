@@ -1,7 +1,8 @@
 package tech.gruppone.stalkerserver.organization;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
@@ -10,6 +11,7 @@ import tech.gruppone.stalkerserver.organization.place.Place;
 
 @Builder
 @Value
+@AllArgsConstructor
 public class Organization {
 
   int id;
@@ -18,7 +20,7 @@ public class Organization {
   @NonNull String description = "";
 
   @Singular
-  Set<Place> places = new HashSet<Place>();
+  List<Place> places = new ArrayList<Place>();
 
   @Builder.Default
   boolean isPrivate = false;
