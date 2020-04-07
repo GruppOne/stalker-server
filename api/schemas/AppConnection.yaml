@@ -12,3 +12,4 @@ properties:
   createdDate:
     type: string
     format: date-time
+    example: "2020-02-12T12:13:14+01:00"
