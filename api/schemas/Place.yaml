@@ -50,7 +50,7 @@ properties:
         type: string
         minLength: 5
         maxLength: 5
-        example: 35031
+        example: "35031"
       state:
         type: string
         example: Italia
