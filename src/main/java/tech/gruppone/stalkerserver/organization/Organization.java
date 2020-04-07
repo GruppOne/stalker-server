@@ -12,7 +12,7 @@ import tech.gruppone.stalkerserver.organization.place.Place;
 @Value
 public class Organization {
 
-  @NonNull Integer id;
+  int id;
   @NonNull String name;
   @Builder.Default
   @NonNull String description = "";
@@ -20,7 +20,6 @@ public class Organization {
   @Singular
   Set<Place> places = new HashSet<Place>();
 
-  @NonNull
   @Builder.Default
   boolean isPrivate = false;
 //  LdapConfiguration ldapConfiguration;
