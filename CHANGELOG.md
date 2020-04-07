@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/GruppOne/stalker-server/compare/v0.1.0...v0.3.0) (2020-04-07)
+
+
+### Features
+
+* add login endpoint ([20bacfc](https://github.com/GruppOne/stalker-server/commit/20bacfcd04f65cffe1178b3a2044df545edace9d))
+* add the new structure for endpoints' entities ([225e719](https://github.com/GruppOne/stalker-server/commit/225e7193777c2cd44014f10905450637b24ed8d3))
+* add user login endpoint ([5428780](https://github.com/GruppOne/stalker-server/commit/542878031c9a6e704ed06d35e07e0c077eb24e46))
+* design PoC API subset ([#1](https://github.com/GruppOne/stalker-server/issues/1)) ([4f880ca](https://github.com/GruppOne/stalker-server/commit/4f880ca1d45164719a22695df1269e81cc387afb))
+* implement 2 organization endpoints ([01e6db6](https://github.com/GruppOne/stalker-server/commit/01e6db681e284fbd93a2f566d84ded5872302ec6))
+* implement entities model ([eedd487](https://github.com/GruppOne/stalker-server/commit/eedd487c7617704625d7dad3d181652fb594532a))
+* implement version endpoint ([e670e14](https://github.com/GruppOne/stalker-server/commit/e670e141ff4e2f1b7f6ad38cc27be5f3994b1536))
+* simplify configuration classes ([4b9ccf7](https://github.com/GruppOne/stalker-server/commit/4b9ccf789137614bb97f8dfe142945371aaf3713))
+
+
+### Configuration
+
+*  commit unfinished work ([97ed1c6](https://github.com/GruppOne/stalker-server/commit/97ed1c6a966781cf6391cfd2db9d9d8dc5afda78))
+
 ## [0.2.0](https://github.com/GruppOne/stalker-server/compare/v0.1.0...v0.2.0) (2020-04-06)
 
 
