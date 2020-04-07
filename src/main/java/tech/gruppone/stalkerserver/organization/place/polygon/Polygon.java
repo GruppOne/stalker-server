@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.organization.place;
+package tech.gruppone.stalkerserver.organization.place.polygon;
 
 import java.util.Set;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.Value;
 @Value
 public class Polygon {
 
+  //  TODO can this be a flux?
   @Singular
   Set<GeographicalPoint> geographicalPoints;
 

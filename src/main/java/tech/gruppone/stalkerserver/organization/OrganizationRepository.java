@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class OrganizationRepository {
@@ -12,6 +11,7 @@ public class OrganizationRepository {
   private static final Logger logger = LoggerFactory.getLogger(OrganizationRepository.class);
 
   final Map<Integer, Organization> organizationsMap = new HashMap<Integer, Organization>() {{
+    //noinspection GrazieInspection
     put(
       1,
       Organization.builder()
@@ -24,12 +24,12 @@ public class OrganizationRepository {
     put(2, Organization.builder().id(2).name("Imola Informatica").description("...").isPrivate(false).build());
   }};
 
-  public Flux<Organization> findAllOrganizations() {
-    logger.info("getting all organizations");
+  public Organization[] findAllOrganizations() {
+    logger.info("getting all organizations from repository");
 
     Organization[] organizations = organizationsMap.values().toArray(Organization[]::new);
 
-    return Flux.fromArray(organizations);
+    return organizations;
   }
 
   public Mono<Organization> findOrganizationById(int id) {

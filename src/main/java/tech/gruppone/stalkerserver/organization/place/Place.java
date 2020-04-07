@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.Value;
+import tech.gruppone.stalkerserver.organization.place.polygon.Polygon;
 
 @Builder
 @Value
