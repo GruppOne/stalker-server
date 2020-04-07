@@ -3,6 +3,7 @@ package tech.gruppone.stalkerserver.user;
 //import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,8 +20,9 @@ import reactor.core.publisher.Mono;
 @Controller
 public class UserController {
 
-  UserRepository userRepo;
+  UserRepository userRepo = new UserRepository();
   private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
   /*
   @PostMapping("/login")
@@ -31,7 +33,7 @@ public class UserController {
   */
   @PostMapping("/login")
   public Mono<ResponseEntity<User>> login (@RequestBody UnauthenticatedUser user){
-    if(userRepo.findByEmail(user.getEmail()) && userRepo.finByPassword(user.getPassword())){
+    if(userRepo.findByEmail(user.getEmail())){
         logger.info("user is logged");
         return Mono.just(ResponseEntity.status(HttpStatus.ACCEPTED).build());
     }
