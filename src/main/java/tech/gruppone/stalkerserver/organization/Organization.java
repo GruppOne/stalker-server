@@ -1,50 +1,43 @@
 package tech.gruppone.stalkerserver.organization;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
-import tech.gruppone.stalkerserver.place.Place;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Singular;
+import lombok.Value;
+import tech.gruppone.stalkerserver.organization.place.Place;
 
+@Builder
+@Value
 public class Organization {
 
-  @Getter
-  @Setter
-  private String name;
-  @Getter
-  private String description;
-  @Getter
-  private LdapConfiguration ldapConfiguration;
-  // Is it final?
-  @Getter
-  private Set<Place> places = new HashSet<Place>();
-  @Getter
-  private boolean isPrivate;
-  @Getter
-  private final LocalDateTime createdDate;
-  @Getter
-  @Setter
-  private LocalDateTime lastModifiedDate;
+  @NonNull Integer id;
+  @NonNull String name;
+  @Builder.Default
+  @NonNull String description = "";
 
-  public Organization(int id, String name, String description,
-    LdapConfiguration ldapConfiguration, Set<Place> places, boolean isPrivate, LocalDateTime createdDate,
-    LocalDateTime lastModifiedDate) {
-    this.name = name;
-    this.description = description;
-    this.ldapConfiguration = ldapConfiguration;
-    this.places = places;
-    this.isPrivate = isPrivate;
-    this.createdDate = createdDate;
-    this.lastModifiedDate = lastModifiedDate;
-  }
+  @Singular
+  Set<Place> places = new HashSet<Place>();
 
-  public static class LdapConfiguration {
-    @Getter
-    private String host;
-    @Getter
-    private String username;
-    @Getter
-    private String password;
-  }
+  @NonNull
+  @Builder.Default
+  boolean isPrivate = false;
+//  LdapConfiguration ldapConfiguration;
+
+//  @Builder
+//  @Data
+//  public static class LdapConfiguration {
+//
+//    @NonNull
+//    private final URL host;
+//    @NonNull
+//    private final String username;
+//    @NonNull
+//    private final String password;
+//  }
+
+//  Timestamp createdDate;
+//  Timestamp lastModifiedDate;
+
 }

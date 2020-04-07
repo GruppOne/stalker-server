@@ -1,27 +1,27 @@
 package tech.gruppone.stalkerserver.user;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 @Builder
-@Data
+@Value
 public class User {
 
   int id;
-  //UserData userData;
   String email;
   String password;
+  UserData userData;
 
-  /*@Builder
-  @Data
+  @Builder
+  @Value
   public static class UserData {
 
     String firstName;
     String lastName;
     LocalDate birthDate;
-    Timestamp createdDate;
-    Timestamp lastModifiedDate;
-  }*/
+//    Timestamp createdDate;
+//    Timestamp lastModifiedDate;
+  }
+
 }
