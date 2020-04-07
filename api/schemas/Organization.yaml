@@ -11,9 +11,11 @@ properties:
 
   name:
     type: string
+    example: Unipd Math
 
   description:
     type: string
+    example: Dipartimento di Matematica di Unipd
 
   # FIXME WE SHOULD NOT GIVE THIS PROPERTY TO USERS!
   ldapConfiguration:

@@ -5,6 +5,7 @@ properties:
     $ref: "./GenericId.yaml#"
   name:
     type: string
+    example: Torre Archimede
   # TODO check validity of this data type compared to leaflet's polygons
   polygon:
     type: array
@@ -27,6 +28,7 @@ properties:
           format: double
           minimum: -180
           maximum: 180
+    example: [{latitude: 45.411564, longitude: 11.887473}, {latitude: 45.411225, longitude: 11.887325}, {latitude: 45.41111, longitude: 11.887784}, {latitude: 45.41144, longitude: 11.88795},]
 
   placeData:
     type: object
@@ -40,7 +42,7 @@ properties:
     properties:
       address:
         type: string
-        example: via Garibaldi, 1
+        example: Via Trieste
       city:
         type: string
         example: Padova
@@ -48,5 +50,7 @@ properties:
         type: string
         minLength: 5
         maxLength: 5
+        example: 35031
       state:
         type: string
+        example: Italia
