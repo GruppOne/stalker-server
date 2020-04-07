@@ -1,21 +1,15 @@
 package tech.gruppone.stalkerserver.user;
 
-import tech.gruppone.stalkerserver.user.User.UserData;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UserRepository {
 
-  private User user;
+  private User user = User.builder().email("ciao").password("password").build();
 
-  public UserRepository(User user) {
-      this.user = new User(1, "mariorossi@gmail.com", "password", new UserData("mario", "rossi",,1,1));
-  }
-
-  public Boolean findByEmail(String email){
-    return user.getEmail()== email;
-  }
-
-  public Boolean finByPassword(String password){
-    return user.getPassword() == password;
+  public Boolean findByEmail(String email) {
+    return user.getEmail() == email;
   }
 
 }
