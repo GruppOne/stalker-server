@@ -1,20 +1,32 @@
 package tech.gruppone.stalkerserver.configuration;
 
+import lombok.Getter;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
-// TODO test that configuration works as expected
-//TODO should eventually use configuration annotation
-//FIXME should not be a RestController
-//@Configuration
+@Configuration
 @PropertySource("classpath:application.properties")
 @RestController
+@Getter
 public class ApplicationConfiguration {
 
-  @GetMapping("/version")
-  public String currentServerVersion(@Value("${spring.application.version}") String version) {
-    return version;
+  @NonNull
+  private final String version;
+
+  public ApplicationConfiguration(@Value("${spring.application.version}") String version) {
+    this.version = version;
+  }
+
+  @GetMapping(value = {"/", "/version"})
+  public Mono<String> currentServerVersion() {
+
+//    FIXME should not be done like this
+    final String versionObject = "{\"version\":\"" + version + "\"}";
+    return Mono.just(versionObject);
   }
 }
