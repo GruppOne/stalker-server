@@ -1,0 +1,26 @@
+title: LocationInfo
+type: object
+description: "Specifics of an user's current location relative to the places monitored by organizations they're subscribet to."
+properties:
+  timestamp:
+    type: string
+    format: date-time
+    example: '2020-04-07T13:06:23+02:00'
+  userId:
+    $ref: ./GenericId.v1.yaml
+  anonymous:
+    type: boolean
+    example: 'false'
+  inside:
+    type: boolean
+    example: 'true'
+  placeIds:
+    type: array
+    items:
+      $ref: ./GenericId.v1.yaml
+required:
+  - timestamp
+  - userId
+  - anonymous
+  - inside
+  - placeIds

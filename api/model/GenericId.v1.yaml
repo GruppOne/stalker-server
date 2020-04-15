@@ -1,0 +1,5 @@
+type: integer
+title: GenericId
+description: An unsigned integer
+format: int32
+example: 1
