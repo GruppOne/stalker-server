@@ -1,3 +1,3 @@
 # create a file here named local.properties and put the actual passwords there
-spring.datasource.password=example-root-password
+spring.r2dbc.password=example-root-password
 influxdb.password=example-admin-password
