@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.organization.place.polygon;
+package tech.gruppone.stalker.server.model;
 
 import java.util.Set;
 import lombok.Builder;

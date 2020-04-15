@@ -1,10 +1,10 @@
-package tech.gruppone.stalkerserver;
+package tech.gruppone.stalker.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApplicationTests {
+class ServerApplicationTests {
 
   @Test
   void contextLoads() {

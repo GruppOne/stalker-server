@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.user;
+package tech.gruppone.stalker.server.model;
 
 import java.time.LocalDate;
 import lombok.Builder;

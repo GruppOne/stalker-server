@@ -1,6 +1,7 @@
-package tech.gruppone.stalkerserver.user;
+package tech.gruppone.stalker.server.repository;
 
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.User;
 
 public class UserRepository {
 
