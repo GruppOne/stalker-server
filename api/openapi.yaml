@@ -1,7 +1,5 @@
 openapi: "3.0.3"
 
-# TODO remove all comments from these files or we can't use stoplight studio
-# The extension of this file needs to be ".yaml" and not ".yml"
 info:
   title: Stalker API
   description: |
@@ -38,10 +36,6 @@ tags:
   - name: stalker web app
     description: This operation should be available to web app users (owners, managers, viewers).
 
-# TODO define links https://swagger.io/docs/specification/links/ to reach the full glory of REST
-# TODO explicitly declare permissions schema for admin roles
-# TODO use plurals: /users, not /user
-# TODO use http status 202 "accepted" for long async operations
 paths:
   /location/update:
     post:
@@ -235,7 +229,6 @@ paths:
         default:
           $ref: "#/components/responses/DefaultResponse"
 
-# Apply security scheme globally
 security:
   - AdminKey: []
 
@@ -265,34 +258,24 @@ components:
       schema:
         $ref: "#/components/schemas/GenericId"
 
-  # TODO reuse bodies?
-  # requestBodies:
-
-  # TODO add explicit json content to errors
   responses:
-    # 200
     Ok:
-      description: Ok.
+      description: 200 - Ok.
 
-    # 401
     Unauthorized:
-      description: The user is not authenticated.
+      description: 401 - The user is not authenticated.
 
-    # 403
     Forbidden:
-      description: The user is authenticated but not authorized.
+      description: 403 - The user is authenticated but not authorized.
 
-    # 404
     NotFound:
-      description: The specified resource was not found.
+      description: 404 - The specified resource was not found.
 
-    # 500
     DefaultResponse:
-      description: Unexpected error.
+      description: 500 - Unexpected error.
 
-    # 501
     NotImplemented:
-      description: This endpoint has not been implemented yet.
+      description: 501 - This endpoint has not been implemented yet.
 
   schemas:
     AppConnection:
@@ -307,7 +290,6 @@ components:
     Organization:
       $ref: "./schemas/Organization.yaml#"
 
-    # we keep this here because it's an "important" entity
     Place:
       $ref: "./schemas/Place.yaml#"
 
@@ -321,5 +303,4 @@ components:
     AdminKey:
       type: apiKey
       in: header
-      # name of the header
       name: STALKER-ADMIN-API-KEY
