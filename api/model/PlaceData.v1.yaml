@@ -8,7 +8,7 @@ properties:
   polygon:
     type: array
     description: An array of points that constitutes the perimeter of a place
-    example: '[{latitude: 45.411564, longitude: 11.887473}, {latitude: 45.411225, longitude: 11.887325}, {latitude: 45.41111, longitude: 11.887784}, {latitude: 45.41144, longitude: 11.88795},]'
+    example: [{latitude: 45.411564, longitude: 11.887473}, {latitude: 45.411225, longitude: 11.887325}, {latitude: 45.41111, longitude: 11.887784}, {latitude: 45.41144, longitude: 11.88795},]
     minItems: 3
     items:
       type: object

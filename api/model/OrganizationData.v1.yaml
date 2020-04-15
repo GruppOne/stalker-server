@@ -21,6 +21,7 @@ properties:
         format: password
   places:
     type: array
+    example: []
     items:
       $ref: ./Place.v1.yaml
   isPrivate:
