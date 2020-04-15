@@ -17,4 +17,4 @@ jobs:
           node-version: '12.x'
 
       - name: Run spectral linter via npx
-        run: npx --package @stoplight/spectral spectral lint ./api/**.yaml
+        run: npx --package @stoplight/spectral spectral lint ./api/openapi.yaml
