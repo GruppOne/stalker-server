@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 //TODO refactor using @configurationproperties for typed config values
 @Configuration
 @PropertySource("classpath:application.properties")
-@PropertySource("classpath:local.properties")
+// @PropertySource("classpath:local.properties")
 @Getter
 public class InfluxDbConfiguration {
 
