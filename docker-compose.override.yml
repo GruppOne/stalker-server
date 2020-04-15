@@ -1,10 +1,32 @@
 version: "3.7"
 
 services:
+
   rdb:
     ports:
       - "3306:3306"
 
+  # FIXME not working
+  rdb-gui:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - rdb
+
+    environment:
+      PMA_HOST: stalker-rdb
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+
+    ports:
+      - "8080:80"
+
   tsdb:
     ports:
       - "8086:8086"
+
+  # FIXME not working
+  tsdb-gui:
+    image: chronograf:alpine
+    depends_on:
+      - tsdb
+    ports:
+      - "8889:8888"

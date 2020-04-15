@@ -2,10 +2,6 @@ version: "3.7"
 
 #################### THIS SECTIONS CONTAINS SOME EXPLANATIONS AND TIPS ON HOW TO WORK WITH DOCKER-COMPOSE ##############
 
-# To start the graphical interfaces for the db services, use the following command in the root workspace folder:
-
-# docker-compose -f ./docker-compose.yml -f ./docker-compose.gui.yml <compose-command>
-
 # The password required to access our services are specified inside a .env file in the repository root directory. The env structure is documented in the .env.template file.
 
 # The "ports" mapping exposes the given ports to the HOST. The "expose" mapping only exposes given the ports to other services, which is what we want because only the server talks to the external world
