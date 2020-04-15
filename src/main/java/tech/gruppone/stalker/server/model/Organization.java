@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
-import tech.gruppone.stalker.server.model.Place;
 
 @Builder
 @Value
