@@ -1,25 +1,20 @@
-openapi: "3.0.3"
-
+openapi: 3.0.3
 info:
   title: Stalker API
   description: |
     The API specification developed by GruppOne for the Stalker project.
-
   contact:
     name: GruppOne
     email: gruppone.swe@gmail.com
-    url: "https://github.com/GruppOne"
-
+    url: 'https://github.com/GruppOne'
   license:
     name: GNU GPLv3
-    url: "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
-
-  version: "0.3.0"
-
+    url: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html'
+  version: 0.3.0
 servers:
-  - url: "http://localhost:8080"
+  - url: 'http://localhost:8080'
     description: Development server.
-  - url: "https://{environment}.gruppone.tech/v{majorVersion}"
+  - url: 'https://{environment}.gruppone.tech/v{majorVersion}'
     variables:
       environment:
         enum:
@@ -27,15 +22,13 @@ servers:
           - api
         default: api
       majorVersion:
-        default: "0"
+        default: '0'
     description: Staging and Production servers.
-
 tags:
   - name: stalker mobile app
     description: This operation should be available to mobile app users.
   - name: stalker web app
-    description: This operation should be available to web app users (owners, managers, viewers).
-
+    description: 'This operation should be available to web app users (owners, managers, viewers).'
 paths:
   /location/update:
     post:
@@ -50,17 +43,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LocationInfo"
+              $ref: '#/components/schemas/LocationInfo'
       responses:
-        "200":
-          $ref: "#/components/responses/Ok"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
+        '200':
+          $ref: '#/components/responses/Ok'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          $ref: "#/components/responses/DefaultResponse"
-
+          $ref: '#/components/responses/DefaultResponse'
   /user/login:
     post:
       tags:
@@ -74,23 +66,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UnauthenticatedUser"
+              $ref: '#/components/schemas/LoginData'
       responses:
-        "200":
+        '200':
           description: Ok.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         default:
-          $ref: "#/components/responses/DefaultResponse"
-
-  /users/{userId}/subscribed:
+          $ref: '#/components/responses/DefaultResponse'
+  '/users/{userId}/subscribed':
     parameters:
-      - $ref: "#/components/parameters/userId"
-
+      - $ref: '#/components/parameters/userId'
     get:
       tags:
         - stalker mobile app
@@ -98,28 +88,27 @@ paths:
       description: Get the list of organizations that a user has connected to.
       operationId: getSpecificUserSubscriptions
       responses:
-        "200":
+        '200':
           description: The list of the ids of the organizations the user is connected to.
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - connected
                 properties:
                   connected:
                     type: array
                     items:
-                      $ref: "#/components/schemas/AppConnection"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "501":
-          $ref: "#/components/responses/NotImplemented"
+                      $ref: '#/components/schemas/GenericId'
+                required:
+                  - connected
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
         default:
-          $ref: "#/components/responses/DefaultResponse"
-
+          $ref: '#/components/responses/DefaultResponse'
   /organizations:
     get:
       tags:
@@ -128,7 +117,7 @@ paths:
       description: Get the list of all the organizations registered to Stalker.
       operationId: getOrganizations
       responses:
-        "200":
+        '200':
           description: The list of organizations registered to Stalker.
           content:
             application/json:
@@ -140,12 +129,11 @@ paths:
                   organizations:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Organization"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+                      $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         default:
-          $ref: "#/components/responses/DefaultResponse"
-
+          $ref: '#/components/responses/DefaultResponse'
     post:
       tags:
         - stalker web app
@@ -156,54 +144,50 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Organization"
+              $ref: '#/components/schemas/OrganizationData'
       responses:
-        "200":
+        '200':
           description: The id of the newly created organization.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenericId"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
+                $ref: '#/components/schemas/GenericId'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          $ref: "#/components/responses/DefaultResponse"
-
-  /organizations/{organizationId}:
+          $ref: '#/components/responses/DefaultResponse'
+  '/organizations/{organizationId}':
     parameters:
-      - $ref: "#/components/parameters/organizationId"
-
+      - $ref: '#/components/parameters/organizationId'
     put:
       tags:
         - stalker web app
       operationId: putSpecificOrganization
-      description: Update an organization's data.
+      description: "Update an organization's data."
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Organization"
+              $ref: '#/components/schemas/Organization'
       responses:
-        "200":
+        '200':
           description: Ok. The response contains the full organization info including the updates.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Organization"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
+                $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          $ref: "#/components/responses/DefaultResponse"
-
-  /organizations/{organizationId}/place:
+          $ref: '#/components/responses/DefaultResponse'
+  '/organizations/{organizationId}/place':
     parameters:
-      - $ref: "#/components/parameters/organizationId"
-
+      - $ref: '#/components/parameters/organizationId'
     post:
       tags:
         - stalker web app
@@ -214,24 +198,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Place"
+              $ref: '#/components/schemas/PlaceData'
       responses:
-        "200":
+        '200':
           description: Ok. The response contains the id of the newly created place.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenericId"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
+                $ref: '#/components/schemas/GenericId'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          $ref: "#/components/responses/DefaultResponse"
-
+          $ref: '#/components/responses/DefaultResponse'
 security:
   - AdminKey: []
-
 components:
   parameters:
     userId:
@@ -240,65 +222,53 @@ components:
       description: The id of an user.
       required: true
       schema:
-        $ref: "#/components/schemas/GenericId"
-
+        $ref: '#/components/schemas/GenericId'
     organizationId:
       in: path
       name: organizationId
       description: The id of an organization.
       required: true
       schema:
-        $ref: "#/components/schemas/GenericId"
-
+        $ref: '#/components/schemas/GenericId'
     placeId:
       in: path
       name: placeId
       description: The id of a place.
       required: true
       schema:
-        $ref: "#/components/schemas/GenericId"
-
+        $ref: '#/components/schemas/GenericId'
   responses:
     Ok:
-      description: 200 - Ok.
-
+      description: Ok.
     Unauthorized:
-      description: 401 - The user is not authenticated.
-
+      description: The user is not authenticated.
     Forbidden:
-      description: 403 - The user is authenticated but not authorized.
-
+      description: The user is authenticated but not authorized.
     NotFound:
-      description: 404 - The specified resource was not found.
-
+      description: The specified resource was not found.
     DefaultResponse:
-      description: 500 - Unexpected error.
-
+      description: Unexpected error.
     NotImplemented:
-      description: 501 - This endpoint has not been implemented yet.
-
+      description: This endpoint has not been implemented yet.
   schemas:
     AppConnection:
-      $ref: "./schemas/AppConnection.yaml#"
-
+      $ref: ./model/AppConnection.v1.yaml
     GenericId:
-      $ref: "./schemas/GenericId.yaml#"
-
+      $ref: ./model/GenericId.v1.yaml
     LocationInfo:
-      $ref: "./schemas/LocationInfo.yaml#"
-
+      $ref: ./model/LocationInfo.v1.yaml
     Organization:
-      $ref: "./schemas/Organization.yaml#"
-
+      $ref: ./model/Organization.v1.yaml
     Place:
-      $ref: "./schemas/Place.yaml#"
-
-    UnauthenticatedUser:
-      $ref: "./schemas/UnauthenticatedUser.yaml#"
-
+      $ref: ./model/Place.v1.yaml
     User:
-      $ref: "./schemas/User.yaml#"
-
+      $ref: ./model/User.v1.yaml
+    OrganizationData:
+      $ref: ./model/OrganizationData.v1.yaml
+    PlaceData:
+      $ref: ./model/PlaceData.v1.yaml
+    LoginData:
+      $ref: ./model/Login.v1.yaml
   securitySchemes:
     AdminKey:
       type: apiKey
