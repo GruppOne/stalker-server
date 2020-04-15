@@ -35,7 +35,7 @@ paths:
       tags:
         - stalker mobile app
       description: |
-        This is the cornerstone of our tracking mechanism. Sending "inside/outside" updates on the user's position relative to the places of the organizations he's connected to gives the server enough information to estimate the number of people currently inside a building, using the power of MATH and STATISTICS.
+        This is the cornerstone of our tracking mechanism. Sending "inside/outside" updates on the user's position relative to the places of the organizations they're connected to gives the server enough information to estimate the number of people currently inside a building, using the power of MATH and STATISTICS.
       summary: "Send an update for an user's current location."
       operationId: postLocationUpdate
       requestBody:
