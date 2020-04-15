@@ -1,13 +1,11 @@
 plugins {
-  // TODO consider switching to M4 version in order to get async db dependency
-  id 'org.springframework.boot' version '2.2.6.RELEASE'
+  id 'org.springframework.boot' version '2.3.0.M4'
   id 'io.spring.dependency-management' version '1.0.9.RELEASE'
   id 'java'
 }
 
-group = 'tech.gruppone'
+group = 'tech.gruppone.stalker'
 version = '0.3.0'
-
 sourceCompatibility = '11'
 
 tasks.withType(JavaCompile) {
@@ -33,41 +31,54 @@ configurations {
 
 repositories {
   mavenCentral()
+  maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
-  // TODO is this needed?
-  // implementation 'org.springframework.boot:spring-boot-starter'
+//  Supports built in (or custom) endpoints that let you monitor and manage your application - such as application health, metrics, sessions, etc.
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-  // TODO probably unneeded; is hibernate included here or in data rest?
-  // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-  // TODO not needed for minimal functionality
-  // implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+//  Provides Reactive Relational Database Connectivity to persist data in SQL stores using Spring Data in reactive applications.
+  implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+
+//  Send email using Java Mail and Spring Framework's JavaMailSender.
   implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+//  Build reactive web applications with Spring WebFlux and Netty.
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-  // TODO this should be useful if we use HATEOAS. Probably NOT ALLOWED WITH WEBFLUX.
-  // implementation 'org.springframework.data:spring-data-rest-hal-browser'
+//  Highly customizable authentication and access-control framework for Spring applications.
+//  implementation 'org.springframework.boot:spring-boot-starter-security'
 
-  // // influxdb 1.7 java client
-  // implementation 'org.influxdb:influxdb-java:2.17'
-
-  // this enables some production-ready features (mainly health checks?).
-  // ref: https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-enabling
-  compile("org.springframework.boot:spring-boot-starter-actuator")
-
+//  Java annotation library which helps to reduce boilerplate code.
   compileOnly 'org.projectlombok:lombok'
 
+//  Provides fast application restarts, LiveReload, and configurations for enhanced development experience.
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+//  MySQL JDBC and R2DBC driver.
+  runtimeOnly 'dev.miku:r2dbc-mysql'
+  runtimeOnly 'mysql:mysql-connector-java'
+
+//  Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
   annotationProcessor 'org.projectlombok:lombok'
 
   testImplementation('org.springframework.boot:spring-boot-starter-test') {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
+
+//  Provides a platform neutral way for running an LDAP server in unit tests.
   testImplementation 'com.unboundid:unboundid-ldapsdk'
+
   testImplementation 'io.projectreactor:reactor-test'
+  testImplementation 'org.springframework.security:spring-security-test'
+
+//  ---------------------------------------------------------------------------------
+
+//  influxdb 1.7 java client
+  implementation 'org.influxdb:influxdb-java:2.17'
 }
 
 test {
