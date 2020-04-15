@@ -1,0 +1,10 @@
+title: Organization
+type: object
+description: Data relative to an organization
+properties:
+  id:
+    $ref: ./GenericId.v1.yaml
+  data:
+    $ref: ./OrganizationData.v1.yaml
+required:
+  - id

@@ -1,0 +1,24 @@
+title: UserData
+type: object
+description: Data necessary for user registration
+properties:
+  firstName:
+    type: string
+    example: Mario
+    minLength: 3
+  lastName:
+    type: string
+    example: Rossi
+  birthDate:
+    type: string
+    example: '1990-01-01'
+  creationDate:
+    type: string
+  login:
+    $ref: ./Login.v1.yaml
+required:
+  - firstName
+  - lastName
+  - birthDate
+  - creationDate
+  - login

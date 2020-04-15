@@ -1,0 +1,11 @@
+title: Place
+type: object
+description: Represents a location relative to which an organization wants to track its users movements.
+properties:
+  id:
+    $ref: ./GenericId.v1.yaml
+  data:
+    $ref: ./PlaceData.v1.yaml
+required:
+  - id
+  - data

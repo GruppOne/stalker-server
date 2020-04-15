@@ -1,0 +1,16 @@
+title: Connection
+type: object
+description: Represents the fact that an user has connected to an organization.
+properties:
+  organizationId:
+    $ref: ./GenericId.v1.yaml
+  userId:
+    $ref: ./GenericId.v1.yaml
+  creationDate:
+    type: string
+    format: date-time
+    example: '2020-02-12T12:13:14+01:00'
+required:
+  - organizationId
+  - userId
+  - creationDate
