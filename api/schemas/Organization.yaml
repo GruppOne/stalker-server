@@ -17,9 +17,7 @@ properties:
     type: string
     example: Dipartimento di Matematica di Unipd
 
-  # FIXME WE SHOULD NOT GIVE THIS PROPERTY TO USERS!
   ldapConfiguration:
-    #TODO check ldapConfiguration: are these properties enough?
     type: object
     description: The information required to allow the configuration of LDAP authentication for private organizations.
     required:
@@ -37,14 +35,12 @@ properties:
         type: string
         format: password
 
-  # reference to Place
   places:
     type: array
     description: list of places within this organization
     items:
       $ref: "./Place.yaml#"
 
-  # if private == true a user can't be anonymous
   isPrivate:
     type: boolean
 
@@ -55,4 +51,3 @@ properties:
   lastModifiedDate:
     type: string
     format: date-time
-# @createdDate and @lastModifiedDate are set when a row is inserted and/or updated

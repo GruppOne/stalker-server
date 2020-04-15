@@ -6,7 +6,6 @@ properties:
   name:
     type: string
     example: Torre Archimede
-  # TODO check validity of this data type compared to leaflet's polygons
   polygon:
     type: array
     description: An array of points that constitutes the perimeter of a place
@@ -33,7 +32,6 @@ properties:
   placeData:
     type: object
     description: More information on a place.
-    # TODO decide which geocoding API we use and have this resource match its type
     required:
       - address
       - city

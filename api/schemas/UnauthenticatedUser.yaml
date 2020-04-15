@@ -7,16 +7,12 @@ properties:
   email:
     type: string
     format: email
-    # XXX we do NOT offer the possibility to change the email
-    # FIXME patterns are unneeded. the format already specifies a type that we will define elsewhere
     pattern: ^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9])+$
     example: mariorossi@gmail.com
 
   password:
     type: string
     format: password
-    # Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
-    # FIXME patterns are unneeded. the format already specifies a type that we will define elsewhere
     pattern: ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$
     minLength: 8
     maxLength: 32
