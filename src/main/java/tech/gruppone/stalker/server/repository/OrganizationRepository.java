@@ -1,17 +1,17 @@
-package tech.gruppone.stalkerserver.organization;
+package tech.gruppone.stalker.server.repository;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.Organization;
 
 public class OrganizationRepository {
 
   private static final Logger logger = LoggerFactory.getLogger(OrganizationRepository.class);
 
   final Map<Integer, Organization> organizationsMap = new HashMap<Integer, Organization>() {{
-    //noinspection GrazieInspection
     put(
       1,
       Organization.builder()
@@ -27,13 +27,10 @@ public class OrganizationRepository {
   public Organization[] findAllOrganizations() {
     logger.info("getting all organizations from repository");
 
-    Organization[] organizations = organizationsMap.values().toArray(Organization[]::new);
-
-    return organizations;
+    return organizationsMap.values().toArray(Organization[]::new);
   }
 
   public Mono<Organization> findOrganizationById(int id) {
-    //noinspection GrazieInspection
     logger.info("searching for an organization with id {}", id);
 
     if (!organizationsMap.containsKey(id)) {

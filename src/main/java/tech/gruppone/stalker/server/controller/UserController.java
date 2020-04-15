@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.user;
+package tech.gruppone.stalker.server.controller;
 
 //@RequestMapping("/users")
 //@RestController

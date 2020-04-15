@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.organization;
+package tech.gruppone.stalker.server.controller;
 
 import lombok.Value;
 import org.slf4j.Logger;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.Organization;
+import tech.gruppone.stalker.server.repository.OrganizationRepository;
 
 @RequestMapping("/organizations")
 @RestController

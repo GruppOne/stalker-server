@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.organization;
+package tech.gruppone.stalker.server.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
-import tech.gruppone.stalkerserver.organization.place.Place;
+import tech.gruppone.stalker.server.model.Place;
 
 @Builder
 @Value

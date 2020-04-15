@@ -1,10 +1,9 @@
-package tech.gruppone.stalkerserver.organization.place;
+package tech.gruppone.stalker.server.model;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.Value;
-import tech.gruppone.stalkerserver.organization.place.polygon.Polygon;
 
 @Builder
 @Value
