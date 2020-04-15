@@ -1,6 +1,6 @@
 title: LocationInfo
 type: object
-description: "Specifics of an user's current location relative to the places monitored by organizations they're subscribet to."
+description: "Specifics of an user's current location relative to the places monitored by organizations they're subscribes to."
 properties:
   timestamp:
     type: string
@@ -10,10 +10,10 @@ properties:
     $ref: ./GenericId.v1.yaml
   anonymous:
     type: boolean
-    example: 'false'
+    example: false
   inside:
     type: boolean
-    example: 'true'
+    example: true
   placeIds:
     type: array
     items:
