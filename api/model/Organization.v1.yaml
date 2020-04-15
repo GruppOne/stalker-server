@@ -8,3 +8,4 @@ properties:
     $ref: ./OrganizationData.v1.yaml
 required:
   - id
+  - data
