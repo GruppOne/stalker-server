@@ -6,14 +6,12 @@ properties:
     type: string
     format: email
     example: mario.rossi@example.org
-    pattern: '^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9])+$'
   password:
     type: string
     format: password
-    example: I3BAI7bUO6j4vb3ron5U41D5Avn
+    example: 'I3BAI7bUO6j4vb3ron5U41D5Avn#'
     minLength: 8
     maxLength: 32
-    pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$'
 required:
   - email
   - password
