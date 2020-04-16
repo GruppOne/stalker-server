@@ -110,7 +110,7 @@ CREATE TABLE `Place` (
   `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `position` linestring NOT NULL
+  `position` polygon NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -143,7 +143,7 @@ CREATE TABLE `UserLog` (
 CREATE TABLE `Users` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` char(64) NOT NULL
+  `password` char(128) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 --
