@@ -77,7 +77,7 @@ dependencies {
   testImplementation 'com.unboundid:unboundid-ldapsdk'
 
   testImplementation 'io.projectreactor:reactor-test'
-  testImplementation 'org.springframework.security:spring-security-test'
+  // testImplementation 'org.springframework.security:spring-security-test'
 
 //  ---------------------------------------------------------------------------------
 

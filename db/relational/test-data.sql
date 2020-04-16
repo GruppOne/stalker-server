@@ -7,6 +7,8 @@
 -- Versione del server: 10.1.37-MariaDB
 -- Versione PHP: 7.2.12
 
+USE `stalker-rdb`;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
