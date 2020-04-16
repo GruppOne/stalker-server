@@ -1,14 +1,20 @@
 package tech.gruppone.stalker.server.repository;
 
+import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.User;
 
-public class UserRepository {
+public interface UserRepository extends ReactiveCrudRepository<User,Long> {
 
-  private User user = User.builder().email("mario.rossi@gmail.com").password("HASHED_PASSWORD").build();
+  @Query("select * from Users")
+  public Flux<User> findAll();
 
-  public Mono<User> findByEmail(String email) {
-    return Mono.just(user);
-  }
+  @Query("select * from Users u where u.id = :id")
+  public Mono<User> findById(Long id);
+
+  @Query("select * from Users u where u.email = :email")
+  public Mono<User> findByEmail(String email);
 
 }

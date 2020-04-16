@@ -1,61 +1,32 @@
 package tech.gruppone.stalker.server.controller;
 
-import lombok.Value;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.Value;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.Organization;
 import tech.gruppone.stalker.server.repository.OrganizationRepository;
 
 @RequestMapping("/organizations")
 @RestController
+@Value
 public class OrganizationController {
 
-  private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
+  private final OrganizationRepository organizationRepository;
 
-  private final OrganizationRepository organizationRepository = new OrganizationRepository();
-
+  // TODO refactor this. it needs to return a valid json object: {"organizations":[...]}
   @GetMapping
-  public Mono<WrappedOrganizations> getOrganizations() {
-    logger.info("returning list of all organizations");
+  public Flux<Organization> getOrganizations() {
 
-    Organization[] organizations = organizationRepository.findAllOrganizations();
-
-//    can probably use producers for this
-    var wrappedOrganizations = new WrappedOrganizations(organizations);
-
-    return Mono.just(wrappedOrganizations);
+    return organizationRepository.findAll();
   }
 
   @GetMapping("/{id}")
-  Mono<Organization> getOrganizationById(@PathVariable int id) {
+  Mono<Organization> getOrganizationById(@PathVariable Long id) {
 
-    return organizationRepository.findOrganizationById(id);
+    return organizationRepository.findById(id);
   }
-
-  @Value
-  public static class WrappedOrganizations {
-
-    Organization[] organizations;
-  }
-
-//  @PutMapping("/{id}")
-//  public Mono<Organization> putOrganizationById(@PathVariable int id, @RequestBody Organization updatedOrganization
-//  ) {
-//    Mono<Organization> organizationMono = organizationRepository.findOrganizationById(id);
-//
-//    organizationMono.subscribe(
-//      value ->logger.info("found organization {}", value),
-//      error -> logger.error(error.getMessage()),
-//      () -> logger.info("completed without a value")
-//    );
-//
-////    System.out.printf("body of request is {}", updatedOrganization);
-//
-//    return Mono.just(updatedOrganization);
-//  }
 }
