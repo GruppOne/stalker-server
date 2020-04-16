@@ -2,7 +2,7 @@ package tech.gruppone.stalker.server.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import org.springframework.data.annotation.Id;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
@@ -10,10 +10,10 @@ import lombok.Value;
 
 @Builder
 @Value
-@AllArgsConstructor
 public class Organization {
 
-  int id;
+  @Id
+  Long id;
   @NonNull String name;
   @Builder.Default
   @NonNull String description = "";

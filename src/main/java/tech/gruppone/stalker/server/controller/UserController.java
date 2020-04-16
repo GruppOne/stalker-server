@@ -1,35 +1,42 @@
 package tech.gruppone.stalker.server.controller;
 
-//@RequestMapping("/users")
-//@RestController
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import lombok.Value;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.User;
+import tech.gruppone.stalker.server.repository.UserRepository;
+
+@Value
+@RestController
+@RequestMapping("/users")
 public class UserController {
 
-//  private static Logger logger = LoggerFactory.getLogger(UserController.class);
-//
-//  //  FIXME this should not be done like this
-//  private final OrganizationRepository organizationRepository = new OrganizationRepository();
-//  private final UserRepository userRepository = new UserRepository();
-//
-//  // XXX is it correct to send the hashed password?
-//  @PostMapping("/login")
-//  public Mono<User> login(@RequestBody UnauthenticatedUser unauthenticatedUser) {
-//
-//    logger.info("received login request for {}", unauthenticatedUser);
-//
-////    TODO check password is a match
-//
-//    return userRepository.findByEmail(unauthenticatedUser.email);
-//  }
+  UserRepository userRepository;
 
-//  @GetMapping("/users/{id}/subscribed")
-//  public Flux<Integer> getSubscribedOrganizations(@PathVariable("id") int id) {
-//
-//    logger.info("requested subscribed organizations for user {}", id);
-//
-//    Organization[] organizations = organizationRepository.findAllOrganizations();
-//    var ids = Arrays.stream(organizations).map(org -> org.getId());
-//
-//    return Flux.fromStream(ids);
-//  }
+  @GetMapping
+  public Flux<User> getUsers() {
+    return userRepository.findAll();
+  }
 
+  @GetMapping("/{id}")
+  public Mono<User> getUserById(@PathVariable Long id) {
+
+    return userRepository.findById(id);
+  }
+
+  // TODO implement
+  // TODO should return valid json
+  @GetMapping("/{id}/subscribed")
+  public Flux<Integer> getSubscribedOrganizations(ServerHttpResponse response,@PathVariable Long id) {
+
+    response.setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+
+    return Flux.empty();
+  }
 }

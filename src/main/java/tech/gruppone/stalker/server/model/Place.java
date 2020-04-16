@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.model;
 
+import org.springframework.data.annotation.Id;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -9,7 +10,8 @@ import lombok.Value;
 @Value
 public class Place {
 
-  int id;
+  @Id
+  Long id;
   @NonNull String name;
   @NonNull Polygon polygon;
   @NonNull PlaceData placeData;

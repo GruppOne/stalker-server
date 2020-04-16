@@ -1,17 +1,28 @@
 package tech.gruppone.stalker.server.model;
 
 import java.time.LocalDate;
+import org.springframework.data.annotation.Id;
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 @Builder
 @Value
 public class User {
 
-  int id;
+  @Id
+  @NonNull
+  Long id;
+
+  @NonNull
   String email;
+
+  @NonNull
   String password;
-  UserData userData;
+
+  // TODO re-add userData property
+  // @NonNull
+  // UserData userData;
 
   @Builder
   @Value
@@ -19,9 +30,10 @@ public class User {
 
     String firstName;
     String lastName;
+    // TODO use timezone-agnostic type for dates
     LocalDate birthDate;
-//    Timestamp createdDate;
-//    Timestamp lastModifiedDate;
+    // Timestamp createdDate;
+    // Timestamp lastModifiedDate;
   }
 
 }
