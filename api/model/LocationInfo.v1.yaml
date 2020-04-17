@@ -1,6 +1,6 @@
 title: LocationInfo
 type: object
-description: "Specifics of an user's current location relative to the places monitored by organizations they're subscribed to."
+description: "Specifics of a user's current location relative to the places monitored by organizations they're subscribed to."
 properties:
   timestamp:
     type: string

@@ -1,5 +1,5 @@
 title: user
-description: Data representing an user.
+description: Data representing a user.
 type: object
 properties:
   id:
