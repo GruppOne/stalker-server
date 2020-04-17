@@ -1,6 +1,0 @@
-# A generic id type. can be refactored easily
-type: integer
-description: An unsigned integer
-format: uint32
-readonly: true
-example: 1
