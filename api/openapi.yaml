@@ -12,7 +12,7 @@ info:
     url: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html'
   version: 0.3.0
 servers:
-  - url: 'http://localhost:8080'
+  - url: 'http://localhost:11111'
     description: Development server.
   - url: 'https://{environment}.gruppone.tech/v{majorVersion}'
     variables:
@@ -30,6 +30,31 @@ tags:
   - name: stalker web app
     description: 'This operation should be available to web app users (owners, managers, viewers).'
 paths:
+
+  /version:
+    get:
+      tags:
+        - stalker web app
+        - stalker mobile app
+      description: Get the current server version.
+      operationId: getVersion
+      responses:
+        "200":
+          description: Ok. This endpoint shows the current server version.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - version
+                properties:
+                  version:
+                    type: string
+                    description: The server's version number.
+                    example: "X.Y.Z"
+
+        default:
+          $ref: "#/components/responses/DefaultResponse"
   /location/update:
     post:
       tags:

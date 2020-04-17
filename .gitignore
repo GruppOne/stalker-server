@@ -105,3 +105,5 @@ bin/
 # docker-compose.override.yml
 
 **/diagrams/img/
+
+lib/
