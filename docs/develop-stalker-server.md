@@ -29,18 +29,20 @@ il teardown completo dei db lo potete fare con
 
 Vi consiglio di farlo abbastanza spesso per evitare che il funzionamento del server dipenda da cose che avete fatto su una specifica istanza del db.
 
-## Windows
+## Docker Toolbox - Windows Home
 
-Docker su windows lavora dentro una VM, quindi i container non girano su localhost ma sull'IP della VM. La cosa si può risolvere configurando il port forwarding delle porte interessate da virtualbox:
+Se avete Windows 10 Pro o Education vi conviene installare Docker Desktop for Windows, ma su quello dovete essere autonomi per capirne il funzionamento.
+
+Chi ha Windows 10 Home è obbligato a usare Docker Toolbox, che lavora dentro una VM, quindi i container non girano su localhost ma sull'IP della VM. La cosa si può risolvere configurando il port forwarding delle porte interessate da VirtualBox:
 
 1. rosso: selezionare la VM su cui sta girando docker.
 2. arancione scuro: andare sui setting della VM
 3. arancione chiaro: selezionare la tab network
 4. cliccare su port forwarding (è dentro il menu "advanced")
 
-![virtualbox port forwarding 1](./img/virtualbox-port-forwarding-1.png)
+![VirtualBox port forwarding 1](./img/virtualbox-port-forwarding-1.png)
 
-- rosso: porta sul pc in cui è installato virtualbox.
+- rosso: porta sul pc in cui è installato VirtualBox.
 - giallo: porta pubblicata dal container alla VM. Attenzione perché non è necessariamente uguale alla porta dichiarata nell'immagine. Vedere [Docker - Published ports](https://docs.docker.com/config/containers/container-networking/#published-ports#published-ports) per dettagli.
 
-![virtualbox port forwarding 2](./img/virtualbox-port-forwarding-2.png)
+![VirtualBox port forwarding 2](./img/virtualbox-port-forwarding-2.png)
