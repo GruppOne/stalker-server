@@ -214,6 +214,7 @@ paths:
           $ref: '#/components/responses/DefaultResponse'
 security:
   - AdminKey: []
+  - bearerAuth: []
 components:
   parameters:
     userId:
@@ -274,3 +275,7 @@ components:
       type: apiKey
       in: header
       name: STALKER-ADMIN-API-KEY
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

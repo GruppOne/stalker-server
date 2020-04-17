@@ -1,0 +1,14 @@
+OAuth2:
+  type: oauth 2
+  description: Stalker's server API uses  OAuth 2 in order to manage authentication
+  flows:
+    authorizationCode:
+      authorizationUrl: http://localhost:8080/authorize
+      refreshUrl: http://localhost:8080/authorize
+      # the refreshUrl is essential when you want to obtain a refresh token
+      scopes:
+        user: represents user's authorized operations
+        viewer: represents viewer's authorized operations
+        manager: represents manager's authorized operations
+        owner: represents owner's authorized operations
+        admin: represents admin's authorized operations
