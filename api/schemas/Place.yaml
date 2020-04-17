@@ -40,7 +40,7 @@ properties:
     properties:
       address:
         type: string
-        example: Via Trieste
+        example: Via Trieste, 1
       city:
         type: string
         example: Padova
