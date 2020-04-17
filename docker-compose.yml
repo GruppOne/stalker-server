@@ -2,10 +2,6 @@ version: "3.7"
 
 #################### THIS SECTIONS CONTAINS SOME EXPLANATIONS AND TIPS ON HOW TO WORK WITH DOCKER-COMPOSE ##############
 
-# To start the graphical interfaces for the db services, use the following command in the root workspace folder:
-
-# docker-compose -f ./docker-compose.yml -f ./docker-compose.gui.yml <compose-command>
-
 # The password required to access our services are specified inside a .env file in the repository root directory. The env structure is documented in the .env.template file.
 
 # The "ports" mapping exposes the given ports to the HOST. The "expose" mapping only exposes given the ports to other services, which is what we want because only the server talks to the external world
@@ -14,7 +10,7 @@ version: "3.7"
 # SOURCE is the named volume, TARGET is the folder inside the container MODE is ro (read-only),
 
 # We can use this command to dump the currently running mysql instance to a file:
-# docker exec rdb sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > ./db/relational/dump/all-databases.sql
+# docker exec rdb bash -c 'exec mysqldump --all-databases -u"root" -p"$MYSQL_ROOT_PASSWORD"' > ./db/relational/dump/all-databases.sql
 
 # To get an interactive shell inside a RUNNING container, use:
 # 'docker-compose exec <service-mapping-key> <shell-command>'

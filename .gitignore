@@ -103,3 +103,5 @@ bin/
 
 # temporarily committing override file
 # docker-compose.override.yml
+
+**/diagrams/img/
