@@ -30,7 +30,6 @@ tags:
   - name: stalker web app
     description: 'This operation should be available to web app users (owners, managers, viewers).'
 paths:
-
   /version:
     get:
       tags:
@@ -39,7 +38,7 @@ paths:
       description: Get the current server version.
       operationId: getVersion
       responses:
-        "200":
+        '200':
           description: Ok. This endpoint shows the current server version.
           content:
             application/json:
@@ -50,25 +49,26 @@ paths:
                 properties:
                   version:
                     type: string
-                    description: The server's version number.
-                    example: "X.Y.Z"
-
+                    description: "The server's version number."
+                    example: X.Y.Z
         default:
-          $ref: "#/components/responses/DefaultResponse"
+          $ref: '#/components/responses/DefaultResponse'
+      summary: "Read the server's current version"
   /location/update:
     post:
       tags:
         - stalker mobile app
       description: |
         This is the cornerstone of our tracking mechanism. Sending "inside/outside" updates on the user's position relative to the places of the organizations they're connected to gives the server enough information to estimate the number of people currently inside a building, using the power of MATH and STATISTICS.
-      summary: "Send an update for an user's current location."
+      summary: "Create an update for a user's current location"
       operationId: postLocationUpdate
       requestBody:
         required: true
+        description: ''
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocationInfo'
+              $ref: ./model/LocationInfo.v1.yaml
       responses:
         '200':
           $ref: '#/components/responses/Ok'
@@ -83,7 +83,7 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-      description: Log in an existing user. This endpoint should not have a security scheme.
+      description: This endpoint should not have a security scheme.
       operationId: postUserLoginCredentials
       security: []
       requestBody:
@@ -91,19 +91,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginData'
+              $ref: ./model/Login.v1.yaml
       responses:
         '200':
           description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: ./model/User.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/DefaultResponse'
-  '/users/{userId}/subscribed':
+      summary: Create a login request for an user
+  '/users/{userId}/organizations/connected':
     parameters:
       - $ref: '#/components/parameters/userId'
     get:
@@ -123,7 +124,7 @@ paths:
                   connected:
                     type: array
                     items:
-                      $ref: '#/components/schemas/GenericId'
+                      $ref: ./model/GenericId.v1.yaml
                 required:
                   - connected
         '401':
@@ -134,12 +135,13 @@ paths:
           $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      summary: Read all organizations an user is connected to.
   /organizations:
     get:
       tags:
         - stalker mobile app
         - stalker web app
-      description: Get the list of all the organizations registered to Stalker.
+      description: 'Get the list of all the organizations registered to Stalker, complete with all details.'
       operationId: getOrganizations
       responses:
         '200':
@@ -148,41 +150,47 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                  - organizations
                 properties:
                   organizations:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Organization'
+                      $ref: ./model/Organization.v1.yaml
+                required:
+                  - organizations
         '401':
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      summary: Read all organizations
+      security:
+        - Oauth scoped authorizations:
+            - user
+            - viewer
     post:
       tags:
         - stalker web app
-      description: Create a new organization.
+      description: Request the creation of a new organization.
       operationId: postOrganizations
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrganizationData'
+              $ref: ./model/OrganizationData.v1.yaml
       responses:
         '200':
           description: The id of the newly created organization.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GenericId'
+                $ref: ./model/GenericId.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      summary: Create an organization
   '/organizations/{organizationId}':
     parameters:
       - $ref: '#/components/parameters/organizationId'
@@ -196,20 +204,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organization'
+              $ref: ./model/Organization.v1.yaml
       responses:
         '200':
           description: Ok. The response contains the full organization info including the updates.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Organization'
+                $ref: ./model/Organization.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      parameters: []
+      summary: Update an organization
   '/organizations/{organizationId}/place':
     parameters:
       - $ref: '#/components/parameters/organizationId'
@@ -223,20 +233,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PlaceData'
+              $ref: ./model/PlaceData.v1.yaml
       responses:
         '200':
           description: Ok. The response contains the id of the newly created place.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GenericId'
+                $ref: ./model/GenericId.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      summary: Create a place in an organization
 security:
   - AdminKey: []
   - bearerAuth: []
@@ -248,21 +259,21 @@ components:
       description: The id of a user.
       required: true
       schema:
-        $ref: '#/components/schemas/GenericId'
+        $ref: ./model/GenericId.v1.yaml
     organizationId:
       in: path
       name: organizationId
       description: The id of an organization.
       required: true
       schema:
-        $ref: '#/components/schemas/GenericId'
+        $ref: ./model/GenericId.v1.yaml
     placeId:
       in: path
       name: placeId
       description: The id of a place.
       required: true
       schema:
-        $ref: '#/components/schemas/GenericId'
+        $ref: ./model/GenericId.v1.yaml
   responses:
     Ok:
       description: Ok.
@@ -276,25 +287,6 @@ components:
       description: Unexpected error.
     NotImplemented:
       description: This endpoint has not been implemented yet.
-  schemas:
-    AppConnection:
-      $ref: ./model/AppConnection.v1.yaml
-    GenericId:
-      $ref: ./model/GenericId.v1.yaml
-    LocationInfo:
-      $ref: ./model/LocationInfo.v1.yaml
-    Organization:
-      $ref: ./model/Organization.v1.yaml
-    Place:
-      $ref: ./model/Place.v1.yaml
-    User:
-      $ref: ./model/User.v1.yaml
-    OrganizationData:
-      $ref: ./model/OrganizationData.v1.yaml
-    PlaceData:
-      $ref: ./model/PlaceData.v1.yaml
-    LoginData:
-      $ref: ./model/Login.v1.yaml
   securitySchemes:
     AdminKey:
       type: apiKey
@@ -304,3 +296,17 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: ''
+    Oauth scoped authorizations:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: 'http://localhost:11111/authorize'
+          tokenUrl: ''
+          scopes:
+            user: "a user's authorized operations"
+            viewer: "a viewer's authorized operations"
+            manager: "a manager's authorized operations"
+            owner: "an owner's authorized operations"
+          refreshUrl: 'http://localhost:11111/refresh'
+      description: "Stalker's server API uses  OAuth 2 in order to manage authorizations"
