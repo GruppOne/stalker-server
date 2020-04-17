@@ -220,7 +220,7 @@ components:
     userId:
       in: path
       name: userId
-      description: The id of an user.
+      description: The id of a user.
       required: true
       schema:
         $ref: '#/components/schemas/GenericId'

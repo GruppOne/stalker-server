@@ -1,6 +1,6 @@
 # TODO find a way to have these regexes be the source of truth across every component
 type: object
-description: Data reprenting an user.
+description: Data representing a user.
 required:
   - id
 
@@ -14,7 +14,7 @@ properties:
           $ref: "./GenericId.yaml#"
         userData:
           type: object
-          description: An user's personal data.
+          description: A user's personal data.
           required:
             - firstName
             - lastName

@@ -1,5 +1,5 @@
 type: object
-description: Minimal data required for authenticating an user.
+description: Minimal data required for authenticating a user.
 required:
   - email
   - password
