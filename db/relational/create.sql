@@ -52,7 +52,7 @@ CREATE TABLE `AdminType` (
 CREATE TABLE `Connections` (
   `organizationId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -74,7 +74,7 @@ CREATE TABLE `OrganizationRole` (
   `organizationId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `adminType` int(11) NOT NULL,
-  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -86,8 +86,8 @@ CREATE TABLE `Organizations` (
   `name` varchar(50) NOT NULL,
   `description` tinytext NOT NULL,
   `ldapConf` int(11) NULL DEFAULT NULL,
-  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastModifiedDate` DATETIME NULL DEFAULT NULL
+  `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastModifiedDate` TIMESTAMP NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -122,8 +122,8 @@ CREATE TABLE `UserData` (
   `firstName` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `birthDate` date NOT NULL,
-  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastModifiedDate` DATETIME NULL DEFAULT NULL
+  `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastModifiedDate` TIMESTAMP NULL DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -133,7 +133,7 @@ CREATE TABLE `UserData` (
 CREATE TABLE `UserLog` (
   `userId` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL,
-  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
