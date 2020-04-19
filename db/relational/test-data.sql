@@ -27,9 +27,9 @@ START TRANSACTION;
 -- Dump dei dati per la tabella `organizations`
 --
 
-INSERT INTO `Organizations` (`name`, `description`, `ldapConf`, `createdDate`, `lastModifiedDate`) VALUES
-('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software', NULL, '', NULL),
-('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica ☺️👨🏻‍💻👩🏿‍💻', NULL, '', NULL);
+INSERT INTO `Organizations` (`name`, `description`) VALUES
+('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software'),
+('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica ☺️👨🏻‍💻👩🏿‍💻');
 
 --
 -- Dump dei dati per la tabella `place`
@@ -66,14 +66,10 @@ INSERT INTO `Users` (`email`, `password`) VALUES
 -- Dump dei dati per la tabella `userdata`
 --
 
-INSERT INTO `UserData` (`userId`, `firstName`, `lastName`, `birthDate`, `createdDate`, `lastModifiedDate`) VALUES
-(1, 'Mario', 'Rossi', '1960-04-16', '', NULL),
-(2, 'Giorgio', 'Bianchi', '1983-11-21', '', NULL),
-(3, 'Maria', 'Verdi', '1987-08-14', '', NULL),
-(4, 'Barbara', 'Gialli', '1965-01-15', '', NULL),
-(5, 'Filippo', 'Azzurri', '1999-06-25', '', NULL);
+INSERT INTO `UserData` (`userId`, `firstName`, `lastName`, `birthDate`) VALUES
+(1, 'Mario', 'Rossi', '1960-04-16'),
+(2, 'Giorgio', 'Bianchi', '1983-11-21'),
+(3, 'Maria', 'Verdi', '1987-08-14'),
+(4, 'Barbara', 'Gialli', '1965-01-15'),
+(5, 'Filippo', 'Azzurri', '1999-06-25');
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
