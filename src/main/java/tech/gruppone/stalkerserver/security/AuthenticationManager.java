@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver.security;
+/*package tech.gruppone.stalkerserver.security;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -18,4 +18,4 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     authentication.setAuthenticated(true);
     return authentication;
     }
-}
+}*/

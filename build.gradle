@@ -69,6 +69,7 @@ dependencies {
   runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'
   runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.1'
 
+
 //  Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 

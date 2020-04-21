@@ -1,4 +1,4 @@
-package tech.gruppone.stalkerserver;
+/*package tech.gruppone.stalkerserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -19,4 +19,4 @@ public class Application {
     SpringApplication.run(Application.class, args);
 
   }
-}
+}*/
