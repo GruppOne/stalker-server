@@ -5,17 +5,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 
 @EnableWebFluxSecurity
-@Configuration
+@EnableReactiveMethodSecurity
 @PropertySource("classpath:application.properties")
 public class SecurityConfiguration {
 
@@ -23,7 +22,7 @@ public class SecurityConfiguration {
   AuthenticationManager authenticationManager;
 
   @Autowired
-  SecurityContextRepository SecurityContextRepository;
+  SecurityContextRepository securityContextRepository;
 
   @Bean
   public PasswordEncoder passwordEncoder(){
@@ -38,7 +37,7 @@ public class SecurityConfiguration {
         httpBasic().disable();// disable basic authentication
 
       http.authenticationManager(this.authenticationManager); // set the authentication manager
-      http.securityContextRepository(this.SecurityContextRepository); // set the context repository
+      http.securityContextRepository(this.securityContextRepository); // set the context repository
 
       http.authorizeExchange().
        pathMatchers(HttpMethod.POST, "/user/login").permitAll(). // disable security for login
