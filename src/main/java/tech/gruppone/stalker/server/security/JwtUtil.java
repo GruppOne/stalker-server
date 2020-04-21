@@ -1,21 +1,14 @@
-package tech.gruppone.stalkerserver.security;
+package tech.gruppone.stalker.server.security;
 
 
 import com.sun.mail.imap.protocol.BASE64MailboxEncoder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
-import tech.gruppone.stalker.server.model.User;
 
 public class JwtUtil {
 

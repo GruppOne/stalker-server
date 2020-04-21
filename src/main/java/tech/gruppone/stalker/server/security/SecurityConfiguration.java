@@ -1,0 +1,54 @@
+package tech.gruppone.stalker.server.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.context.ServerSecurityContextRepository;
+
+@EnableWebFluxSecurity
+@Configuration
+@PropertySource("classpath:application.properties")
+public class SecurityConfiguration {
+
+  @Autowired
+  AuthenticationManager authenticationManager;
+
+  @Autowired
+  SecurityContextRepository SecurityContextRepository;
+
+  @Bean
+  public PasswordEncoder passwordEncoder(){
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  protected SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception{
+      http.
+      csrf().disable().  // disable csrf for now  --> if you want to enable use (.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).)
+      formLogin().disable(). // disable form login
+        httpBasic().disable();// disable basic authentication
+
+      http.authenticationManager(this.authenticationManager); // set the authentication manager
+      http.securityContextRepository(this.SecurityContextRepository); // set the context repository
+
+      http.authorizeExchange().
+       pathMatchers(HttpMethod.POST, "/user/login").permitAll(). // disable security for login
+       pathMatchers(HttpMethod.POST, "/user/registration").permitAll();// disable security for registration
+
+      http.authorizeExchange().anyExchange().authenticated(); //any other request must be authenticated
+
+      return http.build();
+  }
+
+
+
+}
