@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-   @Value("${springSecurity.jwt.key}")
+   @Value("${springsecurity.jwt.key}")
    private String key;
 
-   @Value("${springSecurity.jwt.expirationTime}")
+   @Value("${springsecurity.jwt.expirationtime}")
    private String expirationTime;
 
    public Claims getJWTString(String token){
