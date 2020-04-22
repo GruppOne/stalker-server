@@ -17,4 +17,4 @@ jobs:
           java-version: 11
 
       - name: Run SonarCloud scanner gradle task
-        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }}
+        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }} -Dsonar.pullrequest.branch=${{ github.head_ref }}
