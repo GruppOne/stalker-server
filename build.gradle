@@ -2,6 +2,11 @@ plugins {
   id 'org.springframework.boot' version '2.3.0.M4'
   id 'io.spring.dependency-management' version '1.0.9.RELEASE'
   id 'java'
+
+  id "org.sonarqube" version "2.8"
+
+  // expand variables defined in dotenv
+  id "com.github.otkmnb2783.dotenv" version "0.0.1"
 }
 
 group = 'tech.gruppone.stalker'
@@ -35,8 +40,8 @@ repositories {
 }
 
 dependencies {
-// //  Supports built in (or custom) endpoints that let you monitor and manage your application - such as application health, metrics, sessions, etc.
-//   implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//  Supports built in (or custom) endpoints that let you monitor and manage your application - such as application health, metrics, sessions, etc.
+//  implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 //  Provides Reactive Relational Database Connectivity to persist data in SQL stores using Spring Data in reactive applications.
   implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
@@ -55,10 +60,6 @@ dependencies {
 
 //  Provides fast application restarts, LiveReload, and configurations for enhanced development experience.
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-// //  this is an in memory db to be used only during development
-//   runtimeOnly 'com.h2database:h2'
-//   runtimeOnly 'io.r2dbc:r2dbc-h2'
 
 //  MySQL JDBC and R2DBC driver.
   runtimeOnly 'dev.miku:r2dbc-mysql'
@@ -87,4 +88,14 @@ dependencies {
 
 test {
   useJUnitPlatform()
+}
+
+// configure sonarcloud analysis
+sonarqube {
+  properties {
+    property "sonar.projectKey", "GruppOne_stalker-server"
+    property "sonar.organization", "grupp-one"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.login", "${env.SONARCLOUD_LOGIN}"
+  }
 }

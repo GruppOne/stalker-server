@@ -1,0 +1,20 @@
+name: Dynamic code analysis
+
+on:
+  pull_request:
+
+jobs:
+  sonarcloud-scanner:
+    name: Scan code with SonarCloud
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Run SonarCloud scanner gradle task
+        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }}
