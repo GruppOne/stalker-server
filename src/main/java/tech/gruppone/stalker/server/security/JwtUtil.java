@@ -4,15 +4,16 @@ package tech.gruppone.stalker.server.security;
 import com.sun.mail.imap.protocol.BASE64MailboxEncoder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import java.time.LocalDate;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
-import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtUtil {
+public class JwtUtil{
 
    @Value("${springsecurity.jwt.key}")
    private String key;
@@ -28,19 +29,22 @@ public class JwtUtil {
      return getJWTString(token).getSubject();
    }
 
-   public String getExpirationDate(String token){
-     return getJWTString(token).getExpiration().toString();
+   public Date getExpirationDate(String token){
+     return getJWTString(token).getExpiration();
    }
 
-   // probably not correct.
    public boolean isTokenExpired(String token){
-     return LocalDate.now().toString() == getExpirationDate(token);
+      Date date = new Date();
+      return getExpirationDate(token).before(date);
    }
 
    // this function creates a jwt token. It is not complete
    public String createToken(String username, Map <String, Object> claims){
+     Date x = new Date();
+     return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(x).setExpiration(x).signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256)).compact();
+   }
 
-     SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes());
-     return Jwts.builder().setSubject(username).setClaims(claims).signWith(secretKey).compact();
+   public boolean isTokenStillValid(String token){
+     return !isTokenExpired(token);
    }
 }
