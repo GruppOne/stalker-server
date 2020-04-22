@@ -9,6 +9,7 @@ on:
 # TODO add PlantUML job
 # TODO add spellcheck job: https://github.com/marketplace/actions/spellcheck-action
 jobs:
+  # the idea was to run git status -s to verify that diagrams are up to date, so that no git commit/push is needed
   # plantuml:
   #   name: Generate PlantUML diagrams
   #   runs-on: ubuntu-18.04
@@ -18,9 +19,8 @@ jobs:
   #     #   uses: Timmy/plantuml-action@v1
   #     #   with:
   #     #     args:
-  # the idea was to run git status -s to verify that diagrams are up to date, so that no git commit/push is needed
 
-  lint:
+  lint-markdown:
     name: Lint *.md
     runs-on: ubuntu-18.04
 
