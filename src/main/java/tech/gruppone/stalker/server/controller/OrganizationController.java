@@ -15,7 +15,7 @@ import tech.gruppone.stalker.server.repository.OrganizationRepository;
 @Value
 public class OrganizationController {
 
-  private final OrganizationRepository organizationRepository;
+  OrganizationRepository organizationRepository;
 
   // TODO refactor this. it needs to return a valid json object: {"organizations":[...]}
   @GetMapping
@@ -25,7 +25,7 @@ public class OrganizationController {
   }
 
   @GetMapping("/{id}")
-  Mono<Organization> getOrganizationById(@PathVariable Long id) {
+  public Mono<Organization> getOrganizationById(@PathVariable Long id) {
 
     return organizationRepository.findById(id);
   }

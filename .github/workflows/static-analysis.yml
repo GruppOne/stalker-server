@@ -4,7 +4,6 @@ on:
   pull_request:
 
 jobs:
-
   lint:
     name: Lint API definition
     runs-on: ubuntu-18.04
