@@ -1,15 +1,12 @@
-extends: [[spectral:oas, all]]
-
-# to see detailed rules explanations go to:
-# https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md?srn=gh/stoplightio/spectral/docs/reference/openapi-rules.md
+extends:
+  - - 'spectral:oas'
+    - all
 rules:
-  operation-singular-tag: false
-
   operation-summary-formatted:
-    description: "Operation `summary` should start with upper case and end with a dot."
-    recommended: false
-    type: style
+    description: Operation `summary` should start with upper case and end with a dot.
     given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]"
+    recommended: true
+    type: style
     then:
       field: summary
       function: pattern
@@ -17,14 +14,34 @@ rules:
         match: "^[A-Z].*\\.$"
     tags:
       - operation
-
-    # Require 3-part Semantic Versions as the spec versions
+    severity: info
   semver:
+    description: Require 3-part Semantic Versions as the spec versions
     severity: error
     recommended: true
-    message: Specs should follow semantic versioning. {{value}} is not a valid version.
+    message: 'Specs should follow semantic versioning. {{value}} is not a valid version.'
     given: $.info.version
     then:
       function: pattern
       functionOptions:
-        match: "^([0-9]+.[0-9]+.[0-9]+)$"
+        match: '^([0-9]+.[0-9]+.[0-9]+)$'
+  oas3-operation-security-defined: error
+  oas3-parameter-description: error
+  oas3-server-not-example.com: error
+  oas3-server-trailing-slash: error
+  openapi-tags: error
+  openapi-tags-alphabetical: error
+  operation-2xx-response: error
+  operation-default-response: error
+  operation-description: error
+  operation-operationId: error
+  operation-operationId-valid-in-url: error
+  operation-parameters: error
+  operation-singular-tag: false
+  operation-tag-defined: error
+  operation-tags: error
+  path-declarations-must-exist: error
+  path-keys-no-trailing-slash: error
+  path-not-include-query: error
+  path-params: error
+  tag-description: error
