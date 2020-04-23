@@ -4,9 +4,7 @@ package tech.gruppone.stalker.server.security;
 import com.sun.mail.imap.protocol.BASE64MailboxEncoder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +39,7 @@ public class JwtUtil{
    // this function creates a jwt token. It is not complete
    public String createToken(String username, Map <String, Object> claims){
      Date x = new Date();
-     return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(x).setExpiration(x).signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256)).compact();
+     return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(x).setExpiration(x).signWith(Keys.hmacShaKeyFor(key.getBytes())).compact();
    }
 
    public boolean isTokenStillValid(String token){
