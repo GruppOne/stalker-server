@@ -2,11 +2,16 @@ name: Dynamic code analysis
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
-  sonarcloud-scanner:
-    name: Scan code with SonarCloud
+  sonarcloud-pr-scanner:
+    name: Scan pr with SonarCloud
     runs-on: ubuntu-18.04
+
+    if: github.event_name == 'pull_request'
 
     steps:
       - uses: actions/checkout@v2
@@ -25,3 +30,20 @@ jobs:
 
       - name: Run SonarCloud scanner gradle task
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }} -Dsonar.pullrequest.key=${{ github.event.number }} -Dsonar.pullrequest.branch=${{ github.head_ref }}
+
+  sonarcloud-master-scanner:
+    name: Scan trunk with SonarCloud
+    runs-on: ubuntu-18.04
+
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Run SonarCloud scanner gradle task
+        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }}
