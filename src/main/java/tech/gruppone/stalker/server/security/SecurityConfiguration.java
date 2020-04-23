@@ -38,8 +38,8 @@ public class SecurityConfiguration {
       http.securityContextRepository(this.securityContextRepository); // set the context repository
 
       http.authorizeExchange().
-       pathMatchers(HttpMethod.POST, "/user/login").permitAll(). // disable security for login
-       pathMatchers(HttpMethod.POST, "/user/registration").permitAll();// disable security for registration
+       pathMatchers(HttpMethod.POST, "/users/login").permitAll(). // disable security for login
+       pathMatchers(HttpMethod.POST, "/users/registration").permitAll();// disable security for registration
 
       http.authorizeExchange().anyExchange().authenticated(); //any other request must be authenticated
 

@@ -27,9 +27,12 @@ public class SecurityContextRepository  implements ServerSecurityContextReposito
   public Mono<SecurityContext> load(ServerWebExchange exchange) {
     ServerHttpRequest request = exchange.getRequest();
     String Header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-    String token = Header.substring(7);
-    Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
-    authenticationManager.authenticate(auth);
-    return Mono.just(new SecurityContextImpl(auth));
+    if(Header != null){
+      String token = Header.substring(7);
+      Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
+      authenticationManager.authenticate(auth);
+      return Mono.just(new SecurityContextImpl(auth));
+    }
+    return Mono.empty();
   }
 }
