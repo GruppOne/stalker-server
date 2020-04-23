@@ -23,6 +23,9 @@
   "git.fetchOnPull": false,
   "git.rebaseWhenSync": true,
   "git.useForcePushWithLease": true,
+  "coverage-gutters.manualCoverageFilePaths": [
+    "build/reports/jacoco/test/jacocoTestReport.xml"
+  ],
   "java.format.enabled": true,
   "java.format.onType.enabled": true,
   "java.format.comments.enabled": true,

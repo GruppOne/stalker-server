@@ -85,9 +85,6 @@ fabric.properties
 ### DOTENV FILE ###
 .env
 
-### Spring private properties file ###
-src/main/resources/local.properties
-
 ### VS Code ###
 
 .vscode/*
