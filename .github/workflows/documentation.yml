@@ -21,7 +21,7 @@ jobs:
   #     #     args:
 
   lint-markdown:
-    name: Lint *.md
+    name: Lint markdown files
     runs-on: ubuntu-18.04
 
     steps:
