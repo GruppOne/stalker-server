@@ -1,3 +1,0 @@
-# create a file here named local.properties and put the actual passwords there
-spring.r2dbc.password=example-root-password
-influxdb.password=example-admin-password
