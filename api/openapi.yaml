@@ -39,7 +39,7 @@ paths:
       operationId: getVersion
       responses:
         '200':
-          description: Ok. This endpoint shows the current server version.
+          description: Ok. The response contains the current server version.
           content:
             application/json:
               schema:
@@ -53,14 +53,13 @@ paths:
                     example: X.Y.Z
         default:
           $ref: '#/components/responses/DefaultResponse'
-      summary: "Read the server's current version"
+      summary: Read the server's current version.
   /location/update:
     post:
       tags:
         - stalker mobile app
       description: |
         This is the cornerstone of our tracking mechanism. Sending "inside/outside" updates on the user's position relative to the places of the organizations they're connected to gives the server enough information to estimate the number of people currently inside a building, using the power of MATH and STATISTICS.
-      summary: "Create an update for a user's current location"
       operationId: postLocationUpdate
       requestBody:
         required: true
@@ -77,8 +76,9 @@ paths:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
-  /users/login: #TODO
-    post:
+      summary: Create an update for a user's current location.
+  /authenticate:
+    post: #TODO
       tags:
         - stalker mobile app
         - stalker web app
@@ -93,28 +93,30 @@ paths:
               $ref: ./model/Login.v1.yaml
       responses:
         '200':
-          description: Ok.
+          description: Ok. The response contains user authenticated data.
           content:
             application/json:
               schema:
                 $ref: ./model/User.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
-      summary: Create a login request for an user
-  /users/{userId}/subscribed: #TODO
+      summary: Create a login request for an user.
+  /user/{userId}/connected:
     parameters:
       - $ref: '#/components/parameters/userId'
-    get:
+    get: #TODO
       tags:
         - stalker mobile app
         - stalker web app
       description: Get the list of organizations that a user has connected to.
-      operationId: getSpecificUserSubscriptions
+      operationId: getSpecificUserConnectedOrganizations
       responses:
         '200':
-          description: The list of the ids of the organizations the user is connected to.
+          description: Ok. The response contains the list of the ids of the organizations who the user is connected to.
           content:
             application/json:
               schema:
@@ -144,7 +146,7 @@ paths:
       operationId: getOrganizations
       responses:
         '200':
-          description: The list of organizations registered to Stalker.
+          description: Ok. The response contains the list of organizations registered to Stalker.
           content:
             application/json:
               schema:
@@ -160,7 +162,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/DefaultResponse'
-      summary: Read all organizations
+      summary: Read all organizations.
       security:
         - Oauth scoped authorizations:
             - user
@@ -178,7 +180,7 @@ paths:
               $ref: ./model/OrganizationData.v1.yaml
       responses:
         '200':
-          description: The id of the newly created organization.
+          description: Ok. The response contains the id of the newly created organization.
           content:
             application/json:
               schema:
@@ -189,8 +191,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
-      summary: Create an organization
-  /organizations/{organizationId}:
+      summary: Create an organization.
+  /organization/{organizationId}:
     parameters:
       - $ref: '#/components/parameters/organizationId'
     get:
@@ -201,13 +203,18 @@ paths:
       operationId: getOrganizationById
       responses:
         '200':
-          description: Success.
+          description: Ok. The response contains all the informations of the specific organization.
+          content:
+            application/json:
+              schema:
+                $ref: ./model/Organization.v1.yaml
         '404':
           $ref: '#/components/responses/NotFound'
         '501':
           $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      summary: Get organization's information.
     delete: #TODO
       tags:
         - stalker web app
@@ -215,20 +222,25 @@ paths:
       operationId: deleteOrganizationById
       responses:
         '200':
-          description: Success, the organization has been deleted.
-        '400':
-          description: Organization not found.
+          $ref: "#/components/responses/Ok"
         '401':
           description: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '408':
-          description: Request timed out
+          $ref: '#/components/responses/RequestTimeout'
         '501':
           $ref: '#/components/responses/NotImplemented'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      summary: Delete an organization.
     put: #TODO
       tags:
         - stalker web app
-      operationId: putSpecificOrganization
-      description: Update an organization's data.
+      description: Send the changed data about a specific organization. Operation reserved only to the administrator.
+      operationId: putOrganizationDataById
       requestBody:
         required: true
         content:
@@ -237,25 +249,24 @@ paths:
               $ref: ./model/Organization.v1.yaml
       responses:
         '200':
-          description: Ok. The response contains the full organization info including the updates.
-          content:
-            application/json:
-              schema:
-                $ref: ./model/Organization.v1.yaml
+          $ref: '#/components/responses/Ok'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '408':
+          $ref: '#/components/responses/RequestTimeout'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
-      parameters: []
-      summary: Update an organization
-  /organizations/{organizationId}/place: #TODO
-    post:
+      summary: Update an organization.
+  /organization/{organizationId}/place:
+    post: #TODO
       tags:
         - stalker web app
       description: Add a new place to the given organization. Operation reserved only to the managers and up.
-      operationId: addPlaceIntoAnOrganizationById
+      operationId: postPlaceByOrganizationId
       parameters:
       - $ref: "#/components/parameters/organizationId"
       requestBody:
@@ -263,9 +274,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-              - $ref: ./model/Organization.v1.yaml
-              - $ref: ./model/PlaceData.v1.yaml
+              $ref: ./model/PlaceData.v1.yaml
       responses:
         '200':
           description: Ok. The response contains the id of the newly created place.
@@ -279,40 +288,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        default:
-          $ref: '#/components/responses/DefaultResponse'
-  /organizations/{organizationId}/changeData: #TODO
-    put:
-      tags:
-        - stalker web app
-      description: Send the changed data about a specific organization. Operation reserved only to the administrator.
-      operationId: changeOrganizationData
-      parameters:
-        - $ref: '#/components/parameters/organizationId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: ./model/Organization.v1.yaml
-      responses:
-        '200':
-          description: Success, the place has been modified.
-        '408':
-          description: Request timed out.
         '501':
           $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
-  /organizations/{organizationId}/place/{placeId}/changeData: #TODO
+      summary: Add a new place.
+  /organization/{organizationId}/place/{placeId}:
     parameters:
       - $ref: '#/components/parameters/organizationId'
       - $ref: '#/components/parameters/placeId'
-    put:
+    put: #TODO
       tags:
         - stalker web app
-      description: Change data for a place. Operation reserved only to the managers and up.
-      operationId: changePlaceData
+      description: Change data for a specific place. Operation reserved only to the managers and up.
+      operationId: putPlaceData
       requestBody:
         required: true
         content:
@@ -321,27 +310,29 @@ paths:
               $ref: ./model/Place.v1.yaml
       responses:
         '200':
-          description: Success, the place has been modified.
+          $ref: '#/components/responses/Ok'
         '400':
           $ref: '#/components/responses/NotFound'
         '501':
           $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
-    delete:
+      summary: Update a place.
+    delete: #TODO
       tags:
         - stalker web app
       description: Delete the specified place. Operation reserved only to the managers and up.
       operationId: deletePlace
       responses:
         '200':
-          description: Success.
+          $ref: '#/components/responses/Ok'
         '404':
-          description: Place was not found.
+          $ref: '#/components/responses/NotFound'
         '501':
           $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      summary: Remove a place.
 
   #TODO /organization/{id}/subscribed --> list of users subscribed to organization: is it needed?
   #TODO to add /monitor and /tracking endpoints of oldPaths.yaml, branch all-endpoints
@@ -373,17 +364,19 @@ components:
       schema:
         $ref: ./model/GenericId.v1.yaml
   responses:
-    Ok:
+    Ok: #200
       description: Ok.
-    Unauthorized:
+    Unauthorized: #401
       description: The user is not authenticated.
-    Forbidden:
+    Forbidden: #403
       description: The user is authenticated but not authorized.
-    NotFound:
+    NotFound: #404
       description: The specified resource was not found.
+    RequestTimeout: #408
+      description: The specified request has exceeded the time limit.
     DefaultResponse:
       description: Unexpected error.
-    NotImplemented:
+    NotImplemented: #501
       description: This endpoint has not been implemented yet.
   securitySchemes:
     AdminKey:
