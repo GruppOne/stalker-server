@@ -8,6 +8,7 @@
     "pivotal.vscode-spring-boot",
     "redhat.java",
     "shengchen.vscode-checkstyle",
+    "sonarsource.sonarlint-vscode",
     "vscjava.vscode-java-debug",
     "vscjava.vscode-java-dependency",
     "vscjava.vscode-java-test",
