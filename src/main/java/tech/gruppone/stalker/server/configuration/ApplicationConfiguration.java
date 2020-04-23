@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 @Configuration
 @PropertySource("classpath:application.properties")
+// FIXME this class should NOT be a controller
 @RestController
 public class ApplicationConfiguration {
 
@@ -26,5 +27,4 @@ public class ApplicationConfiguration {
     return Mono.just(version);
   }
 
-  // TODO inner class named versioninfo. move restcontroller there
 }
