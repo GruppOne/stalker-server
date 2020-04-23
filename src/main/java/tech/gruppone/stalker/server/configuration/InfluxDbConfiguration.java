@@ -14,19 +14,19 @@ public class InfluxDbConfiguration {
 
   // TODO use constructor value injection
   @NonNull
-  @Value("${influxdb.url}")
+  @Value("${spring.influx.url}")
  private String url;
 
   @NonNull
-  @Value("${influxdb.database}")
+  @Value("${spring.influx.database}")
  private String databaseName;
 
   @NonNull
-  @Value("${influxdb.user}")
+  @Value("${spring.influx.user}")
  private String userName;
 
   @NonNull
-  @Value("${influxdb.password}")
+  @Value("${spring.influx.password}")
  private String password;
 
 }
