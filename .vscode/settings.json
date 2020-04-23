@@ -43,6 +43,10 @@
   "todo-tree.regex.regex": "((//|#|<!--|;|%|/\\*|^|--)\\s*($TAGS)|^\\s*- \\[ \\])",
   "yaml.schemaStore.enable": true,
   "yaml.format.enable": false,
+  "sonarlint.connectedMode.project": {
+    "connectionId": "GruppOne_stalker-server connection",
+    "projectKey": "GruppOne_stalker-server"
+  },
   // SPELLING
   "spellright.language": [
     "en",
