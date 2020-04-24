@@ -36,5 +36,4 @@ properties:
 required:
   - name
   - description
-  - places
   - isPrivate

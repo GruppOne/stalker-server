@@ -1,0 +1,13 @@
+title: OrganizationRole
+type: object
+properties:
+  userId:
+    type: integer
+  organizationId:
+    type: integer
+  role:
+    type: string
+required:
+  - userId
+  - organizationId
+  - role
