@@ -436,6 +436,129 @@ paths:
                 - email
       tags:
         - stalker mobile app
+  '/organization/{organizationId}/users/connected':
+    parameters:
+      - $ref: '#/components/parameters/organizationId'
+    get:
+      summary: Get all users connected to an organization.
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connectedUsers:
+                    type: array
+                    items:
+                      $ref: ./model/User.v1.yaml
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      operationId: get-organization-organizationId-users-connected
+      description: get the list of all users connected to an organization.
+  '/user/{userId}/connect':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    post:
+      summary: Connect an user to an organization.
+      operationId: post-user-userId-organization-organizationId-connect
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - The LDAP credentials for this organization were invalid.
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: The request body has the ldap property only if the organization is private.
+      tags:
+        - stalker mobile app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                organizationId:
+                  $ref: ./model/GenericId.v1.yaml
+                ldapAuthentication:
+                  type: object
+              required:
+                - organizationId
+  '/user/{userId}/disconnect':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    post:
+      summary: Disconnect an user from an organization.
+      operationId: post-user-userId-disconnect
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Request the disconnection of an user from an organization.
+      tags:
+        - stalker mobile app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+  '/user/{userId}/places/history':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      summary: "Get an user's visited places history."
+      tags: []
+      responses:
+        '204':
+          description: No Content
+        '501':
+          description: Not Implemented
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      operationId: get-user-userId-history
+      description: "Get the history of an user's visited places."
+  '/user/{userId}/logout':
+    post:
+      summary: Create a logout request for an user
+      operationId: post-user-logout
+      responses:
+        '200':
+          description: OK
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Send a logout request.
+      tags:
+        - stalker mobile app
+        - stalker web app
+    parameters:
+      - $ref: '#/components/parameters/userId'
+  '/user/{userId}':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    delete:
+      summary: Delete an user from Stalker.
+      operationId: delete-user-userId
+      responses:
+        '200':
+          description: OK
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Request to delete an user and its data.
   '/organization/{organizationId}/users/role':
     parameters:
       - $ref: '#/components/parameters/organizationId'
