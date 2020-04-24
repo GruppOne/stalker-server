@@ -224,7 +224,7 @@ paths:
         '200':
           $ref: '#/components/responses/Ok'
         '401':
-          description: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
@@ -437,6 +437,76 @@ paths:
                 - email
       tags:
         - stalker mobile app
+  '/organization/{organizationId}/users/role':
+    parameters:
+      - schema:
+          type: integer
+        name: organizationId
+        in: path
+        required: true
+        description: The id of the organization
+    post:
+      summary: Add a role for an user.
+      operationId: post-organization-organizationId-users-role
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Add a new rule for an user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleData:
+                  $ref: ./model/OrganizationRole.v1.yaml
+      security: []
+      tags:
+        - stalker web app
+    delete:
+      summary: Delete a role for an user.
+      operationId: delete-organization-organizationId-users-role
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Delete an existing role for an user.
+      security: []
+      tags:
+        - stalker web app
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleData:
+                  $ref: ./model/OrganizationRole.v1.yaml
 security:
   - AdminKey: []
   - bearerAuth: []
