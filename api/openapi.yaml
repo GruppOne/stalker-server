@@ -28,7 +28,7 @@ tags:
   - name: stalker mobile app
     description: This operation should be available to mobile app users.
   - name: stalker web app
-    description: This operation should be available to web app users (owners, managers, viewers).
+    description: 'This operation should be available to web app users (owners, managers, viewers).'
 paths:
   /version:
     get:
@@ -49,11 +49,11 @@ paths:
                 properties:
                   version:
                     type: string
-                    description: The server's version number.
+                    description: "The server's version number."
                     example: X.Y.Z
         default:
           $ref: '#/components/responses/DefaultResponse'
-      summary: Read the server's current version.
+      summary: "Read the server's current version."
   /location/update:
     post:
       tags:
@@ -76,9 +76,9 @@ paths:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
-      summary: Create an update for a user's current location.
-  /authenticate:
-    post: #TODO
+      summary: "Create an update for a user's current location."
+  /user/login:
+    post:
       tags:
         - stalker mobile app
         - stalker web app
@@ -90,7 +90,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/Login.v1.yaml
+              $ref: ./model/LoginData.v1.yaml
       responses:
         '200':
           description: Ok. The response contains user authenticated data.
@@ -105,10 +105,10 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Create a login request for an user.
-  /user/{userId}/connected:
+  '/user/{userId}/connected':
     parameters:
       - $ref: '#/components/parameters/userId'
-    get: #TODO
+    get:
       tags:
         - stalker mobile app
         - stalker web app
@@ -142,7 +142,7 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-      description: Get the list of all the organizations registered to Stalker, complete with all details.
+      description: 'Get the list of all the organizations registered to Stalker, complete with all details.'
       operationId: getOrganizations
       responses:
         '200':
@@ -192,7 +192,7 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Create an organization.
-  /organization/{organizationId}:
+  '/organization/{organizationId}':
     parameters:
       - $ref: '#/components/parameters/organizationId'
     get:
@@ -214,15 +214,15 @@ paths:
           $ref: '#/components/responses/NotImplemented'
         default:
           $ref: '#/components/responses/DefaultResponse'
-      summary: Get organization's information.
-    delete: #TODO
+      summary: "Get organization's information."
+    delete:
       tags:
         - stalker web app
       description: Delete the specified organization. Operation reserved only to the administrator.
       operationId: deleteOrganizationById
       responses:
         '200':
-          $ref: "#/components/responses/Ok"
+          $ref: '#/components/responses/Ok'
         '401':
           description: '#/components/responses/Unauthorized'
         '403':
@@ -236,7 +236,7 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete an organization.
-    put: #TODO
+    put:
       tags:
         - stalker web app
       description: Send the changed data about a specific organization. Operation reserved only to the administrator.
@@ -261,14 +261,14 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Update an organization.
-  /organization/{organizationId}/place:
-    post: #TODO
+  '/organization/{organizationId}/place':
+    post:
       tags:
         - stalker web app
       description: Add a new place to the given organization. Operation reserved only to the managers and up.
       operationId: postPlaceByOrganizationId
       parameters:
-      - $ref: "#/components/parameters/organizationId"
+        - $ref: '#/components/parameters/organizationId'
       requestBody:
         required: true
         content:
@@ -293,11 +293,11 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Add a new place.
-  /organization/{organizationId}/place/{placeId}:
+  '/organization/{organizationId}/place/{placeId}':
     parameters:
       - $ref: '#/components/parameters/organizationId'
       - $ref: '#/components/parameters/placeId'
-    put: #TODO
+    put:
       tags:
         - stalker web app
       description: Change data for a specific place. Operation reserved only to the managers and up.
@@ -318,7 +318,7 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Update a place.
-    delete: #TODO
+    delete:
       tags:
         - stalker web app
       description: Delete the specified place. Operation reserved only to the managers and up.
@@ -333,10 +333,110 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Remove a place.
-
-  #TODO /organization/{id}/subscribed --> list of users subscribed to organization: is it needed?
-  #TODO to add /monitor and /tracking endpoints of oldPaths.yaml, branch all-endpoints
-
+  /users:
+    get:
+      summary: Read all users.
+      tags:
+        - stalker web app
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: ./model/User.v1.yaml
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      operationId: get-users
+      description: Get all users registered on Stalker.
+    post:
+      summary: Create an user.
+      operationId: post-users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./model/GenericId.v1.yaml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - This email is not valid or already registered
+                required:
+                  - message
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Create a new user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                loginData:
+                  $ref: ./model/LoginData.v1.yaml
+                userData:
+                  $ref: ./model/UserData.v1.yaml
+              required:
+                - loginData
+                - userData
+      security: []
+      tags:
+        - stalker mobile app
+  /user/password/recovery:
+    post:
+      summary: "Recovery a user's password."
+      operationId: post-user-password-recovery
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - This email is not valid.
+                required:
+                  - message
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Request password recovery for an email.
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+      tags:
+        - stalker mobile app
 security:
   - AdminKey: []
   - bearerAuth: []
@@ -364,19 +464,19 @@ components:
       schema:
         $ref: ./model/GenericId.v1.yaml
   responses:
-    Ok: #200
+    Ok:
       description: Ok.
-    Unauthorized: #401
+    Unauthorized:
       description: The user is not authenticated.
-    Forbidden: #403
+    Forbidden:
       description: The user is authenticated but not authorized.
-    NotFound: #404
+    NotFound:
       description: The specified resource was not found.
-    RequestTimeout: #408
+    RequestTimeout:
       description: The specified request has exceeded the time limit.
     DefaultResponse:
       description: Unexpected error.
-    NotImplemented: #501
+    NotImplemented:
       description: This endpoint has not been implemented yet.
   securitySchemes:
     AdminKey:

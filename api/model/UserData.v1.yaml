@@ -14,11 +14,12 @@ properties:
     example: '1990-01-01'
   creationDate:
     type: string
-  login:
-    $ref: ./Login.v1.yaml
+  email:
+    type: string
+    format: email
+    example: mario.rossi@example.org
 required:
   - firstName
   - lastName
   - birthDate
-  - creationDate
-  - login
+  - email

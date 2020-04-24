@@ -1,4 +1,4 @@
-title: Login
+title: LoginData
 type: object
 description: Data necessary for user login
 properties:
