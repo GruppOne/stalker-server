@@ -2,6 +2,10 @@ title: UserData
 type: object
 description: Data necessary for user registration
 properties:
+  email:
+    type: string
+    format: email
+    example: mario.rossi@example.org
   firstName:
     type: string
     example: Mario
@@ -14,10 +18,6 @@ properties:
     example: '1990-01-01'
   creationDate:
     type: string
-  email:
-    type: string
-    format: email
-    example: mario.rossi@example.org
 required:
   - firstName
   - lastName

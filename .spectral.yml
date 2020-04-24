@@ -45,3 +45,4 @@ rules:
   path-not-include-query: error
   path-params: error
   tag-description: error
+  oas2-unused-definition: error

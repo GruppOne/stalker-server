@@ -17,16 +17,16 @@ che non sono esprimibili nel file di specifica.
 
 ## todos
 
-### TODO usare i plurali: /users, not /user
-
 ### TODO dichiarare schema esplicito dei permessi per i ruoli della web app
 
 ### TODO usare http status 202 "accepted" per le operazioni asincrone lente
 
-### TODO definire proprietà "links" <https://swagger.io/docs/specification/links/> per ottenere "the full glory of REST"
+### TODO what's in the property ldapAuthentication of endpoint /user/{userId}/connect?
 
 ### TODO aggiungere json della risposta in #/components/responses
 
 ### FIXME NON DARE TUTTA LA PROPRIETA' organization.ldapConfiguration AGLI UTENTI
 
 ### FIXME UnauthenticatedUser patterns are unneeded. the format already specifies a type that we will define elsewhere
+
+### XXX definire proprietà "links" <https://swagger.io/docs/specification/links/> per ottenere "the full glory of REST"
