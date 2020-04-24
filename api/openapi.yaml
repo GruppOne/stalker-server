@@ -99,9 +99,16 @@ paths:
               schema:
                 $ref: ./model/User.v1.yaml
         '401':
-          $ref: '#/components/responses/Unauthorized'
-        '501':
-          $ref: '#/components/responses/NotImplemented'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - This email/password combination is not valid
+          description: Unauthorized.
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Create a login request for an user.
@@ -122,12 +129,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  connected:
+                  connectedOrganizations:
                     type: array
                     items:
                       $ref: ./model/GenericId.v1.yaml
                 required:
-                  - connected
+                  - connectedOrganizations
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -142,7 +149,7 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-      description: 'Get the list of all the organizations registered to Stalker, complete with all details.'
+      description: 'Get the list of all the organizations registered to Stalker, complete with all details EXCEPT private information (ldapConfiguration).'
       operationId: getOrganizations
       responses:
         '200':
@@ -163,10 +170,6 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Read all organizations.
-      security:
-        - Oauth scoped authorizations:
-            - user
-            - viewer
     post:
       tags:
         - stalker web app
@@ -199,7 +202,7 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-      description: Get information about a specific organization.
+      description: Get all information about a specific organization INCLUDING ldapConfiguration.
       operationId: getOrganizationById
       responses:
         '200':
@@ -208,8 +211,6 @@ paths:
             application/json:
               schema:
                 $ref: ./model/Organization.v1.yaml
-        '404':
-          $ref: '#/components/responses/NotFound'
         '501':
           $ref: '#/components/responses/NotImplemented'
         default:
@@ -227,8 +228,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '408':
           $ref: '#/components/responses/RequestTimeout'
         '501':
@@ -261,7 +260,9 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Update an organization.
-  '/organization/{organizationId}/place':
+  '/organization/{organizationId}/places':
+    parameters:
+      - $ref: '#/components/parameters/organizationId'
     post:
       tags:
         - stalker web app
@@ -326,8 +327,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Ok'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '501':
           $ref: '#/components/responses/NotImplemented'
         default:
@@ -378,7 +377,7 @@ paths:
                   message:
                     type: string
                     enum:
-                      - This email is not valid or already registered
+                      - This email is not valid or is already registered
                 required:
                   - message
         default:
@@ -439,12 +438,7 @@ paths:
         - stalker mobile app
   '/organization/{organizationId}/users/role':
     parameters:
-      - schema:
-          type: integer
-        name: organizationId
-        in: path
-        required: true
-        description: The id of the organization
+      - $ref: '#/components/parameters/organizationId'
     post:
       summary: Add a role for an user.
       operationId: post-organization-organizationId-users-role
@@ -473,7 +467,6 @@ paths:
               properties:
                 roleData:
                   $ref: ./model/OrganizationRole.v1.yaml
-      security: []
       tags:
         - stalker web app
     delete:
@@ -496,7 +489,6 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Delete an existing role for an user.
-      security: []
       tags:
         - stalker web app
       requestBody:

@@ -13,4 +13,3 @@ properties:
 required:
   - organizationId
   - userId
-  - creationDate
