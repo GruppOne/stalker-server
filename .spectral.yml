@@ -2,6 +2,35 @@ extends:
   - - 'spectral:oas'
     - all
 rules:
+  required-unauthorized-response:
+    description: if this operation has a security scheme the 401 Unauthorized response is probably needed. Careful for false positives!
+    given: $.paths.*[*].responses
+    recommended: true
+    severity: hint
+    then:
+      field: "401"
+      function: truthy
+  required-forbidden-response:
+    description: if this operation has a security scheme the 403 Forbidden response is probably needed. Careful for false positives!
+    given: $.paths.*[*].responses
+    recommended: true
+    severity: hint
+    then:
+      field: "403"
+      function: truthy
+  summary-approved-verbs:
+    description: Operation `summary` should use a standard verb (Create, Read, Update, Delete) at the beginning.
+    given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]"
+    recommended: true
+    type: style
+    then:
+      field: summary
+      function: pattern
+      functionOptions:
+        match: "^(Create|Read|Update|Delete)"
+    tags:
+      - operation
+    severity: error
   operation-summary-formatted:
     description: Operation `summary` should start with upper case and end with a dot.
     given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]"
@@ -14,7 +43,20 @@ rules:
         match: "^[A-Z].*\\.$"
     tags:
       - operation
-    severity: info
+    severity: error
+  operation-description-formatted:
+    description: Operation `description` should start with upper case and end with a dot.
+    given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]"
+    recommended: true
+    type: style
+    then:
+      field: description
+      function: pattern
+      functionOptions:
+        match: "^[A-Z].*\\.$"
+    tags:
+      - operation
+    severity: error
   semver:
     description: Require 3-part Semantic Versions as the spec versions
     severity: error
