@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
 
+// TODO should builder be removed? do we use it anywhere but in tests?
 @Builder
 @Value
 public class Organization {
