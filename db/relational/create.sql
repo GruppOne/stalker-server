@@ -42,7 +42,7 @@ USE `stalker-rdb`;
 --
 CREATE TABLE `AdministratorType` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(20) NOT NULL,
   `role` varchar(20) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -86,8 +86,13 @@ CREATE TABLE `OrganizationRole` (
   `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
+<<<<<<< HEAD
   `administratorType` int(11) NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+=======
+  `name` varchar(20) NOT NULL,
+  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+>>>>>>> f0cdb9a... fix: modify db tables
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -169,7 +174,7 @@ CREATE TABLE `User` (
 ALTER TABLE
   `AdministratorType`
 ADD
-  PRIMARY KEY (`id`);
+  PRIMARY KEY (`name`);
 
 --
 -- Indici per le tabelle `Connection`
@@ -207,7 +212,11 @@ ADD
 ADD
   KEY `userId` (`userId`),
 ADD
+<<<<<<< HEAD
   KEY `administratorType` (`administratorType`);
+=======
+  KEY `name` (`name`);
+>>>>>>> f0cdb9a... fix: modify db tables
 
 --
 -- Indici per le tabelle `Organization`
@@ -266,6 +275,7 @@ ADD
 --
 -- AUTO_INCREMENT per la tabella `AdministratorType`
 --
+<<<<<<< HEAD
 ALTER TABLE
   `AdministratorType`
 MODIFY
@@ -278,6 +288,8 @@ ALTER TABLE
   `Connection`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
+=======
+>>>>>>> f0cdb9a... fix: modify db tables
 
 --
 -- AUTO_INCREMENT per la tabella `LdapConfiguration`
@@ -338,7 +350,11 @@ ADD
 ALTER TABLE
   `LdapConfiguration`
 ADD
+<<<<<<< HEAD
   CONSTRAINT `LdapConfiguration_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`);
+=======
+  CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`name`) REFERENCES `AdminType` (`name`);
+>>>>>>> f0cdb9a... fix: modify db tables
 
 --
 -- Limiti per la tabella `OrganizationRole`
