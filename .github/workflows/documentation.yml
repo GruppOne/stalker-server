@@ -1,7 +1,9 @@
-name: Documentation
+name: Documentation jobs
 
 on:
   pull_request:
+    branches:
+      - master
   # push:
   #   branches:
   #     - '!master'
@@ -32,3 +34,17 @@ jobs:
         with:
           files: .
           ignore_files: 'CHANGELOG.md'
+
+  lint-api:
+    name: Lint API definition
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Run spectral linter via npx
+        run: npx --package @stoplight/spectral@~5.3.0 spectral lint ./api
