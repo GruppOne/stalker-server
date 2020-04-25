@@ -82,6 +82,10 @@ dependencies {
 
 test {
   useJUnitPlatform()
+
+  finalizedBy {
+    jacocoTestReport
+  }
 }
 
 processResources {
@@ -122,9 +126,17 @@ jacocoTestCoverageVerification {
       }
     }
   }
+
+  dependsOn {
+    jacocoTestReport
+  }
 }
 
-test.finalizedBy jacocoTestReport
+check {
+  dependsOn {
+    jacocoTestCoverageVerification
+  }
+}
 
 sonarqube {
   properties {

@@ -2,13 +2,15 @@ name: Dynamic analysis and testing
 
 on:
   pull_request:
+    branches:
+      - master
   push:
     branches:
       - master
 
 jobs:
-  sonarcloud-pr-scanner:
-    name: Scan PR with SonarCloud
+  test:
+    name: Run gradle check
     runs-on: ubuntu-18.04
 
     if: github.event_name == 'pull_request'
@@ -29,10 +31,14 @@ jobs:
           java-version: 11
 
       - name: Setup Gradle wrapper
-        run: ./gradlew
+        run: ./gradlew --console=plain --warning-mode=all --info
 
-      - name: Run SonarCloud scanner gradle task
-        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }} -Dsonar.pullrequest.key=${{ github.event.number }} -Dsonar.pullrequest.branch=${{ github.head_ref }}
+      - name: Run gradle check (with minimum coverage at 80%)
+        run: ./gradlew --console=plain --warning-mode=all --info check
+
+      - name: Upload results to SonarCloud
+        if: always()
+        run: ./gradlew --console=plain --warning-mode=all --info sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }} -Dsonar.pullrequest.key=${{ github.event.number }} -Dsonar.pullrequest.branch=${{ github.head_ref }}
 
   sonarcloud-master-scanner:
     name: Fully scan master with SonarCloud
@@ -49,7 +55,7 @@ jobs:
           java-version: 11
 
       - name: Setup Gradle wrapper
-        run: ./gradlew
+        run: ./gradlew --console=plain --warning-mode=all --info
 
-      - name: Run SonarCloud scanner gradle task
-        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }}
+      - name: Run SonarCloud scanner task
+        run: ./gradlew --console=plain --warning-mode=all --info sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }}
