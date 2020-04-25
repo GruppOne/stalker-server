@@ -1,19 +1,14 @@
-name: Static code analysis
+# name: Static code analysis
 
-on:
-  pull_request:
+# on:
+#   pull_request:
+#     branches:
+#       - master
 
-jobs:
-  lint:
-    name: Lint API definition
-    runs-on: ubuntu-18.04
+# jobs:
+#   lint:
+#     name: Lint Java code
+#     runs-on: ubuntu-18.04
 
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-
-      - name: Run spectral linter via npx
-        run: npx --package @stoplight/spectral@~5.3.0 spectral lint ./api
+#     steps:
+#       - uses: actions/checkout@v2

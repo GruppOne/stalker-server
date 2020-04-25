@@ -12,6 +12,9 @@ on:
     branches-ignore:
       - master
 
+env:
+  MY_GITHUB_TOKEN: ${{ secrets.ERCLU_ORGANIZATION_TOKEN }}
+
 jobs:
   # FIXME nessuno di questi due job funziona
   # create-draft-pr:
@@ -48,19 +51,30 @@ jobs:
   #         PULL_REQUEST_BODY: This PR was createad automatically. Modify appropriately its title and body.
   #         PULL_REQUEST_DRAFT: true
 
-  assign_one_project:
-    name: Assign to main project board
-    runs-on: ubuntu-latest
-
-    env:
-      MY_GITHUB_TOKEN: ${{ secrets.ERCLU_ORGANIZATION_TOKEN }}
+  assign-main-project:
+    name: Assign to our main project board
+    runs-on: ubuntu-18.04
 
     if: github.event_name != 'push'
 
     steps:
       - name: Assign new issues and new PRs to the main organization project board
         uses: srggrs/assign-one-project-github-action@1.2.0
-        if: github.event.action == 'opened'
+        if: github.event.action == 'opened' && !contains(github.event.issue.labels.*.name, 'requirement')
         with:
           project: "https://github.com/orgs/GruppOne/projects/9"
           column_name: "To do"
+
+  assign-requirement-main-project:
+    name: Assign a requirement to our main project board
+    runs-on: ubuntu-18.04
+
+    if: github.event_name != 'push'
+
+    steps:
+      - name: Assign new requirement to the correct project column
+        uses: srggrs/assign-one-project-github-action@1.2.0
+        if: contains(github.event.issue.labels.*.name, 'requirement')
+        with:
+          project: "https://github.com/orgs/GruppOne/projects/9"
+          column_name: "To do - Requirements"

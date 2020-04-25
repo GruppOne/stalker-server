@@ -1,4 +1,4 @@
-name: Dynamic code analysis
+name: Dynamic analysis and testing
 
 on:
   pull_request:
@@ -28,11 +28,14 @@ jobs:
         with:
           java-version: 11
 
+      - name: Setup Gradle wrapper
+        run: ./gradlew
+
       - name: Run SonarCloud scanner gradle task
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }} -Dsonar.pullrequest.key=${{ github.event.number }} -Dsonar.pullrequest.branch=${{ github.head_ref }}
 
   sonarcloud-master-scanner:
-    name: Scan trunk with SonarCloud
+    name: Fully scan master with SonarCloud
     runs-on: ubuntu-18.04
 
     if: github.event_name == 'push'
@@ -44,6 +47,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Setup Gradle wrapper
+        run: ./gradlew
 
       - name: Run SonarCloud scanner gradle task
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONARCLOUD_LOGIN }}
