@@ -2,6 +2,9 @@ package tech.gruppone.stalker.server.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +23,12 @@ import tech.gruppone.stalker.server.model.User;
 import tech.gruppone.stalker.server.repository.UserRepository;
 import tech.gruppone.stalker.server.security.JwtUtil;
 
-@Value
 @RestController
 @RequestMapping("/users")
+@Data
 public class UserController {
 
+  @Getter(AccessLevel.NONE)
   UserRepository userRepository;
 
   @Autowired
