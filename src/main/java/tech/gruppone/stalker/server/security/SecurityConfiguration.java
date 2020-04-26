@@ -31,17 +31,17 @@ public class SecurityConfiguration {
   protected SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception{
       http.
       csrf().disable().  // disable csrf for now  --> if you want to enable use (.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).)
-      formLogin().disable(). // disable form login
-        httpBasic().disable();// disable basic authentication
+      formLogin().disable().// disable form login
+       logout().disable();
+        http.httpBasic().disable();// disable basic authentication
 
       http.authenticationManager(this.authenticationManager); // set the authentication manager
       http.securityContextRepository(this.securityContextRepository); // set the context repository
 
       http.authorizeExchange().
-       pathMatchers(HttpMethod.POST, "/users/login").permitAll(). // disable security for login
+       pathMatchers(HttpMethod.POST, "/users/login").permitAll().
        pathMatchers(HttpMethod.POST, "/users/registration").permitAll();// disable security for registration
-
-      http.authorizeExchange().anyExchange().authenticated(); //any other request must be authenticated
+       http.authorizeExchange().anyExchange().authenticated(); //any other request must be authenticated
 
       return http.build();
   }

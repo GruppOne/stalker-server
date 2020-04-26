@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.security;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +21,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
       return Mono.empty();
     } else {
       UsernamePasswordAuthenticationToken accessToken = new UsernamePasswordAuthenticationToken(jwtToken.getUsername(
-        token), null);
+        token), null, null);
       return Mono.just(accessToken);
     }
   }

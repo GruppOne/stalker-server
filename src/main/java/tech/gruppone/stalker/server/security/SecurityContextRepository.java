@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.security;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -27,9 +28,9 @@ public class SecurityContextRepository  implements ServerSecurityContextReposito
   public Mono<SecurityContext> load(ServerWebExchange exchange) {
     ServerHttpRequest request = exchange.getRequest();
     String Header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-    if(Header != null){
+    if(Header != null && Header.startsWith("Bearer ")){
       String token = Header.substring(7);
-      Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
+      Authentication auth = new UsernamePasswordAuthenticationToken(token,token,null);
       authenticationManager.authenticate(auth);
       return Mono.just(new SecurityContextImpl(auth));
     }

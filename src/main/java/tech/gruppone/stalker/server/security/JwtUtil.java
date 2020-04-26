@@ -1,13 +1,15 @@
 package tech.gruppone.stalker.server.security;
 
 
-import com.sun.mail.imap.protocol.BASE64MailboxEncoder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -47,8 +49,15 @@ public class JwtUtil{
 
    // this function creates a jwt token. It is not complete
    public String createToken(String username, Map <String, Object> claims){
-     Date x = new Date(); // dummy date
-     return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(x).setExpiration(x).signWith(getEncodedKey()).compact();
+     Date issuedAt = new Date(); // dummy date
+     Date expirationAt= new Date(issuedAt.getTime() + Long.parseLong(expirationTime));
+     List<OrganizationRole> t = new ArrayList<>();
+     t.add(new OrganizationRole(2, "ROLE_MANAGER"));
+     t.add(new OrganizationRole(3, "ROLE_VIEWER"));
+     Map <String, List<OrganizationRole> > xd= new HashMap<>();
+     xd.put("organizations", t);
+     return Jwts.builder().setClaims(xd).setSubject(username).
+       setIssuedAt(issuedAt).setExpiration(expirationAt).signWith(getEncodedKey()).compact();
    }
 
    public boolean isTokenStillValid(String token){
