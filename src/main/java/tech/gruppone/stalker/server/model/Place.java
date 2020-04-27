@@ -1,22 +1,20 @@
 package tech.gruppone.stalker.server.model;
 
 import org.springframework.data.annotation.Id;
-import lombok.Builder;
+
 import lombok.Data;
 import lombok.NonNull;
-import lombok.Value;
 
-@Builder
-@Value
 public class Place {
 
   @Id
   Long id;
   @NonNull String name;
-  @NonNull Polygon polygon;
-  @NonNull PlaceData placeData;
+  //@NonNull Polygon polygon;
+  //@NonNull PlaceData placeData;
 
-  @Builder
+
+
   @Data
   public static class PlaceData {
 
@@ -26,4 +24,37 @@ public class Place {
     String state;
   }
 
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+
+
+/*
+  public Polygon getPolygon() {
+    return polygon;
+  }
+
+  public void setPolygon(Polygon polygon) {
+    this.polygon = polygon;
+  }
+
+  public PlaceData getPlaceData() {
+    return placeData;
+  }
+
+  public void setPlaceData(PlaceData placeData) {
+    this.placeData = placeData;
+  }
+*/
 }

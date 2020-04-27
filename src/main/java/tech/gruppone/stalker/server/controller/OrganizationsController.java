@@ -4,39 +4,30 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Value;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.Organization;
 import tech.gruppone.stalker.server.repository.OrganizationRepository;
 
-@RequestMapping("/organization")
+@RequestMapping("/organizations")
 @RestController
 @Value
-public class OrganizationController {
+public class OrganizationsController {
 
   OrganizationRepository organizationRepository;
 
-  @GetMapping("/{id}")
-  public Mono<Organization> getOrganizationById(@PathVariable Long id) {
+  // TODO refactor this. it needs to return a valid json object: {"organizations":[...]}
+  @GetMapping
+  public Flux<Organization> getOrganizations() {
 
-    return organizationRepository.findById(id);
-  }
-
-  @PutMapping("/{id}")
-  public Mono<Organization> updateOrganizationById(@PathVariable Long id, @RequestBody String jsonString) throws IOException{
-
-    Organization org = new ObjectMapper().readValue(jsonString, Organization.class);
-    return organizationRepository.update(id, org.getName(), org.getDescription());
-
+    return organizationRepository.findAll();
   }
 
   @PostMapping
@@ -46,10 +37,4 @@ public class OrganizationController {
     return organizationRepository.create(org.getName(), org.getDescription());
   }
 
-
-
-  @DeleteMapping("/{id}")
-  public Mono<Organization> deleteOrganizationById(@PathVariable Long id){
-    return organizationRepository.delete(id);
-  }
 }
