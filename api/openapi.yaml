@@ -405,8 +405,6 @@ paths:
       summary: Delete a user from Stalker.
       tags:
         - stalker mobile app
-    parameters:
-      - $ref: '#/components/parameters/userId'
     put:
       description: "Update a user's data."
       operationId: put-user-userId
@@ -418,6 +416,30 @@ paths:
       summary: "Update a user's data."
       tags:
         - stalker mobile app
+    get:
+      summary: Read information about an user.
+      operationId: get-user-userId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: ./model/User.v1.yaml
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Get information of a specific user.
+      tags:
+        - stalker web app
+    parameters:
+      - $ref: '#/components/parameters/userId'
   '/user/{userId}/logout':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -551,10 +573,6 @@ paths:
                     type: array
                 type: object
           description: Ok.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Read all users.
@@ -596,6 +614,10 @@ paths:
                   - message
                 type: object
           description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         default:
           $ref: '#/components/responses/DefaultResponse'
       security: []
