@@ -1,12 +1,10 @@
 package tech.gruppone.stalker.server.model;
 
 import java.time.LocalDate;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-
 import org.springframework.data.annotation.Id;
 import lombok.NonNull;
 
@@ -34,11 +32,9 @@ public class User {
   @JsonDeserialize(using = LocalDateDeserializer.class)
   @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate birthDate;
-  // Timestamp createdDate;
-  // Timestamp lastModifiedDate;
 
   public Long getId() {
-    return id;
+    return this.id;
   }
 
   public void setId(Long id) {
@@ -46,7 +42,7 @@ public class User {
   }
 
   public String getEmail() {
-    return email;
+    return this.email;
   }
 
   public void setEmail(String email) {
@@ -54,7 +50,7 @@ public class User {
   }
 
   public String getPassword() {
-    return password;
+    return this.password;
   }
 
   public void setPassword(String password) {
@@ -62,14 +58,14 @@ public class User {
   }
 
   public String getFirstName() {
-    return firstName;
+    return this.firstName;
   }
 
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
   public String getLastName() {
-    return lastName;
+    return this.lastName;
   }
 
   public void setLastName(String lastName) {
@@ -77,33 +73,11 @@ public class User {
   }
 
   public LocalDate getBirthDate() {
-    return birthDate;
+    return this.birthDate;
   }
 
   public void setBirthDate(LocalDate birthDate) {
     this.birthDate = birthDate;
   }
-
-
-  // // TODO re-add userData property
-  // // @NonNull
-  // // UserData userData;
-
-  // @Builder
-  // @Value
-  // public static class UserData {
-  //   @NonNull
-  //   String email;
-
-  //   @NonNull
-  //   String password;
-
-  //   String firstName;
-  //   String lastName;
-  //   // TODO use timezone-agnostic type for dates
-  //   LocalDate birthDate;
-  //   // Timestamp createdDate;
-  //   // Timestamp lastModifiedDate;
-  // }
 
 }
