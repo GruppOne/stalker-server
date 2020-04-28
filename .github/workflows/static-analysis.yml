@@ -21,8 +21,8 @@ jobs:
       - name: Setup Gradle wrapper
         run: ./gradlew --console=plain --warning-mode=all --info
 
-      - name: Compile Java classes and test classes
-        run: ./gradlew --console=plain --warning-mode=all --info classes testClasses
+      - name: Compile all Java code
+        run: ./gradlew --console=plain --warning-mode=all --info --continue classes testClasses
 
   lint:
     name: Lint with Checkstyle
