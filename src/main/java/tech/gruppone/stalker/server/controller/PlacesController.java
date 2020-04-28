@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Value;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.Place;
 import tech.gruppone.stalker.server.repository.PlaceRepository;
 
@@ -25,7 +26,7 @@ public class PlacesController {
 
 
   @PostMapping
-  public Flux<Place> createPlace(@PathVariable Long orgId,@RequestBody String jsonString) throws IOException{
+  public Mono<Place> createPlace(@PathVariable Long orgId,@RequestBody String jsonString) throws IOException{
 
     Place p = new ObjectMapper().readValue(jsonString, Place.class);
     return placeRepository.create(p.getName(), orgId);
