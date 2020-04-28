@@ -111,11 +111,11 @@ tasks.withType(JavaCompile) {
 // TODO add checkstyle plugin configuration
 
 jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled false
-    }
+  reports {
+    xml.enabled true
+    csv.enabled false
+    html.enabled false
+  }
 }
 
 jacocoTestCoverageVerification {
@@ -140,11 +140,17 @@ check {
 
 sonarqube {
   properties {
+    property "sonar.sourceEncoding", "UTF-8"
+
+    property "sonar.projectName", "stalker-server"
     property "sonar.projectKey", "GruppOne_stalker-server"
     property "sonar.organization", "grupp-one"
+
     property "sonar.host.url", "https://sonarcloud.io"
     property "sonar.login", "${env.SONARCLOUD_LOGIN.orNull()}"
 
     property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
   }
 }
+
+tasks.findByName('sonarqube').mustRunAfter('check')
