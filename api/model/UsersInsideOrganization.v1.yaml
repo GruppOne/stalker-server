@@ -1,0 +1,23 @@
+title: UsersInsideReport
+type: object
+properties:
+  usersInside:
+    type: integer
+    minimum: 0
+  places:
+    type: array
+    uniqueItems: true
+    items:
+      type: object
+      properties:
+        placeId:
+          $ref: ./GenericId.v1.yaml
+        usersInside:
+          type: integer
+          minimum: 0
+      required:
+        - placeId
+        - usersInside
+required:
+  - usersInside
+  - places
