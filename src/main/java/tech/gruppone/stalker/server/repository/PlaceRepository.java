@@ -18,14 +18,14 @@ public interface PlaceRepository extends ReactiveCrudRepository<Place,Long> {
   public Mono<Place> find(Long orgId,Long id);
 
   @Modifying
-  @Query("insert into Place (name,organizationId) values (:name,:orgId)")
-  public Mono<Place> create(String name,Long orgId);
+  @Query("insert into Place (name,position,organizationId) values (:name,ST_PolygonFromText(:positon),:orgId); SET @lastId := (select id from Place order by id DESC limit 1); insert into PlaceData (id,address,city,state,zipcode) values (@LastId,:address,:city,:state,:zipcode)")
+  public Mono<Place> create(String name,String position, Long orgId,String address,String city,String state, String zipcode);
 
   @Modifying
-  @Query("update Place pla,PlaceData pd set pla.name = :name, pd.address = :address, pd.city = :city, pd.state = :state, pd.zipcode = :zipcode where pd.id = pla.id and pla.id = :id and pla.organizationId = :orgId")
+  @Query("update Place pla,PlaceData pd set pla.name = :name, pd.address = :address, pd.city = :city, pd.state = :state, pd.zipcode = :zipcode, pla.position = ST_PolygonFromText(:positon) where pd.id = pla.id and pla.id = :id and pla.organizationId = :orgId")
   //@Query("update Place pla,PlaceData pd, Polygon pol set pla.name = :name, pd.address = :address, pd.city = :city, pd.zipcode = :zipcode, pd.state = :state, where o.id = :id")
   //public Flux<Place> update(Long orgId,Long id, String name, String address, String city, String zipcode, String state);
-  public Mono<Place> update(String name,String address,String city,String state, String zipcode,Long id, Long orgId);
+  public Mono<Place> update(String name,String address,String city,String state, String zipcode,String position, Long id, Long orgId);
 
 
   @Modifying

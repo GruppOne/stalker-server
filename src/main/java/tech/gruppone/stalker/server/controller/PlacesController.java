@@ -29,7 +29,8 @@ public class PlacesController {
   public Mono<Place> createPlace(@PathVariable Long orgId,@RequestBody String jsonString) throws IOException{
 
     Place p = new ObjectMapper().readValue(jsonString, Place.class);
-    return placeRepository.create(p.getName(), orgId);
+    System.out.println(p.getPosition());
+    return placeRepository.create(p.getName(),p.getPosition(),orgId,p.getAddress(),p.getCity(),p.getState(),p.getZipcode());
   }
 
 

@@ -36,7 +36,7 @@ public class PlaceController {
   public Mono<Place> updatePlace(@PathVariable Long orgId,@PathVariable Long id,@RequestBody String jsonString) throws IOException{
 
     Place p = new ObjectMapper().readValue(jsonString, Place.class);
-    return placeRepository.update(p.getName(),p.getAddress(),p.getCity(),p.getState(),p.getZipcode(),id,orgId);
+    return placeRepository.update(p.getName(),p.getAddress(),p.getCity(),p.getState(),p.getZipcode(),p.getPosition(),id,orgId);
   }
 
 
