@@ -116,6 +116,10 @@ jacocoTestReport {
     csv.enabled false
     html.enabled false
   }
+
+  dependsOn {
+    test
+  }
 }
 
 jacocoTestCoverageVerification {
@@ -132,11 +136,12 @@ jacocoTestCoverageVerification {
   }
 }
 
-check {
-  dependsOn {
-    jacocoTestCoverageVerification
-  }
-}
+// TODO check if sonarcloud still fails on min coverage without this
+// check {
+//   dependsOn {
+//     jacocoTestCoverageVerification
+//   }
+// }
 
 sonarqube {
   properties {
