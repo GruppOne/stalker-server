@@ -51,11 +51,11 @@ public class JwtUtil{
    public String createToken(String username, Map <String, Object> claims){
      Date issuedAt = new Date(); // dummy date
      Date expirationAt= new Date(issuedAt.getTime() + Long.parseLong(expirationTime));
-     List<OrganizationRole> t = new ArrayList<>();
-     t.add(new OrganizationRole(2, "ROLE_MANAGER"));
-     t.add(new OrganizationRole(3, "ROLE_VIEWER"));
-     Map <String, List<OrganizationRole> > xd= new HashMap<>();
-     xd.put("organizations", t);
+     List<UserRoles> t = new ArrayList<>();
+     /*t.add(new UserRoles(2, "ROLE_MANAGER"));
+     t.add(new UserRoles(3, "ROLE_VIEWER"));*/
+     Map <String, List<UserRoles> > xd= new HashMap<>();
+     //xd.put("organizations", t);
      return Jwts.builder().setClaims(xd).setSubject(username).
        setIssuedAt(issuedAt).setExpiration(expirationAt).signWith(getEncodedKey()).compact();
    }

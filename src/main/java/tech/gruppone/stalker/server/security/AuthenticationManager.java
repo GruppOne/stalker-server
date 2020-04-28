@@ -11,13 +11,15 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
+
   @Autowired
   JwtUtil jwtToken;
 
   @Override
   public Mono<Authentication> authenticate(Authentication authentication) {
     String token = authentication.getCredentials().toString();
-    if (jwtToken.isTokenExpired(token)) {
+    String username = authentication.getName();
+    if ( username!= null && jwtToken.isTokenExpired(token)) {
       return Mono.empty();
     } else {
       UsernamePasswordAuthenticationToken accessToken = new UsernamePasswordAuthenticationToken(jwtToken.getUsername(

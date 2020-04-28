@@ -23,11 +23,6 @@ public class SecurityConfiguration {
   SecurityContextRepository securityContextRepository;
 
   @Bean
-  public PasswordEncoder passwordEncoder(){
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
   protected SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception{
       http.
       csrf().disable().  // disable csrf for now  --> if you want to enable use (.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).)
@@ -40,7 +35,8 @@ public class SecurityConfiguration {
 
       http.authorizeExchange().
        pathMatchers(HttpMethod.POST, "/users/login").permitAll().
-       pathMatchers(HttpMethod.POST, "/users/registration").permitAll();// disable security for registration
+       pathMatchers(HttpMethod.POST, "/users/registration").permitAll().// disable security for registration
+       pathMatchers(HttpMethod.GET,"/users/roles/{username}").permitAll();
        http.authorizeExchange().anyExchange().authenticated(); //any other request must be authenticated
 
       return http.build();

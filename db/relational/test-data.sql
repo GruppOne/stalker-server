@@ -67,7 +67,7 @@ INSERT INTO `User` (`email`, `password`) VALUES
 --
 
 INSERT INTO `AdminType` (`name`, `role`) VALUES
-('admin  ', 'ROLE_ADMIN'),
+('admin', 'ROLE_ADMIN'),
 ('manager', 'ROLE_MANAGER'),
 ('owner', 'ROLE_OWNER'),
 ('viewer', 'ROLE_VIEWER');
@@ -77,10 +77,10 @@ INSERT INTO `AdminType` (`name`, `role`) VALUES
 --
 
 INSERT INTO `OrganizationRole` (`organizationId`, `userId`, `name`, `createdDate`) VALUES
-(2, 1, 'manager', '2020-02-07 16:31:38'),
+(2, 3, 'manager', '2020-02-07 16:31:38'),
 (1, 2, 'viewer', '2020-03-17 16:31:38'),
-(2, 1, 'owner', '2020-04-24 14:33:50'),
-(2, 2, 'viewer', '2020-02-04 16:35:23');
+(2, 4, 'owner', '2020-04-24 14:33:50'),
+(2, 2, 'admin', '2020-02-04 16:35:23');
 
 --
 -- Dump dei dati per la tabella `userdata`
