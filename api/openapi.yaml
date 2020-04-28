@@ -79,9 +79,22 @@ paths:
             application/json:
               schema:
                 $ref: ./model/Organization.v1.yaml
-          description: Ok. The response contains all the informations of the specific organization.
+          description: Ok. The response contains all the public information on the specific organization.
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - The requested organization does not exist
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Read an organization's information."
@@ -118,17 +131,8 @@ paths:
       description: Delete the specified place. Operation reserved only to the managers and up.
       operationId: deletePlace
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - A place has been deleted with success.
+        '204':
+          description: No Content
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -184,6 +188,10 @@ paths:
                     $ref: ./model/PlaceData.v1.yaml
         '400':
           description: Bad Request
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Get all the information about a specific place in a specific organization.
@@ -422,17 +430,8 @@ paths:
                 - email
               type: object
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - The new password has been replaced with success.
+        '204':
+          description: No Content
         '400':
           content:
             application/json:
@@ -457,19 +456,14 @@ paths:
       description: Request to delete a user and its data.
       operationId: delete-user-userId
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - An user has been removed by Stalker.
+        '204':
+          description: No Content
         '400':
           description: Bad Request
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete a user from Stalker.
@@ -490,6 +484,10 @@ paths:
                     $ref: ./model/UserData.v1.yaml
         '400':
           description: Bad Request
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Update a user's data."
@@ -526,19 +524,14 @@ paths:
       description: Send a logout request.
       operationId: post-user-logout
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - User disconnected by Stalker.
+        '204':
+          description: No Content
         '400':
           description: Bad Request
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Create a logout request for a user.
@@ -587,8 +580,10 @@ paths:
       summary: Delete a user connection to an organization.
       operationId: delete-user-userId-organizations-connection
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -597,9 +592,11 @@ paths:
                   message:
                     type: string
                     enum:
-                      - User disconnected.
-        '400':
-          description: Bad Request
+                      - The requested connection does not exist.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Request the disconnection of a user from an organization.
@@ -731,10 +728,6 @@ paths:
                   - message
                 type: object
           description: Bad Request
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       security: []
@@ -778,7 +771,11 @@ paths:
         - stalker web app
       responses:
         '204':
-          description: No Content (not implemented yet)
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-report
