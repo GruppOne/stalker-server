@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Value;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.Organization;
 import tech.gruppone.stalker.server.repository.OrganizationRepository;
@@ -39,5 +41,11 @@ public class OrganizationController {
   @DeleteMapping("/{id}")
   public Mono<Organization> deleteOrganizationById(@PathVariable Long id){
     return organizationRepository.delete(id);
+  }
+
+
+  @GetMapping("/{id}/users/connection")
+  public Flux<User> getUsersConnectedByOrganizationId(@PathVariable Long id){
+    return organizationRepository.findAllusers(id);
   }
 }
