@@ -6,6 +6,8 @@ properties:
     type: string
     format: email
     example: mario.rossi@example.org
+  password:
+    type: string  
   firstName:
     type: string
     example: Mario
@@ -19,7 +21,8 @@ properties:
   creationDate:
     type: string
 required:
+  - email
   - firstName
   - lastName
   - birthDate
-  - email
+  - password
