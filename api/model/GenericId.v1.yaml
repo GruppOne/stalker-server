@@ -1,5 +1,7 @@
 type: integer
-title: GenericId
+title: Generic Id
 description: An unsigned integer
-format: int32
+format: int64
+minimum: 0
+exclusiveMinimum: true
 example: 1
