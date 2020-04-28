@@ -130,9 +130,9 @@ paths:
                     enum:
                       - A place has been deleted with success.
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete a place.
@@ -161,9 +161,9 @@ paths:
                   place:
                     $ref: ./model/PlaceData.v1.yaml
         '401':
-          $ref: '#/components/responses/Ok'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Update a place's data."
@@ -233,9 +233,9 @@ paths:
                   places:
                     $ref: ./model/PlaceData.v1.yaml
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Get all the places of a specific organization.
@@ -259,19 +259,19 @@ paths:
                 type: object
           description: OK
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Read the list of users connected to an organization.
       tags: []
     parameters:
       - $ref: '#/components/parameters/organizationId'
-  '/organization/{organizationId}/users/role':
+  '/organization/{organizationId}/user/{userId}/role':
     delete:
       description: Delete an existing role for a user.
-      operationId: delete-organization-organizationId-users-role
+      operationId: delete-organization-organizationId-user-role
       requestBody:
         content:
           application/json:
@@ -281,21 +281,12 @@ paths:
                   $ref: ./model/OrganizationRole.v1.yaml
               type: object
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - It has been removed a role for an user.
-          description: OK
+        '204':
+          description: No Content
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete a role for a user.
@@ -303,9 +294,10 @@ paths:
         - stalker web app
     parameters:
       - $ref: '#/components/parameters/organizationId'
+      - $ref: '#/components/parameters/userId'
     post:
       description: Add a new role for a user.
-      operationId: post-organization-organizationId-users-role
+      operationId: post-organization-organizationId-user-role
       requestBody:
         content:
           application/json:
@@ -316,20 +308,11 @@ paths:
               type: object
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - An user has a new role.
           description: OK
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Create a role for a user in an organization.
@@ -399,8 +382,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./model/User.v1.yaml
-          description: "Ok. The response contains the authenticated user's data."
+                type: object
+                properties:
+                  jwt:
+                    type: string
+                    description: "The JWT authorizing this user's future operations."
+          description: OK
         '401':
           content:
             application/json:
@@ -421,7 +408,7 @@ paths:
         - stalker web app
   /user/password/recovery:
     post:
-      description: Request password recovery for an email.
+      description: "Request a link to recover a user's password."
       operationId: post-user-password-recovery
       requestBody:
         content:
@@ -522,9 +509,9 @@ paths:
                   user:
                     $ref: ./model/User.v1.yaml
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Get information of a specific user.
@@ -657,6 +644,8 @@ paths:
                     type: string
                 type: object
           description: Unauthorized
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Create a request to connect a user to an organization.
@@ -670,13 +659,14 @@ paths:
         '204':
           description: No Content (not implemented yet)
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Read a user's visited places history."
-      tags: []
+      tags:
+        - stalker mobile app
     parameters:
       - $ref: '#/components/parameters/userId'
   /users:
@@ -696,17 +686,18 @@ paths:
                 type: object
           description: Ok.
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Read all users.
       tags:
         - stalker web app
+  /user:
     post:
       description: Create a new user.
-      operationId: post-users
+      operationId: post-user
       requestBody:
         content:
           application/json:
@@ -741,9 +732,9 @@ paths:
                 type: object
           description: Bad Request
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
       security: []
@@ -783,7 +774,8 @@ paths:
       - $ref: '#/components/parameters/organizationId'
     get:
       summary: Read an organizational report.
-      tags: []
+      tags:
+        - stalker web app
       responses:
         '204':
           description: No Content (not implemented yet)
@@ -791,9 +783,6 @@ paths:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-report
       description: 'Get a report detailing user accesses, time spent at each place and most frequented places. Optional feature.'
-security:
-  - AdminKey: []
-  - bearerAuth: []
 components:
   schemas:
     AuthenticationError:
@@ -876,25 +865,10 @@ components:
           schema:
             $ref: '#/components/schemas/UnexpectedError'
   securitySchemes:
-    AdminKey:
-      type: apiKey
-      in: header
-      name: STALKER-ADMIN-API-KEY
-    bearerAuth:
+    JWT:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: ''
-    Oauth scoped authorizations:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: 'http://localhost:11111/authorize'
-          tokenUrl: ''
-          scopes:
-            user: "a user's authorized operations"
-            viewer: "a viewer's authorized operations"
-            manager: "a manager's authorized operations"
-            owner: "an owner's authorized operations"
-          refreshUrl: 'http://localhost:11111/refresh'
-      description: "Stalker's server API uses OAuth 2 in order to manage authorizations"
+      description: The token is sent through the Authorization header with Bearer schema.
+security:
+  - JWT: []

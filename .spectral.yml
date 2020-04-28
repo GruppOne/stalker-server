@@ -1,25 +1,25 @@
 extends:
-  - - 'spectral:oas'
+  - - "spectral:oas"
     - all
 rules:
   required-unauthorized-response:
-    description: if this operation has a security scheme the 401 Unauthorized response is probably needed. Careful for false positives!
-    given: $.paths.*[*].responses
+    description: "if this operation has a security scheme the 401 Unauthorized response is probably needed. Careful for false positives!"
+    given: "$.paths.*[*].responses"
     recommended: true
     severity: hint
     then:
       field: "401"
       function: truthy
   required-forbidden-response:
-    description: if this operation has a security scheme the 403 Forbidden response is probably needed. Careful for false positives!
-    given: $.paths.*[*].responses
+    description: "if this operation has a security scheme the 403 Forbidden response is probably needed. Careful for false positives!"
+    given: "$.paths.*[*].responses"
     recommended: true
     severity: hint
     then:
       field: "403"
       function: truthy
   summary-approved-verbs:
-    description: Operation `summary` should use a standard verb (Create, Read, Update, Delete) at the beginning.
+    description: "Operation `summary` should use a standard verb (Create, Read, Update, Delete) at the beginning."
     given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]"
     recommended: true
     type: style
@@ -61,12 +61,12 @@ rules:
     description: Require 3-part Semantic Versions as the spec versions
     severity: error
     recommended: true
-    message: 'Specs should follow semantic versioning. {{value}} is not a valid version.'
+    message: "Specs should follow semantic versioning. {{value}} is not a valid version."
     given: $.info.version
     then:
       function: pattern
       functionOptions:
-        match: '^([0-9]+.[0-9]+.[0-9]+)$'
+        match: "^([0-9]+.[0-9]+.[0-9]+)$"
   oas3-operation-security-defined: error
   oas3-parameter-description: error
   oas3-server-not-example.com: error

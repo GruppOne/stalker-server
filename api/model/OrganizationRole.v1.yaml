@@ -2,9 +2,9 @@ title: OrganizationRole
 type: object
 properties:
   userId:
-    type: integer
+    $ref: ./GenericId.v1.yaml
   organizationId:
-    type: integer
+    $ref: ./GenericId.v1.yaml
   role:
     type: string
 required:
