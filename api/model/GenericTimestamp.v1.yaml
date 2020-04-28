@@ -1,0 +1,7 @@
+type: integer
+title: UNIX Timestamp in milliseconds
+description: A UNIX timestamp expressed in milliseconds.
+format: int64
+example: 1588095817512
+minimum: 0
+exclusiveMinimum: false

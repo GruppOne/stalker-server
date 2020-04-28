@@ -3,9 +3,7 @@ type: object
 description: "Specifics of a user's current location relative to the places monitored by organizations they're subscribed to."
 properties:
   timestamp:
-    type: string
-    format: date-time
-    example: '2020-04-07T13:06:23+02:00'
+    $ref: ./GenericTimestamp.v1.yaml
   userId:
     $ref: ./GenericId.v1.yaml
   anonymous:
