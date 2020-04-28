@@ -27,12 +27,10 @@ properties:
   isPrivate:
     type: boolean
     example: false
-  creationDate:
-    type: string
-    format: date-time
-  lastChangeDate:
-    type: string
-    format: date-time
+  creationDateTime:
+    $ref: ./GenericTimestamp.v1.yaml
+  lastChangeDateTime:
+    $ref: ./GenericTimestamp.v1.yaml
 required:
   - name
   - description

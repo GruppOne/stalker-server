@@ -6,10 +6,8 @@ properties:
     $ref: ./GenericId.v1.yaml
   userId:
     $ref: ./GenericId.v1.yaml
-  creationDate:
-    type: string
-    format: date-time
-    example: '2020-02-12T12:13:14+01:00'
+  creationDateTime:
+    $ref: ./GenericTimestamp.v1.yaml
 required:
   - organizationId
   - userId
