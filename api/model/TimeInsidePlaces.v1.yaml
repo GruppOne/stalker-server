@@ -1,0 +1,21 @@
+title: TimeInsideOrganizations
+type: object
+properties:
+  currentPlaces:
+    type: array
+    uniqueItems: true
+    items:
+      type: object
+      properties:
+        timeInside:
+          type: number
+        organizationId:
+          $ref: ./GenericId.v1.yaml
+        placeId:
+          $ref: ./GenericId.v1.yaml
+      required:
+        - timeInside
+        - organizationId
+        - placeId
+required:
+  - currentPlaces
