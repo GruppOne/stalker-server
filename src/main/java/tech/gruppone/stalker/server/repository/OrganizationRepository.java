@@ -31,7 +31,7 @@ public interface OrganizationRepository extends ReactiveCrudRepository<Organizat
 
 
   @Modifying
-  @Query("select u.email from Users u,Connections c where c.organizationId = :id and c.userId = u.id");
+  @Query("select u.email from Users u,Connections c where c.organizationId = :id and c.userId = u.id")
   public Flux<User> findAllusers(Long id);
 
 }
