@@ -100,6 +100,8 @@ processResources {
 ext {
   mysqlRootPassword = "${env.MYSQL_ROOT_PASSWORD.orElse("password")}"
   influxdbAdminPassword = "${env.INFLUXDB_ADMIN_PASSWORD.orElse("password")}"
+
+  emailAccountPassword = "${env.EMAIL_ACCOUNT_PASSWORD}"
 }
 
 tasks.withType(JavaCompile) {
