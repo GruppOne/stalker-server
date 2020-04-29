@@ -14,7 +14,6 @@ public interface OrganizationRepository extends ReactiveCrudRepository<Organizat
   @Query("select * from Organizations")
   public Flux<Organization> findAll();
 
-
   @Query("select * from Organizations o where o.id = :id")
   public Mono<Organization> findById(Long id);
 

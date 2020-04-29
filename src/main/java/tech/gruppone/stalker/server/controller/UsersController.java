@@ -20,6 +20,7 @@ public class UsersController {
 
   @GetMapping
   public Flux<User> getUsers() {
+    //TODO solve the problem of null fields
     return userRepository.findAll();
   }
 

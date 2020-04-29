@@ -15,19 +15,14 @@ public class User {
   @Id
   @NonNull
   private Long id;
-
   @NonNull
   private String email;
-
   @NonNull
   private String password;
-
   @NonNull
   private String firstName;
-
   @NonNull
   private String lastName;
-
   @NonNull
   @JsonDeserialize(using = LocalDateDeserializer.class)
   @JsonSerialize(using = LocalDateSerializer.class)

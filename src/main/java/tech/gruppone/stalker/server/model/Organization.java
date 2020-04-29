@@ -5,11 +5,6 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import lombok.NonNull;
 import lombok.Singular;
-import lombok.Value;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-// TODO should builder be removed? do we use it anywhere but in tests?
 
 public class Organization {
 
@@ -19,10 +14,9 @@ public class Organization {
   private String name;
   @NonNull
   private String description;
-
   @Singular
   private List<Place> places = new ArrayList<Place>();
-
+  // LdapConfiguration ldapConfiguration;
   boolean isPrivate;
 
   public Long getId(){
@@ -46,23 +40,5 @@ public class Organization {
   public void setDescription(String description){
     this.description = description;
   }
-
-
-//  LdapConfiguration ldapConfiguration;
-
-//  @Builder
-//  @Data
-//  public static class LdapConfiguration {
-//
-//    @NonNull
-//    private final URL host;
-//    @NonNull
-//    private final String username;
-//    @NonNull
-//    private final String password;
-//  }
-
-//  Timestamp createdDate;
-//  Timestamp lastModifiedDate;
 
 }
