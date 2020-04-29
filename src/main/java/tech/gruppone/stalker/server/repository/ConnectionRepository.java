@@ -1,19 +1,13 @@
 package tech.gruppone.stalker.server.repository;
 
-import org.springframework.data.r2dbc.repository.*;
+import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.Connection;
+import reactor.core.publisher.Flux;
+import tech.gruppone.stalker.server.model.OrganizationData;
 
-public interface ConnectionRepository extends ReactiveCrudRepository<Connection, Long> {
+public interface ConnectionRepository extends ReactiveCrudRepository<OrganizationData, Long> {
 
-  @Modifying
-  @Query("insert into Connections (organizationId, userId) values (:organizationId, :userId)")
-  public Mono<Connection> createConnectionById(Long organizationId, Long userId);
-
-  @Modifying
-  @Query("delete from Connections where organizationId = :organizationId and userId = :id ")
-  public Mono<Void> deleteConnectionById(Long organizationId, Long userId);
-
+  @Query("select o.id, o.name, o.description from Connections c, Organizations o where c.organizationId = o.id and c.userId = :id")
+  public Flux<OrganizationData> findConnectedOrganizationsByUserId(Long id);
 }

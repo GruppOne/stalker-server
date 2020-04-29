@@ -10,7 +10,7 @@ import tech.gruppone.stalker.server.model.User;
 
 public interface UserRepository extends ReactiveCrudRepository<User,Long> {
 
-  @Query("select * from Users left join UserData on Users.id = UserData.userId")
+  @Query("select u.id, u.email, d.firstName, d.lastName, d.birthDate from Users u, UserData d where u.id = d.userId")
   public Flux<User> findAll();
 
   @Query("select * from Users u where u.id = :id")

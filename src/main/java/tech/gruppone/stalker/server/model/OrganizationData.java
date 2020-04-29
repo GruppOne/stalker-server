@@ -1,24 +1,22 @@
 package tech.gruppone.stalker.server.model;
 
-import java.net.URL;
 import org.springframework.data.annotation.Id;
+
 import lombok.NonNull;
 import lombok.Value;
 
+// Model created to reflect exactly keys of the json which api receives by app and web app
 @Value
-public class LdapConfiguration {
+public class OrganizationData {
 
   @Id
   @NonNull
   Long id;
 
   @NonNull
-  URL host;
+  String name;
 
   @NonNull
-  String username;
-
-  @NonNull
-  String password;
+  String description;
 
 }
