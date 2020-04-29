@@ -1,0 +1,23 @@
+@startuml ConnectionController
+class Connection {
+  + ConnectionRepository connectionRepository
+  ==methods==
+
+  + Flux<OrganizationData> getConnectedOrganizationsByUserId(Long id <<final>>)
+}
+
+class Connections {
+  + ConnectionsRepository connectionsRepository
+  ==methods==
+
+  + Mono<AppConnection> connectUserToOrganizationById(
+    Long userId <<final>>,
+    Long organizationId <<final>>
+    )
+  + Mono<Void> deleteUserConnectionById(
+    Long userId <<final>>,
+    Long organizationId <<final>>
+    )
+}
+
+@enduml

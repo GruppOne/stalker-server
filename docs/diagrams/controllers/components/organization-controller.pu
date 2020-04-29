@@ -1,0 +1,22 @@
+@startuml OrganizationController
+class OrganizationController {
+  + OrganizationRepository organizationRepository
+  ==methods==
+
+  + Mono<Organization> getOrganizationById(Long id)
+  + Mono<Organization> updateOrganizationById(
+    Long id,
+    String jsonString
+    )
+  + Mono<Organization> deleteOrganizationById(Long id)
+  + Flux<User> getUsersConnectedByOrganizationId(Long id)
+}
+
+class OrganizationsController {
+  + OrganizationRepository organizationRepository
+  ==methods==
+
+  + Flux<Organization> getOrganizations()
+  + Mono<Organization> createOrganization(String jsonString)
+}
+@enduml

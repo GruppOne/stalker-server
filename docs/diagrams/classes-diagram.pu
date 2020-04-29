@@ -1,0 +1,3 @@
+@startuml ClassesDiagram
+!include controllers/controller-diagram.pu
+@enduml

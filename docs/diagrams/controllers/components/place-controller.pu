@@ -1,0 +1,18 @@
+@startuml PlaceController
+class PlaceController {
+  + PlaceRepository placeRepository
+  ==methods==
+
+  + Mono<Place> getPlaces(Long orgId, Long id)
+  + Mono<Place> updatePlace(Long orgId, Long id, String jsonString)
+  + Mono<Place> deletePlace(Long orgId, Long id)
+}
+
+class PlacesController {
+  + PlaceRepository placeRepository
+  ==methods==
+
+  + Mono<Place> createPlace(Long orgId, String jsonString)
+  + Flux<Place> getPlaces(Long orgId)
+}
+@enduml

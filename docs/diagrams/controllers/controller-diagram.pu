@@ -1,0 +1,6 @@
+@startuml ControllerDiagram
+!include components/connection-controller.pu
+!include components/organization-controller.pu
+!include components/place-controller.pu
+!include components/user-controller.pu
+@enduml

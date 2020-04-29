@@ -1,0 +1,30 @@
+@startuml UserController
+class UserController {
+  - UserRepository userRepository
+  ==methods==
+
+  + Mono<User> getUserById(Long id <<final>>)
+  + Mono<User> updateUserById(
+    Long id <<final>>,
+    String jsonString <<final>>
+    )
+  + Mono<Void> deleteUserById(Long id <<final>>)
+}
+
+class UsersController {
+  - UserRepository userRepository
+  ==methods==
+
+  + Flux<User> getUsers()
+  + Mono<User> createUser(String jsonString)
+}
+
+class RecoveryPasswordController {
+  - UserRepository userRepository
+  - SmtpMailSenderConfiguration smtpMailSender
+  - String EMAIL_BODY <<static>> <<final>>
+  ==methods==
+
+  + void recoveryUserPassword(String jsonString <<final>>)
+}
+@enduml
