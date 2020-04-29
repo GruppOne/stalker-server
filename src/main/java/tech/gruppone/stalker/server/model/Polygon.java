@@ -18,6 +18,7 @@ public class Polygon {
     double longitude;
   }
 
+  // FIXME this cannot be a set. when we discussed how leaflet and SQL manage polygons we decided that we need to keep the first and last point identical, which means it needs to be a list (no duplicated elements in a set). Plus, the points need to be ordered and a set isn't ordered
   public Set<GeographicalPoint> getGeographicalPoints(){
     return this.geographicalPoints;
   }

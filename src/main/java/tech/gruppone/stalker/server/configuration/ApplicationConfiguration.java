@@ -20,6 +20,7 @@ public class ApplicationConfiguration {
     this.version = version;
   }
 
+  // TODO move this to another class called VersionController using dependency injection to get config values
   @GetMapping("/version")
   public Mono<String> currentServerVersion() {
 

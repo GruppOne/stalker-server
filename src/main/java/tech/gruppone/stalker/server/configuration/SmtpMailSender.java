@@ -8,22 +8,25 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+// FIXME this class should either be marked with @Configuration and renamed to SmtpMailSenderConfiguration or moved to another place
 @Component
 public class SmtpMailSender {
 
   @Autowired
   private JavaMailSender javaMailSender;
 
-	public void send(String to, String subject, String body) throws MessagingException {
-		MimeMessage message = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper;
-		// SSL Certhificate.
-		helper = new MimeMessageHelper(message, true);
-		// Multipart messages.
-		helper.setSubject(subject);
-		helper.setTo(to);
-		helper.setText(body, true);
-		javaMailSender.send(message);
+  public void send(String to, String subject, String body) throws MessagingException {
+    MimeMessage message = javaMailSender.createMimeMessage();
+
+    // SSL Certificate.
+    MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+    // Multipart messages.
+    helper.setSubject(subject);
+    helper.setTo(to);
+    helper.setText(body, true);
+
+    javaMailSender.send(message);
   }
 
 }

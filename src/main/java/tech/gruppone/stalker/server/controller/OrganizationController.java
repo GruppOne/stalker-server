@@ -46,6 +46,6 @@ public class OrganizationController {
 
   @GetMapping("/{id}/users/connection")
   public Flux<User> getUsersConnectedByOrganizationId(@PathVariable Long id){
-    return organizationRepository.findAllusers(id);
+    return organizationRepository.findAllUsers(id);
   }
 }
