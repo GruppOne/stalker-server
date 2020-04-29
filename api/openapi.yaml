@@ -239,7 +239,11 @@ paths:
                 type: object
                 properties:
                   places:
-                    $ref: ./model/PlaceData.v1.yaml
+                    type: array
+                    items:
+                      $ref: ./model/Place.v1.yaml
+                required:
+                  - places
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -270,34 +274,6 @@ paths:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-report
       description: 'Get a report detailing user accesses, time spent at each place and most frequented places. Optional feature.'
-  '/organization/{organizationId}/user/{userId}':
-    get:
-      summary: "Read a connected user's data."
-      operationId: get-organization-organizationId-user-userId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  userData:
-                    $ref: ./model/UserData.v1.yaml
-                required:
-                  - userData
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        default:
-          description: ''
-      description: "Get a connected user's data."
-      tags:
-        - stalker web app
-    parameters:
-      - $ref: '#/components/parameters/organizationId'
-      - $ref: '#/components/parameters/userId'
   '/organization/{organizationId}/user/{userId}/role':
     delete:
       description: Delete an existing role for a user.
@@ -405,8 +381,9 @@ paths:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
-      description: Get information of a specific user.
+      description: Get information on a specific user.
       tags:
+        - stalker mobile app
         - stalker web app
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -555,28 +532,15 @@ paths:
       tags:
         - stalker mobile app
       operationId: get-user-userId-time-inside
-      summary: Read the time spent inside a place.
-      description: Get the time spent inside a place belonging to an organization.
+      summary: Read the time since a user entered inside some places.
+      description: 'Get a list of all the places a user is currently inside, and the time since he entered in each place.'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  timeInside:
-                    type: number
-                    minimum: 0
-                    exclusiveMinimum: true
-                  organizationId:
-                    $ref: ./model/GenericId.v1.yaml
-                  placeId:
-                    $ref: ./model/GenericId.v1.yaml
-                required:
-                  - timeInside
-                  - organizationId
-                  - placeId
+                $ref: ./model/TimeInsidePlaces.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -702,6 +666,7 @@ paths:
                   jwt:
                     type: string
                     description: "The JWT authorizing this user's future operations."
+                    example: eyJhbGciOiJIUzI1NiJ9.eyJvcmdhbml6YXRpb25zIjpbeyJvcmdhbml6YXRpb25JZCI6Miwicm9sZSI6Ik1hbmFnZXIifSx7Im9yZ2FuaXphdGlvbklkIjozLCJyb2xlIjoiVmlld2VyIn1dLCJzdWIiOiJ1c2VyIiwiaWF0IjoxNTg3OTEwNDI3LCJleHAiOjE1OTA5MTA0Mjd9.xOKpTUzPDMmjIffL7uUNJ48VY5bUun2rZDD7nmK9zt4
           description: OK
         '401':
           content:

@@ -6,7 +6,7 @@ rules:
     description: 'If this operation has a security scheme the 401 Unauthorized response is probably needed. Careful for false positives!'
     given: '$.paths.*[*].responses'
     recommended: true
-    severity: info
+    severity: warn
     then:
       field: '401'
       function: truthy
@@ -14,7 +14,7 @@ rules:
     description: 'If this operation has a security scheme the 403 Forbidden response is probably needed. Careful for false positives!'
     given: '$.paths.*[*].responses'
     recommended: true
-    severity: info
+    severity: warn
     then:
       field: '403'
       function: truthy
@@ -90,9 +90,6 @@ rules:
   oas2-unused-definition: error
 except:
   'api/openapi.yaml#/paths/~1organizations/get/responses':
-    - required-forbidden-response
-  'api/openapi.yaml#/paths/~1user/post/responses':
-    - required-unauthorized-response
     - required-forbidden-response
   'api/openapi.yaml#/paths/~1user~1login/post/responses':
     - required-forbidden-response
