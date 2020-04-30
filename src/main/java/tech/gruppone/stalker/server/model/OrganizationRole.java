@@ -8,15 +8,16 @@ import lombok.NonNull;
 import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@Table("OrganizationRole")
 public class OrganizationRole {
 
-  @NonNull  Long organizationId;
-  @NonNull Long userId;
+  @NonNull  String organizationId;
+  @NonNull String userId;
   @NonNull String name;
   @NonNull String createdDate;
 
