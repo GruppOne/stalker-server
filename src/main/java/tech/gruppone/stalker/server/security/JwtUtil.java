@@ -48,15 +48,10 @@ public class JwtUtil{
    }
 
    // this function creates a jwt token. It is not complete
-   public String createToken(String username, Map <String, Object> claims){
+   public String createToken(Long id, String username, Map <String, List<UserRoles>> claims){
      Date issuedAt = new Date(); // dummy date
      Date expirationAt= new Date(issuedAt.getTime() + Long.parseLong(expirationTime));
-     List<UserRoles> t = new ArrayList<>();
-     /*t.add(new UserRoles(2, "ROLE_MANAGER"));
-     t.add(new UserRoles(3, "ROLE_VIEWER"));*/
-     Map <String, List<UserRoles> > xd= new HashMap<>();
-     //xd.put("organizations", t);
-     return Jwts.builder().setClaims(xd).setSubject(username).
+     return Jwts.builder().setIssuer(Long.toString(id)).setClaims(claims).setSubject(username).
        setIssuedAt(issuedAt).setExpiration(expirationAt).signWith(getEncodedKey()).compact();
    }
 

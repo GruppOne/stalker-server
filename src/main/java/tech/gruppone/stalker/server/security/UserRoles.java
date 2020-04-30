@@ -14,8 +14,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 public class UserRoles {
 
-;
-    private Long organizationId;
+    private int organizationId;
 
     private String role;
 }
