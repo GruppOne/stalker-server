@@ -23,10 +23,15 @@ services:
     ports:
       - "8086:8086"
 
-  # # FIXME not working
-  # tsdb-gui:
-  #   image: chronograf:alpine
-  #   depends_on:
-  #     - tsdb
-  #   ports:
-  #     - "8889:8888"
+  tsdb-gui:
+    image: chronograf:1.8-alpine
+    depends_on:
+      - tsdb
+
+    environment:
+      INFLUXDB_URL: http://tsdb:8086
+      INFLUXDB_USERNAME: root
+      INFLUXDB_PASSWORD: ${INFLUXDB_ADMIN_PASSWORD:?err}
+
+    ports:
+      - "8888:8888"
