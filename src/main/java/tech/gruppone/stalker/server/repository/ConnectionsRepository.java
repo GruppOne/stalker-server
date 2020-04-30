@@ -9,11 +9,11 @@ import tech.gruppone.stalker.server.model.AppConnection;
 public interface ConnectionsRepository extends ReactiveCrudRepository<AppConnection, Long> {
 
   @Modifying
-  @Query("insert into Connections (organizationId, userId) values (:organizationId, :userId)")
+  @Query("INSERT INTO Connections (organizationId, userId) VALUES (:organizationId, :userId)")
   public Mono<AppConnection> postUserToOrganizationConnection(Long organizationId, Long userId);
 
   @Modifying
-  @Query("delete from Connections where organizationId = :organizationId and userId = :id ")
+  @Query("DELETE FROM Connections WHERE organizationId = :organizationId AND userId = :id")
   public Mono<Void> deleteUserToOrganizationConnection(Long organizationId, Long userId);
 
 }

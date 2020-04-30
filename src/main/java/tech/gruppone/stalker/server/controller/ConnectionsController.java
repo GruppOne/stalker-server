@@ -12,19 +12,19 @@ import tech.gruppone.stalker.server.repository.ConnectionsRepository;
 
 @RestController
 @Value
-@RequestMapping("/user")
+@RequestMapping("/user/{userId}/organization/{organizationId}/connection")
 public class ConnectionsController {
 
   private ConnectionsRepository connectionsRepository;
 
   //TODO how to guarantee LDAP authentication if the organization corrensponds to a private organization?
-  @PostMapping("/{userId}/organization/{organizationId}/connection")
-  public Mono<AppConnection> connectUserToOrganizationById(@PathVariable("userId") final Long userId, @PathVariable("organizationId") final Long organizationId/*, @RequestBody String jsonString*/) throws IOException{
+  @PostMapping
+  public Mono<AppConnection> connectUserToOrganizationById(@PathVariable("userId") final Long userId, @PathVariable("organizationId") final Long organizationId, @RequestBody String jsonString) throws IOException{
     // Connection connection = new ObjectMapper().readValue(jsonString, Connection.class);
     return connectionsRepository.postUserToOrganizationConnection(organizationId, userId);
   }
 
-  @DeleteMapping("/{userId}/organization/{organizationId}/connection")
+  @DeleteMapping
   public Mono<Void> deleteUserConnectionById(@PathVariable("userId") final Long userId, @PathVariable("organizationId") final Long organizationId) {
     return connectionsRepository.deleteUserToOrganizationConnection(organizationId, userId);
   }

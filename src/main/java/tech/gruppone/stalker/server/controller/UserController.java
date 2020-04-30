@@ -35,13 +35,13 @@ public class UserController {
   }
 
   //TODO Perhaps useless, because it's not a server responsability, but an app responsability. What do you say??
-  @PostMapping("/{id}/logout")
+  @PostMapping("/logout")
   public void logoutUser(@PathVariable final Long id){
     throw new UnsupportedOperationException("NOT IMPLEMENTED YET");
   }
 
   //TODO InfluxDB
-  @GetMapping("/{id}/places/history")
+  @GetMapping("/places/history")
   public void getHistoryUser(@PathVariable final Long id){
     throw new UnsupportedOperationException("NOT IMPLEMENTED YET");
   }

@@ -11,27 +11,27 @@ import tech.gruppone.stalker.server.model.Organization;
 
 public interface OrganizationRepository extends ReactiveCrudRepository<Organization,Long> {
 
-  @Query("select * from Organizations")
+  @Query("SELECT * FROM Organizations")
   public Flux<Organization> findAll();
 
-  @Query("select * from Organizations o where o.id = :id")
+  @Query("SELECT * FROM Organizations o WHERE o.id = :id")
   public Mono<Organization> findById(Long id);
 
   @Modifying
-  @Query("update Organizations o set o.name = :name, o.description = :description where o.id = :id")
-  public Mono<Organization> update(Long id, String name, String description);
+  @Query("UPDATE Organizations o SET o.name = :name, o.description = :description WHERE o.id = :id")
+  public Mono<Organization> updateOrganizationById(Long id, String name, String description);
 
   @Modifying
-  @Query("insert into Organizations (name, description) values (:name, :description)")
+  @Query("INSERT INTO Organizations (name, description) VALUES (:name, :description)")
   public Mono<Organization> create(String name, String description);
 
   @Modifying
-  @Query("delete from Organizations o where o.id = :id")
+  @Query("DELETE FROM Organizations o WHERE o.id = :id")
   public Mono<Organization> delete(Long id);
 
 
   @Modifying
-  @Query("select u.email from Users u,Connections c where c.organizationId = :id and c.userId = u.id")
+  @Query("SELECT u.email FROM Users u,Connections c WHERE c.organizationId = :id AND c.userId = u.id")
   public Flux<User> findAllUsers(Long id);
 
 }

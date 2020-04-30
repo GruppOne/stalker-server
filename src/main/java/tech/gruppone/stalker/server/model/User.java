@@ -6,15 +6,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.springframework.data.annotation.Id;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Value;
 
 //TODO rewrite class in a right way
-@Value
+@Data
+@NoArgsConstructor
 public class User {
 
   @Id
-  @NonNull
   Long id;
 
   @NonNull

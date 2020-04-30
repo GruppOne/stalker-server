@@ -19,33 +19,33 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.Organization;
 import tech.gruppone.stalker.server.repository.OrganizationRepository;
 
-@RequestMapping("/organization")
+@RequestMapping("/organization/{id}")
 @RestController
 @Value
 public class OrganizationController {
 
   OrganizationRepository organizationRepository;
 
-  @GetMapping("/{id}")
+  @GetMapping
   public Mono<Organization> getOrganizationById(@PathVariable Long id) {
     return organizationRepository.findById(id);
   }
 
-  @PutMapping("/{id}")
-  public Mono<Organization> updateOrganizationById(@PathVariable Long id, @RequestBody String jsonString) throws IOException{
+  @PutMapping
+  public Mono<Organization> putOrganizationById(@PathVariable Long id, @RequestBody String jsonString) throws IOException{
     Organization org = new ObjectMapper().readValue(jsonString, Organization.class);
-    return organizationRepository.update(id, org.getName(), org.getDescription());
+    return organizationRepository.updateOrganizationById(id, org.getName(), org.getDescription());
   }
 
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping
   public Mono<Organization> deleteOrganizationById(@PathVariable Long id){
     return organizationRepository.delete(id);
   }
 
 
-  @GetMapping("/{id}/users/connections")
-  public Flux<User> getUsersConnectedByOrganizationId(@PathVariable Long id){
+  @GetMapping("/users/connections")
+  public Flux<User> getUsersConnectionsToOrganizationById(@PathVariable Long id){
     return organizationRepository.findAllUsers(id);
   }
 }

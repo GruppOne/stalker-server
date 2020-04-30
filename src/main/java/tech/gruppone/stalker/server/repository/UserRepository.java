@@ -10,24 +10,24 @@ import tech.gruppone.stalker.server.model.User;
 
 public interface UserRepository extends ReactiveCrudRepository<User,Long> {
 
-  @Query("select u.id, u.email, d.firstName, d.lastName, d.birthDate from Users u, UserData d where u.id = d.userId")
-  public Flux<User> findAll();
+  @Query("SELECT u.id, u.email, d.firstName, d.lastName, d.birthDate FROM Users u, UserData d WHERE u.id = d.userId")
+  public Flux<User> findAllUsers();
 
-  @Query("select * from Users u where u.id = :id")
+  @Query("SELECT * FROM Users u WHERE u.id = :id")
   public Mono<User> findById(Long id);
 
-  @Query("select count(*) from Users where email = ':email'")
+  @Query("SELECT COUNT(*) FROM Users WHERE email = ':email'")
   public Mono<Integer> findByEmail(String email);
 
   @Modifying
-  @Query("insert into Users (email, password) values (:email, :password); insert into UserData (userId, firstName, lastName, birthDate) values (LAST_INSERT_ID(), :firstname, :lastname, :birthdate)")
+  @Query("INSERT INTO Users (email, password) VALUES (:email, :password); INSERT INTO UserData (userId, firstName, lastName, birthDate) VALUES (LAST_INSERT_ID(), :firstname, :lastname, :birthdate)")
   public Mono<User> createUser(String email, String password, String firstname, String lastname, LocalDate birthdate);
 
   @Modifying
-  @Query("update UserData u set u.firstName = :firstName, u.lastName = :lastName, u.birthDate = :birthdate, u.lastModifiedDate = now() where u.userId = :id")
+  @Query("UPDATE UserData u SET u.firstName = :firstName, u.lastName = :lastName, u.birthDate = :birthdate, u.lastModifiedDate = now() WHERE u.userId = :id")
   public Mono<User> updateUser(String firstName, String lastName, LocalDate birthdate, Long id);
 
-  @Query("delete Users,UserData from Users inner join UserData where Users.id = UserData.userId and UserData.userId = :id")
+  @Query("DELETE Users, UserData FROM Users INNER JOIN UserData WHERE Users.id = UserData.userId AND UserData.userId = :id")
   public Mono<Void> deleteUserById(Long id);
 
 }

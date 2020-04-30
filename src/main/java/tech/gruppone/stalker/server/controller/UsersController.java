@@ -22,9 +22,10 @@ public class UsersController {
   @GetMapping
   public Flux<User> getUsers() {
     //TODO solve the problem of null fields
-    return userRepository.findAll();
+    return userRepository.findAllUsers();
   }
 
+  //TODO veify if @RequestBody User user works
   @PostMapping
   public Mono<User> createUser(@RequestBody String jsonString) throws IOException{
     User user = new ObjectMapper().readValue(jsonString, User.class);

@@ -8,6 +8,6 @@ import tech.gruppone.stalker.server.model.OrganizationData;
 
 public interface ConnectionRepository extends ReactiveCrudRepository<OrganizationData, Long> {
 
-  @Query("select o.id, o.name, o.description from Connections c, Organizations o where c.organizationId = o.id and c.userId = :id")
+  @Query("SELECT o.id, o.name, o.description FROM Connections c, Organizations o WHERE c.organizationId = o.id AND c.userId = :id")
   public Flux<OrganizationData> findConnectedOrganizationsByUserId(Long id);
 }

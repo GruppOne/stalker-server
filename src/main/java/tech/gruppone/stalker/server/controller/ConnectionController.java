@@ -9,12 +9,15 @@ import tech.gruppone.stalker.server.repository.ConnectionRepository;
 
 @Value
 @RestController
+@RequestMapping("/user/{id}/organizations/connections")
 public class ConnectionController {
 
   private ConnectionRepository connectionRepository;
 
-  @GetMapping("/user/{id}/organizations/connections")
+  //TODO verify if @RequestBody Connection connection works
+  @GetMapping
   public Flux<OrganizationData> getConnectedOrganizationsByUserId(@PathVariable final Long id){
     return connectionRepository.findConnectedOrganizationsByUserId(id);
   }
+
 }

@@ -10,27 +10,24 @@ import tech.gruppone.stalker.server.model.Place;
 
 public interface PlaceRepository extends ReactiveCrudRepository<Place,Long> {
 
-  @Query("select p.name,CONVERT(ST_AsText(p.position), CHAR) as position,pd.address,pd.city,pd.state,pd.zipcode from Place p, PlaceData pd where p.organizationId = :orgId and p.id = pd.id")
-  public Flux<Place> findAll(Long orgId);
+  @Query("SELECT p.name, CONVERT(ST_AsText(p.position), CHAR) AS position,pd.address,pd.city,pd.state,pd.zipcode FROM Place p, PlaceData pd WHERE p.organizationId = :organizationId AND p.id = pd.id")
+  public Flux<Place> findAll(Long organizationId);
 
-
-  @Query("select p.name,CONVERT(ST_AsText(p.position), CHAR) as position,pd.address,pd.city,pd.state,pd.zipcode from Place p, PlaceData pd where p.organizationId = :orgId and p.id = pd.id and p.id = :id")
-  public Mono<Place> find(Long orgId,Long id);
-
-  @Modifying
-  @Query("insert into Place (name,position,organizationId) values (:name,ST_PolygonFromText(:positon),:orgId); SET @lastId := (select id from Place order by id DESC limit 1); insert into PlaceData (id,address,city,state,zipcode) values (@LastId,:address,:city,:state,:zipcode)")
-  public Mono<Place> create(String name,String position, Long orgId,String address,String city,String state, String zipcode);
+  @Query("SELECT p.name, CONVERT(ST_AsText(p.position), CHAR) AS position,pd.address,pd.city,pd.state,pd.zipcode FROM Place p, PlaceData pd WHERE p.organizationId = :organizationId AND p.id = pd.id AND p.id = :placeId")
+  public Mono<Place> find(Long organizationId, Long placeId);
 
   @Modifying
-  @Query("update Place pla,PlaceData pd set pla.name = :name, pd.address = :address, pd.city = :city, pd.state = :state, pd.zipcode = :zipcode, pla.position = ST_PolygonFromText(:positon) where pd.id = pla.id and pla.id = :id and pla.organizationId = :orgId")
-  //@Query("update Place pla,PlaceData pd, Polygon pol set pla.name = :name, pd.address = :address, pd.city = :city, pd.zipcode = :zipcode, pd.state = :state, where o.id = :id")
+  @Query("INSERT INTO Place (name,position,organizationId) VALUES (:name,ST_PolygonFROMText(:positon),:orgId); SET @lastId := (SELECT id FROM Place ORDER BY id DESC limit 1); INSERT INTO PlaceData (id,address,city,state,zipcode) VALUES (@LastId,:address,:city,:state,:zipcode)")
+  public Mono<Place> create(String name, String position, Long orgId, String address, String city, String state, String zipcode);
+
+  @Modifying
+  @Query("UPDATE Place pla,PlaceData pd SET pla.name = :name, pd.address = :address, pd.city = :city, pd.state = :state, pd.zipcode = :zipcode, pla.position = ST_PolygonFROMText(:position) WHERE pd.id = pla.id AND pla.id = :placeId AND pla.organizationId = :organizationId")
+  //@Query("UPDATE Place pla,PlaceData pd, Polygon pol SET pla.name = :name, pd.address = :address, pd.city = :city, pd.zipcode = :zipcode, pd.state = :state WHERE o.id = :id")
   //public Flux<Place> update(Long orgId,Long id, String name, String address, String city, String zipcode, String state);
-  public Mono<Place> update(String name,String address,String city,String state, String zipcode,String position, Long id, Long orgId);
-
+  public Mono<Place> update(String name, String address, String city, String state, String zipcode, String position, Long placeId, Long organizationId);
 
   @Modifying
-  @Query("delete from Place where organizationId = :orgId and id = :id")
-  //@Query("update Place pla,PlaceData pd, Polygon pol set pla.name = :name, pd.address = :address, pd.city = :city, pd.zipcode = :zipcode, pd.state = :state, where o.id = :id")
-  //public Flux<Place> update(Long orgId,Long id, String name, String address, String city, String zipcode, String state);
-  public Mono<Place> delete(Long ordId, Long id);
+  @Query("DELETE FROM Place WHERE organizationId = :organizationId AND id = :placeId")
+  public Mono<Place> deletePlaceById(Long organizationId, Long placeId);
+
 }
