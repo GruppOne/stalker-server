@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.models.api.response;
+package tech.gruppone.stalker.server.model.api.responses;
 
 public class PostUsersResponse {
 
