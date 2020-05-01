@@ -108,3 +108,6 @@ bin/
 lib/
 
 **/diagrams/img/
+
+## SonarLint intellij files
+.idea/sonarlint/

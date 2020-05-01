@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.UserDto;
-import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
 @AllArgsConstructor
@@ -39,5 +38,6 @@ public class UserController {
   public Mono<Void> deleteUserById(@PathVariable final Long userId) {
 
     return userRepository.deleteUserById(userId);
+
   }
 }

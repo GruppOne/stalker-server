@@ -1,44 +1,38 @@
 package tech.gruppone.stalker.server.controllers;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import lombok.Data;
+import lombok.Getter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.exceptions.NotImplementedException;
-import tech.gruppone.stalker.server.model.api.OrganizationDto;
-import tech.gruppone.stalker.server.services.OrganizationService;
+import tech.gruppone.stalker.server.model.Organization;
+import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("/organizations")
 @RestController
-@RequestMapping("/organization/{id}")
+// we need the class to be not final in order to enable PreAuthorize annotation
+@Data
 public class OrganizationController {
 
-  OrganizationService organizationService;
+  @Getter(AccessLevel.NONE)
+  private final OrganizationRepository organizationRepository;
 
-  @GetMapping
-  @ResponseStatus(HttpStatus.OK)
-  public Mono<OrganizationDto> getOrganizationById(@PathVariable long id) {
-    return organizationService.findById(id);
+
+  // TODO refactor this. it needs to return a valid json object: {"organizations":[...]}
+  @GetMapping("/all")
+  public Flux<Organization> getOrganizations() {
+
+    return organizationRepository.findAll();
   }
 
-  @PutMapping
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<OrganizationDto> putOrganizationById(@PathVariable long id) {
-    return Mono.error(NotImplementedException::new);
-  }
+  @GetMapping("/{id}")
+  public Mono<Organization> getOrganizationById(@PathVariable Long id) {
 
-  @DeleteMapping
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<OrganizationDto> deleteOrganizationById(@PathVariable long id) {
-    return Mono.error(NotImplementedException::new);
+    return organizationRepository.findById(id);
   }
 }

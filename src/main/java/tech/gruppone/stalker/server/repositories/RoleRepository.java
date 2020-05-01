@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.repository;
+package tech.gruppone.stalker.server.repositories;
 
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
