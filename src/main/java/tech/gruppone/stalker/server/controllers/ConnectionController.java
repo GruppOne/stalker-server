@@ -9,8 +9,8 @@ import reactor.core.publisher.Mono;
 // import lombok.extern.log4j.Log4j2;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
-import tech.gruppone.stalker.server.models.api.LdapConfiguration;
-import tech.gruppone.stalker.server.models.api.response.GetUserIdOrganizationsConnectionsResponse;
+import tech.gruppone.stalker.server.model.api.LdapConfiguration;
+import tech.gruppone.stalker.server.model.api.responses.GetUserIdOrganizationsConnectionsResponse;
 
 // @Log4j2
 @Value

@@ -1,9 +1,9 @@
-package tech.gruppone.stalker.server.models.api.response;
+package tech.gruppone.stalker.server.model.api.responses;
 
 import java.util.List;
 
 import lombok.Value;
-import tech.gruppone.stalker.server.models.api.User;
+import tech.gruppone.stalker.server.model.api.User;
 
 @Value
 public class GetUsersResponse {

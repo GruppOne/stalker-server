@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import lombok.Value;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
-import tech.gruppone.stalker.server.models.api.TimeInsidePlaces;
-import tech.gruppone.stalker.server.models.api.User;
-import tech.gruppone.stalker.server.models.api.request.PutUserIdRequest;
+import tech.gruppone.stalker.server.model.api.TimeInsidePlaces;
+import tech.gruppone.stalker.server.model.api.User;
+import tech.gruppone.stalker.server.model.api.requests.PutUserIdRequest;
 
 import tech.gruppone.stalker.server.repositories.UserRepository;
 

@@ -2,8 +2,6 @@ package tech.gruppone.stalker.server.controllers;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Value;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.models.api.Place;
+import tech.gruppone.stalker.server.model.api.Place;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @RequestMapping("/organization/{organizationId}/place/{placeId}")

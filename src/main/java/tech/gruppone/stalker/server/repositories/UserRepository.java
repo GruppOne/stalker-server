@@ -6,8 +6,8 @@ import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.models.api.User;
-import tech.gruppone.stalker.server.models.api.response.PostUsersResponse;
+import tech.gruppone.stalker.server.model.api.User;
+import tech.gruppone.stalker.server.model.api.responses.PostUsersResponse;
 
 public interface UserRepository extends ReactiveCrudRepository<User,Long> {
 

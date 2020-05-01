@@ -7,7 +7,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.models.api.Organization;
+import tech.gruppone.stalker.server.model.api.Organization;
 
 public interface OrganizationRepository extends ReactiveCrudRepository<Organization,Long> {
 

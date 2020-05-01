@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import tech.gruppone.stalker.server.configuration.SmtpMailSenderConfiguration;
-import tech.gruppone.stalker.server.models.api.UserData;
+import tech.gruppone.stalker.server.model.api.UserData;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Value

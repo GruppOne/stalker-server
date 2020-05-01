@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.models.api.Place;
+import tech.gruppone.stalker.server.model.api.Place;
 
 public interface PlaceRepository extends ReactiveCrudRepository<Place,Long> {
 

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import lombok.Value;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
-import tech.gruppone.stalker.server.models.api.request.PostUsersRequest;
-import tech.gruppone.stalker.server.models.api.response.GetUsersResponse;
-import tech.gruppone.stalker.server.models.api.response.PostUsersResponse;
+import tech.gruppone.stalker.server.model.api.requests.PostUsersRequest;
+import tech.gruppone.stalker.server.model.api.responses.GetUsersResponse;
+import tech.gruppone.stalker.server.model.api.responses.PostUsersResponse;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 // @Log4j2
