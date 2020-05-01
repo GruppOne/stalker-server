@@ -1,13 +1,15 @@
 package tech.gruppone.stalker.server.controllers;
 
-// import org.springframework.http.HttpStatus;
-// import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.HttpStatus;
 import java.io.IOException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import lombok.Value;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.exceptions.NotImplementedException;
+import tech.gruppone.stalker.server.models.api.TimeInsidePlaces;
 import tech.gruppone.stalker.server.models.api.User;
+import tech.gruppone.stalker.server.models.api.request.PutUserIdRequest;
+
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 // @Log4j2
@@ -18,32 +20,57 @@ public class UserController {
 
   private UserRepository userRepository;
 
+  //TODO
   @GetMapping
+  @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
   public Mono<User> getUserById(@PathVariable final Long id) {
-    return userRepository.findById(id);
+
+    return Mono.error(new NotImplementedException());
+    // return userRepository.findById(id);
   }
 
   @PutMapping
-  public Mono<User> updateUserById(@PathVariable final Long id, @RequestBody final String jsonString) throws IOException {
-    User user = new ObjectMapper().readValue(jsonString, User.class);
-    return userRepository.updateUser(user.getUserData().getFirstName(), user.getUserData().getLastName(), user.getUserData().getBirthDate(), id);
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> updateUserById(@PathVariable final Long id, @RequestBody final PutUserIdRequest body) throws IOException {
+
+    return Mono.error(new NotImplementedException());
+    // return userRepository.updateUser(body.getUserData().getFirstName(), body.getUserData().getLastName(), body.getUserData().getBirthDate(), id);
   }
 
   @DeleteMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteUserById(@PathVariable final Long id) {
+
     return userRepository.deleteUserById(id);
   }
 
-  //TODO Perhaps useless, because it's not a server responsability, but an app responsability. What do you say??
+  //TODO --> Perhaps useless, because it's not a server responsability, but an app responsability. What do you say, Luca??
   @PostMapping("/logout")
-  public void logoutUser(@PathVariable final Long id){
-    throw new UnsupportedOperationException("NOT IMPLEMENTED YET");
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> logoutUser(@PathVariable final Long id){
+
+    return Mono.error(new NotImplementedException());
+    // no function in UserRepository
   }
 
-  //TODO InfluxDB
+  //TODO in InfluxDB
   @GetMapping("/places/history")
-  public void getHistoryUser(@PathVariable final Long id){
-    throw new UnsupportedOperationException("NOT IMPLEMENTED YET");
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> getHistoryUser(@PathVariable final Long id){
+
+    return Mono.error(new NotImplementedException());
+    // no function in UserRepository
+  }
+
+  //TODO in InfluxDB
+  @GetMapping("/time/inside")
+  @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<TimeInsidePlaces> getUserTimeInside(@PathVariable final Long id){
+
+    return Mono.error(new NotImplementedException());
+    // no function in UserRepository
   }
 
 }

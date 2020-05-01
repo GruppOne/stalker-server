@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.controllers;
 
+import org.springframework.http.HttpStatus;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,11 @@ public class RecoveryPasswordController {
     -Then click on https://myaccount.google.com/lesssecureapps and turn on access for less secure apps.
      Alternately, if the link up doesn't work, go on https://accounts.google.com/b/0/DisplayUnlockCaptcha.
   */
+  //--------------------------------------------DON'T EREASE IT!! FIX TODOS AND THE ENDPOINT WILL WORK------------------------------------------
   @PostMapping
+  @ResponseStatus(HttpStatus.OK)
   public void recoveryUserPassword(@RequestBody final UserData userData) throws IOException, MessagingException {
+
     //TODO add control to verify unique email in the database --> findByEmail(user.getEmail());
     smtpMailSender.send(userData.getEmail(), "Recovery password for Stalker", EMAIL_BODY);
     log.info("The mail has been sent correctly to {} ", userData.getEmail());
