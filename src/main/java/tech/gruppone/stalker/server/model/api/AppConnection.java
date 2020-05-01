@@ -15,6 +15,7 @@ public class AppConnection {
   @NonNull
   Long userId;
 
+  //LocalDateTime
   Timestamp creationDateTime;
 
 }

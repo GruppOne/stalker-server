@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.model.api;
+package tech.gruppone.stalker.server.model.api.responses;
 
 import lombok.NonNull;
 import lombok.Data;

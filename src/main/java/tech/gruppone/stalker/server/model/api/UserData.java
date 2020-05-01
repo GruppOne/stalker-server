@@ -28,6 +28,7 @@ public class UserData {
   @JsonSerialize(using = LocalDateSerializer.class)
   LocalDate birthDate;
 
+  //LocalDateTime
   Timestamp creationDateTime;
 
 }

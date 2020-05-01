@@ -1,17 +1,14 @@
 package tech.gruppone.stalker.server.controllers;
 
+import org.springframework.http.HttpStatus;
 import java.io.IOException;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import lombok.Value;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.Organization;
+import tech.gruppone.stalker.server.exceptions.NotImplementedException;
+import tech.gruppone.stalker.server.model.api.OrganizationData;
+import tech.gruppone.stalker.server.model.api.responses.GetOrganizationsResponse;
+import tech.gruppone.stalker.server.model.api.responses.PostIdResponse;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
 @RequestMapping("/organizations")
@@ -21,17 +18,24 @@ public class OrganizationsController {
 
   OrganizationRepository organizationRepository;
 
-  // TODO refactor this. it needs to return a valid json object: {"organizations":[...]}
+  //TODO
   @GetMapping
-  public Flux<Organization> getOrganizations() {
-    return organizationRepository.findAll();
+  @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<GetOrganizationsResponse> getOrganizations(){
+
+    return Mono.error(new NotImplementedException());
+    // return organizationRepository.findAllOrganizations();
   }
 
+  //TODO
   @PostMapping
-  public Mono<Organization> createOrganization(@RequestBody String jsonString) throws IOException{
-    return Mono.empty();
-    // Organization org = new ObjectMapper().readValue(jsonString, Organization.class);
-    // return organizationRepository.create(org.getName(), org.getDescription());
+  @ResponseBody
+  @ResponseStatus(HttpStatus.CREATED)
+  public Mono<PostIdResponse> createOrganization(@RequestBody final OrganizationData body) throws IOException{
+
+    return Mono.error(new NotImplementedException());
+    // return organizationRepository.create(...,..,..,..,..);
   }
 
 }

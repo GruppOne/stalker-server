@@ -15,7 +15,7 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 // @Log4j2
 @Value
 @RestController
-@RequestMapping("/user/{id}")
+@RequestMapping("/user/{userId}")
 public class UserController {
 
   private UserRepository userRepository;
@@ -24,31 +24,31 @@ public class UserController {
   @GetMapping
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
-  public Mono<User> getUserById(@PathVariable final Long id) {
+  public Mono<User> getUserById(@PathVariable final Long userId) {
 
     return Mono.error(new NotImplementedException());
-    // return userRepository.findById(id);
+    // return userRepository.findById(userId);
   }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> updateUserById(@PathVariable final Long id, @RequestBody final PutUserIdRequest body) throws IOException {
+  public Mono<Void> updateUserById(@PathVariable final Long userId, @RequestBody final PutUserIdRequest body) throws IOException {
 
     return Mono.error(new NotImplementedException());
-    // return userRepository.updateUser(body.getUserData().getFirstName(), body.getUserData().getLastName(), body.getUserData().getBirthDate(), id);
+    // return userRepository.updateUser(body.getUserData().getFirstName(), body.getUserData().getLastName(), body.getUserData().getBirthDate(), userId);
   }
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> deleteUserById(@PathVariable final Long id) {
+  public Mono<Void> deleteUserById(@PathVariable final Long userId) {
 
-    return userRepository.deleteUserById(id);
+    return userRepository.deleteUserById(userId);
   }
 
   //TODO --> Perhaps useless, because it's not a server responsability, but an app responsability. What do you say, Luca??
   @PostMapping("/logout")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> logoutUser(@PathVariable final Long id){
+  public Mono<Void> logoutUser(@PathVariable final Long userId){
 
     return Mono.error(new NotImplementedException());
     // no function in UserRepository
@@ -57,7 +57,7 @@ public class UserController {
   //TODO in InfluxDB
   @GetMapping("/places/history")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> getHistoryUser(@PathVariable final Long id){
+  public Mono<Void> getHistoryUser(@PathVariable final Long userId){
 
     return Mono.error(new NotImplementedException());
     // no function in UserRepository
@@ -67,7 +67,7 @@ public class UserController {
   @GetMapping("/time/inside")
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
-  public Mono<TimeInsidePlaces> getUserTimeInside(@PathVariable final Long id){
+  public Mono<TimeInsidePlaces> getUserTimeInside(@PathVariable final Long userId){
 
     return Mono.error(new NotImplementedException());
     // no function in UserRepository

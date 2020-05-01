@@ -7,7 +7,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.User;
-import tech.gruppone.stalker.server.model.api.responses.PostUsersResponse;
+import tech.gruppone.stalker.server.model.api.responses.PostIdResponse;
 
 public interface UserRepository extends ReactiveCrudRepository<User,Long> {
 
@@ -21,7 +21,7 @@ public interface UserRepository extends ReactiveCrudRepository<User,Long> {
   public Mono<String> findByEmail(String email);
 
   @Query("SELECT id FROM Users WHERE email = ':email'")
-  public Mono<PostUsersResponse> findIdByMail(String email);
+  public Mono<PostIdResponse> findIdByMail(String email);
 
   @Modifying
   @Query("INSERT INTO Users (email, password) VALUES (:email, :password); INSERT INTO UserData (userId, firstName, lastName, birthDate) VALUES (LAST_INSERT_ID(), :firstname, :lastname, :birthdate)")

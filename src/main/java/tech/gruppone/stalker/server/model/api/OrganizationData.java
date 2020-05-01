@@ -26,8 +26,10 @@ public class OrganizationData {
   @NonNull
   Boolean isPrivate;
 
-  Timestamp creationDateTime;
+  //LocalDateTime
+  Timestamp createdDate;
 
-  Timestamp lastChangeDateTime;
+  //LocalDateTime
+  Timestamp lastModifiedDate;
 
 }

@@ -1,50 +1,100 @@
 package tech.gruppone.stalker.server.controllers;
 
+import org.springframework.http.HttpStatus;
 import java.io.IOException;
-
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import lombok.Value;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.Organization;
+import tech.gruppone.stalker.server.model.api.responses.GetOrganizationOrganizationIdUsersConnectionsResponse;
+import tech.gruppone.stalker.server.model.api.responses.UsersInsideOrganization;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
-@RequestMapping("/organization/{id}")
+// @Log4j2
+@RequestMapping("/organization/{organizationId}")
 @RestController
 @Value
 public class OrganizationController {
 
-  OrganizationRepository organizationRepository;
+  private OrganizationRepository organizationRepository;
 
+  //TODO
   @GetMapping
-  public Mono<Organization> getOrganizationById(@PathVariable Long id) {
-    return organizationRepository.findById(id);
+  @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<Organization> getOrganizationById(@PathVariable final Long organizationId) {
+
+    return Mono.error(new NotImplementedException());
+    // return organizationRepository.findById(organizationId);
   }
 
+  //TODO
   @PutMapping
-  public Mono<Organization> putOrganizationById(@PathVariable Long id, @RequestBody String jsonString) throws IOException{
-    return Mono.empty();
-    // Organization org = new ObjectMapper().readValue(jsonString, Organization.class);
-    // return organizationRepository.updateOrganizationById(id, org.getName(), org.getDescription());
-  }
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Organization> putOrganizationById(@PathVariable Long organizationId, @RequestBody final Organization body) throws IOException{
 
+    return Mono.error(new NotImplementedException());
+    // return organizationRepository.updateOrganizationById(organizationId, body.getName(), org.getDescription(), ...);
+  }
 
   @DeleteMapping
-  public Mono<Organization> deleteOrganizationById(@PathVariable Long id){
-    return organizationRepository.delete(id);
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Organization> deleteOrganizationById(@PathVariable final Long organizationId){
+
+    return organizationRepository.delete(organizationId);
   }
 
-
+  //TODO
   @GetMapping("/users/connections")
-  public Flux<User> getUsersConnectionsToOrganizationById(@PathVariable Long id){
-    return organizationRepository.findAllUsers(id);
+  @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<GetOrganizationOrganizationIdUsersConnectionsResponse> getUsersConnectionsToOrganizationById(@PathVariable final Long organizationId){
+
+    return Mono.error(new NotImplementedException());
+    // return organizationRepository.findAllUsers(organizationId);
   }
+
+  //TODO Is Alberto Cocco doing this endpoint in his branch? If YES, delete this endpoint by here!
+  @PostMapping("/user/{userId}/role")
+  @ResponseStatus(HttpStatus.CREATED)
+  public Mono<Void> createRoleForAnUserById(@PathVariable("organizationId") final Long organizationId, @PathVariable("userId") final Long userId){
+
+    return Mono.error(new NotImplementedException());
+    // no function in OrganizationRepository
+  }
+
+
+  //TODO Is Alberto Cocco doing this endpoint in his branch? If YES, delete this endpoint by here!
+  @DeleteMapping("/user/{userId}/role")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> deleteRoleForAnUserById(@PathVariable("organizationId") final Long organizationId, @PathVariable("userId") final Long userId){
+
+    return Mono.error(new NotImplementedException());
+    // no function in OrganizationRepository
+  }
+
+
+
+  //TODO
+  @GetMapping("/report")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> getReportByOrganizationId(@PathVariable final Long organizationId){
+
+    return Mono.error(new NotImplementedException());
+    // no function in OrganizationRepository
+  }
+
+  //TODO
+  @GetMapping("/users/inside")
+  @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<UsersInsideOrganization> getPeopleNumberByOrganizationId(@PathVariable final Long organizationId){
+
+    return Mono.error(new NotImplementedException());
+    // no function in OrganizationRepository
+  }
+
+
+
 }
