@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.api.resources;
+package tech.gruppone.stalker.server.model.api;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
