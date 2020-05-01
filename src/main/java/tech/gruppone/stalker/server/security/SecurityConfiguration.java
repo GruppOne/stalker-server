@@ -35,6 +35,7 @@ public class SecurityConfiguration {
 
       http.authorizeExchange().
        pathMatchers(HttpMethod.POST, "/login").permitAll().
+        pathMatchers(HttpMethod.GET, "/users/roles/{username}").permitAll().
        pathMatchers(HttpMethod.POST, "/users/registration").permitAll();// disable security for registration
        http.authorizeExchange().anyExchange().authenticated(); //any other request must be authenticated
 

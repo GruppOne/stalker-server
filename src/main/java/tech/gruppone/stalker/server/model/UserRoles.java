@@ -4,21 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Value;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Builder
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-@Table("OrganizationRole")
-public class OrganizationRole {
+public class UserRoles {
 
-  @NonNull  String organizationId;
-  @NonNull String userId;
-  @NonNull String name;
-  @NonNull String createdDate;
 
+    @Column("organizationId")
+    private Integer organizationId;
+
+    private String role;
 }

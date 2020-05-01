@@ -6,14 +6,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;;
 import java.security.Key;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import tech.gruppone.stalker.server.model.UserRoles;
 
 @Component
 @PropertySource("classpath:application.properties")
@@ -51,7 +50,7 @@ public class JwtUtil{
    public String createToken(Long id, String username, Map <String, List<UserRoles>> claims){
      Date issuedAt = new Date(); // dummy date
      Date expirationAt= new Date(issuedAt.getTime() + Long.parseLong(expirationTime));
-     return Jwts.builder().setIssuer(Long.toString(id)).setClaims(claims).setSubject(username).
+     return Jwts.builder().setClaims(claims).setId(Long.toString(id)).setSubject(username).
        setIssuedAt(issuedAt).setExpiration(expirationAt).signWith(getEncodedKey()).compact();
    }
 
