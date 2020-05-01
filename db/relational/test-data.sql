@@ -103,5 +103,6 @@ INSERT INTO `OrganizationRole` (`organizationId`, `userId`, `administratorType`,
 (1, 2, 3, '2020-03-17 16:31:38'),
 (2, 4, 2, '2020-04-24 14:33:50'),
 (2, 2, 1, '2020-02-04 16:35:23');
+COMMIT;
 
 COMMIT;

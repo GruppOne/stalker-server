@@ -24,7 +24,7 @@ public class AuthenticationController {
   @Autowired
   LoginService loginService;
 
-  @PostMapping("/login")
+  @PostMapping("/user/login")
   public Mono<ResponseEntity<?>> login(@RequestBody UnauthenticatedUser unauthenticatedUser){
         return loginService.logUser(unauthenticatedUser);
   }

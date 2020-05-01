@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,9 +49,10 @@ public class JwtUtil{
 
    // this function creates a jwt token. It is not complete
    public String createToken(Long id, String username, Map <String, List<UserRoles>> claims){
+
      Date issuedAt = new Date(); // dummy date
      Date expirationAt= new Date(issuedAt.getTime() + Long.parseLong(expirationTime));
-     return Jwts.builder().setClaims(claims).setId(Long.toString(id)).setSubject(username).
+     return Jwts.builder().setClaims(claims).setSubject(username).
        setIssuedAt(issuedAt).setExpiration(expirationAt).signWith(getEncodedKey()).compact();
    }
 
