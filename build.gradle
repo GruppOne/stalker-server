@@ -63,12 +63,19 @@ dependencies {
   runtimeOnly 'mysql:mysql-connector-java'
 
  // Provides support for JSON web Token
+<<<<<<< HEAD
   implementation 'io.jsonwebtoken:jjwt-api:0.11.1'
   implementation 'io.jsonwebtoken:jjwt-jackson:0.11.1'
 
   runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'
   runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.1'
 
+=======
+  compile 'io.jsonwebtoken:jjwt-jackson:0.11.1'
+  compile 'io.jsonwebtoken:jjwt-api:0.11.1'
+  runtime 'io.jsonwebtoken:jjwt-impl:0.11.1',
+    'io.jsonwebtoken:jjwt-jackson:0.11.1' //
+>>>>>>> ed11520... feat: deserialize json in order to obtain user roles
 
 //  Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

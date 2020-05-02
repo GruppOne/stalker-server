@@ -1,7 +1,5 @@
 package tech.gruppone.stalker.server.model;
 
-import java.time.LocalDateTime;
-import javax.annotation.sql.DataSourceDefinition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +21,4 @@ public class Connections {
     @Column("userId")
     Integer userid;
 
-    @NonNull
-    LocalDateTime createdDate;
 }
