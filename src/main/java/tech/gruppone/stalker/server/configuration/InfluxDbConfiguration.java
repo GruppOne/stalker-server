@@ -1,5 +1,7 @@
 package tech.gruppone.stalker.server.configuration;
 
+import java.util.concurrent.TimeUnit;
+
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.LogLevel;
@@ -7,7 +9,6 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.impl.InfluxDBMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.influx.InfluxDbAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -21,7 +22,7 @@ import lombok.extern.log4j.Log4j2;
 @PropertySource("classpath:application.properties")
 @lombok.Value
 @NonFinal
-public class InfluxDbConfiguration extends InfluxDbAutoConfiguration {
+public class InfluxDbConfiguration {
 
   String url;
   String database;
@@ -47,8 +48,8 @@ public class InfluxDbConfiguration extends InfluxDbAutoConfiguration {
     log.info("creating connection to InfluxDB {} on db {}", url, database);
 
     final var influxDB = InfluxDBFactory.connect(url, username, password).setDatabase(database)
-        .setRetentionPolicy(retentionPolicy).enableGzip().setLogLevel(LogLevel.BASIC)
-        .enableBatch(BatchOptions.DEFAULTS);
+        .setRetentionPolicy(retentionPolicy).enableGzip().setLogLevel(LogLevel.FULL)
+        .enableBatch(BatchOptions.DEFAULTS.precision(TimeUnit.MILLISECONDS));
 
     // XXX careful! this operation is blocking.
     var queryResult = influxDB.query(new Query("SHOW DATABASES"));
