@@ -1,2 +1,2 @@
 CREATE DATABASE "stalker-tsdb";
-CREATE RETENTION POLICY "stalker-tsdb-default-retention-policy" ON "stalker-tsdb" DURATION 1h REPLICATION 1 DEFAULT;
+CREATE RETENTION POLICY "stalker-tsdb-retention-policy" ON "stalker-tsdb" DURATION 1h REPLICATION 1 DEFAULT;
