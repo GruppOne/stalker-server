@@ -71,7 +71,7 @@ public class JwtUtil{
 
    public List<UserRoles> parseUserRoles(String token) throws IOException {
      Claims claims = getJWTString(token);
-     Object organizations = claims.get("organizations");
+     Object organizations = claims.get("organizationRoles");
      ByteArrayOutputStream out = new ByteArrayOutputStream();
      ObjectMapper mapper = new ObjectMapper();
      mapper.writeValue(out, organizations);

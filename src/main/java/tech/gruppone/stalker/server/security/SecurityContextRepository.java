@@ -30,10 +30,13 @@ public class SecurityContextRepository  implements ServerSecurityContextReposito
     String header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if(header != null && header.startsWith("Bearer ")){
       String token = header.substring(7);
-      Authentication auth = new UsernamePasswordAuthenticationToken(token,token,null);
-      authenticationManager.authenticate(auth);
-      return Mono.just(new SecurityContextImpl(auth));
+      Authentication auth = new UsernamePasswordAuthenticationToken(token,token);
+      return this.authenticationManager.authenticate(auth).map((authentication) -> {
+
+        return new SecurityContextImpl(authentication);
+        });
     }
     return Mono.empty();
   }
 }
+

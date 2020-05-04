@@ -26,7 +26,6 @@ public class LoginService {
       } else {
         sink.next(jwtService.createToken(user.getId()));
       }
-    });
-
+    }
   }
 }

@@ -11,14 +11,10 @@ import org.springframework.data.relational.core.mapping.Column;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Connections {
+public class Connection {
 
     @NonNull
     @Column("organizationId")
-    Integer organizationId;
-
-    @NonNull
-    @Column("userId")
-    Integer userid;
+    Long organizationId;
 
 }

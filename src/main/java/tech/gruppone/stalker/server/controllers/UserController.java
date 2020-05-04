@@ -10,10 +10,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.services.UserService;
+import tech.gruppone.stalker.server.model.Connection;
+import tech.gruppone.stalker.server.model.User;
+import tech.gruppone.stalker.server.repositories.ConnectionRepository;
+import tech.gruppone.stalker.server.repositories.RoleRepository;
+import tech.gruppone.stalker.server.repositories.UserRepository;
+import tech.gruppone.stalker.server.model.UserRoles;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

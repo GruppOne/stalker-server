@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
+
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+;
 
-@EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
+@EnableWebFluxSecurity()
+@EnableReactiveMethodSecurity()
 @PropertySource("classpath:application.properties")
 public class SecurityConfiguration {
 
@@ -35,8 +35,7 @@ public class SecurityConfiguration {
 
       http.authorizeExchange().
        pathMatchers(HttpMethod.POST, "/user/login").permitAll().
-        pathMatchers(HttpMethod.GET, "/users/roles/{username}").permitAll().
-       pathMatchers(HttpMethod.POST, "/users/registration").permitAll();// disable security for registration
+       pathMatchers(HttpMethod.GET, "/version").permitAll();// disable security for registration
        http.authorizeExchange().anyExchange().authenticated(); //any other request must be authenticated
 
       return http.build();
