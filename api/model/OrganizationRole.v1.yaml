@@ -8,6 +8,5 @@ properties:
   role:
     type: string
 required:
-  - userId
   - organizationId
   - role
