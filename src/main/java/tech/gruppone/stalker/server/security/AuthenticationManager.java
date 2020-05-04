@@ -9,6 +9,8 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.Connection;
@@ -28,9 +30,8 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
   @Override
   public Mono<Authentication> authenticate(Authentication authentication) {
-    String token = authentication.getCredentials().toString();
-    String username = authentication.getName();
-    if ( username== null || jwtToken.isTokenExpired(token) || !jwtToken.isTokenSigned(token)) {
+    String token = authentication.getName();
+    if ( token== null || jwtToken.isTokenExpired(token) || !jwtToken.isTokenSigned(token)) {
       return Mono.empty();
     } else {
       List<Connection> connectionList = new ArrayList<>();
@@ -46,13 +47,11 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
       userRolesList.stream().filter(UserRoles-> connectionList.stream()
         .anyMatch(connection -> connection.getOrganizationId().equals(UserRoles.getOrganizationId())));
 
-
       List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
       for(UserRoles userRoles : userRolesList){
         authorityList.add(new SimpleGrantedAuthority(userRoles.getRole()));
       }
-      UsernamePasswordAuthenticationToken accessToken = new UsernamePasswordAuthenticationToken(jwtToken.getUsername(
-        token), null, authorityList);
+      UsernamePasswordAuthenticationToken accessToken = new UsernamePasswordAuthenticationToken(jwtToken.getId(token), null, authorityList);
       return Mono.just(accessToken);
     }
   }

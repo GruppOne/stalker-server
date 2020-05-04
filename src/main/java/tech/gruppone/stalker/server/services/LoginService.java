@@ -18,6 +18,7 @@ public class LoginService {
   UserRepository userRepository;
   JwtService jwtService;
 
+<<<<<<< HEAD
   public Mono<String> logUser(LoginDataDto loginData) {
     Mono<UserDao> userDao = userRepository.findByEmail(loginData.getEmail());
     return userDao.switchIfEmpty(Mono.error(new UnauthorizedException())).handle((user, sink) -> {
@@ -26,6 +27,6 @@ public class LoginService {
       } else {
         sink.next(jwtService.createToken(user.getId()));
       }
-    }
+    });
   }
 }
