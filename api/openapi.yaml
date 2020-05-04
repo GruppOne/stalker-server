@@ -274,7 +274,7 @@ paths:
       description: 'Get a report detailing user accesses, time spent at each place and most frequented places. Optional feature.'
   '/organization/{organizationId}/user/{userId}/role':
     delete:
-      description: Delete an existing role for a user.
+      description: Delete an existing role for a user (without deleting the user or their connection to the organization).
       operationId: delete-organization-organizationId-user-role
       responses:
         '204':
@@ -298,10 +298,12 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                roleData:
-                  $ref: ./model/OrganizationRole.v1.yaml
               type: object
+              properties:
+                role:
+                  $ref: ./model/OrganizationRole.v1.yaml
+              required:
+                - role
       responses:
         '201':
           description: Created
@@ -521,12 +523,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  organizationWithRolesId:
+                  organizationsWithRoles:
                     type: array
                     items:
                       $ref: ./model/OrganizationRole.v1.yaml
                 required:
-                  - organizationWithRolesId
+                  - organizationsWithRoles
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -701,12 +703,10 @@ paths:
                 type: object
                 properties:
                   jwt:
-                    type: string
-                    description: "The JWT authorizing this user's future operations."
-                    example: eyJhbGciOiJIUzI1NiJ9.eyJvcmdhbml6YXRpb25zIjpbeyJvcmdhbml6YXRpb25JZCI6Miwicm9sZSI6Ik1hbmFnZXIifSx7Im9yZ2FuaXphdGlvbklkIjozLCJyb2xlIjoiVmlld2VyIn1dLCJzdWIiOiJ1c2VyIiwiaWF0IjoxNTg3OTEwNDI3LCJleHAiOjE1OTA5MTA0Mjd9.xOKpTUzPDMmjIffL7uUNJ48VY5bUun2rZDD7nmK9zt4
+                    $ref: ./model/EncodedJwt.v1.yaml
                 required:
                   - jwt
-          description: Created. The response contains the JWT authorizing the user.
+          description: Created. The response contains the encoded JWT authorizing the user.
         '401':
           content:
             application/json:
@@ -814,11 +814,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    $ref: ./model/GenericId.v1.yaml
+                  jwt:
+                    $ref: ./model/EncodedJwt.v1.yaml
                 required:
-                  - id
-          description: Created
+                  - jwt
+          description: Created. The response contains the JWT authorizing the user.
         '400':
           content:
             application/json:

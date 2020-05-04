@@ -1,0 +1,4 @@
+type: string
+title: Encoded JWT
+pattern: "^[a-zA-Z0-9\\-_]+?\\.[a-zA-Z0-9\\-_]+?\\.([a-zA-Z0-9\\-_]+)?$"
+description: 'This should be a base64 URL-encoded string, matching the given regex.'
