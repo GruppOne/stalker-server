@@ -488,14 +488,14 @@ paths:
           content:
             application/json:
               schema:
+                type: object
                 properties:
-                  connectedOrganizations:
+                  connectedOrganizationsIds:
+                    type: array
                     items:
                       $ref: ./model/GenericId.v1.yaml
-                    type: array
                 required:
-                  - connectedOrganizations
-                type: object
+                  - connectedOrganizationIds
           description: Ok. The response contains the list of the ids of the organizations the user is connected to.
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -506,6 +506,35 @@ paths:
       summary: Read the list of all organizations a user is connected to.
       tags:
         - stalker mobile app
+  '/user/{userId}/organizations/roles':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      summary: "Read a user's roles in all relevant organizations."
+      tags:
+        - stalker web app
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  organizationWithRolesId:
+                    type: array
+                    items:
+                      $ref: ./model/OrganizationRole.v1.yaml
+                required:
+                  - organizationWithRolesId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      operationId: get-user-userId-organizations-roles
+      description: "Get an array with this user's roles in all organizations where he's at least a viewer."
   '/user/{userId}/places/history':
     get:
       description: "Get the history of a user's visited places."
