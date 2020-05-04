@@ -1,0 +1,22 @@
+title: Decoded JWT Payload
+type: object
+properties:
+  organizations:
+    type: array
+    items:
+      $ref: ./OrganizationRole.v1.yaml
+  sub:
+    $ref: ./GenericId.v1.yaml
+  iat:
+    type: integer
+    format: int64
+    minimum: 0
+    exclusiveMinimum: false
+  exp:
+    type: integer
+    format: int64
+    minimum: 0
+    exclusiveMinimum: false
+required:
+  - organizations
+description: 'sub contains the user Id, exp and iat are UNIX timestamps in seconds.'
