@@ -300,13 +300,26 @@ paths:
             schema:
               type: object
               properties:
-                role:
-                  $ref: ./model/OrganizationRole.v1.yaml
+                newRole:
+                  $ref: ./model/AdministratorType.v1.yaml
               required:
-                - role
+                - newRole
       responses:
         '201':
           description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - This user already had a role in this organization.
+                required:
+                  - message
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -316,6 +329,45 @@ paths:
       summary: Create a role for a user in an organization.
       tags:
         - stalker web app
+    put:
+      summary: Update a role for a user in an organization.
+      operationId: put-organization-organizationId-user-userId-role
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - This user had no role in this organization.
+                required:
+                  - message
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                modifiedRole:
+                  $ref: ./model/AdministratorType.v1.yaml
+              required:
+                - modifiedRole
+        description: Change an existing role for a user in an organization.
+      tags:
+        - stalker web app
+      description: Changes an existing role for a user in an organization.
   '/user/{userId}':
     delete:
       description: Request to delete a user and its data.
@@ -325,6 +377,17 @@ paths:
           description: No Content
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - This user does not exist.
+                required:
+                  - message
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -629,6 +692,35 @@ paths:
         - stalker web app
     parameters:
       - $ref: '#/components/parameters/organizationId'
+  '/organization/{organizationId}/users/roles':
+    parameters:
+      - $ref: '#/components/parameters/organizationId'
+    get:
+      summary: Read all users with roles in this organization.
+      tags:
+        - stalker web app
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userRoles:
+                    type: array
+                    items:
+                      $ref: ./model/UserRole.v1.yaml
+                required:
+                  - userRoles
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      operationId: get-organization-organizationId-users-roles
+      description: Get a list of all users and their roles in this organization.
   /organizations:
     get:
       description: 'Get the list of all the organizations registered to Stalker, complete with all details EXCEPT private information (ldapConfiguration).'

@@ -1,0 +1,8 @@
+type: string
+title: Administrator Types
+enum:
+  - Admin
+  - Owner
+  - Manager
+  - Viewer
+  - User

@@ -1,10 +1,10 @@
-title: User Roles in a specific organization
+title: User Role in all organizations
 type: object
 properties:
-  userId:
+  organizationId:
     $ref: ./GenericId.v1.yaml
   role:
     $ref: ./AdministratorType.v1.yaml
 required:
-  - userId
+  - organizationId
   - role
