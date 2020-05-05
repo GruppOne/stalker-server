@@ -83,7 +83,7 @@ CREATE TABLE `OrganizationRole` (
 --
 CREATE TABLE `Organizations` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(75) NOT NULL,
   `description` tinytext NOT NULL,
   `ldapConf` int(11) NULL DEFAULT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -97,7 +97,7 @@ CREATE TABLE `Organizations` (
 CREATE TABLE `PlaceData` (
   `id` int(11) NOT NULL,
   `address` varchar(150) NOT NULL,
-  `city` varchar(50) NOT NULL,
+  `city` varchar(75) NOT NULL,
   `zipcode` varchar(10) NOT NULL,
   `state` varchar(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
