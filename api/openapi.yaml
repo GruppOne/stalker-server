@@ -63,8 +63,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '408':
-          $ref: '#/components/responses/RequestTimeout'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete an organization.
@@ -119,8 +117,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '408':
-          $ref: '#/components/responses/RequestTimeout'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Update an organization's data."
@@ -179,8 +175,6 @@ paths:
                 properties:
                   place:
                     $ref: ./model/Place.v1.yaml
-        '400':
-          description: Bad Request
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -415,8 +409,6 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
-          description: Bad Request
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -460,8 +452,6 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
-          description: Bad Request
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -912,18 +902,18 @@ paths:
                   - jwt
           description: Created. The response contains the JWT authorizing the user.
         '400':
+          description: Bad Request
           content:
             application/json:
               schema:
+                type: object
                 properties:
                   message:
                     enum:
-                      - This email is not valid or is already registered
+                      - This email is not valid or is already registered.
                     type: string
                 required:
                   - message
-                type: object
-          description: Bad Request
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -953,8 +943,6 @@ paths:
                 required:
                   - version
           description: Ok. The response contains the current server version.
-        '400':
-          description: Bad Request
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Read the server's current version."
@@ -963,37 +951,6 @@ paths:
         - stalker mobile app
       security: []
 components:
-  schemas:
-    AuthenticationError:
-      type: object
-      description: Could not authenticate a user.
-      title: Authentication Error
-      properties:
-        message:
-          type: string
-          enum:
-            - The server could not authenticate the user.
-    AuthorizationError:
-      type: object
-      description: Could not authorize request.
-      title: Authorization Error
-      properties:
-        message:
-          type: string
-          enum:
-            - The server could not authorize the request.
-      required:
-        - message
-    UnexpectedError:
-      type: object
-      title: Unexpected Error
-      properties:
-        message:
-          type: string
-          enum:
-            - The server encountered an unexpected error.
-      required:
-        - message
   parameters:
     userId:
       in: path
@@ -1017,30 +974,73 @@ components:
       schema:
         $ref: ./model/GenericId.v1.yaml
   responses:
-    Ok:
-      description: Ok.
+    BadRequest:
+      description: The server could not process the request due to a client error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                enum:
+                  - The server could not process the request due to a client error.
+            required:
+              - message
     Unauthorized:
-      description: The user is not authenticated.
+      description: The server could not authenticate the user.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/AuthenticationError'
+            type: object
+            properties:
+              message:
+                type: string
+                enum:
+                  - The server could not authenticate the user.
+            required:
+              - message
     Forbidden:
-      description: The user is authenticated but not authorized.
+      description: The server could not authorize the user.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/AuthorizationError'
+            type: object
+            properties:
+              message:
+                type: string
+                enum:
+                  - The server could not authorize the user.
+            required:
+              - message
     NotFound:
-      description: The specified resource was not found.
-    RequestTimeout:
-      description: The specified request has exceeded the time limit.
-    DefaultResponse:
-      description: Unexpected error.
+      description: The server could not find the requested resource.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnexpectedError'
+            type: object
+            properties:
+              message:
+                type: string
+                enum:
+                  - The server could not find the requested resource.
+                description: Resource not found.
+            required:
+              - message
+    DefaultResponse:
+      description: The server encountered an unexpected error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                enum:
+                  - The server encountered an unexpected error.
+                description: Unexpected error.
+            required:
+              - message
   securitySchemes:
     JWT:
       type: http
