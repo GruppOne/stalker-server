@@ -12,7 +12,6 @@ import lombok.experimental.NonFinal;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfo;
-import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
 import tech.gruppone.stalker.server.services.LocationInfoService;
 
 @Log4j2
@@ -24,18 +23,12 @@ public class MultiLocationInfoController {
   @NonNull
   LocationInfoService locationInfoService;
 
-  @NonNull
-  LocationInfoRepository locationInfoRepository;
-
   @PostMapping("/location/update")
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> postLocationUpdate(@RequestBody final MultiLocationInfo multiLocationInfo) {
     log.info(multiLocationInfo);
 
-    var allLocationInfo = locationInfoService.locationInfoSupplier(multiLocationInfo);
-    var savedLocationInfo = locationInfoRepository.saveAllLocationInfo(allLocationInfo);
-
-    return savedLocationInfo.then();
+    return locationInfoService.save(multiLocationInfo).then();
   }
 
 }
