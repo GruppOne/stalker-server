@@ -9,7 +9,7 @@ properties:
   password:
     type: string
     format: password
-    example: 'I3BAI7bUO6j4vb3ron5U41D5Avn#'
+    example: 0f210daf25a61744efc5a98c76efe0d19e613ee04dfd97b17b600decfb680451f26c03cb93be3f4a4674916881f81c3b9b02ef3708c19651443424a84fd3005c
     minLength: 128
     maxLength: 128
 required:
