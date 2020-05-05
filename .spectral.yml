@@ -18,6 +18,22 @@ rules:
     then:
       field: '403'
       function: truthy
+  required-not-found-response:
+    description: 'This operation needs to have a 404 response. Careful for false positives!'
+    given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'delete')].responses"
+    recommended: true
+    severity: error
+    then:
+      field: '404'
+      function: truthy
+  required-bad-request-response:
+    description: 'This POST operation needs to have a 400 response.'
+    given: "$.paths.*[?( @property === 'post' )].responses"
+    recommended: true
+    severity: error
+    then:
+      field: '400'
+      function: truthy
   summary-approved-verbs:
     description: 'Operation `summary` should use a standard verb (Create, Read, Update, Delete) at the beginning.'
     given: "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]"
