@@ -895,18 +895,7 @@ paths:
                   - jwt
           description: Created. The response contains the JWT authorizing the user.
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    enum:
-                      - This email is not valid or is already registered.
-                    type: string
-                required:
-                  - message
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
