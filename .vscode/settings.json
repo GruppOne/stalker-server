@@ -1,6 +1,7 @@
 {
   "editor.detectIndentation": false,
   "[java]": {
+    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
     "editor.formatOnPaste": false,
     "editor.formatOnSave": false,
     "editor.formatOnType": false,
