@@ -6,16 +6,17 @@ import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.LogLevel;
 import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.Query;
 import org.influxdb.impl.InfluxDBMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 
 import lombok.NonNull;
 import lombok.experimental.NonFinal;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
 
 @Log4j2
 @Configuration
@@ -30,11 +31,12 @@ public class InfluxDbConfiguration {
   String username;
   String password;
 
-  public InfluxDbConfiguration(@NonNull @Value("${spring.influx.url}") String url,
-      @NonNull @Value("${spring.influx.database}") String database,
-      @NonNull @Value("${spring.influx.retention}") String retentionPolicy,
-      @NonNull @Value("${spring.influx.user}") String userName,
-      @NonNull @Value("${spring.influx.password}") String password) {
+  public InfluxDbConfiguration(
+      @NonNull @Value("${influxdb.url}") String url,
+      @NonNull @Value("${influxdb.database}") String database,
+      @NonNull @Value("${influxdb.retention}") String retentionPolicy,
+      @NonNull @Value("${influxdb.user}") String userName,
+      @NonNull @Value("${influxdb.password}") String password) {
     this.url = url;
     this.database = database;
     this.retentionPolicy = retentionPolicy;
@@ -42,27 +44,36 @@ public class InfluxDbConfiguration {
     this.password = password;
   }
 
-  // TODO handle errors when establishing the connection
-  @Bean(destroyMethod = "close")
+  // FIXME fails silently when connection cannot be established
+  // TODO handle errors when establishing the connection. maybe add spring retry?
+  @Bean(name="influxDbConnection",destroyMethod = "close")
   public InfluxDB getInfluxDBConnection() {
     log.info("creating connection to InfluxDB {} on db {}", url, database);
 
-    final var influxDB = InfluxDBFactory.connect(url, username, password).setDatabase(database)
-        .setRetentionPolicy(retentionPolicy).enableGzip().setLogLevel(LogLevel.FULL)
-        .enableBatch(BatchOptions.DEFAULTS.precision(TimeUnit.MILLISECONDS));
+    final OkHttpClient.Builder httpClientBuilder =
+        new OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .retryOnConnectionFailure(false);
 
-    // XXX careful! this operation is blocking.
-    var queryResult = influxDB.query(new Query("SHOW DATABASES"));
-    var result = queryResult.getResults();
+    final InfluxDB influxDB =
+        InfluxDBFactory.connect(url, username, password, httpClientBuilder)
+            .setDatabase(database)
+            .setRetentionPolicy(retentionPolicy)
+            .enableGzip()
+            .setLogLevel(LogLevel.FULL)
+            .enableBatch(BatchOptions.DEFAULTS.precision(TimeUnit.MILLISECONDS));
 
-    log.info(result);
+    log.info(influxDB);
+    // TODO how to catch errors here?
+    // influxDB.ping();
 
     return influxDB;
   }
 
   @Bean
-  public InfluxDBMapper getInfluxDBMapper() {
-    return new InfluxDBMapper(getInfluxDBConnection());
+  @DependsOn("influxDbConnection")
+  public InfluxDBMapper getInfluxDBMapper(InfluxDB influxDB) {
+    return new InfluxDBMapper(influxDB);
   }
 
 }
