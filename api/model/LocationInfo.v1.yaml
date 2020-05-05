@@ -4,21 +4,27 @@ type: object
 properties:
   timestamp:
     $ref: ./GenericTimestamp.v1.yaml
-  userId:
-    $ref: ./GenericId.v1.yaml
-  anonymous:
-    type: boolean
-    example: false
+  user:
+    oneOf:
+      - properties:
+          id:
+            $ref: ./GenericId.v1.yaml
+        required:
+          - id
+      - properties:
+          anonymous:
+            type: boolean
+        required:
+          - anonymous
+    type: object
   inside:
     type: boolean
-    example: true
   placeIds:
     type: array
     items:
       $ref: ./GenericId.v1.yaml
 required:
   - timestamp
-  - userId
-  - anonymous
+  - user
   - inside
   - placeIds

@@ -27,7 +27,7 @@ rules:
       field: '404'
       function: truthy
   required-bad-request-response:
-    description: 'This POST operation needs to have a 400 response.'
+    description: 'This POST operation needs to have a 400 response. Careful for false positives!'
     given: "$.paths.*[?( @property === 'post' )].responses"
     recommended: true
     severity: error
