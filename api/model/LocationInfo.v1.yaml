@@ -1,6 +1,6 @@
 title: LocationInfo
-type: object
 description: "Specifics of a user's current location relative to the places monitored by organizations they're subscribed to."
+type: object
 properties:
   timestamp:
     $ref: ./GenericTimestamp.v1.yaml
