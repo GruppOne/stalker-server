@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.controller;
+package tech.gruppone.stalker.server.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ import lombok.experimental.NonFinal;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfo;
-import tech.gruppone.stalker.server.repository.LocationInfoRepository;
+import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
 import tech.gruppone.stalker.server.services.LocationInfoService;
 
 @Log4j2

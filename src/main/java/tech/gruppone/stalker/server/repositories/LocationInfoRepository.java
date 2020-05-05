@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.repository;
+package tech.gruppone.stalker.server.repositories;
 
 import org.influxdb.impl.InfluxDBMapper;
 import org.springframework.stereotype.Repository;
