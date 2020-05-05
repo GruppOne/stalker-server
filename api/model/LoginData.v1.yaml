@@ -10,8 +10,8 @@ properties:
     type: string
     format: password
     example: 'I3BAI7bUO6j4vb3ron5U41D5Avn#'
-    minLength: 8
-    maxLength: 32
+    minLength: 128
+    maxLength: 128
 required:
   - email
   - password
