@@ -43,6 +43,8 @@ paths:
       responses:
         '201':
           description: Created
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -63,6 +65,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete an organization.
@@ -78,21 +82,12 @@ paths:
               schema:
                 $ref: ./model/Organization.v1.yaml
           description: Ok. The response contains all the public information on the specific organization.
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - The requested organization does not exist
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Read an organization's information."
@@ -119,6 +114,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/DefaultResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
       summary: "Update an organization's data."
       tags:
         - stalker web app
@@ -133,6 +130,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete a place.
@@ -157,6 +156,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Update a place's data."
@@ -179,6 +180,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Get all the information about a specific place in a specific organization.
@@ -210,6 +213,8 @@ paths:
                 required:
                   - id
           description: Created. The response contains the id of the newly created place.
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -240,6 +245,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Get all the places of a specific organization.
@@ -260,6 +267,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '501':
           description: Unfinished endpoint.
         default:
@@ -277,6 +286,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete a role for a user.
@@ -302,18 +313,7 @@ paths:
         '201':
           description: Created
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - This user already had a role in this organization.
-                required:
-                  - message
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -334,18 +334,7 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - This user had no role in this organization.
-                required:
-                  - message
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       requestBody:
@@ -369,23 +358,12 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - This user does not exist.
-                required:
-                  - message
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Delete a user from Stalker.
@@ -413,6 +391,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: "Update a user's data."
@@ -435,6 +415,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Get information on a specific user.
@@ -452,6 +434,8 @@ paths:
       responses:
         '204':
           description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -480,21 +464,12 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - The requested connection does not exist.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       description: Request the disconnection of a user from an organization.
@@ -514,6 +489,8 @@ paths:
       responses:
         '201':
           description: Created
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           content:
             application/json:
@@ -556,6 +533,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Read the list of all organizations a user is connected to.
@@ -586,6 +565,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-user-userId-organizations-roles
@@ -601,6 +582,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '501':
           description: Unfinished endpoint.
         default:
@@ -628,6 +611,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
     parameters:
@@ -654,6 +639,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Read the list of users connected to an organization.
@@ -676,6 +663,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       tags:
@@ -707,6 +696,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-users-roles
@@ -758,6 +749,8 @@ paths:
                 required:
                   - id
           description: Created. The response contains the id of the newly created organization.
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -938,7 +931,7 @@ paths:
                   version:
                     type: string
                     description: "The server's version number."
-                    example: 0.1.0
+                    example: "0.1.0"
                     pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
                 required:
                   - version
