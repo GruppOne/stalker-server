@@ -9,13 +9,12 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.Connection;
-import tech.gruppone.stalker.server.model.UserRoles;
+import tech.gruppone.stalker.server.model.db.Connection;
+import tech.gruppone.stalker.server.model.api.UserRole;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
+import tech.gruppone.stalker.server.services.JwtUtil;
 
 @Component
 public class AuthenticationManager implements ReactiveAuthenticationManager {
@@ -37,19 +36,19 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
       List<Connection> connectionList = new ArrayList<>();
       Long id = Long.valueOf(jwtToken.getId(token));
       connectionRepository.findConnectedUserById(id).subscribe(Connection -> connectionList.add(Connection));
-      List<UserRoles> userRolesList= new ArrayList<>();
+      List<UserRole> userRoleList = new ArrayList<>();
       try {
-        userRolesList = jwtToken.parseUserRoles(token);
+        userRoleList = jwtToken.parseUserRoles(token);
       } catch (IOException e) {
         e.printStackTrace();
       }
 
-      userRolesList.stream().filter(UserRoles-> connectionList.stream()
-        .anyMatch(connection -> connection.getOrganizationId().equals(UserRoles.getOrganizationId())));
+      userRoleList.stream().filter(UserRole -> connectionList.stream()
+        .anyMatch(connection -> connection.getOrganizationId().equals(UserRole.getOrganizationId())));
 
       List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-      for(UserRoles userRoles : userRolesList){
-        authorityList.add(new SimpleGrantedAuthority(userRoles.getRole()));
+      for(UserRole userRole : userRoleList){
+        authorityList.add(new SimpleGrantedAuthority(userRole.getRole()));
       }
       UsernamePasswordAuthenticationToken accessToken = new UsernamePasswordAuthenticationToken(jwtToken.getId(token), null, authorityList);
       return Mono.just(accessToken);

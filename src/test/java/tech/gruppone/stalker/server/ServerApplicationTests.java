@@ -12,9 +12,9 @@ class ServerApplicationTests {
   private WebTestClient webTestClient;
 
   // TODO how to test that context loads correctly without requesting stuff from endpoints?
-  /*@Test
+  @Test
   public void contextLoads() {
     webTestClient.get().uri("/version").exchange().expectStatus().isOk();
-  }*/
+  }
 
 }

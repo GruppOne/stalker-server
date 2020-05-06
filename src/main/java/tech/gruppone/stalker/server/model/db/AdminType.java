@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.model;
+package tech.gruppone.stalker.server.model.db;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

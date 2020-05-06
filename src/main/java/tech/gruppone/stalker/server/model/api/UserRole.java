@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.model;
+package tech.gruppone.stalker.server.model.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Column;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoles {
+public class UserRole {
 
 
     @Column("organizationId")

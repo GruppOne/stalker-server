@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.security;
+package tech.gruppone.stalker.server.services;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,7 +16,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import tech.gruppone.stalker.server.model.UserRoles;
+import tech.gruppone.stalker.server.model.api.UserRole;
 
 @Component
 @PropertySource("classpath:application.properties")
@@ -60,16 +60,16 @@ public class JwtUtil{
    }
 
 
-   public String createToken(Long id, String username, Map <String, List<UserRoles>> claims){
+   public String createToken(Long id, String username, Map <String, List<UserRole>> claims){
 
      Date issuedAt = new Date(); // dummy date
      Date expirationAt= new Date(issuedAt.getTime() + Long.parseLong(expirationTime));
-     return Jwts.builder().setClaims(claims).setId(Long.toString(id)).setSubject(username).
-       setIssuedAt(issuedAt).setExpiration(expirationAt).signWith(getEncodedKey()).compact();
+     return Jwts.builder().setSubject(String.valueOf(id)).setIssuedAt(issuedAt).setExpiration(expirationAt).setId(String.valueOf((int)Math.random())).signWith(getEncodedKey()).compact();
+
    }
 
 
-   public List<UserRoles> parseUserRoles(String token) throws IOException {
+   public List<UserRole> parseUserRoles(String token) throws IOException {
      Claims claims = getJWTString(token);
      Object organizations = claims.get("organizationRoles");
      ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -77,7 +77,7 @@ public class JwtUtil{
      mapper.writeValue(out, organizations);
      byte[] data = out.toByteArray();
      String str = new String(data);
-     List<UserRoles> list = mapper.readValue(str, new TypeReference<List<UserRoles>>() { });
+     List<UserRole> list = mapper.readValue(str, new TypeReference<List<UserRole>>() { });
      return list;
 
   }

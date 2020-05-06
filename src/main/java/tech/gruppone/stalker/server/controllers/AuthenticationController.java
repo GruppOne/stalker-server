@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.UnauthenticatedUser;
+import tech.gruppone.stalker.server.model.api.LoginData;
 import tech.gruppone.stalker.server.services.LoginService;
 
 
@@ -21,8 +21,8 @@ public class AuthenticationController {
   LoginService loginService;
 
   @PostMapping("/user/login")
-  public Mono<ResponseEntity<?>> login(@RequestBody UnauthenticatedUser unauthenticatedUser){
-        return loginService.logUser(unauthenticatedUser);
+  public Mono<String> login(@RequestBody LoginData loginData){
+        return loginService.logUser(loginData);
   }
 
 }
