@@ -112,10 +112,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        default:
-          $ref: '#/components/responses/DefaultResponse'
         '404':
           $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
       summary: "Update an organization's data."
       tags:
         - stalker web app
@@ -644,7 +644,8 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       summary: Read the list of users connected to an organization.
-      tags: []
+      tags:
+        - stalker web app
     parameters:
       - $ref: '#/components/parameters/organizationId'
   '/organization/{organizationId}/users/inside':
@@ -920,7 +921,7 @@ paths:
                   version:
                     type: string
                     description: "The server's version number."
-                    example: "0.1.0"
+                    example: 0.1.0
                     pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
                 required:
                   - version
