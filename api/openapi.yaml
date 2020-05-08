@@ -10,7 +10,7 @@ info:
   license:
     name: GNU GPLv3
     url: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html'
-  version: 0.5.0
+  version: 0.8.0
 servers:
   - url: 'http://localhost:11111'
     description: Development server.
@@ -38,7 +38,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/LocationInfo.v1.yaml
+              $ref: ./model/MultiLocationInfo.v1.yaml
         required: true
       responses:
         '201':
@@ -921,7 +921,7 @@ paths:
                   version:
                     type: string
                     description: "The server's version number."
-                    example: 0.1.0
+                    example: "0.1.0"
                     pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
                 required:
                   - version
