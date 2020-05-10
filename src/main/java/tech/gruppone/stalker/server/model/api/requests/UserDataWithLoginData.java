@@ -8,12 +8,12 @@ import tech.gruppone.stalker.server.model.api.UserData;
 
 @Data
 @NoArgsConstructor
-public class PutUserIdRequest {
-
-  @NonNull
-  UserData userData;
+public class UserDataWithLoginData {
 
   @NonNull
   LoginData loginData;
+
+  @NonNull
+  UserData userData;
 
 }

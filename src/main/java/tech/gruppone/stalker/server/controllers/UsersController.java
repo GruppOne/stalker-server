@@ -7,7 +7,7 @@ import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
-import tech.gruppone.stalker.server.model.api.requests.PostUsersRequest;
+import tech.gruppone.stalker.server.model.api.requests.UserDataWithLoginData;
 import tech.gruppone.stalker.server.model.api.responses.GetUsersResponse;
 import tech.gruppone.stalker.server.model.api.responses.PostIdResponse;
 import tech.gruppone.stalker.server.repositories.UserRepository;
@@ -33,7 +33,7 @@ public class UsersController {
   @PostMapping
   @ResponseBody
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<PostIdResponse> createUser(@RequestBody final PostUsersRequest signUp) throws IOException{
+  public Mono<PostIdResponse> createUser(@RequestBody final UserDataWithLoginData signUp) throws IOException{
 
     //--------------------------------------------DON'T EREASE IT!! FIX ALL THE FIXME AND THE ENDPOINT WILL WORK------------------------------------------
     //FIXME how to check if the new user is inserting a new mail (not present on DB)?

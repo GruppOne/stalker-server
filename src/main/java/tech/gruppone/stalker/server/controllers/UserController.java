@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.TimeInsidePlaces;
 import tech.gruppone.stalker.server.model.api.User;
-import tech.gruppone.stalker.server.model.api.requests.PutUserIdRequest;
+import tech.gruppone.stalker.server.model.api.requests.UserDataWithLoginData;
 
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
@@ -32,7 +32,7 @@ public class UserController {
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> updateUserById(@PathVariable final Long userId, @RequestBody final PutUserIdRequest body) throws IOException {
+  public Mono<Void> updateUserById(@PathVariable final Long userId, @RequestBody final UserDataWithLoginData body) throws IOException {
 
     return Mono.error(new NotImplementedException());
     // return userRepository.updateUser(body.getUserData().getFirstName(), body.getUserData().getLastName(), body.getUserData().getBirthDate(), userId);
