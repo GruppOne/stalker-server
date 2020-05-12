@@ -1,4 +1,4 @@
-title: User Role in all organizations
+title: A specific user's role in an organization
 type: object
 properties:
   organizationId:

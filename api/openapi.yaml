@@ -10,7 +10,7 @@ info:
   license:
     name: GNU GPLv3
     url: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html'
-  version: 0.5.0
+  version: 0.8.1
 servers:
   - url: 'http://localhost:11111'
     description: Development server.
@@ -112,10 +112,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        default:
-          $ref: '#/components/responses/DefaultResponse'
         '404':
           $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
       summary: "Update an organization's data."
       tags:
         - stalker web app
@@ -555,12 +555,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  organizationsWithRoles:
+                  rolesInOrganizations:
                     type: array
+                    uniqueItems: true
                     items:
-                      $ref: ./model/OrganizationRole.v1.yaml
+                      $ref: ./model/UserRoleInOrganization.v1.yaml
                 required:
-                  - organizationsWithRoles
+                  - rolesInOrganizations
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -686,12 +687,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  userRoles:
+                  usersWithRoles:
                     type: array
+                    uniqueItems: true
                     items:
-                      $ref: ./model/UserRole.v1.yaml
+                      $ref: ./model/OrganizationRole.v1.yaml
                 required:
-                  - userRoles
+                  - usersWithRoles
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -920,7 +922,7 @@ paths:
                   version:
                     type: string
                     description: "The server's version number."
-                    example: "0.1.0"
+                    example: 0.1.0
                     pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
                 required:
                   - version
