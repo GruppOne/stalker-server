@@ -57,6 +57,7 @@ dependencies {
 
 //  MySQL JDBC and R2DBC driver.
   runtimeOnly 'dev.miku:r2dbc-mysql'
+  // TODO probably unnecessary
   runtimeOnly 'mysql:mysql-connector-java'
 
 //  Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).

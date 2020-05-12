@@ -37,6 +37,7 @@ services:
     restart: always
 
     environment:
+      TZ: Europe/Rome
       # TODO add server-specific user credentials
       # The username is root (default)
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}

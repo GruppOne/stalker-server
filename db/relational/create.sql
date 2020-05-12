@@ -38,18 +38,29 @@ USE `stalker-rdb`;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `AdminType`
+-- Struttura della tabella `AdministratorType`
 --
-CREATE TABLE `AdminType` (
+CREATE TABLE `AdministratorType` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL
+  `name` varchar(50) NOT NULL,
+  `role` varchar(20) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+--
+-- Dump dei dati per la tabella `AdministratorType`
+--
+
+INSERT INTO `AdministratorType` (`id`, `name`, `role`) VALUES
+(1, 'Admin', 'ROLE_ADMIN'),
+(2, 'Manager', 'ROLE_MANAGER'),
+(3, 'Owner', 'ROLE_OWNER'),
+(4, 'Viewer', 'ROLE_VIEWER');
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `Connections`
+-- Struttura della tabella `Connection`
 --
-CREATE TABLE `Connections` (
+CREATE TABLE `Connection` (
   `organizationId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -73,15 +84,15 @@ CREATE TABLE `LdapConfiguration` (
 CREATE TABLE `OrganizationRole` (
   `organizationId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `adminType` int(11) NOT NULL,
+  `administratorType` int(11) NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `Organizations`
+-- Struttura della tabella `Organization`
 --
-CREATE TABLE `Organizations` (
+CREATE TABLE `Organization` (
   `id` int(11) NOT NULL,
   `name` varchar(75) NOT NULL,
   `description` tinytext NOT NULL,
@@ -138,9 +149,9 @@ CREATE TABLE `UserLog` (
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `Users`
+-- Struttura della tabella `User`
 --
-CREATE TABLE `Users` (
+CREATE TABLE `User` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` char(128) NOT NULL
@@ -150,18 +161,18 @@ CREATE TABLE `Users` (
 -- Indici per le tabelle scaricate
 --
 --
--- Indici per le tabelle `AdminType`
+-- Indici per le tabelle `AdministratorType`
 --
 ALTER TABLE
-  `AdminType`
+  `AdministratorType`
 ADD
   PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `Connections`
+-- Indici per le tabelle `Connection`
 --
 ALTER TABLE
-  `Connections`
+  `Connection`
 ADD
   KEY `organizationId` (`organizationId`),
 ADD
@@ -185,13 +196,13 @@ ADD
 ADD
   KEY `userId` (`userId`),
 ADD
-  KEY `adminType` (`adminType`);
+  KEY `administratorType` (`administratorType`);
 
 --
--- Indici per le tabelle `Organizations`
+-- Indici per le tabelle `Organization`
 --
 ALTER TABLE
-  `Organizations`
+  `Organization`
 ADD
   PRIMARY KEY (`id`),
 ADD
@@ -232,10 +243,10 @@ ADD
   KEY `userId` (`userId`);
 
 --
--- Indici per le tabelle `Users`
+-- Indici per le tabelle `User`
 --
 ALTER TABLE
-  `Users`
+  `User`
 ADD
   PRIMARY KEY (`id`);
 
@@ -243,10 +254,10 @@ ADD
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 --
--- AUTO_INCREMENT per la tabella `AdminType`
+-- AUTO_INCREMENT per la tabella `AdministratorType`
 --
 ALTER TABLE
-  `AdminType`
+  `AdministratorType`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -259,10 +270,10 @@ MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `Organizations`
+-- AUTO_INCREMENT per la tabella `Organization`
 --
 ALTER TABLE
-  `Organizations`
+  `Organization`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -275,10 +286,10 @@ MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `Users`
+-- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE
-  `Users`
+  `User`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -286,14 +297,14 @@ MODIFY
 -- Limiti per le tabelle scaricate
 --
 --
--- Limiti per la tabella `Connections`
+-- Limiti per la tabella `Connection`
 --
 ALTER TABLE
-  `Connections`
+  `Connection`
 ADD
-  CONSTRAINT `Connections_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organizations` (`id`),
+  CONSTRAINT `Connection_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`),
 ADD
-  CONSTRAINT `Connections_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`);
+  CONSTRAINT `Connection_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
 
 --
 -- Limiti per la tabella `OrganizationRole`
@@ -301,19 +312,19 @@ ADD
 ALTER TABLE
   `OrganizationRole`
 ADD
-  CONSTRAINT `OrganizationRole_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organizations` (`id`),
+  CONSTRAINT `OrganizationRole_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`),
 ADD
-  CONSTRAINT `OrganizationRole_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`),
+  CONSTRAINT `OrganizationRole_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
 ADD
-  CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`adminType`) REFERENCES `AdminType` (`id`);
+  CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`administratorType`) REFERENCES `AdministratorType` (`id`);
 
 --
--- Limiti per la tabella `Organizations`
+-- Limiti per la tabella `Organization`
 --
 ALTER TABLE
-  `Organizations`
+  `Organization`
 ADD
-  CONSTRAINT `Organizations_ibfk_1` FOREIGN KEY (`ldapConf`) REFERENCES `LdapConfiguration` (`id`);
+  CONSTRAINT `Organization_ibfk_1` FOREIGN KEY (`ldapConf`) REFERENCES `LdapConfiguration` (`id`);
 
 --
 -- Limiti per la tabella `PlaceData`
@@ -329,7 +340,7 @@ ADD
 ALTER TABLE
   `Place`
 ADD
-  CONSTRAINT `Place_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organizations` (`id`);
+  CONSTRAINT `Place_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`);
 
 --
 -- Limiti per la tabella `UserData`
@@ -337,7 +348,7 @@ ADD
 ALTER TABLE
   `UserData`
 ADD
-  CONSTRAINT `UserData_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`);
+  CONSTRAINT `UserData_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
 
 --
 -- Limiti per la tabella `UserLog`
@@ -345,7 +356,7 @@ ADD
 ALTER TABLE
   `UserLog`
 ADD
-  CONSTRAINT `UserLog_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`);
+  CONSTRAINT `UserLog_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
 
 COMMIT;
 
