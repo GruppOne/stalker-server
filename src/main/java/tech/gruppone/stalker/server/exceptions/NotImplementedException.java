@@ -11,5 +11,4 @@ public final class NotImplementedException extends UnsupportedOperationException
   public NotImplementedException() {
     super("NOT IMPLEMENTED YET");
   }
-
 }
