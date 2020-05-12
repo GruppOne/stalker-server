@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.controller;
+package tech.gruppone.stalker.server.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpResponse;
@@ -10,7 +10,7 @@ import lombok.Value;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.User;
-import tech.gruppone.stalker.server.repository.UserRepository;
+import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Value
 @RestController
