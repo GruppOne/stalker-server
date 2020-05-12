@@ -27,7 +27,7 @@ START TRANSACTION;
 -- Dump dei dati per la tabella `organizations`
 --
 
-INSERT INTO `Organizations` (`name`, `description`) VALUES
+INSERT INTO `Organization` (`name`, `description`) VALUES
 ('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software'),
 ('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica ☺️👨🏻‍💻👩🏿‍💻');
 
@@ -55,7 +55,7 @@ INSERT INTO `PlaceData` (`id`, `address`, `city`, `zipcode`, `state`) VALUES
 -- Dump dei dati per la tabella `users`
 --
 
-INSERT INTO `Users` (`email`, `password`) VALUES
+INSERT INTO `User` (`email`, `password`) VALUES
 ('mariotest01@gmail.com', 'f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352'),
 ('giorgiotest02@hotmail.it', '95f9d376cada5e12dac91abb345c8d1d53f30fd7469a144796d547ca73db1ceb05aadbd7ba0d4ea36c57e5e5c30098d13140beb93d306b0bf73d25a9a5281cbd'),
 ('mariatest03@live.it', 'ba191a9e86125cacf7dfe63e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba438d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531'),
@@ -72,4 +72,25 @@ INSERT INTO `UserData` (`userId`, `firstName`, `lastName`, `birthDate`) VALUES
 (3, 'Maria', 'Verdi', '1987-08-14'),
 (4, 'Barbara', 'Gialli', '1965-01-15'),
 (5, 'Filippo', 'Azzurri', '1999-06-25');
+
+--
+-- Dump dei dati per la tabella `Connection`
+--
+
+INSERT INTO `Connection` (`organizationId`, `userId`, `createdDate`) VALUES
+(2, 4, '2020-02-07 16:31:38'),
+(1, 1, '2020-03-17 16:31:38'),
+(2, 3, '2020-04-24 14:33:50'),
+(2, 1, '2020-02-04 16:35:23');
+
+--
+-- Dump dei dati per la tabella `OrganizationRole`
+--
+
+INSERT INTO `OrganizationRole` (`organizationId`, `userId`, `administratorType`, `createdDate`) VALUES
+(2, 3, 4, '2020-02-07 16:31:38'),
+(1, 2, 3, '2020-03-17 16:31:38'),
+(2, 4, 2, '2020-04-24 14:33:50'),
+(2, 2, 1, '2020-02-04 16:35:23');
+
 COMMIT;
