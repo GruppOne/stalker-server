@@ -3,40 +3,52 @@ package tech.gruppone.stalker.server.controllers;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.User;
+import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Value
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user/{userId}")
 public class UserController {
 
   UserRepository userRepository;
 
-  @GetMapping
-  public Flux<User> getUsers() {
-    return userRepository.findAll();
-  }
+  // // GET /users
+  // @GetMapping
+  // public Flux<UserDto> getUsers() {
+  //   return userRepository.findAll();
+  // }
 
   @GetMapping("/{id}")
-  public Mono<User> getUserById(@PathVariable Long id) {
+  @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<UserDto> getUserById(@PathVariable final Long userId) {
 
-    return userRepository.findById(id);
+    return userRepository.findById(userId);
   }
 
-  // TODO implement
-  // TODO should return valid json
-  @GetMapping("/{id}/subscribed")
-  public Flux<Integer> getSubscribedOrganizations(ServerHttpResponse response,@PathVariable Long id) {
+  // @PutMapping
+  // @ResponseStatus(HttpStatus.NO_CONTENT)
+  // public Mono<Void> updateUserById(@PathVariable final Long userId, @RequestBody final UserDataWithLoginData body) throws IOException {
 
-    response.setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+  //   return Mono.error(new NotImplementedException());
+  //   // return userRepository.updateUser(body.getUserData().getFirstName(), body.getUserData().getLastName(), body.getUserData().getBirthDate(), userId);
+  // }
 
-    return Flux.empty();
+  @DeleteMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> deleteUserById(@PathVariable final Long userId) {
+
+    return userRepository.deleteUserById(userId);
   }
+
 }
