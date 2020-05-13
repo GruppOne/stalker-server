@@ -7,5 +7,5 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:application.properties")
 // @PropertySource("classpath:local.properties")
 class SecurityConfiguration {
-// TODO configure spring security here
+  // TODO configure spring security here
 }

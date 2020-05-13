@@ -2,13 +2,11 @@ package tech.gruppone.stalker.server.model.db;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 
 @Builder
 @Data
@@ -37,5 +35,4 @@ public class UserDataDao {
   @NonNull
   @Column("lastModifiedDate")
   LocalDateTime lastModifiedDate;
-
 }

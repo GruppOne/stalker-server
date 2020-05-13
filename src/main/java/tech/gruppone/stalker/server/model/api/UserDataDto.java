@@ -9,18 +9,13 @@ import lombok.NonNull;
 @Builder
 @Data
 public class UserDataDto {
-  @NonNull
-  String email;
+  @NonNull String email;
 
-  @NonNull
-  String firstName;
+  @NonNull String firstName;
 
-  @NonNull
-  String lastName;
+  @NonNull String lastName;
 
-  @NonNull
-  LocalDate birthDate;
+  @NonNull LocalDate birthDate;
 
   LocalDateTime creationDateTime;
-
 }
