@@ -1,10 +1,10 @@
 package tech.gruppone.stalker.server.model;
 
 import java.time.LocalDate;
-import org.springframework.data.annotation.Id;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.springframework.data.annotation.Id;
 
 @Builder
 @Value
