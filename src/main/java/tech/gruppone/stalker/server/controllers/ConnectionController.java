@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.controllers;
 
-import java.time.LocalDateTime;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.NonFinal;
@@ -15,24 +14,22 @@ import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
 @RestController
 @Value
-@NonFinal
 public class ConnectionController {
 
-  @NonNull
-  ConnectionRepository connectionRepository;
+  @NonNull ConnectionRepository connectionRepository;
 
   @PostMapping("/user/{userId}/organization/{organizationId}/connection")
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> createUserConnection(
-    @PathVariable("userId") long userId, @PathVariable("organizationId") long organizationId
-  ) {
-    // TOO manage LDAP properties if the organization is private
-    return connectionRepository.createUserConnection(userId, organizationId, LocalDateTime.now());
+      @PathVariable("userId") long userId, @PathVariable("organizationId") long organizationId) {
+    // TODO manage LDAP properties if the organization is private
+    return connectionRepository.createUserConnection(userId, organizationId);
   }
 
   @DeleteMapping("/user/{userId}/organization/{organizationId}/connection")
   @ResponseStatus(HttpStatus.NO_CONTENT)
- public Mono<Void> deleteUserConnectionToOrganization(@PathVariable("userId") long userId, @PathVariable("organizationId") long organizationId){
+  public Mono<Void> deleteUserConnectionToOrganization(
+      @PathVariable("userId") long userId, @PathVariable("organizationId") long organizationId) {
     return connectionRepository.deleteUserConnection(userId, organizationId);
   }
 }
