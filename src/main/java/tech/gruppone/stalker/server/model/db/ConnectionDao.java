@@ -1,16 +1,18 @@
-package tech.gruppone.stalker.server.model;
+package tech.gruppone.stalker.server.model.db;
 
 import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Value;
+
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import lombok.Builder;
+import lombok.Data;
+
 @Builder
+// TODO try with @value
 @Data
 @Table("Connection")
-public class Connection {
+public class ConnectionDao {
 
    @Column("organizationId")
    Long organizationId;

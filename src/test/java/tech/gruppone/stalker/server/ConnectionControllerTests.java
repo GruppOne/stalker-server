@@ -1,20 +1,18 @@
 package tech.gruppone.stalker.server;
 
 
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import tech.gruppone.stalker.server.model.Connection;
+
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class testControllers {
+public class ConnectionControllerTests {
 
   @Autowired
   WebTestClient testClient;
@@ -23,7 +21,7 @@ public class testControllers {
   ConnectionRepository connectionRepository;
 
   @Test
-  public void testUserConnectionToOrganization(){
+  public void testCreateUserConnection(){
     ;
     testClient.post()
       .uri("/user/1/organization/1/connection")
@@ -32,7 +30,7 @@ public class testControllers {
     }
 
    @Test
-   public void testUserDisconnectionToOrganization(){
+   public void testDeleteUserConnectionToOrganization(){
     testClient.delete()
       .uri("/user/1/organization/3/connection")
       .exchange()
@@ -40,9 +38,4 @@ public class testControllers {
       .isNoContent();
   }
 
-  /*@Test
-  public void unitTestUserConnectionToOrganization(){
-    connectionRepository.connectUserToOrganization()
-  }*/
 }
-
