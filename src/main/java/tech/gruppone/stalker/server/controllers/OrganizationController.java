@@ -1,10 +1,10 @@
 package tech.gruppone.stalker.server.controllers;
 
+import lombok.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.Value;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.Organization;

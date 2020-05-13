@@ -1,12 +1,11 @@
 package tech.gruppone.stalker.server.model.db;
 
 import java.time.LocalDateTime;
-
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import lombok.Builder;
-import lombok.Data;
 
 @Builder
 // TODO try with @value

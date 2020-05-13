@@ -2,11 +2,11 @@ package tech.gruppone.stalker.server.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.annotation.Id;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
+import org.springframework.data.annotation.Id;
 
 // TODO should builder be removed? do we use it anywhere but in tests?
 @Builder
