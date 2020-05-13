@@ -71,7 +71,7 @@ CREATE TABLE `Connection` (
 -- Struttura della tabella `LdapConfiguration`
 --
 CREATE TABLE `LdapConfiguration` (
-  `id` int(11) NOT NULL,
+  `organizationId` int(11) NOT NULL,
   `host` varchar(50) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` char(64) NOT NULL
@@ -96,7 +96,7 @@ CREATE TABLE `Organization` (
   `id` int(11) NOT NULL,
   `name` varchar(75) NOT NULL,
   `description` tinytext NOT NULL,
-  `ldapConf` int(11) NULL DEFAULT NULL,
+  `isPrivate` BOOLEAN NOT NULL DEFAULT 0,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
@@ -184,7 +184,7 @@ ADD
 ALTER TABLE
   `LdapConfiguration`
 ADD
-  PRIMARY KEY (`id`);
+  PRIMARY KEY (`organizationId`);
 
 --
 -- Indici per le tabelle `OrganizationRole`
@@ -204,9 +204,7 @@ ADD
 ALTER TABLE
   `Organization`
 ADD
-  PRIMARY KEY (`id`),
-ADD
-  KEY `ldapConf` (`ldapConf`);
+  PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `PlaceData`
@@ -267,7 +265,7 @@ MODIFY
 ALTER TABLE
   `LdapConfiguration`
 MODIFY
-  `id` int(11) NOT NULL AUTO_INCREMENT;
+  `organizationId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Organization`
@@ -307,6 +305,14 @@ ADD
   CONSTRAINT `Connection_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
 
 --
+-- Limiti per la tabella `LdapConfiguration`
+--
+ALTER TABLE
+  `LdapConfiguration`
+ADD
+  CONSTRAINT `LdapConfiguration_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`);
+
+--
 -- Limiti per la tabella `OrganizationRole`
 --
 ALTER TABLE
@@ -317,14 +323,6 @@ ADD
   CONSTRAINT `OrganizationRole_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
 ADD
   CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`administratorType`) REFERENCES `AdministratorType` (`id`);
-
---
--- Limiti per la tabella `Organization`
---
-ALTER TABLE
-  `Organization`
-ADD
-  CONSTRAINT `Organization_ibfk_1` FOREIGN KEY (`ldapConf`) REFERENCES `LdapConfiguration` (`id`);
 
 --
 -- Limiti per la tabella `PlaceData`
