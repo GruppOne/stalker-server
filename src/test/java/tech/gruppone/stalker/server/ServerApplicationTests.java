@@ -8,13 +8,25 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ServerApplicationTests {
 
-  @Autowired
-  private WebTestClient webTestClient;
+  @Autowired private WebTestClient webTestClient;
 
-  // TODO how to test that context loads correctly without requesting stuff from endpoints?
   @Test
   public void contextLoads() {
-    webTestClient.get().uri("/version").exchange().expectStatus().isOk();
+    // No endpoint is defined on this path.
+    // if the server is not loading the error won't be 404 and the test will fail
+    webTestClient.get().uri("/").exchange().expectStatus().isNotFound();
   }
 
+  @Test
+  public void testGetVersion() {
+    webTestClient
+        .get()
+        .uri("/version")
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.version")
+        .isEqualTo("0.8.1");
+  }
 }
