@@ -1,11 +1,10 @@
 package tech.gruppone.stalker.server.model.db;
 
-import org.influxdb.annotation.Column;
-import org.springframework.data.annotation.Id;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import org.influxdb.annotation.Column;
+import org.springframework.data.annotation.Id;
 
 @Builder
 @Data
@@ -21,5 +20,4 @@ public class UserDao {
   @NonNull
   @Column(name = "password")
   String password;
-
 }

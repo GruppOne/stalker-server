@@ -1,10 +1,10 @@
 package tech.gruppone.stalker.server.configuration;
 
+import lombok.Getter;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import lombok.Getter;
-import lombok.NonNull;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -15,18 +15,17 @@ public class InfluxDbConfiguration {
   // TODO use constructor value injection
   @NonNull
   @Value("${spring.influx.url}")
- private String url;
+  private String url;
 
   @NonNull
   @Value("${spring.influx.database}")
- private String databaseName;
+  private String databaseName;
 
   @NonNull
   @Value("${spring.influx.user}")
- private String userName;
+  private String userName;
 
   @NonNull
   @Value("${spring.influx.password}")
- private String password;
-
+  private String password;
 }

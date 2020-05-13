@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
@@ -25,30 +24,18 @@ public class UserControllerTests {
 
     long userId = 1L;
 
-    testClient
-        .get()
-        .uri("/user/{userId}", userId)
-        .exchange()
-        .expectStatus()
-        .isOk();
+    testClient.get().uri("/user/{userId}", userId).exchange().expectStatus().isOk();
 
     verify(userService).read(userId);
   }
 
   @Test
-  public void testDeleteUser(){
+  public void testDeleteUser() {
 
     long userId = 1L;
 
-    testClient
-    .delete()
-    .uri("/user/{userId}", userId)
-    .exchange()
-    .expectStatus()
-    .isNoContent();
+    testClient.delete().uri("/user/{userId}", userId).exchange().expectStatus().isNoContent();
 
-  verify(userRepository).deleteUserById(userId);
-
+    verify(userRepository).deleteUserById(userId);
   }
-
 }
