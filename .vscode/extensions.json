@@ -2,7 +2,7 @@
   "recommendations": [
     // API
     "42Crunch.vscode-openapi",
-    "travisillig.vscode-spectral",
+    // "travisillig.vscode-spectral",
     // JAVA + SPRING
     "GabrielBB.vscode-lombok",
     "pivotal.vscode-spring-boot",
@@ -11,8 +11,8 @@
     "sonarsource.sonarlint-vscode",
     "vscjava.vscode-java-debug",
     "vscjava.vscode-java-dependency",
-    "vscjava.vscode-java-test",
-    "vscjava.vscode-spring-boot-dashboard",
+    // "vscjava.vscode-java-test",
+    // "vscjava.vscode-spring-boot-dashboard",
     // -------- COMMONS --------
     // DOCKER
     "exiasr.hadolint",
@@ -23,7 +23,7 @@
     "jebbs.plantuml",
     "yzhang.markdown-all-in-one",
     // GIT
-    "GitHub.vscode-pull-request-github",
+    // "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "mhutchie.git-graph",
     // OTHER
@@ -32,8 +32,7 @@
     "pflannery.vscode-versionlens",
     "redhat.vscode-xml",
     "redhat.vscode-yaml",
-    "ryanluker.vscode-coverage-gutters",
-    "VisualStudioExptTeam.vscodeintellicode",
-    "wmaurer.vscode-jumpy"
+    // "ryanluker.vscode-coverage-gutters",
+    "VisualStudioExptTeam.vscodeintellicode"
   ]
 }
