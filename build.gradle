@@ -113,8 +113,6 @@ spotless {
     googleJavaFormat("1.7")
 
     endWithNewline()
-    // already set by googleJavaFormat()
-    // indentWithSpaces(2)
     paddedCell()
     removeUnusedImports()
     trimTrailingWhitespace()
