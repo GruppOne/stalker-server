@@ -98,7 +98,7 @@ CREATE TABLE `Organization` (
   `description` tinytext NOT NULL,
   `ldapConf` int(11) NULL DEFAULT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastModifiedDate` TIMESTAMP NULL DEFAULT NULL
+  `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -134,7 +134,7 @@ CREATE TABLE `UserData` (
   `lastName` varchar(50) NOT NULL,
   `birthDate` date NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastModifiedDate` TIMESTAMP NULL DEFAULT NULL
+  `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------

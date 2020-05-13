@@ -110,7 +110,7 @@ spotless {
   java {
     target '**/*.java'
 
-    googleJavaFormat()
+    googleJavaFormat("1.7")
 
     endWithNewline()
     // already set by googleJavaFormat()
