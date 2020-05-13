@@ -107,6 +107,9 @@ ext {
 // ===============================
 
 spotless {
+  // already enforced with a different method
+  enforceCheck false
+
   java {
     target '**/*.java'
 
