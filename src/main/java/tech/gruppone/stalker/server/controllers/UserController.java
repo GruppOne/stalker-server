@@ -23,28 +23,13 @@ public class UserController {
   UserRepository userRepository;
   UserService userService;
 
-  // // GET /users
-  // @GetMapping
-  // public Flux<UserDto> getUsers() {
-  //   return userRepository.findAll();
-  // }
-
   @GetMapping
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   public Mono<UserDto> getUserById(@PathVariable final Long userId) {
-    //return Mono.empty();
-    //return userRepository.findById(userId);
+
     return userService.read(userId);
   }
-
-  // @PutMapping
-  // @ResponseStatus(HttpStatus.NO_CONTENT)
-  // public Mono<Void> updateUserById(@PathVariable final Long userId, @RequestBody final UserDataWithLoginData body) throws IOException {
-
-  //   return Mono.error(new NotImplementedException());
-  //   // return userRepository.updateUser(body.getUserData().getFirstName(), body.getUserData().getLastName(), body.getUserData().getBirthDate(), userId);
-  // }
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
