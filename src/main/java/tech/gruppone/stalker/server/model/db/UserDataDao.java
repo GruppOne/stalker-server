@@ -2,38 +2,40 @@ package tech.gruppone.stalker.server.model.db;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import org.influxdb.annotation.Column;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+
 import lombok.Builder;
-import lombok.NonNull;
 import lombok.Data;
+import lombok.NonNull;
 
 @Builder
 @Data
 public class UserDataDao {
 
   @Id
-  @Column(name = "userId")
+  @Column("userId")
   Long userId;
 
   @NonNull
-  @Column(name = "firstName")
+  @Column("firstName")
   String firstName;
 
   @NonNull
-  @Column(name = "lastName")
+  @Column("lastName")
   String lastName;
 
   @NonNull
-  @Column(name = "birthDate")
+  @Column("birthDate")
   LocalDate birthDate;
 
   @NonNull
-  @Column(name = "createdDate")
+  @Column("createdDate")
   LocalDateTime createdDate;
 
   @NonNull
-  @Column(name = "lastModifiedDate")
+  @Column("lastModifiedDate")
   LocalDateTime lastModifiedDate;
 
 }
