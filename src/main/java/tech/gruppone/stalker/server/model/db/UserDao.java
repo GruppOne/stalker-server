@@ -18,5 +18,8 @@ public class UserDao {
   @Column(name = "email")
   String email;
 
+  @NonNull
+  @Column(name = "password")
+  String password;
 
 }
