@@ -3,6 +3,7 @@ package tech.gruppone.stalker.server.model.db;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.influxdb.annotation.Column;
+import org.springframework.data.annotation.Id;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.Data;
 @Data
 public class UserDataDao {
 
-  @NonNull
+  @Id
   @Column(name = "userId")
   Long userId;
 
