@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 @Builder
 @Data
 public class UserDto {
-  @Id Long id;
+  @Id long id;
 
   @NonNull UserDataDto userData;
 }
