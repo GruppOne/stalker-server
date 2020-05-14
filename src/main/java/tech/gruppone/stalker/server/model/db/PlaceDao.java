@@ -7,7 +7,6 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Value
-@Table("Place")
 public class PlaceDao {
 
   @Id
@@ -21,5 +20,24 @@ public class PlaceDao {
   @Column("name")
   String name;
 
-  // TODO serialize polygon (to a new class?)
+  @NonNull
+  @Column("positionGeoJson")
+  String rawPositionJson;
+
+  // we use a single DAO for tables Place and PlaceData
+  @NonNull
+  @Column("address")
+  String address;
+
+  @NonNull
+  @Column("city")
+  String city;
+
+  @NonNull
+  @Column("zipcode")
+  String zipcode;
+
+  @NonNull
+  @Column("state")
+  String state;
 }

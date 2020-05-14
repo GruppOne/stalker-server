@@ -16,9 +16,13 @@ public class OrganizationDataDto {
 
   @NonNull String description;
 
-  // TODO implement ldapConfiguration
+  // TODO implement ldapConfiguration. might want to use inheritance instead of nullable fields
 
-  @NonNull @Singular List<PlaceDto> places = new ArrayList<>();
+  @NonNull
+  @Singular("place")
+  List<PlaceDto> places = new ArrayList<>();
+
+  @Builder.Default boolean isPrivate = false;
 
   @NonNull LocalDateTime creationDateTime;
 
