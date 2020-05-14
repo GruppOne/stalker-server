@@ -1,5 +1,4 @@
 package tech.gruppone.stalker.server.services;
-
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -7,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
@@ -92,5 +92,28 @@ public class UserService {
               return userDataRepository.save(updatedUserDataDao);
             })
         .then();
+          }
+
+  public Flux<UserDto> findAll() {
+
+    return userRepository
+        .findAll()
+        .zipWith(userDataRepository.findAll())
+        .map(
+            result -> {
+              var t1 = result.getT1();
+              var t2 = result.getT2();
+              return UserDto.builder()
+                  .id(t1.getId())
+                  .userData(
+                      UserDataDto.builder()
+                          .email(t1.getEmail())
+                          .firstName(t2.getFirstName())
+                          .lastName(t2.getLastName())
+                          .birthDate(t2.getBirthDate())
+                          .creationDateTime(Timestamp.valueOf(t2.getLastModifiedDate()))
+                          .build())
+                  .build();
+            });
   }
 }
