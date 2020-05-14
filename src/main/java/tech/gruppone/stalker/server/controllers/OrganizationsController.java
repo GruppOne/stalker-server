@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.db.Organization;
+import tech.gruppone.stalker.server.exceptions.NotImplementedException;
+import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
 @Value
@@ -18,11 +19,12 @@ public class OrganizationsController {
 
   @GetMapping
   public Mono<OrganizationsResponse> getOrganizations() {
-    return organizationRepository.findAll().collectList().map(OrganizationsResponse::new);
+    // return organizationRepository.findAll().collectList().map(OrganizationsResponse::new);
+    return Mono.error(NotImplementedException::new);
   }
 
   @Value
   private static class OrganizationsResponse {
-    List<Organization> organizations;
+    List<OrganizationDto> organizations;
   }
 }
