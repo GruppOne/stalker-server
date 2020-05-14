@@ -38,7 +38,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/LocationInfo.v1.yaml
+              $ref: ./model/MultiLocationInfo.v1.yaml
         required: true
       responses:
         '201':
