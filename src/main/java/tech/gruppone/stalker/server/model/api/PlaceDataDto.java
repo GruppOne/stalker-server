@@ -12,14 +12,18 @@ public class PlaceDataDto {
 
   @NonNull String name;
 
+  // this does not need @Singular. We always treat polygons as a whole entity
   @NonNull List<GeographicalPoint> polygon;
   @NonNull PlaceInfo placeInfo;
 
+  @Value
   public static class GeographicalPoint {
     double latitude;
     double longitude;
   }
 
+  @Builder
+  @Value
   public static class PlaceInfo {
 
     @NonNull String address;
