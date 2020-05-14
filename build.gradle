@@ -49,7 +49,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 //  Highly customizable authentication and access-control framework for Spring applications.
-//  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
 
 //  Java annotation library which helps to reduce boilerplate code.
   compileOnly 'org.projectlombok:lombok'
@@ -61,6 +61,12 @@ dependencies {
   runtimeOnly 'dev.miku:r2dbc-mysql'
   // TODO probably unnecessary
   runtimeOnly 'mysql:mysql-connector-java'
+
+ // Provides support for JSON web Token
+  compile 'io.jsonwebtoken:jjwt-jackson:0.11.1'
+  compile 'io.jsonwebtoken:jjwt-api:0.11.1'
+  runtime 'io.jsonwebtoken:jjwt-impl:0.11.1',
+    'io.jsonwebtoken:jjwt-jackson:0.11.1' //
 
 //  Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -75,7 +81,7 @@ dependencies {
   testImplementation 'com.unboundid:unboundid-ldapsdk'
 
   testImplementation 'io.projectreactor:reactor-test'
-  // testImplementation 'org.springframework.security:spring-security-test'
+  testImplementation 'org.springframework.security:spring-security-test'
 
   // ---------------------------------------------------------------------------------
 
