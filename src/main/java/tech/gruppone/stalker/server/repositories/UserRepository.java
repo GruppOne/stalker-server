@@ -10,8 +10,16 @@ public interface UserRepository extends ReactiveCrudRepository<UserDao, Long> {
 
   public Mono<UserDao> findById(Long id);
 
+  // @Query("select * from Users")
+  // public Flux<UserDao> findAll();
+
+  // @Query("select * from Users u where u.id = :id")
+  // public Mono<UserDao> findById(Long id);
+
+  @Query("select * from User u where u.email = :email")
+  public Mono<UserDao> findByEmail(String email);
+
   @Modifying
-  @Query(
-      "DELETE Users, UserData FROM Users INNER JOIN UserData WHERE Users.id = UserData.userId AND UserData.userId = :id")
+  @Query("DELETE Users, UserData FROM Users INNER JOIN UserData WHERE Users.id = UserData.userId AND UserData.userId = :id")
   public Mono<Void> deleteUserById(Long id);
 }
