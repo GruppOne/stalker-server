@@ -38,7 +38,7 @@
   "java.import.maven.enabled": false,
   "java.referencesCodeLens.enabled": true,
   "java.saveActions.organizeImports": true,
-  "java.showBuildStatusOnStart.enabled": false,
+  "java.showBuildStatusOnStart.enabled": true,
   "prettier.singleQuote": false,
   "todo-tree.regex.regex": "((//|#|<!--|;|%|/\\*|^|--)\\s*($TAGS)|^\\s*- \\[ \\])",
   "yaml.schemaStore.enable": true,
