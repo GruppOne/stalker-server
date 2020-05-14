@@ -28,7 +28,7 @@ public class UserController {
   @ResponseStatus(HttpStatus.OK)
   public Mono<UserDto> getUserById(@PathVariable final Long userId) {
 
-    return userService.read(userId);
+    return userService.findById(userId);
   }
 
   @DeleteMapping

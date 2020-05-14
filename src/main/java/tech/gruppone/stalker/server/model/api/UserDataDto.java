@@ -17,5 +17,5 @@ public class UserDataDto {
 
   @NonNull LocalDate birthDate;
 
-  LocalDateTime creationDateTime;
+  @NonNull LocalDateTime creationDateTime;
 }
