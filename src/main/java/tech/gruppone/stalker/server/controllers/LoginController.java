@@ -17,11 +17,9 @@ public class LoginController {
 
   LoginService loginService;
 
-
   @PostMapping("/user/login")
   @ResponseStatus(HttpStatus.CREATED)
-  Mono<EncodedJwtDto> logUser(@RequestBody LoginDataDto loginDataDto){
+  Mono<EncodedJwtDto> logUser(@RequestBody LoginDataDto loginDataDto) {
     return loginService.logUser(loginDataDto);
   }
-
 }

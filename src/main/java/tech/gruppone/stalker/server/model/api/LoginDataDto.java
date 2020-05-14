@@ -14,5 +14,4 @@ public class LoginDataDto {
   String email;
 
   String password;
-
 }
