@@ -1,15 +1,27 @@
 package tech.gruppone.stalker.server.controllers;
 
 import java.io.IOException;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
+import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.api.requests.UserDataWithLoginData;
-import tech.gruppone.stalker.server.model.api.responses.GetUsersResponse;
 import tech.gruppone.stalker.server.model.api.responses.PostIdResponse;
 import tech.gruppone.stalker.server.repositories.UserRepository;
+import tech.gruppone.stalker.server.services.UserService;
 
 @Value
 @RestController
@@ -17,16 +29,24 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 public class UsersController {
 
   UserRepository userRepository;
+  UserService userService;
 
   // TODO
   @GetMapping
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
-  public Mono<GetUsersResponse> getUsers() {
+  public Mono<UsersResponse> getUsers() {
 
-    return Mono.error(new NotImplementedException());
-    // return userRepository.findAllUsers();
+    return userService.findAll().collectList().map(UsersResponse::new);
   }
+
+  @Value
+  private static class UsersResponse {
+    List<UserDto> users;
+  }
+
+
+
 
   @PostMapping
   @ResponseBody
