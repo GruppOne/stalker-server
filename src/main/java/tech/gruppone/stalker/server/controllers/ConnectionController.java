@@ -2,7 +2,6 @@ package tech.gruppone.stalker.server.controllers;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.NonFinal;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
