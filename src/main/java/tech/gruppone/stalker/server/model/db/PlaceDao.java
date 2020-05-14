@@ -4,9 +4,9 @@ import lombok.NonNull;
 import lombok.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
 @Value
+// no @table here because this corresponds to tables Place and PlaceData joined on id
 public class PlaceDao {
 
   @Id
