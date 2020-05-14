@@ -1,10 +1,9 @@
 package tech.gruppone.stalker.server.services;
 
-import org.springframework.stereotype.Service;
-
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.NonFinal;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
