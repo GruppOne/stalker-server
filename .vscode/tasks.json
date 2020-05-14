@@ -5,15 +5,6 @@
       "label": "run spectral lint",
       "type": "shell",
       "command": "spectral lint ./api/**.yaml",
-      // "command": "npx --package @stoplight/spectral spectral lint ./api/**.yaml",
-      // "options": {
-      //   "shell": {
-      //     "executable": "wsl.exe",
-      //     "args": [
-      //       "--"
-      //     ]
-      //   }
-      // },
       "problemMatcher": {
         "base": "$eslint-stylish",
         "source": "spectral"
@@ -62,23 +53,9 @@
       "problemMatcher": []
     },
     {
-      "label": "build plantuml images",
+      "label": "run spring boot application (./gradlew bootRun)",
       "type": "shell",
-      "command": "java",
-      "args": [
-        "-jar",
-        "${env:PLANTUML_JAR}",
-        "-progress",
-        "-failfast",
-        "-checkmetadata",
-        "-charset",
-        "UTF-8",
-        "-x",
-        "${workspaceRoot}/docs/style/*.pu",
-        "-o",
-        "img",
-        "${workspaceRoot}/docs/diagrams/*.pu"
-      ],
+      "command": "./gradlew bootRun --info",
       "presentation": {
         "echo": true,
         "reveal": "silent",
@@ -87,6 +64,42 @@
         "showReuseMessage": true,
         "clear": false
       },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "compile java continuously",
+      "type": "shell",
+      "command": "./gradlew compileJava --continuous --info",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true,
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "start fresh rdb and rdb-gui services",
+      "type": "shell",
+      "command": "docker-compose down rdb rdb-gui --remove-orphans --volumes --rmi local && docker-compose up rdb rdb-gui",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true,
+      "group": "build",
       "problemMatcher": []
     }
   ]
