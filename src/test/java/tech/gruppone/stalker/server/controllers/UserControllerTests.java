@@ -26,7 +26,7 @@ public class UserControllerTests {
 
     testClient.get().uri("/user/{userId}", userId).exchange().expectStatus().isOk();
 
-    verify(userService).read(userId);
+    verify(userService).findById(userId);
   }
 
   @Test

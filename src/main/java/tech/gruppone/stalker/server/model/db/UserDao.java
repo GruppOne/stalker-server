@@ -3,21 +3,23 @@ package tech.gruppone.stalker.server.model.db;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
-import org.influxdb.annotation.Column;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Builder
 @Data
+@Table("User")
 public class UserDao {
   @Id
-  @Column(name = "id")
+  @Column("id")
   Long id;
 
   @NonNull
-  @Column(name = "email")
+  @Column("email")
   String email;
 
   @NonNull
-  @Column(name = "password")
+  @Column("password")
   String password;
 }

@@ -8,7 +8,6 @@ import tech.gruppone.stalker.server.model.db.UserDao;
 
 public interface UserRepository extends ReactiveCrudRepository<UserDao, Long> {
 
-  @Query("SELECT * from User where id = :id")
   public Mono<UserDao> findById(Long id);
 
   @Modifying

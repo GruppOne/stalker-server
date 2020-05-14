@@ -18,7 +18,7 @@ public class UserService {
   @NonNull UserRepository userRepository;
   @NonNull UserDataRepository userDataRepository;
 
-  public Mono<UserDto> read(final Long userId) {
+  public Mono<UserDto> findById(final Long userId) {
 
     return userRepository
         .findById(userId)
