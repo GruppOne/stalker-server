@@ -14,24 +14,22 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 @Service
 public class LoginService {
 
-
-  @Autowired
-  private UserRepository userRepository;
-
+  @Autowired private UserRepository userRepository;
 
   @ResponseStatus(code = HttpStatus.CREATED)
-  public Mono<EncodedJwtDto> logUser(LoginDataDto loginData){
+  public Mono<EncodedJwtDto> logUser(LoginDataDto loginData) {
     Mono<UserDao> userLogging = userRepository.findByEmail(loginData.getEmail());
 
-    return userLogging.map((userDao) -> {
-      if(loginData.getPassword().equals(userDao.getPassword())){
-        return EncodedJwtDto.builder().encodedJwt("provaJwt").build();
-      }
-      else{
-        throw new LoginFailedException("Combinazione di username e password errata");
-      }
-    }).switchIfEmpty(Mono.error(new LoginFailedException("Combinazione di username e password errata")));
+    return userLogging
+        .map(
+            (userDao) -> {
+              if (loginData.getPassword().equals(userDao.getPassword())) {
+                return EncodedJwtDto.builder().encodedJwt("provaJwt").build();
+              } else {
+                throw new LoginFailedException("Combinazione di username e password errata");
+              }
+            })
+        .switchIfEmpty(
+            Mono.error(new LoginFailedException("Combinazione di username e password errata")));
   }
-
-
 }
