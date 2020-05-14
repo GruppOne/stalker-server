@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Builder
 @Data
@@ -12,8 +11,8 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class LoginDataDto {
 
-  @NonNull String email;
+  String email;
 
-  @NonNull String password;
+  String password;
 
 }
