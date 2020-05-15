@@ -108,7 +108,7 @@ processResources {
 ext {
   mysqlRootPassword = "${env.MYSQL_ROOT_PASSWORD.orElse("password")}"
   influxdbAdminPassword = "${env.INFLUXDB_ADMIN_PASSWORD.orElse("password")}"
-  springJwtSecret = "${env.SPRING_JWT_SECRET}"
+  jwtSecret = "${env.JWT_SECRET}"
 }
 
 // ===============================
