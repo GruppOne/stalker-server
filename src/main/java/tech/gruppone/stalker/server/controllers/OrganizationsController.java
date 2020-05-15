@@ -26,7 +26,7 @@ public class OrganizationsController {
 
   @GetMapping
   public Mono<GetOrganizationsResponse> getOrganizations() {
-     return organizationService.findAll().collectList().map(GetOrganizationsResponse::new);
+    return organizationService.findAll().collectList().map(GetOrganizationsResponse::new);
   }
 
   @PostMapping
