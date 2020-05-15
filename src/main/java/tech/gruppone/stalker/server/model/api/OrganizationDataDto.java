@@ -1,7 +1,7 @@
 package tech.gruppone.stalker.server.model.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
@@ -18,11 +18,10 @@ public class OrganizationDataDto {
 
   // TODO implement ldapConfiguration. might want to use inheritance instead of nullable fields
 
-  @NonNull
-  @Singular("place")
-  List<PlaceDto> places = new ArrayList<>();
+  @NonNull @Singular List<PlaceDto> places;
 
-  @Builder.Default boolean isPrivate = false;
+  @Builder.Default
+  boolean isPrivate = false;
 
   @NonNull LocalDateTime creationDateTime;
 
