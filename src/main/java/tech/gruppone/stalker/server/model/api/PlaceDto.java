@@ -8,5 +8,5 @@ public class PlaceDto {
 
   long id;
 
-  @NonNull PlaceDataDto placeData;
+  @NonNull PlaceDataDto data;
 }

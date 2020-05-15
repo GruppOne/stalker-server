@@ -1,7 +1,6 @@
 package tech.gruppone.stalker.server.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +41,7 @@ class OrganizationsControllerTest {
     when(organizationRepository.findById(1L)).thenReturn(Mono.just(organizationDao));
     when(placeService.findAllByOrganizationId(any(Long.class))).thenReturn(Flux.empty());
 
+    // TODO this assertion is not really meaningful
     webTestClient
         .get()
         .uri("/organizations")
