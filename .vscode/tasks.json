@@ -71,7 +71,7 @@
       }
     },
     {
-      "label": "compile java continuously",
+      "label": "compile java code continuously",
       "type": "shell",
       "command": "./gradlew compileJava --continuous --info",
       "presentation": {
@@ -102,9 +102,9 @@
       "problemMatcher": []
     },
     {
-      "label": "start fresh rdb and rdb-gui services",
+      "label": "compose up rdb and rdb-gui",
       "type": "shell",
-      "command": "docker-compose down rdb rdb-gui --remove-orphans --volumes --rmi local && docker-compose up rdb rdb-gui",
+      "command": "docker-compose up -d rdb rdb-gui && docker-compose logs -f rdb",
       "presentation": {
         "echo": true,
         "reveal": "silent",
@@ -116,6 +116,30 @@
       "isBackground": true,
       "group": "build",
       "problemMatcher": []
+    },
+    {
+      "label": "compose down rdb and rdb-gui",
+      "type": "shell",
+      "command": "docker-compose down rdb rdb-gui --remove-orphans --volumes --rmi local",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true,
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "down & up rdb and rdb-gui",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "compose down rdb and rdb-gui",
+        "compose up rdb and rdb-gui"
+      ]
     }
   ]
 }
