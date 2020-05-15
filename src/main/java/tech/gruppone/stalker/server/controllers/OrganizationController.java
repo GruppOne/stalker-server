@@ -25,6 +25,7 @@ public class OrganizationController {
   OrganizationService organizationService;
 
   @GetMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public Mono<OrganizationDto> getOrganizationById(@PathVariable long id) {
     return organizationService.findById(id);
   }
