@@ -19,7 +19,8 @@ public class OrganizationDataDto {
 
   @NonNull @Singular List<PlaceDto> places;
 
-  @Builder.Default boolean isPrivate = false;
+  // Using the boxed type because both jackson and lombok behave strangely with primitive booleans
+  @Builder.Default Boolean isPrivate = false;
 
   @NonNull LocalDateTime creationDateTime;
 
