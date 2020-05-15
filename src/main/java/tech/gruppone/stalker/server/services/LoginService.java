@@ -10,11 +10,13 @@ import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
+import tech.gruppone.stalker.server.security.JwtConfiguration;
 
 @Service
 public class LoginService {
 
   @Autowired private UserRepository userRepository;
+  @Autowired private JwtConfiguration jwtConfiguration;
 
   @ResponseStatus(code = HttpStatus.CREATED)
   public Mono<EncodedJwtDto> logUser(LoginDataDto loginData) {
@@ -24,7 +26,7 @@ public class LoginService {
         .map(
             (userDao) -> {
               if (loginData.getPassword().equals(userDao.getPassword())) {
-                return EncodedJwtDto.builder().encodedJwt("provaJwt").build();
+                return EncodedJwtDto.builder().encodedJwt(jwtConfiguration.createToken(userDao.getId())).build();
               } else {
                 throw new LoginFailedException("Combinazione di username e password errata");
               }

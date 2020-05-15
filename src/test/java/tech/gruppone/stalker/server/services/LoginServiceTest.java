@@ -12,14 +12,16 @@ import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
+import tech.gruppone.stalker.server.security.JwtConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LoginServiceTest {
 
   @MockBean private UserRepository userRepository;
+  @MockBean private JwtConfiguration jwtConfiguration;
   @Autowired private LoginService loginService;
 
-  @Test
+   @Test
   public void testLogUser() {
     // Arrange
     String email = "mario@gmail.com";
@@ -32,7 +34,7 @@ public class LoginServiceTest {
 
     LoginDataDto loginData = LoginDataDto.builder().email(email).password(password).build();
 
-    EncodedJwtDto encoded = EncodedJwtDto.builder().encodedJwt("provaJwt").build();
+    EncodedJwtDto encoded = EncodedJwtDto.builder().encodedJwt(jwtConfiguration.createToken(1L)).build();
 
     // Act
     Mono<EncodedJwtDto> sut = loginService.logUser(loginData);
