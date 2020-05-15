@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.model.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -20,8 +19,7 @@ public class OrganizationDataDto {
 
   @NonNull @Singular List<PlaceDto> places;
 
-  @Builder.Default
-  boolean isPrivate = false;
+  @Builder.Default boolean isPrivate = false;
 
   @NonNull LocalDateTime creationDateTime;
 
