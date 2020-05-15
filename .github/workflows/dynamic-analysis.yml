@@ -28,7 +28,11 @@ jobs:
       - name: Setup Gradle wrapper
         run: ./gradlew --console=plain --warning-mode=all --info
 
+      - name: Run gradle test
+        run: ./gradlew --console=plain --warning-mode=all --info --continue test
+
       - name: Run gradle test coverage verification
+        if: always()
         run: ./gradlew --console=plain --warning-mode=all --info --continue jacocoTestCoverageVerification
 
   test:
