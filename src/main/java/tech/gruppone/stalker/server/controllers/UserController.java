@@ -1,6 +1,8 @@
 package tech.gruppone.stalker.server.controllers;
 
-import lombok.Value;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +16,13 @@ import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
-@Value
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/user/{userId}")
 public class UserController {
 
+  // FIXME should not depend on both repo and service
   UserRepository userRepository;
   UserService userService;
 
