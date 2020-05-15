@@ -33,14 +33,9 @@ public class JwtConfiguration{
     return Jwts.parserBuilder().setSigningKey(getEncodedKey()).build().isSigned(token);
   }
 
-  public String getUsername(String token){
+  public String getUserId(String token){
     return getJWTString(token).getSubject();
   }
-
-  public String getId(String token){
-    return getJWTString(token).getId();
-  }
-
 
   public Date getExpirationDate(String token){
     return getJWTString(token).getExpiration();
