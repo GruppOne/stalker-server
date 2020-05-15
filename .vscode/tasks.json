@@ -87,6 +87,21 @@
       "problemMatcher": []
     },
     {
+      "label": "format java code continuously",
+      "type": "shell",
+      "command": "./gradlew spotlessApply --continuous",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
       "label": "start fresh rdb and rdb-gui services",
       "type": "shell",
       "command": "docker-compose down rdb rdb-gui --remove-orphans --volumes --rmi local && docker-compose up rdb rdb-gui",
