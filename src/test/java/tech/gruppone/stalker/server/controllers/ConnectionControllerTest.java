@@ -10,7 +10,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ConnectionControllerTests {
+public class ConnectionControllerTest {
 
   @Autowired WebTestClient testClient;
 
