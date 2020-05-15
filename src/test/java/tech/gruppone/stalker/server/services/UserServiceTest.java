@@ -19,7 +19,7 @@ import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserServiceTests {
+public class UserServiceTest {
   @Autowired WebTestClient testClient;
   @MockBean UserDataRepository userDataRepository;
   @MockBean UserRepository userRepository;
