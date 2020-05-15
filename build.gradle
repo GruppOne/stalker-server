@@ -116,7 +116,7 @@ spotless {
     googleJavaFormat("1.7")
 
     endWithNewline()
-    paddedCell()
+    // paddedCell()
     removeUnusedImports()
     trimTrailingWhitespace()
   }

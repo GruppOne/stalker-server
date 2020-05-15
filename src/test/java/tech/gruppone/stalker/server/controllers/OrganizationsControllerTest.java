@@ -49,8 +49,10 @@ class OrganizationsControllerTest {
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.organizations")
-        .exists();
+        .jsonPath("$.organizations[0].id")
+        .isEqualTo(1L)
+        .jsonPath("$.organizations[0].organizationData.places")
+        .isArray();
 
     verify(organizationRepository).findAll();
     verify(placeService).findAllByOrganizationId(1L);
