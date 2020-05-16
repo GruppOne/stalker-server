@@ -13,13 +13,13 @@ import tech.gruppone.stalker.server.services.LoginService;
 
 @RestController
 @Value
-public class postUserLogin {
+public class LoginController {
 
   LoginService loginService;
 
   @PostMapping("/user/login")
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<EncodedJwtDto> logUser(@RequestBody LoginDataDto loginDataDto) {
+  public Mono<EncodedJwtDto> postUserLogin(@RequestBody LoginDataDto loginDataDto) {
     return loginService.logUser(loginDataDto);
   }
 }
