@@ -24,6 +24,7 @@ public class PlaceSerializationService {
 
   ObjectMapper jacksonObjectMapper;
 
+  // FIXME should I drop the last point?
   public List<GeographicalPoint> convertRawPositionJson(final String rawPositionJson) {
     JsonNode coordinates;
     try {
@@ -50,12 +51,16 @@ public class PlaceSerializationService {
 
   public String convertGeographicalPoints(final List<GeographicalPoint> geographicalPoints) {
 
-    final String baseJson = "{\"type\": \"Polygon\", \"coordinates\": [[]]}";
     JsonNode jsonNode;
     try {
+      final String baseJson = "{\"type\": \"Polygon\", \"coordinates\": [[]]}";
       jsonNode = jacksonObjectMapper.readTree(baseJson);
     } catch (final JsonProcessingException e) {
       jsonNode = jacksonObjectMapper.createObjectNode();
+    }
+
+    if (geographicalPoints.isEmpty()) {
+      return jsonNode.toString();
     }
 
     final ArrayNode innerCoordinates = (ArrayNode) jsonNode.get("coordinates").get(0);
@@ -64,9 +69,9 @@ public class PlaceSerializationService {
     final var last = geographicalPoints.get(geographicalPoints.size() - 1);
 
     if (!first.equals(last)) {
-      log.info("adding manually the last polygon point.");
-
-      geographicalPoints.add(first);
+      geographicalPoints.add(new GeographicalPoint(first.getLatitude(), first.getLongitude()));
+    } else {
+      log.info("the last polygon point was already present.");
     }
 
     geographicalPoints.stream()

@@ -1,7 +1,8 @@
 package tech.gruppone.stalker.server.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.PlaceInfo;
@@ -47,13 +49,14 @@ class PlaceServiceTest {
                       .state(state)
                       .build())
               .build());
+
   @MockBean private PlaceRepository placeRepository;
   @MockBean private PlaceSerializationService positionService;
   @Autowired private PlaceService placeService;
 
   @Test
   void testFindById() {
-    doReturn(Mono.just(placeDao)).when(placeRepository).findById(id);
+    when(placeRepository.findById(id)).thenReturn(Mono.just(placeDao));
 
     var sut = placeService.findById(id);
 
@@ -62,10 +65,21 @@ class PlaceServiceTest {
 
   @Test
   void testFindAllByOrganizationId() {
-    doReturn(Flux.just(placeDao)).when(placeRepository).findAllByOrganizationId(organizationId);
+    when(placeRepository.findAllByOrganizationId(organizationId)).thenReturn(Flux.just(placeDao));
 
     var sut = placeService.findAllByOrganizationId(organizationId);
 
     assertThat(sut.next().block()).isEqualTo(expectedPlaceDto);
+  }
+
+  @Test
+  // TODO this test is kind of meaningless...
+  void testSaveAll() {
+    when(placeRepository.create(any(), any(), any())).thenReturn(Mono.empty());
+
+    List<PlaceDto> placeDtos = Collections.emptyList();
+    var sut = placeService.saveAll(placeDtos);
+
+    StepVerifier.create(sut).expectComplete();
   }
 }
