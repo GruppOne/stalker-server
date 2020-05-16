@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 
 @SpringBootTest
-class PositionServiceTest {
+class PlaceSerializationServiceTest {
 
-  @Autowired private PositionService positionService;
+  @Autowired private PlaceSerializationService positionService;
 
   @Test
   void testConvertRawPositionJson() {

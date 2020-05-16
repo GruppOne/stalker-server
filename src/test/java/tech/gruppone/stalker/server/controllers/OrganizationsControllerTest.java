@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.services.PlaceService;
@@ -24,11 +25,11 @@ class OrganizationsControllerTest {
 
   @Test
   void testGetOrganizations() {
-    var organizationId = 1L;
-    var name = "name";
-    var description = "description";
+    final var organizationId = 1L;
+    final var name = "name";
+    final var description = "description";
 
-    var organizationDao =
+    final var organizationDao =
         OrganizationDao.builder()
             .id(organizationId)
             .name(name)
@@ -41,7 +42,6 @@ class OrganizationsControllerTest {
     when(organizationRepository.findById(1L)).thenReturn(Mono.just(organizationDao));
     when(placeService.findAllByOrganizationId(any(Long.class))).thenReturn(Flux.empty());
 
-    // TODO this assertion is not really meaningful
     webTestClient
         .get()
         .uri("/organizations")
@@ -51,10 +51,41 @@ class OrganizationsControllerTest {
         .expectBody()
         .jsonPath("$.organizations[0].id")
         .isEqualTo(1L)
-        .jsonPath("$.organizations[0].organizationData.places")
+        .jsonPath("$.organizations[0].data.places")
         .isArray();
 
     verify(organizationRepository).findAll();
     verify(placeService).findAllByOrganizationId(1L);
+  }
+
+  @Test
+  void testPostOrganizations() {
+    final long id = 1L;
+    final String name = "name";
+    final String description = "description";
+
+    final OrganizationDataDto organizationDataDto =
+        OrganizationDataDto.builder().name(name).description(description).build();
+
+    final OrganizationDao expectedOrganizationDao =
+        OrganizationDao.builder().id(id).name(name).description(description).build();
+
+    when(organizationRepository.save(expectedOrganizationDao.withId(null)))
+        .thenReturn(Mono.just(expectedOrganizationDao));
+
+    when(placeService.saveAll(any())).thenReturn(Flux.empty());
+
+    webTestClient
+        .post()
+        .uri("/organizations")
+        .body(Mono.just(organizationDataDto), OrganizationDataDto.class)
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectBody()
+        .jsonPath("$.id")
+        .isEqualTo(id);
+
+    verify(organizationRepository).save(expectedOrganizationDao.withId(null));
   }
 }

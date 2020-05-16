@@ -48,7 +48,7 @@ class PlaceServiceTest {
                       .build())
               .build());
   @MockBean private PlaceRepository placeRepository;
-  @MockBean private PositionService positionService;
+  @MockBean private PlaceSerializationService positionService;
   @Autowired private PlaceService placeService;
 
   @Test
