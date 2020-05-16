@@ -1,20 +1,18 @@
 package tech.gruppone.stalker.server.security;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Base64;
+import java.util.Date;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -27,13 +25,12 @@ public class JwtConfiguration {
   public JwtConfiguration(
       @NonNull @Value("${jwt.secret}") String secret,
       @NonNull @Value("${jwt.expiration-time}") String expirationTime) {
-    this.secret = secret;
+    this.secret = Base64.getEncoder().encodeToString(secret.getBytes());
     this.expirationTime = expirationTime;
   }
 
   private Key getEncodedKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(this.secret);
-    return Keys.hmacShaKeyFor(keyBytes);
+    return Keys.hmacShaKeyFor(secret.getBytes());
   }
 
   // TODO should probably move the following methods to a separate class called JwtTokenService with an injected instance of jwtconfiguration
