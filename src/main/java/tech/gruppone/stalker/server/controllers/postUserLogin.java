@@ -13,7 +13,7 @@ import tech.gruppone.stalker.server.services.LoginService;
 
 @RestController
 @Value
-public class LoginController {
+public class postUserLogin {
 
   LoginService loginService;
 

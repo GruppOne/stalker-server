@@ -43,22 +43,22 @@ public class JwtConfiguration {
         .getBody();
   }
 
-  public Boolean isTokenSigned(String token) {
+  /*public Boolean isTokenSigned(String token) {
     return Jwts.parserBuilder().setSigningKey(getEncodedKey()).build().isSigned(token);
-  }
+  }*/
 
   public String getUserId(String token) {
     return getJWTString(token).getSubject();
   }
 
-  public Date getExpirationDate(String token) {
+  /*public Date getExpirationDate(String token) {
     return getJWTString(token).getExpiration();
   }
 
   public boolean isTokenExpired(String token) {
     Date date = new Date();
     return getExpirationDate(token).before(date);
-  }
+  }*/
 
   public String createToken(Long id) {
     Date issuedAt = new Date();

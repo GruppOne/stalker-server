@@ -11,10 +11,8 @@ public interface UserRepository extends ReactiveCrudRepository<UserDao, Long> {
 
   public Mono<UserDao> findById(Long id);
 
-  @Query("select * from Users")
   public Flux<UserDao> findAll();
 
-  @Query("SELECT * FROM User u WHERE u.email = :email")
   public Mono<UserDao> findByEmail(String email);
 
   @Modifying
