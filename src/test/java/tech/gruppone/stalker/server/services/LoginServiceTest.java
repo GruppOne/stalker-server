@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
+import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
@@ -21,7 +21,7 @@ public class LoginServiceTest {
   @MockBean private JwtConfiguration jwtConfiguration;
   @Autowired private LoginService loginService;
 
-   @Test
+  @Test
   public void testLogUser() {
     // Arrange
     String email = "mario@gmail.com";
@@ -32,14 +32,15 @@ public class LoginServiceTest {
 
     when(userRepository.findByEmail(email)).thenReturn(Mono.just(user));
 
-    LoginDataDto loginData = LoginDataDto.builder().email(email).password(password).build();
+    LoginDataDto loginData = new LoginDataDto(email, password);
 
-    EncodedJwtDto encoded = EncodedJwtDto.builder().encodedJwt(jwtConfiguration.createToken(1L)).build();
+    String encoded = jwtConfiguration.createToken(1L);
 
     // Act
-    Mono<EncodedJwtDto> sut = loginService.logUser(loginData);
+    Mono<String> sut = loginService.logUser(loginData);
 
     // Assertion
-    Assertions.assertThat(encoded).isEqualTo(sut.block());
+    //Assertions.assertThat(encoded).isEqualTo(sut.block());
+    StepVerifier.create(sut).expectNext(encoded);
   }
 }

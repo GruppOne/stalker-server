@@ -19,18 +19,18 @@ import org.springframework.context.annotation.PropertySource;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtConfiguration {
 
-  String secret;
+  String encodedKey;
   String expirationTime;
 
   public JwtConfiguration(
-      @NonNull @Value("${jwt.secret}") String secret,
+      @NonNull @Value("${jwt.secret}") String encodedKey,
       @NonNull @Value("${jwt.expiration-time}") String expirationTime) {
-    this.secret = Base64.getEncoder().encodeToString(secret.getBytes());
+    this.encodedKey = Base64.getEncoder().encodeToString(encodedKey.getBytes());
     this.expirationTime = expirationTime;
   }
 
   private Key getEncodedKey() {
-    return Keys.hmacShaKeyFor(secret.getBytes());
+    return Keys.hmacShaKeyFor(encodedKey.getBytes());
   }
 
   // TODO should probably move the following methods to a separate class called JwtTokenService with an injected instance of jwtconfiguration
