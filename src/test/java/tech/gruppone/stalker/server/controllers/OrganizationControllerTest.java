@@ -51,11 +51,11 @@ public class OrganizationControllerTest {
         .expectBody()
         .jsonPath("$.id")
         .isEqualTo(organizationId)
-        .jsonPath("$.organizationData.name")
+        .jsonPath("$.data.name")
         .isEqualTo(name)
-        .jsonPath("$.organizationData.description")
+        .jsonPath("$.data.description")
         .isEqualTo(description)
-        .jsonPath("$.organizationData.places")
+        .jsonPath("$.data.places")
         .isArray();
 
     verify(organizationRepository).findById(organizationId);
