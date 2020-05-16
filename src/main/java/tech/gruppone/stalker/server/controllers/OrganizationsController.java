@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.services.OrganizationService;
@@ -36,7 +35,7 @@ public class OrganizationsController {
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<PostOrganizationsResponse> postOrganizations(
       @RequestBody OrganizationDataDto organizationDataDto) {
-    return Mono.error(NotImplementedException::new);
+    return organizationService.save(organizationDataDto).map(PostOrganizationsResponse::new);
   }
 
   @Value

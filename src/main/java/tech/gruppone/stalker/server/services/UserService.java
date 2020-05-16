@@ -1,8 +1,8 @@
 package tech.gruppone.stalker.server.services;
 
-import lombok.NonNull;
-import lombok.Value;
-import lombok.experimental.NonFinal;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
@@ -10,13 +10,13 @@ import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-@Value
-@NonFinal
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class UserService {
 
-  @NonNull UserRepository userRepository;
-  @NonNull UserDataRepository userDataRepository;
+  UserRepository userRepository;
+  UserDataRepository userDataRepository;
 
   public Mono<UserDto> findById(final long userId) {
 

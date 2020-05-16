@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.services;
 
+import java.sql.Timestamp;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +23,11 @@ public class OrganizationService {
 
   public Flux<OrganizationDto> findAll() {
     // I have no idea why this works
-    return organizationRepository.findAll().map(OrganizationDao::getId).flatMap(this::findById);
+    return organizationRepository
+        .findAll()
+        .map(OrganizationDao::getId)
+        .log()
+        .flatMap(this::findById);
   }
 
   public Mono<OrganizationDto> findById(final long id) {
@@ -39,10 +44,25 @@ public class OrganizationService {
                 builder
                     .name(orgDao.getName())
                     .description(orgDao.getDescription())
-                    .isPrivate(orgDao.isPrivate())
-                    .creationDateTime(orgDao.getCreatedDate())
-                    .lastChangeDateTime(orgDao.getLastModifiedDate())
+                    .isPrivate(orgDao.getIsPrivate())
+                    .creationDateTime(Timestamp.valueOf(orgDao.getCreatedDate()))
+                    .lastChangeDateTime(Timestamp.valueOf(orgDao.getLastModifiedDate()))
                     .build())
         .map(data -> new OrganizationDto(id, data));
+  }
+
+  public Mono<Long> save(OrganizationDataDto organizationDataDto) {
+
+    // XXX careful: there can be multiple organizations with the same name!
+    var name = organizationDataDto.getName();
+    var description = organizationDataDto.getDescription();
+    // TODO implement private orgs
+    var places = organizationDataDto.getPlaces();
+
+    var newOrganizationDao = OrganizationDao.builder().name(name).description(description).build();
+
+    var createdId = organizationRepository.save(newOrganizationDao).map(OrganizationDao::getId);
+
+    return placeService.saveAll(places).then(createdId);
   }
 }

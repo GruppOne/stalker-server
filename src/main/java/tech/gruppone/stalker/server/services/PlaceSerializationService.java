@@ -9,18 +9,18 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.StreamSupport;
-import lombok.Value;
-import lombok.experimental.NonFinal;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 
-@Value
-@NonFinal
-@Service
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Log4j2
-// TODO should probably rename this service
-public class PositionService {
+@Service
+public class PlaceSerializationService {
 
   ObjectMapper jacksonObjectMapper;
 
@@ -59,6 +59,15 @@ public class PositionService {
     }
 
     final ArrayNode innerCoordinates = (ArrayNode) jsonNode.get("coordinates").get(0);
+
+    final var first = geographicalPoints.get(0);
+    final var last = geographicalPoints.get(geographicalPoints.size() - 1);
+
+    if (!first.equals(last)) {
+      log.info("adding manually the last polygon point.");
+
+      geographicalPoints.add(first);
+    }
 
     geographicalPoints.stream()
         .forEachOrdered(

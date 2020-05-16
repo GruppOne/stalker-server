@@ -3,7 +3,6 @@ package tech.gruppone.stalker.server.services;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -29,9 +28,8 @@ public class PlaceService {
     return placeRepository.findAllByOrganizationId(id).map(this::convertDaoToDto);
   }
 
-  PositionService positionService;
+  PlaceSerializationService positionService;
 
-  @NonNull
   private PlaceDto convertDaoToDto(final PlaceDao placeDao) {
     final long id = placeDao.getId();
 
@@ -52,5 +50,20 @@ public class PlaceService {
         PlaceDataDto.builder().name(name).polygon(polygon).placeInfo(placeInfo).build();
 
     return new PlaceDto(id, placeDataDto);
+  }
+
+  public Flux<Void> saveAll(final List<PlaceDto> placeDtos) {
+
+    return Flux.fromStream(placeDtos.stream())
+        .flatMap(
+            placeDto -> {
+              var organizationId = placeDto.getId();
+              var name = placeDto.getData().getName();
+
+              var polygon = placeDto.getData().getPolygon();
+              var position = positionService.convertGeographicalPoints(polygon);
+
+              return placeRepository.create(organizationId, name, position);
+            });
   }
 }
