@@ -2,7 +2,6 @@ package tech.gruppone.stalker.server.services;
 
 import static org.mockito.Mockito.when;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +31,7 @@ public class LoginServiceTest {
 
     when(userRepository.findByEmail(email)).thenReturn(Mono.just(user));
 
-    LoginDataDto loginData = new LoginDataDto(email, password);
+    LoginDataDto loginData = LoginDataDto.builder().email(email).password(password).build();
 
     String encoded = jwtConfiguration.createToken(1L);
 
@@ -40,7 +39,6 @@ public class LoginServiceTest {
     Mono<String> sut = loginService.logUser(loginData);
 
     // Assertion
-    //Assertions.assertThat(encoded).isEqualTo(sut.block());
     StepVerifier.create(sut).expectNext(encoded);
   }
 }

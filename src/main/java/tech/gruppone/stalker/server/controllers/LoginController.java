@@ -23,7 +23,7 @@ public class LoginController {
   }
 
   @Value
-  public class EncodedJwtDto {
+  public static class EncodedJwtDto {
 
     String jwt;
   }
