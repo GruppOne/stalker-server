@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.services.LoginService;
 
@@ -20,6 +19,12 @@ public class LoginController {
   @PostMapping("/user/login")
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<EncodedJwtDto> postUserLogin(@RequestBody LoginDataDto loginDataDto) {
-    return loginService.logUser(loginDataDto);
+    return loginService.logUser(loginDataDto).map(EncodedJwtDto::new);
+  }
+
+  @Value
+  public class EncodedJwtDto {
+
+    String jwt;
   }
 }
