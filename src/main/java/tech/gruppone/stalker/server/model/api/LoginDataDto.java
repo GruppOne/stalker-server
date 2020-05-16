@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 
-@Builder
-@Data
+
 @Value
 public class LoginDataDto {
 
-  String email;
+  @NonNull  String email;
 
-  String password;
+  @NonNull  String password;
 }

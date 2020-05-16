@@ -12,7 +12,7 @@ import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.services.LoginService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class postUserLoginTest {
+public class LoginControllerTest {
 
   @Autowired WebTestClient testClient;
 
