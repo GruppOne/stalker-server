@@ -8,5 +8,5 @@ import org.springframework.data.annotation.Id;
 public class OrganizationDto {
   @Id long id;
 
-  @NonNull OrganizationDataDto organizationData;
+  @NonNull OrganizationDataDto data;
 }

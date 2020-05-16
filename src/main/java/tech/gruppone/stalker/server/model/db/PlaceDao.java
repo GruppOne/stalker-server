@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
 @Value
-// no @table here because this corresponds to tables Place and PlaceData joined on id
+// TODO refactor to match table exactly
 public class PlaceDao {
 
   @Id

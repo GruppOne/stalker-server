@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -12,9 +13,11 @@ import org.springframework.data.relational.core.mapping.Table;
 @Value
 @Table("Organization")
 public class OrganizationDao {
+  // r2dbc wants a null field when saving the DAO
+  @With
   @Id
   @Column("id")
-  long id;
+  Long id;
 
   @NonNull
   @Column("name")
@@ -24,14 +27,14 @@ public class OrganizationDao {
   @Column("description")
   String description;
 
+  @Builder.Default
   @Column("isPrivate")
-  boolean isPrivate;
+  Boolean isPrivate = false;
 
-  @NonNull
   @Column("createdDate")
   LocalDateTime createdDate;
 
-  @NonNull
+  @With
   @Column("lastModifiedDate")
   LocalDateTime lastModifiedDate;
 }
