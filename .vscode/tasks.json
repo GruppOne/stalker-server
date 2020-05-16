@@ -53,40 +53,6 @@
       "problemMatcher": []
     },
     {
-      "label": "run spring boot application (./gradlew bootRun)",
-      "type": "shell",
-      "command": "./gradlew bootRun --info",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "compile java code continuously",
-      "type": "shell",
-      "command": "./gradlew compileJava --continuous --info",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "isBackground": true,
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
       "label": "format java code continuously",
       "type": "shell",
       "command": "./gradlew spotlessApply --continuous",
@@ -102,9 +68,9 @@
       "problemMatcher": []
     },
     {
-      "label": "compose up rdb and rdb-gui",
+      "label": "compile java code continuously",
       "type": "shell",
-      "command": "docker-compose up -d rdb rdb-gui && docker-compose logs -f rdb",
+      "command": "./gradlew compileJava --continuous --info",
       "presentation": {
         "echo": true,
         "reveal": "silent",
@@ -115,31 +81,77 @@
       },
       "isBackground": true,
       "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "compose down rdb and rdb-gui",
-      "type": "shell",
-      "command": "docker-compose down rdb rdb-gui --remove-orphans --volumes --rmi local",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "isBackground": true,
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "down & up rdb and rdb-gui",
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "compose down rdb and rdb-gui",
-        "compose up rdb and rdb-gui"
+      "problemMatcher": [
+        // "$gradle"
       ]
-    }
+    },
+    {
+      "label": "test java code continuously",
+      "type": "shell",
+      "command": "./gradlew test --continuous --info",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true,
+      "group": "build",
+      "problemMatcher": [
+        // "$gradle"
+      ]
+    },
+    {
+      "label": "./gradlew bootRun - run spring boot application",
+      "type": "shell",
+      "command": "./gradlew bootRun --info",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    // {
+    //   "label": "compose up rdb and rdb-gui",
+    //   "type": "shell",
+    //   "command": "docker-compose up -d rdb rdb-gui && docker-compose logs -f rdb",
+    //   "presentation": {
+    //     "echo": true,
+    //     "reveal": "silent",
+    //     "focus": false,
+    //     "panel": "shared",
+    //     "showReuseMessage": true,
+    //     "clear": false
+    //   },
+    //   "isBackground": true,
+    //   "group": "build",
+    //   "problemMatcher": []
+    // },
+    // {
+    //   "label": "compose down rdb and rdb-gui",
+    //   "type": "shell",
+    //   "command": "docker-compose down --remove-orphans --volumes --rmi local",
+    //   "presentation": {
+    //     "echo": true,
+    //     "reveal": "silent",
+    //     "focus": false,
+    //     "panel": "shared",
+    //     "showReuseMessage": true,
+    //     "clear": false
+    //   },
+    //   "isBackground": true,
+    //   "group": "build",
+    //   "problemMatcher": []
+    // },
   ]
 }
