@@ -44,7 +44,7 @@ public class LoginControllerTest {
         .body(Mono.just(loginData), LoginDataDto.class)
         .exchange()
         .expectStatus()
-        .isCreated();
+        .isCreated().expectBody().jsonPath("$.jwt").exists();
 
      verify(loginService).logUser(loginData);
   }
