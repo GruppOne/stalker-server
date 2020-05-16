@@ -29,7 +29,7 @@ START TRANSACTION;
 
 INSERT INTO `Organization` (`name`, `description`) VALUES
 ('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software'),
-('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica ☺️👨🏻‍💻👩🏿‍💻');
+('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️');
 
 --
 -- Dump dei dati per la tabella `place`
