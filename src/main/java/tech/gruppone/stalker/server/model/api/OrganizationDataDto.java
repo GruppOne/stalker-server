@@ -1,6 +1,6 @@
 package tech.gruppone.stalker.server.model.api;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
@@ -20,9 +20,9 @@ public class OrganizationDataDto {
   @NonNull @Singular List<PlaceDto> places;
 
   // Using the boxed type because both jackson and lombok behave strangely with primitive booleans
-  @Builder.Default Boolean isPrivate = false;
+  @NonNull @Builder.Default Boolean isPrivate = false;
 
-  @NonNull LocalDateTime creationDateTime;
-
-  @NonNull LocalDateTime lastChangeDateTime;
+  // use timestamps in DTOs to serialize datetimes correctly
+  Timestamp creationDateTime;
+  Timestamp lastChangeDateTime;
 }
