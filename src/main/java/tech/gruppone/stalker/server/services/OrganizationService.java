@@ -10,8 +10,10 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto.OrganizationDataDtoBuilder;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
+import tech.gruppone.stalker.server.model.api.PlaceDataDto;
 import tech.gruppone.stalker.server.model.api.PlaceDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
+import tech.gruppone.stalker.server.model.db.PlaceDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
 @AllArgsConstructor
@@ -53,16 +55,24 @@ public class OrganizationService {
 
   public Mono<Long> save(OrganizationDataDto organizationDataDto) {
 
-    // XXX careful: there can be multiple organizations with the same name!
-    var name = organizationDataDto.getName();
-    var description = organizationDataDto.getDescription();
     // TODO implement private orgs
-    var places = organizationDataDto.getPlaces();
+    // XXX careful: there can be multiple organizations with the same name!
+    String name = organizationDataDto.getName();
+    String description = organizationDataDto.getDescription();
 
-    var newOrganizationDao = OrganizationDao.builder().name(name).description(description).build();
+    OrganizationDao newOrganizationDao =
+        OrganizationDao.builder().name(name).description(description).build();
 
-    var createdId = organizationRepository.save(newOrganizationDao).map(OrganizationDao::getId);
+    Mono<Long> createdId =
+        organizationRepository.save(newOrganizationDao).map(OrganizationDao::getId).log();
 
-    return placeService.saveAll(places).then(createdId);
+    Flux<PlaceDataDto> places =
+        Flux.fromIterable(organizationDataDto.getPlaces()).map(PlaceDto::getData);
+
+    // does not return the created rows in placeposition
+    Flux<PlaceDao> createdPlaces =
+        createdId.flatMapMany(organizationId -> placeService.saveAll(places, organizationId)).log();
+
+    return createdPlaces.then(createdId);
   }
 }

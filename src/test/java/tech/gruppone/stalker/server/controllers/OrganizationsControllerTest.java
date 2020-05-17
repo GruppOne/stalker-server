@@ -1,6 +1,7 @@
 package tech.gruppone.stalker.server.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -60,7 +61,7 @@ class OrganizationsControllerTest {
 
   @Test
   void testPostOrganizations() {
-    final long id = 1L;
+    final long organizationId = 1L;
     final String name = "name";
     final String description = "description";
 
@@ -68,12 +69,11 @@ class OrganizationsControllerTest {
         OrganizationDataDto.builder().name(name).description(description).build();
 
     final OrganizationDao expectedOrganizationDao =
-        OrganizationDao.builder().id(id).name(name).description(description).build();
+        OrganizationDao.builder().id(organizationId).name(name).description(description).build();
 
     when(organizationRepository.save(expectedOrganizationDao.withId(null)))
         .thenReturn(Mono.just(expectedOrganizationDao));
-
-    when(placeService.saveAll(any())).thenReturn(Flux.empty());
+    when(placeService.saveAll(any(), eq(organizationId))).thenReturn(Flux.empty());
 
     webTestClient
         .post()
@@ -84,8 +84,9 @@ class OrganizationsControllerTest {
         .isCreated()
         .expectBody()
         .jsonPath("$.id")
-        .isEqualTo(id);
+        .isEqualTo(organizationId);
 
     verify(organizationRepository).save(expectedOrganizationDao.withId(null));
+    verify(placeService).saveAll(any(), eq(organizationId));
   }
 }
