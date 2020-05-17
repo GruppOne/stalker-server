@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -36,10 +35,22 @@ public class PlacePositionService {
   }
 
   public Mono<Integer> savePlacePosition(
-      final Long placeId, @NonNull final List<GeographicalPoint> geographicalPoints) {
+      final Long placeId, final List<GeographicalPoint> geographicalPoints) {
+    log.info("saving position for place {}", placeId);
+
     String rawPositionJson = convertGeographicalPoints(geographicalPoints);
 
-    return placePositionRepository.create(placeId, rawPositionJson);
+    // var createdPlacePosition =
+    // // createdPlacePosition.subscribe(
+    // //     howMany -> log.info("created {} place positions", howMany),
+    // Throwable::printStackTrace);
+
+    var createdPlacePositionNumber = placePositionRepository.create(placeId, rawPositionJson);
+
+    createdPlacePositionNumber.subscribe(
+        howMany -> log.info("if 1 then placeposition was created: {}", howMany));
+
+    return createdPlacePositionNumber;
   }
 
   ObjectMapper jacksonObjectMapper;

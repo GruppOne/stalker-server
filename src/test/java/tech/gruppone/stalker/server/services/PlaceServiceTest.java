@@ -1,5 +1,7 @@
 package tech.gruppone.stalker.server.services;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -16,6 +18,7 @@ import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.PlaceInfo;
 import tech.gruppone.stalker.server.model.api.PlaceDto;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.PlacePositionRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @SpringBootTest
@@ -75,15 +78,16 @@ class PlaceServiceTest {
     var sut = placeService.findAllByOrganizationId(organizationId);
 
     sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
-    // assertThat(sut.next().block()).isEqualTo(expectedPlaceDto);
   }
 
+  @MockBean private PlacePositionRepository placePositionRepository;
+
   @Test
-  // TODO this test is kind of meaningless...
   void testSaveAll() {
-    PlaceDao newPlaceDao =
+    PlaceDao expectedPlaceDao =
         PlaceDao.builder()
-            .organizationId(organizationId)
+            .id(1L)
+            .organizationId(1L)
             .name(name)
             .address(address)
             .city(city)
@@ -91,11 +95,43 @@ class PlaceServiceTest {
             .state(state)
             .build();
 
-    when(placeRepository.saveAll(List.of(newPlaceDao))).thenReturn(Flux.just(placeDao));
+    PlaceDao newPlaceDao =
+        PlaceDao.builder()
+            .organizationId(1L)
+            .name(name)
+            .address(address)
+            .city(city)
+            .zipcode(zipcode)
+            .state(state)
+            .build();
 
-    Flux<PlaceDataDto> placeDataDtos = Flux.empty();
-    var sut = placeService.saveAll(placeDataDtos, 1L);
+    when(placeRepository.save(newPlaceDao)).thenReturn(Mono.just(expectedPlaceDao));
+    when(placePositionRepository.create(eq(id), any())).thenReturn(Mono.just(1));
 
-    sut.as(StepVerifier::create).expectComplete();
+    var placeDataDtos = Flux.just(expectedPlaceDto).map(PlaceDto::getData);
+
+    Flux<PlaceDao> sut = placeService.saveAll(placeDataDtos, 1L);
+
+    sut.as(StepVerifier::create).expectNext(expectedPlaceDao);
   }
+
+  // this test was kind of meaningless...
+  // void testSaveAll() {
+  //   PlaceDao newPlaceDao =
+  //       PlaceDao.builder()
+  //           .organizationId(organizationId)
+  //           .name(name)
+  //           .address(address)
+  //           .city(city)
+  //           .zipcode(zipcode)
+  //           .state(state)
+  //           .build();
+
+  //   when(placeRepository.saveAll(List.of(newPlaceDao))).thenReturn(Flux.just(placeDao));
+
+  //   Flux<PlaceDataDto> placeDataDtos = Flux.empty();
+  //   var sut = placeService.saveAll(placeDataDtos, 1L);
+
+  //   sut.as(StepVerifier::create).expectComplete();
+  // }
 }

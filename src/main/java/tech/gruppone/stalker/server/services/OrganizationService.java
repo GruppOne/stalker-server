@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,12 +14,12 @@ import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto;
 import tech.gruppone.stalker.server.model.api.PlaceDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
-import tech.gruppone.stalker.server.model.db.PlaceDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
+@Log4j2
 public class OrganizationService {
   OrganizationRepository organizationRepository;
   PlaceService placeService;
@@ -55,22 +56,17 @@ public class OrganizationService {
     // XXX careful: there can be multiple organizations with the same name!
     String name = organizationDataDto.getName();
     String description = organizationDataDto.getDescription();
+    // TODO we should not have to have an id for places not yet created
+    Flux<PlaceDataDto> placeDataDtos =
+        Flux.fromIterable(organizationDataDto.getPlaces()).map(PlaceDto::getData);
 
     OrganizationDao newOrganizationDao =
         OrganizationDao.builder().name(name).description(description).build();
 
-    Mono<Long> createdId =
-        organizationRepository.save(newOrganizationDao).map(OrganizationDao::getId);
-
-    Flux<PlaceDataDto> places =
-        Flux.fromIterable(organizationDataDto.getPlaces()).map(PlaceDto::getData);
-
-    // does not return the created rows in placeposition
-    Flux<PlaceDao> createdPlaces =
-        createdId.flatMapMany(organizationId -> placeService.saveAll(places, organizationId));
-
-    createdPlaces.log();
-
-    return createdId;
+    return organizationRepository
+        .save(newOrganizationDao)
+        .doOnNext(orgDao -> log.info("created organization {}", orgDao))
+        .map(OrganizationDao::getId)
+        .doOnNext(organizationId -> placeService.saveAll(placeDataDtos, organizationId));
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,13 +18,19 @@ import tech.gruppone.stalker.server.repositories.PlaceRepository;
 @Service
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Log4j2
 public class PlaceService {
   PlaceRepository placeRepository;
 
   PlacePositionService placePositionService;
 
   public Flux<PlaceDao> saveAll(final Flux<PlaceDataDto> placeDataDtos, final long organizationId) {
-    return placeDataDtos.flatMap(placeDataDto -> save(placeDataDto, organizationId));
+    log.info("saving some places for organization {}", organizationId);
+
+    var placeDaos = placeDataDtos.flatMap(placeDataDto -> save(placeDataDto, organizationId));
+
+    placeDaos.subscribe(log::info);
+    return placeDaos;
   }
 
   public Mono<PlaceDao> save(final PlaceDataDto placeDataDto, final long organizationId) {
@@ -32,6 +39,8 @@ public class PlaceService {
     final String city = placeDataDto.getPlaceInfo().getCity();
     final String zipcode = placeDataDto.getPlaceInfo().getZipcode();
     final String state = placeDataDto.getPlaceInfo().getState();
+
+    log.info("saving place {} for organization {}", name, organizationId);
 
     final PlaceDao placeDao =
         PlaceDao.builder()
@@ -43,19 +52,13 @@ public class PlaceService {
             .state(state)
             .build();
 
-    final Mono<PlaceDao> savedPlaceDao = placeRepository.save(placeDao);
-
     // save place position to separate table
     final List<GeographicalPoint> polygon = placeDataDto.getPolygon();
 
-    final Mono<Integer> howManyPlacePositionCreated =
-        savedPlaceDao
-            .map(PlaceDao::getId)
-            .flatMap(createdId -> placePositionService.savePlacePosition(createdId, polygon));
-
-    howManyPlacePositionCreated.subscribe();
-
-    return savedPlaceDao;
+    return placeRepository
+        .save(placeDao)
+        .doOnNext(
+            createdPlace -> placePositionService.savePlacePosition(createdPlace.getId(), polygon));
   }
 
   private Mono<PlaceDto> convertDaoToDto(final PlaceDao placeDao) {
