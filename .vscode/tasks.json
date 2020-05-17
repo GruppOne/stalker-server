@@ -104,6 +104,21 @@
       ]
     },
     {
+      "label": "format and test java code continuously",
+      "type": "shell",
+      "command": "./gradlew spotlessApply test --continuous",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
       "label": "./gradlew bootRun - run spring boot application",
       "type": "shell",
       "command": "./gradlew bootRun --info",

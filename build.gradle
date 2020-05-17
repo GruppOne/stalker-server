@@ -199,3 +199,4 @@ sonarqube {
 }
 
 tasks.findByName('sonarqube').mustRunAfter('check')
+tasks.findByName('test').mustRunAfter('spotlessApply')

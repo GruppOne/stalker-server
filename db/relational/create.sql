@@ -174,6 +174,8 @@ ADD
 ALTER TABLE
   `Connection`
 ADD
+  UNIQUE KEY `ConnectionKey` (`organizationId`, `userId`),
+ADD
   KEY `organizationId` (`organizationId`),
 ADD
   KEY `userId` (`userId`);
@@ -191,6 +193,8 @@ ADD
 --
 ALTER TABLE
   `OrganizationRole`
+ADD
+  UNIQUE KEY `OrganizationRoleKey` (`organizationId`, `userId`,`administratorType`),
 ADD
   KEY `organizationId` (`organizationId`),
 ADD
@@ -212,7 +216,7 @@ ADD
 ALTER TABLE
   `PlaceData`
 ADD
-  KEY `id` (`id`);
+  PRIMARY KEY `id` (`id`);
 
 --
 -- Indici per le tabelle `Place`
@@ -230,7 +234,7 @@ ADD
 ALTER TABLE
   `UserData`
 ADD
-  KEY `userId` (`userId`);
+  PRIMARY KEY `userId` (`userId`);
 
 --
 -- Indici per le tabelle `UserLog`
@@ -238,7 +242,7 @@ ADD
 ALTER TABLE
   `UserLog`
 ADD
-  KEY `userId` (`userId`);
+  PRIMARY KEY `userId` (`userId`);
 
 --
 -- Indici per le tabelle `User`
