@@ -16,16 +16,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 
 @SpringBootTest
-class PlaceSerializationServiceTest {
+class PlacePositionServiceTest {
 
-  @Autowired private PlaceSerializationService positionService;
+  @Autowired private PlacePositionService placePositionService;
 
   @Test
   void testConvertRawPositionJson() {
     List<GeographicalPoint> expectedPoints = Arrays.asList(new GeographicalPoint(50.0, 50.0));
     String rawPositionJson = "{\"type\":\"Polygon\",\"coordinates\":[[[50.0,50.0]]]}";
 
-    var sut = positionService.convertRawPositionJson(rawPositionJson);
+    var sut = placePositionService.convertRawPositionJson(rawPositionJson);
 
     assertThat(sut).isEqualTo(expectedPoints);
   }
@@ -35,7 +35,7 @@ class PlaceSerializationServiceTest {
     String expectedRawPositionJson = "{\"type\":\"Polygon\",\"coordinates\":[[[50.0,50.0]]]}";
     List<GeographicalPoint> geographicalPoints = Arrays.asList(new GeographicalPoint(50.0, 50.0));
 
-    var sut = positionService.convertGeographicalPoints(geographicalPoints);
+    var sut = placePositionService.convertGeographicalPoints(geographicalPoints);
 
     assertThat(sut).isEqualTo(expectedRawPositionJson);
   }
@@ -62,10 +62,10 @@ class PlaceSerializationServiceTest {
 
   @ParameterizedTest
   @MethodSource("testConvertGeographicalPointsParameters")
-  void testConvertGeographicalPoints(
+  void testConvertManyGeographicalPoints(
       List<GeographicalPoint> geographicalPoints, String expectedRawPositionJson) {
 
-    var sut = positionService.convertGeographicalPoints(geographicalPoints);
+    var sut = placePositionService.convertGeographicalPoints(geographicalPoints);
 
     assertThat(sut).isEqualTo(expectedRawPositionJson);
   }

@@ -10,7 +10,7 @@ import tech.gruppone.stalker.server.model.db.PlacePositionDao;
 public interface PlacePositionRepository extends ReactiveCrudRepository<PlacePositionDao, Long> {
 
   @Query("SELECT id, ST_ASGEOJSON(position) AS positionGeoJson FROM PlacePosition WHERE id = :id")
-  Mono<PlacePositionDao> findById(final long id);
+  Mono<PlacePositionDao> findById(final Long id);
 
   // returns number of affected rows (should be 0 or 1)
   @Modifying

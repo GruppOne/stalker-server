@@ -106,7 +106,7 @@
     {
       "label": "format and test java code continuously",
       "type": "shell",
-      "command": "./gradlew spotlessApply test --continuous",
+      "command": "./gradlew spotlessApply test jacocoTestReport --continuous",
       "presentation": {
         "echo": true,
         "reveal": "silent",

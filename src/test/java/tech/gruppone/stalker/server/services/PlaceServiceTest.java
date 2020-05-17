@@ -1,7 +1,5 @@
 package tech.gruppone.stalker.server.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -34,7 +32,15 @@ class PlaceServiceTest {
   String zipcode = "zipcode";
   String state = "state";
   PlaceDao placeDao =
-      new PlaceDao(id, organizationId, name, polygonJson, address, city, zipcode, state);
+      PlaceDao.builder()
+          .id(id)
+          .organizationId(organizationId)
+          .name(name)
+          .address(address)
+          .city(city)
+          .zipcode(zipcode)
+          .state(state)
+          .build();
   PlaceDto expectedPlaceDto =
       new PlaceDto(
           id,
@@ -51,7 +57,6 @@ class PlaceServiceTest {
               .build());
 
   @MockBean private PlaceRepository placeRepository;
-  @MockBean private PlaceSerializationService positionService;
   @Autowired private PlaceService placeService;
 
   @Test
@@ -60,7 +65,7 @@ class PlaceServiceTest {
 
     var sut = placeService.findById(id);
 
-    assertThat(sut.block()).isEqualTo(expectedPlaceDto);
+    sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
   }
 
   @Test
@@ -69,17 +74,28 @@ class PlaceServiceTest {
 
     var sut = placeService.findAllByOrganizationId(organizationId);
 
-    assertThat(sut.next().block()).isEqualTo(expectedPlaceDto);
+    sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
+    // assertThat(sut.next().block()).isEqualTo(expectedPlaceDto);
   }
 
   @Test
   // TODO this test is kind of meaningless...
   void testSaveAll() {
-    when(placeRepository.create(any(), any(), any())).thenReturn(Mono.empty());
+    PlaceDao newPlaceDao =
+        PlaceDao.builder()
+            .organizationId(organizationId)
+            .name(name)
+            .address(address)
+            .city(city)
+            .zipcode(zipcode)
+            .state(state)
+            .build();
 
-    List<PlaceDto> placeDtos = Collections.emptyList();
-    var sut = placeService.saveAll(placeDtos);
+    when(placeRepository.saveAll(List.of(newPlaceDao))).thenReturn(Flux.just(placeDao));
 
-    StepVerifier.create(sut).expectComplete();
+    Flux<PlaceDataDto> placeDataDtos = Flux.empty();
+    var sut = placeService.saveAll(placeDataDtos, 1L);
+
+    sut.as(StepVerifier::create).expectComplete();
   }
 }

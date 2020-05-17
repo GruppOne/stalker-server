@@ -1,30 +1,50 @@
 package tech.gruppone.stalker.server.services;
 
-import static java.util.stream.Collectors.toList;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.api.PlaceDataDto;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
+import tech.gruppone.stalker.server.model.db.PlacePositionDao;
+import tech.gruppone.stalker.server.repositories.PlacePositionRepository;
 
+@Service
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Log4j2
-@Service
-public class PlaceSerializationService {
+public class PlacePositionService {
+
+  PlacePositionRepository placePositionRepository;
+
+  public Mono<List<PlaceDataDto.GeographicalPoint>> findGeographicalPointsByPlaceId(final Long id) {
+    return placePositionRepository
+        .findById(id)
+        .map(PlacePositionDao::getRawPositionJson)
+        .map(this::convertRawPositionJson);
+  }
+
+  public Mono<Integer> savePlacePosition(
+      final Long placeId, @NonNull final List<GeographicalPoint> geographicalPoints) {
+    String rawPositionJson = convertGeographicalPoints(geographicalPoints);
+
+    return placePositionRepository.create(placeId, rawPositionJson);
+  }
 
   ObjectMapper jacksonObjectMapper;
 
-  // FIXME should I drop the last point?
+  // TODO these could be private!
   public List<GeographicalPoint> convertRawPositionJson(final String rawPositionJson) {
     JsonNode coordinates;
     try {
@@ -32,16 +52,24 @@ public class PlaceSerializationService {
 
       final Iterable<JsonNode> iterable = coordinates::elements;
 
-      return StreamSupport.stream(iterable.spliterator(), false)
-          .map(
-              node -> {
-                final double latitude = Double.parseDouble(node.get(0).asText());
-                final double longitude = Double.parseDouble(node.get(1).asText());
+      var geographicalPoints =
+          StreamSupport.stream(iterable.spliterator(), false)
+              .map(
+                  node -> {
+                    final double latitude = Double.parseDouble(node.get(0).asText());
+                    final double longitude = Double.parseDouble(node.get(1).asText());
 
-                return new GeographicalPoint(latitude, longitude);
-              })
-          .collect(toList());
+                    return new GeographicalPoint(latitude, longitude);
+                  })
+              .collect(Collectors.toList());
 
+      // drop last point if list is not empty. I don't know if a single-point polygon is allowed by
+      // the GeoJSON spec
+      if (geographicalPoints.size() > 1) {
+        geographicalPoints.remove(geographicalPoints.size() - 1);
+      }
+
+      return geographicalPoints;
     } catch (final JsonProcessingException e) {
       log.error(e.getMessage());
 

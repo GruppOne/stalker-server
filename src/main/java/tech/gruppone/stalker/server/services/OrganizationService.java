@@ -25,11 +25,7 @@ public class OrganizationService {
 
   public Flux<OrganizationDto> findAll() {
     // I have no idea why this works
-    return organizationRepository
-        .findAll()
-        .map(OrganizationDao::getId)
-        .log()
-        .flatMap(this::findById);
+    return organizationRepository.findAll().map(OrganizationDao::getId).flatMap(this::findById);
   }
 
   public Mono<OrganizationDto> findById(final long id) {
@@ -64,15 +60,17 @@ public class OrganizationService {
         OrganizationDao.builder().name(name).description(description).build();
 
     Mono<Long> createdId =
-        organizationRepository.save(newOrganizationDao).map(OrganizationDao::getId).log();
+        organizationRepository.save(newOrganizationDao).map(OrganizationDao::getId);
 
     Flux<PlaceDataDto> places =
         Flux.fromIterable(organizationDataDto.getPlaces()).map(PlaceDto::getData);
 
     // does not return the created rows in placeposition
     Flux<PlaceDao> createdPlaces =
-        createdId.flatMapMany(organizationId -> placeService.saveAll(places, organizationId)).log();
+        createdId.flatMapMany(organizationId -> placeService.saveAll(places, organizationId));
 
-    return createdPlaces.then(createdId);
+    createdPlaces.log();
+
+    return createdId;
   }
 }
