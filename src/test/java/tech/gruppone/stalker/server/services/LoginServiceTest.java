@@ -18,6 +18,7 @@ public class LoginServiceTest {
 
   @MockBean private UserRepository userRepository;
   @MockBean private JwtConfiguration jwtConfiguration;
+
   @Autowired private LoginService loginService;
 
   @Test
@@ -31,14 +32,14 @@ public class LoginServiceTest {
 
     when(userRepository.findByEmail(email)).thenReturn(Mono.just(user));
 
-    LoginDataDto loginData = LoginDataDto.builder().email(email).password(password).build();
+    LoginDataDto loginData = new LoginDataDto(email,password);
 
     String encoded = jwtConfiguration.createToken(1L);
 
     // Act
     Mono<String> sut = loginService.logUser(loginData);
 
-    // Assertion
+    // Assert
     StepVerifier.create(sut).expectNext(encoded);
   }
 }

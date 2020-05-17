@@ -33,7 +33,7 @@ public class JwtConfiguration {
     return Keys.hmacShaKeyFor(encodedKey.getBytes());
   }
 
-  // TODO should probably move the following methods to a separate class called JwtTokenService with an injected instance of jwtconfiguration
+  // TODO should probably move the following methods to a separate class called JwtTokenService
 
   public Claims getJWTString(String token) {
     return Jwts.parserBuilder()
