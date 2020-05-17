@@ -29,13 +29,14 @@ public class LoginService {
               var expectedPassword = user.getPassword();
 
               if (!loginData.getPassword().equals(expectedPassword)) {
+                // TODO this is the wrong way to throw from inside a map. should fix it eventually
                 throw new UnauthorizedException();
               }
 
               return jwtConfiguration.createToken(user.getId());
             })
         .switchIfEmpty(
-            Mono.error(new UnauthorizedException()));
+            Mono.error(UnauthorizedException::new));
 
   }
 }
