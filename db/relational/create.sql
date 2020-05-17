@@ -101,6 +101,7 @@ CREATE TABLE `Organization` (
   `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+-- FIXME this should be 1 to 1 with place, not 0..1 to 1
 -- --------------------------------------------------------
 --
 -- Struttura della tabella `PlacePosition`
