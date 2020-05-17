@@ -22,14 +22,19 @@ public class LoginService {
   public Mono<String> logUser(LoginDataDto loginData) {
     Mono<UserDao> userDao = userRepository.findByEmail(loginData.getEmail());
 
-    return userDao.handle(
-        (user, sink) -> {
-          var expectedPassword = user.getPassword();
-          if (!loginData.getPassword().equals(expectedPassword)) {
-            sink.error(new UnauthorizedException());
-          } else {
-            sink.next(jwtConfiguration.createToken(user.getId()));
-          }
-        });
+    return userDao
+        .map(
+            user -> {
+              var expectedPassword = user.getPassword();
+
+              if (!loginData.getPassword().equals(expectedPassword)) {
+                // TODO this is the wrong way to throw from inside a map. should fix it eventually
+                throw new UnauthorizedException();
+              }
+
+              return jwtConfiguration.createToken(user.getId());
+            })
+        // this is needed to handle the case where the findByEmail call returns no users
+        .switchIfEmpty(Mono.error(UnauthorizedException::new));
   }
 }
