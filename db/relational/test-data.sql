@@ -34,22 +34,22 @@ INSERT INTO `Organization` (`name`, `description`) VALUES
 --
 -- Dump dei dati per la tabella `place`
 --
-SET @g = 'POLYGON((45.408351 11.886792,45.408164 11.886736,45.408115 11.887098,45.408351 11.886792))';
-SET @h = 'POLYGON((45.408194 11.886379,45.408074 11.886312,45.408063 11.88635,45.408021 11.886304,45.408051 11.886208,45.407978 11.88617,45.407938 11.886283,45.407857 11.886275,45.407859 11.886347,45.407935 11.88635,45.407906 11.886535,45.407859 11.886532,45.407846 11.886092,45.407711 11.886106,45.407718 11.886583,45.407703 11.886878,45.408051 11.886988,45.408074 11.88691,45.408106 11.886926,45.40813 11.886819,45.408194 11.886379))';
-SET @j = 'POLYGON((45.411561 11.887471, 45.411224 11.887326,45.411111 11.887785,45.411561 11.887471))';
-INSERT INTO `Place` (`organizationId`, `name`, `position`) VALUES
-(1, 'Aule Luzzati', ST_PolygonFromText(@g)),
-(1, 'Complesso Paolotti', ST_PolygonFromText(@h)),
-(2, 'Torre Archimede', ST_PolygonFromText(@j));
+INSERT INTO `Place` (`organizationId`, `name`, `address`, `city`, `zipcode`, `state`) VALUES
+(1, 'Aule Luzzatti', 'Via Paolotti', 'Padova', '351d31', 'Italia'),
+(1, 'Complesso Paolotti', 'Via Paolotti', 'Padova', '35131', 'Italia'),
+(2, 'Torre Archimede', 'Via Trieste', 'Padova', '35131', 'Italia');
 
 --
--- Dump dei dati per la tabella `placedata`
+-- Dump dei dati per la tabella `placeposition`
 --
+SET @place_one = 'POLYGON((45.408351 11.886792,45.408164 11.886736,45.408115 11.887098,45.408351 11.886792))';
+SET @place_two = 'POLYGON((45.408194 11.886379,45.408074 11.886312,45.408063 11.88635,45.408021 11.886304,45.408051 11.886208,45.407978 11.88617,45.407938 11.886283,45.407857 11.886275,45.407859 11.886347,45.407935 11.88635,45.407906 11.886535,45.407859 11.886532,45.407846 11.886092,45.407711 11.886106,45.407718 11.886583,45.407703 11.886878,45.408051 11.886988,45.408074 11.88691,45.408106 11.886926,45.40813 11.886819,45.408194 11.886379))';
+SET @place_three = 'POLYGON((45.411561 11.887471, 45.411224 11.887326,45.411111 11.887785,45.411561 11.887471))';
 
-INSERT INTO `PlaceData` (`id`, `address`, `city`, `zipcode`, `state`) VALUES
-(1, 'Via Paolotti', 'Padova', '35131', 'Italia'),
-(2, 'Via Paolotti', 'Padova', '35131', 'Italia'),
-(3, 'Via Trieste', 'Padova', '35131', 'Italia');
+INSERT INTO `PlacePosition` (`id`, `position`) VALUES
+(1, ST_PolygonFromText(@place_one)),
+(2, ST_PolygonFromText(@place_two)),
+(3, ST_PolygonFromText(@place_three));
 
 --
 -- Dump dei dati per la tabella `users`

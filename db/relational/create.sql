@@ -103,14 +103,11 @@ CREATE TABLE `Organization` (
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `PlaceData`
+-- Struttura della tabella `PlacePosition`
 --
-CREATE TABLE `PlaceData` (
+CREATE TABLE `PlacePosition` (
   `id` int(11) NOT NULL,
-  `address` varchar(150) NOT NULL,
-  `city` varchar(75) NOT NULL,
-  `zipcode` varchar(10) NOT NULL,
-  `state` varchar(50) NOT NULL
+  `position` polygon NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -121,7 +118,10 @@ CREATE TABLE `Place` (
   `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `position` polygon NOT NULL
+  `address` varchar(150) NOT NULL,
+  `city` varchar(75) NOT NULL,
+  `zipcode` varchar(10) NOT NULL,
+  `state` varchar(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- --------------------------------------------------------
@@ -211,10 +211,10 @@ ADD
   PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `PlaceData`
+-- Indici per le tabelle `PlacePosition`
 --
 ALTER TABLE
-  `PlaceData`
+  `PlacePosition`
 ADD
   PRIMARY KEY `id` (`id`);
 
@@ -329,12 +329,12 @@ ADD
   CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`administratorType`) REFERENCES `AdministratorType` (`id`);
 
 --
--- Limiti per la tabella `PlaceData`
+-- Limiti per la tabella `PlacePosition`
 --
 ALTER TABLE
-  `PlaceData`
+  `PlacePosition`
 ADD
-  CONSTRAINT `PlaceData_ibfk_1` FOREIGN KEY (`id`) REFERENCES `Place` (`id`);
+  CONSTRAINT `PlacePosition_ibfk_1` FOREIGN KEY (`id`) REFERENCES `Place` (`id`);
 
 --
 -- Limiti per la tabella `Place`
