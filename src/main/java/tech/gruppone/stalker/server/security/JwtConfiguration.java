@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.security;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -35,21 +34,21 @@ public class JwtConfiguration {
 
   // TODO should probably move the following methods to a separate class called JwtTokenService
 
-  public Claims getJWTString(String token) {
-    return Jwts.parserBuilder()
-        .setSigningKey(getEncodedKey())
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
-  }
+  // public Claims getJWTString(String token) {
+  //   return Jwts.parserBuilder()
+  //       .setSigningKey(getEncodedKey())
+  //       .build()
+  //       .parseClaimsJws(token)
+  //       .getBody();
+  // }
 
   /*public Boolean isTokenSigned(String token) {
     return Jwts.parserBuilder().setSigningKey(getEncodedKey()).build().isSigned(token);
   }*/
 
-  public String getUserId(String token) {
-    return getJWTString(token).getSubject();
-  }
+  // public String getUserId(String token) {
+  //   return getJWTString(token).getSubject();
+  // }
 
   /*public Date getExpirationDate(String token) {
     return getJWTString(token).getExpiration();
