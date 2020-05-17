@@ -1,30 +1,31 @@
 package tech.gruppone.stalker.server.model.db;
 
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
+@Builder
 @Value
-// TODO refactor to match table exactly
+@Table("Place")
 public class PlaceDao {
 
+  @With
   @Id
   @Column("id")
-  long id;
+  Long id;
 
+  @NonNull
   @Column("organizationId")
-  long organizationId;
+  Long organizationId;
 
   @NonNull
   @Column("name")
   String name;
 
-  @NonNull
-  @Column("positionGeoJson")
-  String rawPositionJson;
-
-  // we use a single DAO for tables Place and PlaceData
   @NonNull
   @Column("address")
   String address;
