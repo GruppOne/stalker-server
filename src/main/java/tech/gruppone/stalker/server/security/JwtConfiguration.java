@@ -62,7 +62,7 @@ public class JwtConfiguration {
 
   public String createToken(Long id) {
     Date issuedAt = new Date();
-    Date expirationAt = new Date(issuedAt.getTime() + Long.parseLong(expirationTime));
+    Date expirationAt = new Date(issuedAt.getTime() + Long.parseLong(expirationTime)*1000000);
     return Jwts.builder()
         .setSubject(String.valueOf(id))
         .setIssuedAt(issuedAt)
