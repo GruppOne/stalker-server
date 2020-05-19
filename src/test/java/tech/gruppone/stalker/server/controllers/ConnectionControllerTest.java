@@ -5,25 +5,23 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
 import reactor.core.publisher.Flux;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ConnectionControllerTest {
+class ConnectionControllerTest {
 
   @Autowired WebTestClient testClient;
 
   @MockBean ConnectionRepository connectionRepository;
 
   @Test
-  public void testCreateUserConnection() {
+  void testCreateUserConnection() {
 
     long userId = 1L;
     long organizationId = 1L;
@@ -40,7 +38,7 @@ public class ConnectionControllerTest {
   }
 
   @Test
-  public void testDeleteUserConnectionToOrganization() {
+  void testDeleteUserConnectionToOrganization() {
     long userId = 1L;
     long organizationId = 1L;
 
@@ -56,14 +54,15 @@ public class ConnectionControllerTest {
   }
 
   @Test
-  public void testGetConnectedOrganizationsByUserId(){
+  void testGetConnectedOrganizationsByUserId() {
     long userId = 1L;
 
     List<Long> listIds = new ArrayList<>();
     listIds.add(1L);
     listIds.add(2L);
 
-    when(connectionRepository.findConnectedOrganizationsByUserId(userId)).thenReturn(Flux.fromIterable(listIds));
+    when(connectionRepository.findConnectedOrganizationsByUserId(userId))
+        .thenReturn(Flux.fromIterable(listIds));
 
     testClient
         .get()
