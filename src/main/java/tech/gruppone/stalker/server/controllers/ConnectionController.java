@@ -1,13 +1,10 @@
 package tech.gruppone.stalker.server.controllers;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +28,8 @@ public class ConnectionController {
   @PostMapping("/organization/{organizationId}/connection")
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> createUserConnection(
-      @PathVariable("userId") final long userId, @PathVariable("organizationId") long organizationId) {
+      @PathVariable("userId") final long userId,
+      @PathVariable("organizationId") long organizationId) {
     // TODO manage LDAP properties if the organization is private
     return connectionRepository.createUserConnection(userId, organizationId);
   }
@@ -39,7 +37,8 @@ public class ConnectionController {
   @DeleteMapping("/organization/{organizationId}/connection")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteUserConnectionToOrganization(
-      @PathVariable("userId") final long userId, @PathVariable("organizationId") long organizationId) {
+      @PathVariable("userId") final long userId,
+      @PathVariable("organizationId") long organizationId) {
     return connectionRepository.deleteUserConnection(userId, organizationId);
   }
 
@@ -47,8 +46,11 @@ public class ConnectionController {
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   public Mono<GetUserIdOrganizationsConnectionsResponse> getConnectedOrganizationsByUserId(
-      @PathVariable("userId") long userId){
-    return connectionRepository.findConnectedOrganizationsByUserId(userId).collectList().map(GetUserIdOrganizationsConnectionsResponse::new);
+      @PathVariable("userId") long userId) {
+    return connectionRepository
+        .findConnectedOrganizationsByUserId(userId)
+        .collectList()
+        .map(GetUserIdOrganizationsConnectionsResponse::new);
   }
 
   @AllArgsConstructor
