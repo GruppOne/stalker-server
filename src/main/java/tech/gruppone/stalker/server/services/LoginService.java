@@ -3,6 +3,7 @@ package tech.gruppone.stalker.server.services;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
@@ -21,20 +22,19 @@ public class LoginService {
 
   public Mono<String> logUser(LoginDataDto loginData) {
     Mono<UserDao> userDao = userRepository.findByEmail(loginData.getEmail());
+    return userDao.switchIfEmpty(Mono.error(new UnauthorizedException())).handle(
 
-    return userDao
-        .map(
-            user -> {
-              var expectedPassword = user.getPassword();
+      (user, sink) -> {
 
-              if (!loginData.getPassword().equals(expectedPassword)) {
-                // TODO this is the wrong way to throw from inside a map. should fix it eventually
-                throw new UnauthorizedException();
-              }
+        var expectedPassword = user.getPassword();
+        if (!loginData.getPassword().equals(expectedPassword)) {
 
-              return jwtConfiguration.createToken(user.getId());
-            })
-        // this is needed to handle the case where the findByEmail call returns no users
-        .switchIfEmpty(Mono.error(UnauthorizedException::new));
+          sink.error(new UnauthorizedException());
+        }
+        else {
+          sink.next(jwtConfiguration.createToken(user.getId()));
+        }
+      });
+
   }
 }
