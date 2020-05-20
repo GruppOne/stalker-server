@@ -15,26 +15,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http
-      .authorizeRequests()
-      .antMatchers("/test/ldap")
-      .fullyAuthenticated()
-      .and()
-      .formLogin();
+    http.authorizeRequests().antMatchers("/test/ldap").fullyAuthenticated().and().formLogin();
   }
 
   @Override
   public void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth
-      .ldapAuthentication()
+    auth.ldapAuthentication()
         .userDnPatterns("uid={0},ou=people")
         .groupSearchBase("ou=groups")
         .contextSource()
-          .url("ldap://localhost:8389/dc=springframework,dc=org")
-          .and()
+        .url("ldap://localhost:8389/dc=springframework,dc=org")
+        .and()
         .passwordCompare()
-          .passwordEncoder(new BCryptPasswordEncoder())
-          .passwordAttribute("userPassword");
+        .passwordEncoder(new BCryptPasswordEncoder())
+        .passwordAttribute("userPassword");
   }
-
 }
