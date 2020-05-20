@@ -37,6 +37,8 @@ dependencies {
 //  Supports built in (or custom) endpoints that let you monitor and manage your application - such as application health, metrics, sessions, etc.
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+
 //  Provides Reactive Relational Database Connectivity to persist data in SQL stores using Spring Data in reactive applications.
   implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
 
@@ -47,9 +49,14 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 //  Highly customizable authentication and access-control framework for Spring applications.
-// implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.ldap:spring-ldap-core'
+  implementation 'org.springframework.security:spring-security-ldap'
 
+// TODO not sure about this ^
 
+// Provides a platform neutral way for running an LDAP server in unit tests.
+  implementation 'com.unboundid:unboundid-ldapsdk'
 
 //  Java annotation library which helps to reduce boilerplate code.
   compileOnly 'org.projectlombok:lombok'
@@ -76,11 +83,8 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
 
-  // Provides a platform neutral way for running an LDAP server in unit tests.
-  testImplementation 'com.unboundid:unboundid-ldapsdk'
-
   testImplementation 'io.projectreactor:reactor-test'
-  // testImplementation 'org.springframework.security:spring-security-test'
+  testImplementation 'org.springframework.security:spring-security-test'
 
   // ---------------------------------------------------------------------------------
 
