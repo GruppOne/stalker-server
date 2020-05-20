@@ -12,5 +12,4 @@ public class HomeController {
   public String index() {
     return "The LDAP authentication has been successful! Well done!";
   }
-
 }
