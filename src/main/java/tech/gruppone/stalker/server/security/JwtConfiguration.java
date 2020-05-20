@@ -22,8 +22,8 @@ public class JwtConfiguration {
   String expirationTime;
 
   public JwtConfiguration(
-      @NonNull @Value("${jwt.secret}") String encodedKey,
-      @NonNull @Value("${jwt.expiration-time}") String expirationTime) {
+      @Value("${jwt.secret}") String encodedKey,
+      @Value("${jwt.expiration-time}") String expirationTime) {
     this.encodedKey = Base64.getEncoder().encodeToString(encodedKey.getBytes());
     this.expirationTime = expirationTime;
   }
