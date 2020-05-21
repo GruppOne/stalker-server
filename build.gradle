@@ -63,10 +63,11 @@ dependencies {
   runtimeOnly 'mysql:mysql-connector-java'
 
  // Provides support for JSON web Token
-  compile 'io.jsonwebtoken:jjwt-jackson:0.11.1'
-  compile 'io.jsonwebtoken:jjwt-api:0.11.1'
-  runtime 'io.jsonwebtoken:jjwt-impl:0.11.1',
-    'io.jsonwebtoken:jjwt-jackson:0.11.1' //
+  implementation 'io.jsonwebtoken:jjwt-api:0.11.1'
+  implementation 'io.jsonwebtoken:jjwt-jackson:0.11.1'
+
+  runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'
+  runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.1'
 
 //  Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -92,7 +93,7 @@ dependencies {
 test {
   useJUnitPlatform()
 
-  // failFast = true
+  // failFast = false
 
   finalizedBy {
     jacocoTestReport
@@ -105,10 +106,19 @@ processResources {
   }
 }
 
+// this fails if the variables are not present
 ext {
-  mysqlRootPassword = "${env.MYSQL_ROOT_PASSWORD.orElse("password")}"
-  influxdbAdminPassword = "${env.INFLUXDB_ADMIN_PASSWORD.orElse("password")}"
-  jwtSecret = "${env.JWT_SECRET}"
+  mysqlRootPassword = "${env.MYSQL_ROOT_PASSWORD.value}"
+  influxdbAdminPassword = "${env.INFLUXDB_ADMIN_PASSWORD.value}"
+  jwtSecret = "${env.JWT_SECRET.value}"
+}
+
+tasks.register("printCurrentSecrets") {
+    doLast {
+        println "MYSQL_ROOT_PASSWORD: ${env.MYSQL_ROOT_PASSWORD.value}"
+        println "INFLUXDB_ADMIN_PASSWORD: ${env.INFLUXDB_ADMIN_PASSWORD.value}"
+        println "JWT_SECRET: ${env.JWT_SECRET.value}"
+    }
 }
 
 // ===============================
@@ -125,7 +135,6 @@ spotless {
     googleJavaFormat("1.7")
 
     endWithNewline()
-    // paddedCell()
     removeUnusedImports()
     trimTrailingWhitespace()
   }
