@@ -13,14 +13,15 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
-import tech.gruppone.stalker.server.security.JwtConfiguration;
+import tech.gruppone.stalker.server.services.JwtService;
 import tech.gruppone.stalker.server.services.LoginService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LoginControllerTest {
 
   @Autowired WebTestClient testClient;
-  @Autowired JwtConfiguration jwtConfiguration;
+  @Autowired
+  JwtService jwtService;
 
   @MockBean private UserRepository userRepository;
   @MockBean private LoginService loginService;
@@ -37,7 +38,7 @@ public class LoginControllerTest {
 
     // TODO this should use the other syntax: when(...).method(...)
     doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginData.getEmail());
-    doReturn(Mono.just(jwtConfiguration.createToken(userDao.getId())))
+    doReturn(Mono.just(jwtService.createToken(userDao.getId())))
         .when(loginService)
         .logUser(loginData);
 
