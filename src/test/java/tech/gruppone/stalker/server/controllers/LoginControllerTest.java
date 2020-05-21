@@ -20,8 +20,7 @@ import tech.gruppone.stalker.server.services.LoginService;
 public class LoginControllerTest {
 
   @Autowired WebTestClient testClient;
-  @Autowired
-  JwtService jwtService;
+  @Autowired JwtService jwtService;
 
   @MockBean private UserRepository userRepository;
   @MockBean private LoginService loginService;

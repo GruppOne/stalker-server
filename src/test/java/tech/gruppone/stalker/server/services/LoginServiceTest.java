@@ -16,20 +16,18 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LoginServiceTest {
 
-  @MockBean
-  private UserRepository userRepository;
-  @MockBean
-  private JwtService jwtService;
+  @MockBean private UserRepository userRepository;
+  @MockBean private JwtService jwtService;
 
-  @Autowired
-  private LoginService loginService;
+  @Autowired private LoginService loginService;
 
   @Test
   public void testLogUser() {
     // Arrange
     Long id = 1L;
     String email = "mario@gmail.com";
-    String password = "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352";
+    String password =
+        "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352";
 
     LoginDataDto loginData = new LoginDataDto(email, password);
 
@@ -51,8 +49,10 @@ public class LoginServiceTest {
     // Arrange
     Long id = 1L;
     String email = "mario@gmail.com";
-    String savedPassword = "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2351";
-    String wrongPassword = "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352";
+    String savedPassword =
+        "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2351";
+    String wrongPassword =
+        "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352";
 
     LoginDataDto loginData = new LoginDataDto(email, wrongPassword);
 
