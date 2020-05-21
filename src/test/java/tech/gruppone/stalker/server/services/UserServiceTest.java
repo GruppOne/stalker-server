@@ -1,11 +1,11 @@
 package tech.gruppone.stalker.server.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,7 +53,7 @@ class UserServiceTest {
         Mono.just(
             UserDto.builder()
                 .id(userId)
-                .userData(
+                .data(
                     UserDataDto.builder()
                         .email(email)
                         .firstName(firstName)
@@ -66,6 +66,6 @@ class UserServiceTest {
     Mono<UserDto> sut = userService.findById(userId);
 
     // ASSERT
-    Assertions.assertThat(userToCheck.block()).isEqualTo(sut.block());
+    assertThat(userToCheck.block()).isEqualTo(sut.block());
   }
 }
