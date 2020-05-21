@@ -9,14 +9,15 @@ import tech.gruppone.stalker.server.model.db.UserDao;
 
 public interface UserRepository extends ReactiveCrudRepository<UserDao, Long> {
 
-  public Mono<UserDao> findById(Long id);
+  Mono<UserDao> findById(Long id);
 
   public Flux<UserDao> findAll();
 
   public Mono<UserDao> findByEmail(String email);
 
   @Modifying
+  // TODO this might be unnecessary
   @Query(
       "DELETE Users, UserData FROM Users INNER JOIN UserData WHERE Users.id = UserData.userId AND UserData.userId = :id")
-  public Mono<Void> deleteUserById(Long id);
+  Mono<Void> deleteUserById(Long id);
 }

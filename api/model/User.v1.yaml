@@ -4,8 +4,8 @@ type: object
 properties:
   id:
     $ref: ./GenericId.v1.yaml
-  userData:
+  data:
     $ref: ./UserData.v1.yaml
 required:
   - id
-  - userData
+  - data

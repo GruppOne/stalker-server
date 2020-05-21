@@ -10,5 +10,5 @@ import org.springframework.data.annotation.Id;
 public class UserDto {
   @Id long id;
 
-  @NonNull UserDataDto userData;
+  @NonNull UserDataDto data;
 }
