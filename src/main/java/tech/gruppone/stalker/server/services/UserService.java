@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.services;
 
+import java.sql.Timestamp;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -35,7 +36,7 @@ public class UserService {
                           .firstName(t2.getFirstName())
                           .lastName(t2.getLastName())
                           .birthDate(t2.getBirthDate())
-                          .creationDateTime(t2.getLastModifiedDate())
+                          .creationDateTime(Timestamp.valueOf(t2.getLastModifiedDate()))
                           .build())
                   .build();
             });

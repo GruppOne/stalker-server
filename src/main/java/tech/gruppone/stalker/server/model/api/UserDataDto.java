@@ -1,7 +1,7 @@
 package tech.gruppone.stalker.server.model.api;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -17,5 +17,5 @@ public class UserDataDto {
 
   @NonNull LocalDate birthDate;
 
-  @NonNull LocalDateTime creationDateTime;
+  @NonNull Timestamp creationDateTime;
 }
