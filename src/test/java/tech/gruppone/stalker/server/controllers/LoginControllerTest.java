@@ -35,7 +35,7 @@ public class LoginControllerTest {
     final var loginData = new LoginDataDto(email, password);
     final var userDao = UserDao.builder().email(email).password(password).id(1L).build();
 
-    // TODO this should use the other syntax: when(...).method(...)
+    // we're using this syntax to allow null values to be passed by mockito.
     doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginData.getEmail());
     doReturn(Mono.just(jwtService.createToken(userDao.getId())))
         .when(loginService)

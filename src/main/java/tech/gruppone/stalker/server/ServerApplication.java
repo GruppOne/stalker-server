@@ -4,10 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
-// TODO find a way to return 501 NOT IMPLEMENTED
-// TODO decide which logger we use. Should be used with the appropriate lombok @log annotation. will
-// probably be @slf4j
-// TODO find an easy way to wrap values inside a valid json
+// XXX we use the annotation @Log4j2 for logging purposes.
 @SpringBootApplication
 @EnableR2dbcRepositories
 public class ServerApplication {
