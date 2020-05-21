@@ -1,14 +1,15 @@
 {
   "configurations": [
+    // FIXME this configuration does not work
     {
       "type": "java",
       "name": "Spring Boot-ServerApplication<stalker-server>",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "console": "internalConsole",
-      "mainClass": "tech.gruppone.stalker.server.ServerApplication",
-      "projectName": "stalker-server",
-      "args": ""
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 11111,
+      "preLaunchTask": {
+        "task": "${defaultBuildTask}",
+      }
     }
   ]
 }

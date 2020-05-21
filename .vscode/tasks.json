@@ -1,10 +1,21 @@
 {
   "version": "2.0.0",
+  "type": "shell",
+  "presentation": {
+    "echo": true,
+    "reveal": "silent",
+    "focus": false,
+    "panel": "dedicated",
+    "showReuseMessage": true,
+    "clear": false
+  },
+  "isBackground": true,
+  "problemMatcher": [],
   "tasks": [
     {
       "label": "run spectral lint",
-      "type": "shell",
       "command": "spectral lint ./api/**.yaml",
+      "isBackground": false,
       "problemMatcher": {
         "base": "$eslint-stylish",
         "source": "spectral"
@@ -12,21 +23,15 @@
     },
     {
       "label": "run prism mock on port 11111",
-      "type": "shell",
       "command": "prism mock --port 11111 --dynamic ./api/openapi.yaml ",
+      "isBackground": false,
       "presentation": {
-        "echo": true,
         "reveal": "always",
         "focus": true,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
       },
-      "problemMatcher": []
     },
     {
       "label": "build plantuml images",
-      "type": "shell",
       "command": "java",
       "args": [
         "-jar",
@@ -42,131 +47,49 @@
         "img",
         "${workspaceRoot}/docs/diagrams/*.pu"
       ],
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": []
+      "isBackground": false,
     },
     {
       "label": "format java code continuously",
-      "type": "shell",
       "command": "./gradlew spotlessApply --continuous",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "isBackground": true,
-      "problemMatcher": []
     },
     {
       "label": "compile java code continuously",
-      "type": "shell",
       "command": "./gradlew compileJava --continuous --info",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "isBackground": true,
       "group": "build",
-      "problemMatcher": [
-        // "$gradle"
-      ]
     },
     {
       "label": "test java code continuously",
-      "type": "shell",
       "command": "./gradlew test --continuous --info",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "isBackground": true,
       "group": "build",
-      "problemMatcher": [
-        // "$gradle"
-      ]
     },
     {
       "label": "format and test java code continuously",
-      "type": "shell",
       "command": "./gradlew spotlessApply test jacocoTestReport --continuous",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "isBackground": true,
-      "problemMatcher": []
     },
     {
-      "label": "./gradlew bootRun - run spring boot application",
-      "type": "shell",
+      "label": "bootRun - run spring boot application",
       "command": "./gradlew bootRun --info",
       "presentation": {
-        "echo": true,
         "reveal": "always",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": true,
-        "clear": false
       },
-      "problemMatcher": [],
       "group": {
         "kind": "build",
         "isDefault": true
       }
     },
-    // {
-    //   "label": "compose up rdb and rdb-gui",
-    //   "type": "shell",
-    //   "command": "docker-compose up -d rdb rdb-gui && docker-compose logs -f rdb",
-    //   "presentation": {
-    //     "echo": true,
-    //     "reveal": "silent",
-    //     "focus": false,
-    //     "panel": "shared",
-    //     "showReuseMessage": true,
-    //     "clear": false
-    //   },
-    //   "isBackground": true,
-    //   "group": "build",
-    //   "problemMatcher": []
-    // },
-    // {
-    //   "label": "compose down rdb and rdb-gui",
-    //   "type": "shell",
-    //   "command": "docker-compose down --remove-orphans --volumes --rmi local",
-    //   "presentation": {
-    //     "echo": true,
-    //     "reveal": "silent",
-    //     "focus": false,
-    //     "panel": "shared",
-    //     "showReuseMessage": true,
-    //     "clear": false
-    //   },
-    //   "isBackground": true,
-    //   "group": "build",
-    //   "problemMatcher": []
-    // },
+    {
+      "label": "compose up rdb and rdb-gui",
+      "type": "shell",
+      "command": "docker-compose up -d rdb rdb-gui && docker-compose logs -f rdb",
+      "group": "build",
+    },
+    {
+      "label": "compose down rdb and rdb-gui",
+      "type": "shell",
+      "command": "docker-compose down --remove-orphans --volumes --rmi local",
+      "isBackground": true,
+      "group": "build",
+    },
   ]
 }
