@@ -5,6 +5,11 @@ on:
     branches:
       - master
 
+env:
+  MYSQL_ROOT_PASSWORD: definitelyNotASecurePassword
+  INFLUXDB_ADMIN_PASSWORD: definitelyNotASecurePassword
+  JWT_SECRET: definitelyNotASecurePassword
+
 jobs:
   sonarcloud-master-scanner:
     name: Fully scan master with SonarCloud
