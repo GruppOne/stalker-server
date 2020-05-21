@@ -1,11 +1,11 @@
 package tech.gruppone.stalker.server.services;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,10 +13,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
+import tech.gruppone.stalker.server.repositories.PlacePositionRepository;
 
 @SpringBootTest
 class PlacePositionServiceTest {
+
+  @MockBean PlacePositionRepository placePositionRepository;
 
   @Autowired private PlacePositionService placePositionService;
 
@@ -49,14 +53,14 @@ class PlacePositionServiceTest {
                     new GeographicalPoint(0.0, 1.0),
                     new GeographicalPoint(1.0, 1.0),
                     new GeographicalPoint(0.0, 0.0))
-                .collect(Collectors.toList()),
+                .collect(toList()),
             "{\"type\":\"Polygon\",\"coordinates\":[[[0.0,0.0],[0.0,1.0],[1.0,1.0],[0.0,0.0]]]}"),
         arguments(
             Stream.of(
                     new GeographicalPoint(0.0, 0.0),
                     new GeographicalPoint(0.0, 1.0),
                     new GeographicalPoint(1.0, 1.0))
-                .collect(Collectors.toList()),
+                .collect(toList()),
             "{\"type\":\"Polygon\",\"coordinates\":[[[0.0,0.0],[0.0,1.0],[1.0,1.0],[0.0,0.0]]]}"));
   }
 

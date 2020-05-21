@@ -1,19 +1,20 @@
 package tech.gruppone.stalker.server;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import tech.gruppone.stalker.server.configuration.ApplicationConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ServerApplicationTest {
 
-  @Autowired private WebTestClient webTestClient;
+  @Autowired ApplicationConfiguration applicationConfiguration;
 
   @Test
   public void contextLoads() {
-    // No endpoint is defined on this path.
-    // if the server is not loading the error won't be 404 and the test will fail
-    webTestClient.get().uri("/").exchange().expectStatus().isNotFound();
+    assertThat(applicationConfiguration).isNotNull();
+    assertThat(applicationConfiguration.getVersion()).isNotNull();
   }
 }

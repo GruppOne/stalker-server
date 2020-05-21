@@ -25,6 +25,8 @@ import tech.gruppone.stalker.server.repositories.PlacePositionRepository;
 @Log4j2
 public class PlacePositionService {
 
+  ObjectMapper jacksonObjectMapper;
+
   PlacePositionRepository placePositionRepository;
 
   public Mono<List<PlaceDataDto.GeographicalPoint>> findGeographicalPointsByPlaceId(final Long id) {
@@ -40,11 +42,6 @@ public class PlacePositionService {
 
     String rawPositionJson = convertGeographicalPoints(geographicalPoints);
 
-    // var createdPlacePosition =
-    // // createdPlacePosition.subscribe(
-    // //     howMany -> log.info("created {} place positions", howMany),
-    // Throwable::printStackTrace);
-
     var createdPlacePositionNumber = placePositionRepository.create(placeId, rawPositionJson);
 
     createdPlacePositionNumber.subscribe(
@@ -52,8 +49,6 @@ public class PlacePositionService {
 
     return createdPlacePositionNumber;
   }
-
-  ObjectMapper jacksonObjectMapper;
 
   // TODO these could be private!
   public List<GeographicalPoint> convertRawPositionJson(final String rawPositionJson) {
