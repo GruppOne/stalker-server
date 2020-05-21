@@ -3,9 +3,10 @@ package tech.gruppone.stalker.server.services;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
@@ -13,13 +14,13 @@ import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LoginServiceTest {
+@ExtendWith(MockitoExtension.class)
+class LoginServiceTest {
 
-  @MockBean private UserRepository userRepository;
-  @MockBean private JwtService jwtService;
+  @Mock UserRepository userRepository;
+  @Mock JwtService jwtService;
 
-  @Autowired private LoginService loginService;
+  @InjectMocks LoginService loginService;
 
   @Test
   public void testLogUser() {
@@ -40,7 +41,6 @@ public class LoginServiceTest {
     Mono<String> sut = loginService.logUser(loginData);
 
     // Assert
-
     StepVerifier.create(sut).expectNext(expectedEncodedJwt);
   }
 

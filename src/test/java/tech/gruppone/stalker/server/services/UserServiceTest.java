@@ -2,6 +2,7 @@ package tech.gruppone.stalker.server.services;
 
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
@@ -18,7 +19,7 @@ import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserServiceTest {
+class UserServiceTest {
   @MockBean UserDataRepository userDataRepository;
   @MockBean UserRepository userRepository;
   @Autowired UserService userService;
@@ -45,8 +46,8 @@ public class UserServiceTest {
             .build();
 
     when(userRepository.findById(userId)).thenReturn(Mono.just(user));
-
     when(userDataRepository.findById(userId)).thenReturn(Mono.just(userData));
+
     // ACT
     Mono<UserDto> userToCheck =
         Mono.just(
@@ -58,13 +59,13 @@ public class UserServiceTest {
                         .firstName(firstName)
                         .lastName(lastName)
                         .birthDate(birthdate)
-                        .creationDateTime(creationDateTime)
+                        .creationDateTime(Timestamp.valueOf(creationDateTime))
                         .build())
                 .build());
 
     Mono<UserDto> sut = userService.findById(userId);
-    // ASSERTION
 
+    // ASSERT
     Assertions.assertThat(userToCheck.block()).isEqualTo(sut.block());
   }
 }

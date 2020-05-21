@@ -7,9 +7,10 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -18,11 +19,15 @@ import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.PlaceInfo;
 import tech.gruppone.stalker.server.model.api.PlaceDto;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
-import tech.gruppone.stalker.server.repositories.PlacePositionRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class PlaceServiceTest {
+
+  @Mock private PlacePositionService placePositionService;
+
+  @Mock private PlaceRepository placeRepository;
+  @InjectMocks private PlaceService placeService;
 
   // Should find a cleaner way to set these wariables across tests...
   long id = 1L;
@@ -59,9 +64,6 @@ class PlaceServiceTest {
                       .build())
               .build());
 
-  @MockBean private PlaceRepository placeRepository;
-  @Autowired private PlaceService placeService;
-
   @Test
   void testFindById() {
     when(placeRepository.findById(id)).thenReturn(Mono.just(placeDao));
@@ -79,8 +81,6 @@ class PlaceServiceTest {
 
     sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
   }
-
-  @MockBean private PlacePositionRepository placePositionRepository;
 
   @Test
   void testSaveAll() {
@@ -106,7 +106,7 @@ class PlaceServiceTest {
             .build();
 
     when(placeRepository.save(newPlaceDao)).thenReturn(Mono.just(expectedPlaceDao));
-    when(placePositionRepository.create(eq(id), any())).thenReturn(Mono.just(1));
+    when(placePositionService.savePlacePosition(eq(id), any())).thenReturn(Mono.just(1));
 
     var placeDataDtos = Flux.just(expectedPlaceDto).map(PlaceDto::getData);
 
