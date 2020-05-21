@@ -6,5 +6,5 @@ import tech.gruppone.stalker.server.model.db.UserDataDao;
 
 public interface UserDataRepository extends ReactiveCrudRepository<UserDataDao, Long> {
 
-  public Mono<UserDataDao> findById(Long id);
+  Mono<UserDataDao> findById(Long id);
 }
