@@ -12,7 +12,6 @@ import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
-import tech.gruppone.stalker.server.security.JwtConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LoginServiceTest {
@@ -20,7 +19,7 @@ public class LoginServiceTest {
   @MockBean
   private UserRepository userRepository;
   @MockBean
-  private JwtConfiguration jwtConfiguration;
+  private JwtService jwtService;
 
   @Autowired
   private LoginService loginService;
@@ -37,7 +36,7 @@ public class LoginServiceTest {
     UserDao user = UserDao.builder().email(email).password(password).id(id).build();
     when(userRepository.findByEmail(email)).thenReturn(Mono.just(user));
 
-    String expectedEncodedJwt = jwtConfiguration.createToken(id);
+    String expectedEncodedJwt = jwtService.createToken(id);
 
     // Act
     Mono<String> sut = loginService.logUser(loginData);

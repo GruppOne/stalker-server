@@ -9,7 +9,6 @@ import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
-import tech.gruppone.stalker.server.security.JwtConfiguration;
 
 @Service
 @AllArgsConstructor
@@ -17,7 +16,7 @@ import tech.gruppone.stalker.server.security.JwtConfiguration;
 public class LoginService {
 
   UserRepository userRepository;
-  JwtConfiguration jwtConfiguration;
+  JwtService jwtService;
 
 
   public Mono<String> logUser(LoginDataDto loginData) {
@@ -26,7 +25,7 @@ public class LoginService {
       if (!loginData.getPassword().equals(user.getPassword())) {
         sink.error(new UnauthorizedException());
       } else {
-        sink.next(jwtConfiguration.createToken(user.getId()));
+        sink.next(jwtService.createToken(user.getId()));
       }
     });
 
