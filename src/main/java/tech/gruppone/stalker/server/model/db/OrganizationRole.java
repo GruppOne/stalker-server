@@ -1,22 +1,37 @@
 package tech.gruppone.stalker.server.model.db;
 
-import java.sql.Timestamp;
-
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import tech.gruppone.stalker.server.model.api.AdministratorType;
+import lombok.With;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+import tech.gruppone.stalker.server.model.AdministratorType;
 
-// FIXME does not work with repository
 @Builder
 @Value
-@AllArgsConstructor
+@Table("OrganizationRole")
 public class OrganizationRole {
 
-  long organizationId;
-  long userId;
+  @Id
+  @With
+  @Column("id")
+  Long id;
+
   @NonNull
+  @Column("organizationId")
+  Long organizationId;
+
+  @NonNull
+  @Column("userId")
+  Long userId;
+
+  @NonNull
+  @Column("administratorType")
   AdministratorType administratorType;
-  Timestamp createdDate;
+
+  @Column("createdDate")
+  LocalDateTime createdDate;
 }
