@@ -30,62 +30,17 @@ START TRANSACTION;
 -- Dump dei dati per la tabella `organizations`
 --
 
-INSERT INTO
-  `Organization`(`name`, `description`, `createdDate`)
-VALUES
-  (
-    'GruppOne',
-    'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software',
-    '2020-01-01 01:01:01'
-  ),(
-    'Amici della Torre Archimede',
-    'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️',
-    '2020-01-01 01:01:01'
-  );
-
+INSERT INTO `Organization` (`name`, `description`) VALUES
+('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software'),
+('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️'),
+('Organizzazione di test Ldap', 'Test Ldap');
 --
 -- Dump dei dati per la tabella `place`
 --
-INSERT INTO
-  `Place` (
-    `organizationId`,
-    `name`,
-    `color`,
-    `maxConcurrentUsers`,
-    `address`,
-    `city`,
-    `zipcode`,
-    `state`
-  )
-VALUES
-  (
-      1,
-      'Aule Luzzatti',
-      '#e64a19',
-      100,
-      'Via Paolotti',
-      'Padova',
-      '35131',
-      'Italia'
-  ),(
-      1,
-      'Complesso Paolotti',
-      '#283593',
-      100,
-      'Via Paolotti',
-      'Padova',
-      '35131',
-      'Italia'
-  ),(
-      2,
-      'Torre Archimede',
-      '#c8e6c9',
-      100,
-      'Via Trieste',
-      'Padova',
-      '35131',
-      'Italia'
-  );
+INSERT INTO `Place` (`organizationId`, `name`, `address`, `city`, `zipcode`, `state`) VALUES
+(1, 'Aule Luzzatti', 'Via Paolotti', 'Padova', '351d31', 'Italia'),
+(3, 'Complesso Paolotti', 'Via Paolotti', 'Padova', '35131', 'Italia'),
+(2, 'Torre Archimede', 'Via Trieste', 'Padova', '35131', 'Italia');
 
 --
 -- Dump dei dati per la tabella `placeposition`
@@ -153,5 +108,13 @@ VALUES
   (1, 2, 3, '2020-03-17 16:31:38'),
   (2, 4, 2, '2020-04-24 14:33:50'),
   (2, 2, 1, '2020-02-04 16:35:23');
+
+
+--
+-- Dump dei dati per la tabella `LdapConfiguration`
+--
+
+INSERT INTO `LdapConfiguration` (`organizationId`, `host`, `username`, `password`) VALUES
+(3, 'localhost', 'cn=user,dc=stalker,dc=intern', 'user_temp_password_to_crypt');
 
 COMMIT;
