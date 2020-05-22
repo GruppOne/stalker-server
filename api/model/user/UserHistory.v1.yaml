@@ -1,0 +1,17 @@
+title: UserHistory
+type: object
+properties:
+  history:
+    type: array
+    items:
+      type: object
+      properties:
+        organizationId:
+          $ref: ../GenericId.v1.yaml
+        historyPerOrganization:
+          $ref: ../organization/UserHistoryPerOrganization.v1.yaml
+      required:
+        - organizationId
+        - historyPerOrganization
+required:
+  - history

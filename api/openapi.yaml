@@ -287,7 +287,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./model/organization/UserHistoryInOrganization.v1.yaml
+                $ref: ./model/organization/UserHistoryPerOrganization.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -618,42 +618,17 @@ paths:
                 - newPassword
       tags:
         - stalker mobile app
-  '/user/{userId}/places/history':
+  '/user/{userId}/history':
     get:
-      description: "Get the history of a user's visited places."
+      description: "Get the history of a user's visited places. The time since he entered in each place can be obtained from this data."
       operationId: get-user-userId-history
-      responses:
-        '204':
-          description: Not implemented yet.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '501':
-          description: Unfinished endpoint.
-        default:
-          $ref: '#/components/responses/DefaultResponse'
-      summary: "Read a user's visited places history."
-      tags:
-        - stalker mobile app
-    parameters:
-      - $ref: '#/components/parameters/userId'
-  '/user/{userId}/time/inside':
-    get:
-      tags:
-        - stalker mobile app
-      operationId: get-user-userId-time-inside
-      summary: Read the time since a user entered inside some places.
-      description: 'Get a list of all the places a user is currently inside, and the time since he entered in each place.'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: ./model/user/TimeInsidePlaces.v1.yaml
+                $ref: ./model/user/UserHistory.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -662,6 +637,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/DefaultResponse'
+      summary: "Read a user's visited places history."
+      tags:
+        - stalker mobile app
     parameters:
       - $ref: '#/components/parameters/userId'
   '/organization/{organizationId}/users/connections':
