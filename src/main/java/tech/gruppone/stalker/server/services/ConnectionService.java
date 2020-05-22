@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.ForbiddenException;
 import tech.gruppone.stalker.server.model.api.LdapConfigurationDto;
+import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;

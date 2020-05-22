@@ -36,6 +36,15 @@ public class ConnectionController {
       @PathVariable("organizationId") long organizationId) {
 
     return connectionService.createUserConnection(ldap, userId, organizationId);
+
+    // if (requestBody != null) {
+    //   log.info("connecting to private organization. Request body is: {}", requestBody);
+    //   // TODO implement functionality.
+    //   // TODO should throw InvalidLdapCredentialsException if given rdn + pw are not valid.
+    //   return Mono.error(NotImplementedException::new);
+    // }
+
+    // return connectionService.createUserConnection(ldap, userId, organizationId);
   }
 
   @DeleteMapping
