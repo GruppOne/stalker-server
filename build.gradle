@@ -51,6 +51,9 @@ dependencies {
 //  Highly customizable authentication and access-control framework for Spring applications.
 // implementation 'org.springframework.boot:spring-boot-starter-security'
 
+//  Aspect oriented programming library, used to implement authorization with little to no fuss
+  implementation 'org.springframework.boot:spring-boot-starter-aop'
+
 //  Java annotation library which helps to reduce boilerplate code.
   compileOnly 'org.projectlombok:lombok'
 
