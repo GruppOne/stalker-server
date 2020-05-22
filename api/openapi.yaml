@@ -80,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./model/Organization.v1.yaml
+                $ref: ./model/organization/Organization.v1.yaml
           description: Ok. The response contains all the public information on the specific organization.
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -103,7 +103,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/Organization.v1.yaml
+              $ref: ./model/organization/Organization.v1.yaml
         required: true
       responses:
         '204':
@@ -147,7 +147,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/Place.v1.yaml
+              $ref: ./model/organization/Place.v1.yaml
         required: true
       responses:
         '204':
@@ -175,7 +175,7 @@ paths:
                 type: object
                 properties:
                   place:
-                    $ref: ./model/Place.v1.yaml
+                    $ref: ./model/organization/Place.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -197,7 +197,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/PlaceData.v1.yaml
+              $ref: ./model/organization/PlaceData.v1.yaml
         required: true
       responses:
         '201':
@@ -236,7 +236,7 @@ paths:
                   places:
                     type: array
                     items:
-                      $ref: ./model/Place.v1.yaml
+                      $ref: ./model/organization/Place.v1.yaml
                 required:
                   - places
         '401':
@@ -374,7 +374,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/UserData.v1.yaml
+              $ref: ./model/user/UserData.v1.yaml
       responses:
         '204':
           description: No Content
@@ -398,7 +398,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./model/User.v1.yaml
+                $ref: ./model/user/User.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -547,7 +547,7 @@ paths:
                     type: array
                     uniqueItems: true
                     items:
-                      $ref: ./model/UserRoleInOrganization.v1.yaml
+                      $ref: ./model/user/UserRoleInOrganization.v1.yaml
                 required:
                   - rolesInOrganizations
         '401':
@@ -628,7 +628,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./model/TimeInsidePlaces.v1.yaml
+                $ref: ./model/user/TimeInsidePlaces.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -653,7 +653,7 @@ paths:
                   connectedUsers:
                     type: array
                     items:
-                      $ref: ./model/User.v1.yaml
+                      $ref: ./model/user/User.v1.yaml
                 required:
                   - connectedUsers
           description: OK
@@ -680,7 +680,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./model/UsersInsideOrganization.v1.yaml
+                $ref: ./model/organization/UsersInsideOrganization.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -712,7 +712,7 @@ paths:
                     type: array
                     uniqueItems: true
                     items:
-                      $ref: ./model/OrganizationRole.v1.yaml
+                      $ref: ./model/organization/OrganizationRole.v1.yaml
                 required:
                   - usersWithRoles
         '401':
@@ -739,7 +739,7 @@ paths:
                   organizations:
                     type: array
                     items:
-                      $ref: ./model/Organization.v1.yaml
+                      $ref: ./model/organization/Organization.v1.yaml
                 required:
                   - organizations
           description: Ok. The response contains the list of organizations registered to Stalker.
@@ -758,7 +758,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/OrganizationData.v1.yaml
+              $ref: ./model/organization/OrganizationData.v1.yaml
         required: true
       responses:
         '201':
@@ -791,7 +791,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/LoginData.v1.yaml
+              $ref: ./model/user/LoginData.v1.yaml
         required: true
       responses:
         '201':
@@ -801,7 +801,7 @@ paths:
                 type: object
                 properties:
                   jwt:
-                    $ref: ./model/EncodedJwt.v1.yaml
+                    $ref: ./model/user/EncodedJwt.v1.yaml
                 required:
                   - jwt
           description: Created. The response contains the encoded JWT authorizing the user.
@@ -876,7 +876,7 @@ paths:
                   users:
                     type: array
                     items:
-                      $ref: ./model/User.v1.yaml
+                      $ref: ./model/user/User.v1.yaml
                 required:
                   - users
           description: Ok.
@@ -899,9 +899,9 @@ paths:
               type: object
               properties:
                 loginData:
-                  $ref: ./model/LoginData.v1.yaml
+                  $ref: ./model/user/LoginData.v1.yaml
                 userData:
-                  $ref: ./model/UserData.v1.yaml
+                  $ref: ./model/user/UserData.v1.yaml
               required:
                 - loginData
                 - userData
@@ -913,7 +913,7 @@ paths:
                 type: object
                 properties:
                   jwt:
-                    $ref: ./model/EncodedJwt.v1.yaml
+                    $ref: ./model/user/EncodedJwt.v1.yaml
                 required:
                   - jwt
           description: Created. The response contains the JWT authorizing the user.
