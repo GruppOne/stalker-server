@@ -251,7 +251,7 @@ paths:
       tags:
         - stalker mobile app
         - stalker web app
-  '/organization/{organizationId}/report':
+  '/organization/{organizationId}/places/report':
     parameters:
       - $ref: '#/components/parameters/organizationId'
     get:
@@ -272,7 +272,32 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-report
-      description: 'Get a report detailing user accesses, time spent at each place and most frequented places. Optional feature.'
+      description: Get a report detailing time spent at each place and most frequented places. Optional feature.
+  '/organization/{organizationId}/user/{userId}/places/history':
+    parameters:
+      - $ref: '#/components/parameters/organizationId'
+      - $ref: '#/components/parameters/userId'
+    get:
+      summary: "Read an user's history relative to an organization."
+      tags:
+        - stalker web app
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./model/organization/UserHistoryInOrganization.v1.yaml
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      operationId: get-organization-organizationId-user-userId-history
+      description: Get the history of user accesses to all places of this organization.
   '/organization/{organizationId}/user/{userId}/role':
     delete:
       description: Delete an existing role for a user (without deleting the user or their connection to the organization).
@@ -560,7 +585,7 @@ paths:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-user-userId-organizations-roles
       description: "Get an array with this user's roles in all organizations where he's at least a viewer."
-  '/users/{userId}/password':
+  '/user/{userId}/password':
     parameters:
       - $ref: '#/components/parameters/userId'
     put:
