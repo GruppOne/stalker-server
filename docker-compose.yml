@@ -78,6 +78,30 @@ services:
         source: tsdb-data
         target: /var/lib/influxdb
 
+  ldap-server:
+    build:
+      context: ./db/ldap
+
+    restart: always
+
+    environment:
+      LDAP_ORGANISATION: Stalker test organization
+      LDAP_DOMAIN: stalker.intern
+      LDAP_ADMIN_PASSWORD: test1234
+      LDAP_BASE_DN: dc=stalker,dc=intern
+
+    expose:
+      # for unsecure connection
+      - "389"
+      # for encrypted SSL connection
+      - "636"
+
+    volumes:
+      - ldap-data:/var/lib/ldap
+      - ldap-config:/etc/ldap/slapd.d
+
 volumes:
   rdb-data:
   tsdb-data:
+  ldap-data:
+  ldap-config:
