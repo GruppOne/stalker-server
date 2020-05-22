@@ -193,8 +193,6 @@ paths:
     post:
       description: Add a new place to the given organization. Operation reserved only to the managers and up.
       operationId: postPlaceByOrganizationId
-      parameters:
-        - $ref: '#/components/parameters/organizationId'
       requestBody:
         content:
           application/json:
@@ -376,14 +374,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                userData:
-                  $ref: ./model/UserData.v1.yaml
-                loginData:
-                  $ref: ./model/LoginData.v1.yaml
-              required:
-                - userData
+              $ref: ./model/UserData.v1.yaml
       responses:
         '204':
           description: No Content
@@ -569,6 +560,39 @@ paths:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-user-userId-organizations-roles
       description: "Get an array with this user's roles in all organizations where he's at least a viewer."
+  '/users/{userId}/password':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    put:
+      summary: "Update a user's password."
+      operationId: put-users-userId-password
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Changes the password of an user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                newPassword:
+                  type: string
+              required:
+                - oldPassword
+                - newPassword
+      tags:
+        - stalker mobile app
   '/user/{userId}/places/history':
     get:
       description: "Get the history of a user's visited places."
@@ -872,6 +896,7 @@ paths:
         content:
           application/json:
             schema:
+              type: object
               properties:
                 loginData:
                   $ref: ./model/LoginData.v1.yaml
@@ -880,7 +905,6 @@ paths:
               required:
                 - loginData
                 - userData
-              type: object
       responses:
         '201':
           content:
