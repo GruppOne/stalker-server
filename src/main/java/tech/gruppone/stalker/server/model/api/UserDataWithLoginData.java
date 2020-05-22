@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDataDto {
+public class UserDataWithLoginData {
 
-  @NonNull String email;
+  @NonNull LoginDataDto loginData;
 
-  @NonNull String password;
+  @NonNull UserDataDto userData;
 }

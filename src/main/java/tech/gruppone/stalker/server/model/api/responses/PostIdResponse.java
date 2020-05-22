@@ -10,7 +10,5 @@ import lombok.NonNull;
 @Data
 public class PostIdResponse {
 
-  @NonNull
-  Long id;
-
+  @NonNull Long id;
 }

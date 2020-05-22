@@ -1,4 +1,5 @@
 package tech.gruppone.stalker.server.services;
+
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
+import tech.gruppone.stalker.server.model.api.UserDataWithLoginData;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
@@ -111,9 +113,48 @@ public class UserService {
                           .firstName(t2.getFirstName())
                           .lastName(t2.getLastName())
                           .birthDate(t2.getBirthDate())
-                          .creationDateTime(Timestamp.valueOf(t2.getLastModifiedDate()))
-                          .build())
-                  .build();
+                          .creationDateTime(Timestamp.valueOf(t2.getCreatedDate()))
+                          .build()).build();
             });
+  }
+
+  public Mono<String> signUpUser(UserDataWithLoginData signUp) {
+
+    Mono<UserDao> email = userRepository.findByEmail(signUp.getLoginData().getEmail());
+    if ((!signUp.getLoginData().getEmail().isBlank())
+        && (signUp.getLoginData().getPassword().length() == 128)
+        && (!signUp.getUserData().getEmail().isBlank())
+        && (!signUp.getUserData().getFirstName().isBlank())
+        && (!signUp.getUserData().getLastName().isBlank())
+        && (!signUp.getUserData().getBirthDate().toString().isBlank())) {
+      UserDao userDao =
+          UserDao.builder()
+              .email(signUp.getLoginData().getEmail())
+              .password(signUp.getLoginData().getPassword())
+              .build();
+      Mono<Long> userId = userRepository.save(userDao).map(UserDao::getId);
+      var userDataDaoMono =
+          userId.map(
+              id ->
+                  UserDataDao.builder()
+                      .userId(id)
+                      .firstName(signUp.getUserData().getFirstName())
+                      .lastName(signUp.getUserData().getLastName())
+                      .birthDate(signUp.getUserData().getBirthDate())
+                      .createdDate(LocalDateTime.now())
+                      .build());
+      var toInsert =
+          userDataDaoMono.map(
+              userDataDao ->
+                  userDataRepository.insert(
+                      userDataDao.getUserId(),
+                      userDataDao.getFirstName(),
+                      userDataDao.getLastName(),
+                      userDataDao.getBirthDate(),
+                      userDataDao.getCreatedDate()));
+      return toInsert.thenReturn(userDao.getEmail());
+    } else {
+      throw new BadRequestException();
+    }
   }
 }

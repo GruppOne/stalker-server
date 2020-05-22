@@ -2,7 +2,6 @@ package tech.gruppone.stalker.server.services;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-;
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -185,8 +184,6 @@ class UserServiceTest {
     verify(userDataRepository).findById(userId);
     verify(userDataRepository).save(expectedUserDataDao);
   }
-
-
 
   @Test
   public void testFindAll() {
