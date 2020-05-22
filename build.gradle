@@ -54,7 +54,7 @@ dependencies {
  // implementation 'org.springframework.security:spring-security-ldap'
 
 // Provides a platform neutral way for running an LDAP server in unit tests.
-  implementation 'com.unboundid:unboundid-ldapsdk'
+ // implementation 'com.unboundid:unboundid-ldapsdk'
 
 // Dependency for LDAP API
   implementation 'org.apache.directory.api:api-all:2.0.1'
@@ -85,7 +85,7 @@ dependencies {
   }
 
   testImplementation 'io.projectreactor:reactor-test'
-  testImplementation 'org.springframework.security:spring-security-test'
+  //testImplementation 'org.springframework.security:spring-security-test'
 
   // ---------------------------------------------------------------------------------
 
