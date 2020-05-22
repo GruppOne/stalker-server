@@ -95,7 +95,7 @@ rules:
   operation-operationId: error
   operation-operationId-valid-in-url: error
   operation-parameters: error
-  operation-singular-tag: false
+  operation-singular-tag: error
   operation-tag-defined: error
   operation-tags: error
   path-declarations-must-exist: error
