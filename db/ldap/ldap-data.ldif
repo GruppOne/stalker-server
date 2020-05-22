@@ -7,7 +7,7 @@ givenname: user
 sn: User
 displayname: User
 mail: user@stalker.com
-userpassword: user_temp_password
+userpassword: user_temp_password_to_crypt
 
 dn: cn=admin_gh,dc=stalker,dc=intern
 changetype: add
@@ -17,7 +17,7 @@ givenname: admin_gh
 sn: Admin
 displayname: Stalker admin
 mail: admin_gh@stalker.com
-userpassword: admin_temp_pass
+userpassword: admin_temp_password_to_crypt
 
 dn: ou=Groups,dc=stalker,dc=intern
 changetype: add
