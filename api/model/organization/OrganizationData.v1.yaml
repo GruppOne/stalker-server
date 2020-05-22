@@ -8,10 +8,6 @@ properties:
   description:
     type: string
     example: Dipartimento di Matematica di Unipd
-  placeIds:
-    type: array
-    items:
-      $ref: ../GenericId.v1.yaml
   organizationType:
     type: string
     enum:
@@ -27,7 +23,7 @@ properties:
         description: "The organization's LDAP server URL."
       searchQuery:
         type: string
-        description: An LDAP search query that returns the list of users registered to it.
+        description: An LDAP search query that returns the list of users registered to the LDAP server.
       bindDn:
         type: string
         description: the fully qualified DN to use for binding the connection.
@@ -47,5 +43,4 @@ properties:
 required:
   - name
   - description
-  - placeIds
   - organizationType
