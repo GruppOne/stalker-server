@@ -1,6 +1,6 @@
 title: OrganizationData
 type: object
-description: Data about an organization
+description: Data of an organization.
 properties:
   name:
     type: string
@@ -8,30 +8,44 @@ properties:
   description:
     type: string
     example: Dipartimento di Matematica di Unipd
+  placeIds:
+    type: array
+    items:
+      $ref: ../GenericId.v1.yaml
+  organizationType:
+    type: string
+    enum:
+      - private
+      - public
   ldapConfiguration:
-    type: object
     description: The information required to allow the configuration of LDAP authentication for private organizations.
+    type: object
     properties:
-      host:
+      url:
         type: string
-      username:
+        format: uri
+        description: "The organization's LDAP server URL."
+      searchQuery:
         type: string
-      password:
+        description: An LDAP search query that returns the list of users registered to it.
+      bindDn:
+        type: string
+        description: the fully qualified DN to use for binding the connection.
+      bindPassword:
         type: string
         format: password
-  places:
-    type: array
-    example: []
-    items:
-      $ref: ./Place.v1.yaml
-  isPrivate:
-    type: boolean
-    example: false
+        description: The password for the bind DN.
+    required:
+      - url
+      - searchQuery
+      - bindDn
+      - bindPassword
   creationDateTime:
-    $ref: ./GenericTimestamp.v1.yaml
+    $ref: ../GenericTimestamp.v1.yaml
   lastChangeDateTime:
-    $ref: ./GenericTimestamp.v1.yaml
+    $ref: ../GenericTimestamp.v1.yaml
 required:
   - name
   - description
-  - isPrivate
+  - placeIds
+  - organizationType
