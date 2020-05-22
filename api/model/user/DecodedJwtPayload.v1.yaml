@@ -2,9 +2,14 @@ type: object
 title: Decoded JWT Payload
 description: sub contains the user id.
 additionalProperties: false
+example:
+  sub: 1
+  iat: 1516239022
+  exp: 1893456000
+  jti: 42
 properties:
   sub:
-    $ref: ./GenericId.v1.yaml
+    $ref: ../GenericId.v1.yaml
   iat:
     type: integer
     format: int64
@@ -27,8 +32,3 @@ required:
   - iat
   - exp
   - jti
-example:
-    sub: 1
-    iat: 1516239022
-    exp: 1893456000
-    jti: 42

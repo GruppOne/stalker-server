@@ -11,7 +11,7 @@ properties:
       type: object
       properties:
         placeId:
-          $ref: ./GenericId.v1.yaml
+          $ref: ../GenericId.v1.yaml
         usersInside:
           type: integer
           minimum: 0

@@ -10,9 +10,9 @@ properties:
         timeInside:
           type: number
         organizationId:
-          $ref: ./GenericId.v1.yaml
+          $ref: ../GenericId.v1.yaml
         placeId:
-          $ref: ./GenericId.v1.yaml
+          $ref: ../GenericId.v1.yaml
       required:
         - timeInside
         - organizationId

@@ -3,7 +3,7 @@ description: Data representing a user.
 type: object
 properties:
   id:
-    $ref: ./GenericId.v1.yaml
+    $ref: ../GenericId.v1.yaml
   data:
     $ref: ./UserData.v1.yaml
 required:
