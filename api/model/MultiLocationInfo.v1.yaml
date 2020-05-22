@@ -4,19 +4,17 @@ type: object
 properties:
   timestamp:
     $ref: ./GenericTimestamp.v1.yaml
-  user:
+  userType:
+    type: string
+    enum:
+      - known
+      - anonymous
+  userId:
     oneOf:
-      - properties:
-          id:
-            $ref: ./GenericId.v1.yaml
-        required:
-          - id
-      - properties:
-          anonymous:
-            type: boolean
-        required:
-          - anonymous
-    type: object
+      - $ref: ./GenericId.v1.yaml
+      - type: boolean
+        enum:
+          - "false"
   inside:
     type: boolean
   placeIds:
@@ -25,6 +23,6 @@ properties:
       $ref: ./GenericId.v1.yaml
 required:
   - timestamp
-  - user
+  - userId
   - inside
   - placeIds

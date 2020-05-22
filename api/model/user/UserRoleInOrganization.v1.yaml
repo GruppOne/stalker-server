@@ -2,9 +2,9 @@ title: A specific user's role in an organization
 type: object
 properties:
   organizationId:
-    $ref: ./GenericId.v1.yaml
+    $ref: ../GenericId.v1.yaml
   role:
-    $ref: ./AdministratorType.v1.yaml
+    $ref: ../AdministratorType.v1.yaml
 required:
   - organizationId
   - role
