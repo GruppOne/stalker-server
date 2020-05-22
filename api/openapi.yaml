@@ -499,6 +499,17 @@ paths:
               properties:
                 ldapAuthentication:
                   type: object
+                  properties:
+                    rdn:
+                      type: string
+                      description: "The user's RDN in his organization's LDAP server."
+                    ldapPassword:
+                      type: string
+                      format: password
+                      description: "The user password for this organization's LDAP server."
+                  required:
+                    - rdn
+                    - ldapPassword
       responses:
         '201':
           description: Created
