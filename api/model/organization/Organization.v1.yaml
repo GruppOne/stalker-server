@@ -1,11 +1,16 @@
 title: Organization
 type: object
-description: Data relative to an organization
+description: An already created organization.
 properties:
   id:
-    $ref: ./GenericId.v1.yaml
+    $ref: ../GenericId.v1.yaml
   data:
     $ref: ./OrganizationData.v1.yaml
+  placeIds:
+    type: array
+    items:
+      $ref: ../GenericId.v1.yaml
 required:
   - id
   - data
+  - placeIds
