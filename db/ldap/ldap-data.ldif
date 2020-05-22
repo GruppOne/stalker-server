@@ -1,0 +1,42 @@
+
+dn: cn=user,dc=stalker,dc=intern
+changetype: add
+objectclass: inetOrgPerson
+cn: user
+givenname: user
+sn: User
+displayname: User
+mail: user@stalker.com
+userpassword: user_temp_password
+
+dn: cn=admin_gh,dc=stalker,dc=intern
+changetype: add
+objectclass: inetOrgPerson
+cn: admin_gh
+givenname: admin_gh
+sn: Admin
+displayname: Stalker admin
+mail: admin_gh@stalker.com
+userpassword: admin_temp_pass
+
+dn: ou=Groups,dc=stalker,dc=intern
+changetype: add
+objectclass: organizationalUnit
+ou: Groups
+
+dn: ou=Users,dc=stalker,dc=intern
+changetype: add
+objectclass: organizationalUnit
+ou: Users
+
+dn: cn=Admins,ou=Groups,dc=stalker,dc=intern
+changetype: add
+cn: Admins
+objectclass: groupOfUniqueNames
+uniqueMember: cn=admin,dc=stalker,dc=intern
+
+dn: cn=Users,ou=Groups,dc=stalker,dc=intern
+changetype: add
+cn: Users
+objectclass: groupOfUniqueNames
+uniqueMember: cn=user,dc=stalker,dc=intern
