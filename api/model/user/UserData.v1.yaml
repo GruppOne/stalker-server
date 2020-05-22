@@ -18,7 +18,7 @@ properties:
     format: date
     example: '1990-01-01'
   creationDateTime:
-    $ref: ./GenericTimestamp.v1.yaml
+    $ref: ../GenericTimestamp.v1.yaml
 required:
   - email
   - firstName
