@@ -28,6 +28,7 @@ public class UserService {
 
   UserRepository userRepository;
   UserDataRepository userDataRepository;
+  JwtService jwtService;
 
   public Mono<UserDto> findById(final long userId) {
 
@@ -151,8 +152,12 @@ public class UserService {
                       userDataDao.getLastName(),
                       userDataDao.getBirthDate(),
                       userDataDao.getCreatedDate()));
-      return toInsert.thenReturn(userDao.getEmail());
-    } else {
+      //Mono<String> jwtToken = userDataDaoMono.flatMap(userDataDao -> jwtService.createToken(userDataDao.getUserId()));
+      //return toInsert.map(UserDataDao::getUserId).map(jwtService::createToken);
+      return toInsert.map(userDataDao -> userDataDao.getUserId()).map(id -> {return jwtService.createToken(id);});
+
+    }
+    else{
       return Mono.error(new BadRequestException());
     }
   }

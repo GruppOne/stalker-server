@@ -15,6 +15,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("UserData")
 public class UserDataDao {
 
+  @With
   @Id
   @NonNull
   @Column("userId")
