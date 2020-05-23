@@ -14,7 +14,7 @@ import org.springframework.data.relational.core.mapping.Table;
 public class UserDao {
   @Id
   @Column("id")
-  long id;
+  Long id;
 
   @NonNull
   @Column("email")
