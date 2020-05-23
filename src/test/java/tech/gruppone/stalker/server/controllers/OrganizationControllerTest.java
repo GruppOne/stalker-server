@@ -67,7 +67,7 @@ public class OrganizationControllerTest {
   }
 
   @Test
-  public void testGetUsersRoleOfOrganizationById() {
+  void testGetUsersRoleOfOrganizationById() {
     var organizationId = 1L;
     var userId = 2L;
     var administratorType = 1L;

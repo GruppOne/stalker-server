@@ -14,37 +14,13 @@ import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRoleRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class OrganizationServiceTest {
+class OrganizationServiceTest {
 
   @MockBean OrganizationRoleRepository organizationRoleRepository;
   @Autowired OrganizationRoleService organizationRoleService;
 
   @Test
-  public void testFindUsersRoles() {
-
-    // var organizationId = 1L;
-    // var userId = 2L;
-    // var nameRole = "Admin";
-    // var createdDateRole = LocalDateTime.now();
-    // var nameOrganization = "GruppOne";
-    // var descriptionOrganization = "Descrizione GruppOne";
-    // var isPrivate = 0L;
-    // var createdDateOrganization = LocalDateTime.parse("2020-05-22 22:50:54");
-    // var lastModifiedDateOrganization = LocalDateTime.parse("2020-05-22 22:50:54");
-    // var emailUser = "gruppone.swe@gmail.com";
-    // var passwordUser = "password";
-    // var roleId = 1L;
-    // var role = "ROLE_ADMIN";
-
-    // OrganizationRoleDao organizationRoleDao =
-    // OrganizationRoleDao.builder().organizationId(organizationId).userId(userId).administratorType(roleId).createdDate(createdDateRole).build();
-    // OrganizationDao organization =
-    // OrganizationDao.builder().id(organizationId).name(nameOrganization).description(descriptionOrganization).isPrivate(isPrivate).createdDate(createdDateOrganization).lastModifiedDate(lastModifiedDateOrganization).build();
-    // UserDao user = UserDao.builder().id(userId).email(emailUser).password(passwordUser).build();
-    // AdministratorTypeDao administratorType =
-    // AdministratorTypeDao.builder().id(roleId).name(nameRole).role(role).build();
-
-    // when(organizationRoleRepository.findUsersRoles(organizationId)).thenReturn(Flux.empty());
+  void testFindUsersRoles() {
 
     var organizationId = 1L;
     var userId = 2L;
