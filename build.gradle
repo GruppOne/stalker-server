@@ -93,7 +93,8 @@ dependencies {
 test {
   useJUnitPlatform()
 
-  // failFast = false
+  // this is opinable. feel free to change it to false if it feels better for you :)
+  failFast = true
 
   finalizedBy {
     jacocoTestReport
