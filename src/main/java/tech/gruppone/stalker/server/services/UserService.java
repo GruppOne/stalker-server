@@ -120,7 +120,6 @@ public class UserService {
 
   public Mono<String> signUpUser(UserDataWithLoginData signUp) {
 
-    Mono<UserDao> email = userRepository.findByEmail(signUp.getLoginData().getEmail());
     if ((!signUp.getLoginData().getEmail().isBlank())
         && (signUp.getLoginData().getPassword().length() == 128)
         && (!signUp.getUserData().getEmail().isBlank())
@@ -132,7 +131,7 @@ public class UserService {
               .email(signUp.getLoginData().getEmail())
               .password(signUp.getLoginData().getPassword())
               .build();
-      Mono<Long> userId = userRepository.save(userDao).map(UserDao::getId);
+      Mono<Long> userId = userRepository.save(userDao).doOnError((error)->{throw new BadRequestException();}).map(UserDao::getId);
       var userDataDaoMono =
           userId.map(
               id ->
@@ -144,7 +143,7 @@ public class UserService {
                       .createdDate(LocalDateTime.now())
                       .build());
       var toInsert =
-          userDataDaoMono.map(
+          userDataDaoMono.flatMap(
               userDataDao ->
                   userDataRepository.insert(
                       userDataDao.getUserId(),
@@ -154,7 +153,7 @@ public class UserService {
                       userDataDao.getCreatedDate()));
       return toInsert.thenReturn(userDao.getEmail());
     } else {
-      throw new BadRequestException();
+      return Mono.error(new BadRequestException());
     }
   }
 }
