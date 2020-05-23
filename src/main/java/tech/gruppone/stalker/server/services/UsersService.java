@@ -21,7 +21,6 @@ public class UsersService {
   UserRepository userRepository;
   UserDataRepository userDataRepository;
   JwtService jwtService;
-
   public Mono<String> signUpUser(UserDataWithLoginData signUp) {
 
     if ((!signUp.getLoginData().getEmail().isBlank())
