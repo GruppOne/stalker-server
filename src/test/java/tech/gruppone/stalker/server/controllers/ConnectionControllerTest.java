@@ -1,28 +1,36 @@
 package tech.gruppone.stalker.server.controllers;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.db.ConnectionDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ConnectionControllerTest {
+class ConnectionControllerTest {
 
-  @Autowired WebTestClient testClient;
+  @Autowired WebTestClient webTestClient;
 
   @MockBean ConnectionRepository connectionRepository;
 
   @Test
-  public void testCreateUserConnection() {
+  void testPostUserByIdOrganizationByIdConnection() {
 
     long userId = 1L;
     long organizationId = 1L;
 
-    testClient
+    var connectionDao =
+        ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
+
+    when(connectionRepository.save(connectionDao)).thenReturn(Mono.empty());
+
+    webTestClient
         .post()
         .uri("/user/{userId}/organization/{organizationId}/connection", userId, organizationId)
         .exchange()
@@ -30,15 +38,18 @@ public class ConnectionControllerTest {
         .isCreated();
 
     // checks that the mock method has been called with the given parameters
-    verify(connectionRepository).createUserConnection(userId, organizationId);
+    verify(connectionRepository).save(connectionDao);
   }
 
   @Test
-  public void testDeleteUserConnectionToOrganization() {
+  void testDeleteUserByIdOrganizationByIdConnection() {
     long userId = 1L;
     long organizationId = 1L;
 
-    testClient
+    when(connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId))
+        .thenReturn(Mono.empty());
+
+    webTestClient
         .delete()
         .uri("/user/{userId}/organization/{organizationId}/connection", userId, organizationId)
         .exchange()
@@ -46,6 +57,6 @@ public class ConnectionControllerTest {
         .isNoContent();
 
     // checks that the mock method has been called with the given parameters
-    verify(connectionRepository).deleteUserConnection(userId, organizationId);
+    verify(connectionRepository).deleteByUserIdAndOrganizationId(userId, organizationId);
   }
 }
