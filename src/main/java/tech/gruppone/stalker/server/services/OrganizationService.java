@@ -1,8 +1,6 @@
 package tech.gruppone.stalker.server.services;
 
 import java.sql.Timestamp;
-import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,8 +16,6 @@ import tech.gruppone.stalker.server.model.api.PlaceDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
-import tech.gruppone.stalker.server.model.db.UserDao;
-import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
@@ -80,20 +76,26 @@ public class OrganizationService {
         .doOnNext(organizationId -> placeService.saveAll(placeDataDtos, organizationId));
   }
 
-  public Flux<UserDto> findConnectedUsersByOrganizationId(Long organizationId){
+  public Flux<UserDto> findConnectedUsersByOrganizationId(Long organizationId) {
 
     return userRepository
         .findAllUsers(organizationId)
         .zipWith(userDataRepository.findAllUserData(organizationId))
         .map(
-          result -> {
-            var t1 = result.getT1();
-            var t2 = result.getT2();
-            return UserDto.builder().id(t1.getId())
-            .userData(UserDataDto.builder().email(t1.getEmail()).firstName(t2.getFirstName()).lastName(t2.getLastName()).birthDate(t2.getBirthDate())
-            .creationDateTime(Timestamp.valueOf(t2.getCreatedDate())).build()).build();
-
-
-          });
+            result -> {
+              var t1 = result.getT1();
+              var t2 = result.getT2();
+              return UserDto.builder()
+                  .id(t1.getId())
+                  .userData(
+                      UserDataDto.builder()
+                          .email(t1.getEmail())
+                          .firstName(t2.getFirstName())
+                          .lastName(t2.getLastName())
+                          .birthDate(t2.getBirthDate())
+                          .creationDateTime(Timestamp.valueOf(t2.getCreatedDate()))
+                          .build())
+                  .build();
+            });
   }
 }
