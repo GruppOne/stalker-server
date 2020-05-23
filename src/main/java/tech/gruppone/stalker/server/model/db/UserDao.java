@@ -13,7 +13,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @Value
 @Table("User")
 public class UserDao {
-  @With
   @Id
   @Column("id")
   Long id;
