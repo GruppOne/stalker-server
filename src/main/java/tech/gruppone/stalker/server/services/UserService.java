@@ -28,7 +28,6 @@ public class UserService {
 
   UserRepository userRepository;
   UserDataRepository userDataRepository;
-  JwtService jwtService;
 
   public Mono<UserDto> findById(final long userId) {
 
@@ -119,46 +118,5 @@ public class UserService {
             });
   }
 
-  public Mono<String> signUpUser(UserDataWithLoginData signUp) {
 
-    if ((!signUp.getLoginData().getEmail().isBlank())
-        && (signUp.getLoginData().getPassword().length() == 128)
-        && (!signUp.getUserData().getEmail().isBlank())
-        && (!signUp.getUserData().getFirstName().isBlank())
-        && (!signUp.getUserData().getLastName().isBlank())
-        && (!signUp.getUserData().getBirthDate().toString().isBlank())) {
-      UserDao userDao =
-          UserDao.builder()
-              .email(signUp.getLoginData().getEmail())
-              .password(signUp.getLoginData().getPassword())
-              .build();
-      Mono<Long> userId = userRepository.save(userDao).doOnError((error)->{throw new BadRequestException();}).map(UserDao::getId);
-      var userDataDaoMono =
-          userId.map(
-              id ->
-                  UserDataDao.builder()
-                      .userId(id)
-                      .firstName(signUp.getUserData().getFirstName())
-                      .lastName(signUp.getUserData().getLastName())
-                      .birthDate(signUp.getUserData().getBirthDate())
-                      .createdDate(LocalDateTime.now())
-                      .build());
-      var toInsert =
-          userDataDaoMono.flatMap(
-              userDataDao ->
-                  userDataRepository.insert(
-                      userDataDao.getUserId(),
-                      userDataDao.getFirstName(),
-                      userDataDao.getLastName(),
-                      userDataDao.getBirthDate(),
-                      userDataDao.getCreatedDate()));
-      //Mono<String> jwtToken = userDataDaoMono.flatMap(userDataDao -> jwtService.createToken(userDataDao.getUserId()));
-      //return toInsert.map(UserDataDao::getUserId).map(jwtService::createToken);
-      return toInsert.map(userDataDao -> userDataDao.getUserId()).map(id -> {return jwtService.createToken(id);});
-
-    }
-    else{
-      return Mono.error(new BadRequestException());
-    }
-  }
 }
