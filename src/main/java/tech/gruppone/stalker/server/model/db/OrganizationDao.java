@@ -27,9 +27,8 @@ public class OrganizationDao {
   @Column("description")
   String description;
 
-  @Builder.Default
   @Column("isPrivate")
-  Boolean isPrivate = false;
+  Long isPrivate;
 
   @Column("createdDate")
   LocalDateTime createdDate;

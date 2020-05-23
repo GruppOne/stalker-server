@@ -20,7 +20,7 @@ public class OrganizationDataDto {
   @NonNull @Singular List<PlaceDto> places;
 
   // Using the boxed type because both jackson and lombok behave strangely with primitive booleans
-  @NonNull @Builder.Default Boolean isPrivate = false;
+  @NonNull Long isPrivate;
 
   // use timestamps in DTOs to serialize datetimes correctly
   Timestamp creationDateTime;

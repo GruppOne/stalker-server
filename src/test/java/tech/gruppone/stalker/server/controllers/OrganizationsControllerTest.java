@@ -29,12 +29,14 @@ class OrganizationsControllerTest {
     final var organizationId = 1L;
     final var name = "name";
     final var description = "description";
+    var isPrivate = 0L;
 
     final var organizationDao =
         OrganizationDao.builder()
             .id(organizationId)
             .name(name)
             .description(description)
+            .isPrivate(isPrivate)
             .createdDate(LocalDateTime.now())
             .lastModifiedDate(LocalDateTime.now())
             .build();
@@ -64,9 +66,14 @@ class OrganizationsControllerTest {
     final long organizationId = 1L;
     final String name = "name";
     final String description = "description";
+    final Long isPrivate = 0L;
 
     final OrganizationDataDto organizationDataDto =
-        OrganizationDataDto.builder().name(name).description(description).build();
+        OrganizationDataDto.builder()
+            .name(name)
+            .description(description)
+            .isPrivate(isPrivate)
+            .build();
 
     final OrganizationDao expectedOrganizationDao =
         OrganizationDao.builder().id(organizationId).name(name).description(description).build();
