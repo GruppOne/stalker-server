@@ -3,30 +3,34 @@ package tech.gruppone.stalker.server.controllers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.db.ConnectionDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ConnectionControllerTest {
 
-  @Autowired WebTestClient testClient;
+  @Autowired WebTestClient webTestClient;
 
   @MockBean ConnectionRepository connectionRepository;
 
   @Test
-  void testCreateUserConnection() {
+  void testPostUserByIdOrganizationByIdConnection() {
 
     long userId = 1L;
     long organizationId = 1L;
 
-    testClient
+    var connectionDao =
+        ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
+
+    when(connectionRepository.save(connectionDao)).thenReturn(Mono.empty());
+
+    webTestClient
         .post()
         .uri("/user/{userId}/organization/{organizationId}/connection", userId, organizationId)
         .exchange()
@@ -34,15 +38,18 @@ class ConnectionControllerTest {
         .isCreated();
 
     // checks that the mock method has been called with the given parameters
-    verify(connectionRepository).createUserConnection(userId, organizationId);
+    verify(connectionRepository).save(connectionDao);
   }
 
   @Test
-  void testDeleteUserConnectionToOrganization() {
+  void testDeleteUserByIdOrganizationByIdConnection() {
     long userId = 1L;
     long organizationId = 1L;
 
-    testClient
+    when(connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId))
+        .thenReturn(Mono.empty());
+
+    webTestClient
         .delete()
         .uri("/user/{userId}/organization/{organizationId}/connection", userId, organizationId)
         .exchange()
@@ -50,30 +57,6 @@ class ConnectionControllerTest {
         .isNoContent();
 
     // checks that the mock method has been called with the given parameters
-    verify(connectionRepository).deleteUserConnection(userId, organizationId);
-  }
-
-  @Test
-  void testGetConnectedOrganizationsByUserId() {
-    long userId = 1L;
-
-    List<Long> listIds = new ArrayList<>();
-    listIds.add(1L);
-    listIds.add(2L);
-
-    when(connectionRepository.findConnectedOrganizationsByUserId(userId))
-        .thenReturn(Flux.fromIterable(listIds));
-
-    testClient
-        .get()
-        .uri("/user/{userId}/organizations/connections", userId)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("$.connectedOrganizationsIds")
-        .isArray();
-
-    verify(connectionRepository).findConnectedOrganizationsByUserId(userId);
+    verify(connectionRepository).deleteByUserIdAndOrganizationId(userId, organizationId);
   }
 }
