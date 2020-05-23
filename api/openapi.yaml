@@ -26,9 +26,9 @@ servers:
     description: Staging and Production servers.
 tags:
   - name: both clients
-    description: This operation should be available to both clients (mobile & web app).
+    description: 'This operation should be available to both clients (mobile & web app).'
   - name: mobile app
-    description: This operation should be available to mobile app users.
+    description: 'This operation should be available to mobile app users.'
   - name: web app
     description: 'This operation should be available to web app users (owners, managers, viewers).'
 paths:
@@ -273,7 +273,7 @@ paths:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-report
       description: Get a report detailing time spent at each place and most frequented places. Optional feature.
-  '/organization/{organizationId}/user/{userId}/places/history':
+  '/organization/{organizationId}/user/{userId}/history':
     parameters:
       - $ref: '#/components/parameters/organizationId'
       - $ref: '#/components/parameters/userId'
@@ -297,7 +297,7 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-user-userId-history
-      description: Get the history of user accesses to all places of this organization.
+      description: Get the history of this user's visited places in this organization.
   '/organization/{organizationId}/user/{userId}/role':
     delete:
       description: Delete an existing role for a user (without deleting the user or their connection to the organization).
@@ -629,7 +629,7 @@ paths:
         - mobile app
   '/user/{userId}/history':
     get:
-      description: "Get the history of a user's visited places. The time since he entered in each place can be obtained from this data."
+      description: "Get the history of a user's visited places for every organization. The time since he entered in each place can be obtained from this data."
       operationId: get-user-userId-history
       responses:
         '200':
@@ -737,7 +737,7 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-users-roles
-      description: Get a list of all users and their roles in this organization.
+      description: Get a list of all users with roles in this organization.
   /organizations:
     get:
       description: 'Get the list of all the organizations registered to Stalker, complete with all details EXCEPT private information (ldapConfiguration).'
