@@ -214,7 +214,7 @@ class UserServiceTest {
         Flux.just(
             UserDto.builder()
                 .id(userId)
-                .userData(
+                .data(
                     UserDataDto.builder()
                         .email(email)
                         .firstName(firstName)

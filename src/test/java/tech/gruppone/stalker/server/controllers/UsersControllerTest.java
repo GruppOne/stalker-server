@@ -57,10 +57,6 @@ public class UsersControllerTest {
     doReturn(Mono.just(userDataDao)).when(userDataRepository).insert(userDataDao.getUserId(), userDataDao.getFirstName(), userDataDao.getLastName(), userDataDao.getBirthDate());
     doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginDataDto.getEmail());
     doReturn(Mono.just(jwtService.createToken(10L))).when(usersService).signUpUser(userWithLoginDataDto);
-    //when(userDataRepository.insert(userDataDao.getUserId(), userDataDao.getFirstName(), userDataDao.getLastName(), userDataDao.getBirthDate())).thenReturn(Mono.just(userDataDao));
-    //when(userRepository.findByEmail(loginDataDto.getEmail())).thenReturn(Mono.just(userDao));
-    //when(usersService.signUpUser(userWithLoginDataDto)).thenReturn(jwtService.createToken(10L));
-
 
 
     testClient
