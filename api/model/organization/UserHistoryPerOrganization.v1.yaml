@@ -1,32 +1,24 @@
-title: User history in organization
+title: User history in a single organization
 type: object
 properties:
   userId:
     $ref: ../GenericId.v1.yaml
-  historyPerPlace:
+  history:
     type: array
     uniqueItems: true
     items:
       type: object
       properties:
+        timestamp:
+          $ref: ../GenericTimestamp.v1.yaml
         placeId:
           $ref: ../GenericId.v1.yaml
-        accesses:
-          type: array
-          items:
-            type: object
-            properties:
-              timestamp:
-                $ref: ../GenericTimestamp.v1.yaml
-              inside:
-                type: boolean
-                description: "If true, the user has recently entered the place. \nIf false, the user has recently exited the place.\n"
-            required:
-              - timestamp
-              - inside
+        inside:
+          type: boolean
       required:
+        - timestamp
         - placeId
-        - accesses
+        - inside
 required:
   - userId
-  - historyPerPlace
+  - history
