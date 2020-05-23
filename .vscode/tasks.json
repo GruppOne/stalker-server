@@ -54,18 +54,31 @@
       "command": "./gradlew spotlessApply --continuous",
     },
     {
-      "label": "compile java code continuously",
-      "command": "./gradlew compileJava --continuous --info",
+      "label": "compile all java code continuously",
+      "command": "./gradlew classes testClasses --continuous --info",
       "group": "build",
+    },
+    {
+      "label": "format and compile java code continuously",
+      "command": "./gradlew spotlessApply classes testClasses --continuous --info",
+    },
+    {
+      "label": "test java code",
+      "command": "./gradlew test jacocoTestReport",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "open test and coverage report",
+      "command": "& ./build/reports/tests/test/index.html ; & build/reports/jacoco/test/html/index.html",
+      "group": "test"
     },
     {
       "label": "test java code continuously",
-      "command": "./gradlew test --continuous --info",
+      "command": "./gradlew test jacocoTestReport --continuous",
       "group": "build",
-    },
-    {
-      "label": "format and test java code continuously",
-      "command": "./gradlew spotlessApply test jacocoTestReport --continuous",
     },
     {
       "label": "bootRun - run spring boot application",
@@ -85,10 +98,14 @@
       "group": "build",
     },
     {
-      "label": "compose down rdb and rdb-gui",
+      "label": "compose down (remove built images and volumes)",
       "type": "shell",
       "command": "docker-compose down --remove-orphans --volumes --rmi local",
-      "isBackground": true,
+      "isBackground": false,
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+      },
       "group": "build",
     },
   ]
