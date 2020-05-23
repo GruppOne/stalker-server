@@ -1,19 +1,16 @@
 package tech.gruppone.stalker.server.controllers;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -57,12 +54,16 @@ public class OrganizationController {
 
   @GetMapping("/users/connections")
   @ResponseStatus(HttpStatus.OK)
-  public Mono<GetOrganizationOrganizationIdUsersConnectionsResponse> getUsersConnectionsToOrganizationById(@PathVariable Long organizationId){
-    return organizationService.findConnectedUsersByOrganizationId(organizationId).collectList().map(GetOrganizationOrganizationIdUsersConnectionsResponse::new);
-   }
+  public Mono<GetOrganizationOrganizationIdUsersConnectionsResponse>
+      getUsersConnectionsToOrganizationById(@PathVariable Long organizationId) {
+    return organizationService
+        .findConnectedUsersByOrganizationId(organizationId)
+        .collectList()
+        .map(GetOrganizationOrganizationIdUsersConnectionsResponse::new);
+  }
 
-   @Value
-   private static class GetOrganizationOrganizationIdUsersConnectionsResponse{
-     List<UserDto> connectedUsers;
-   }
+  @Value
+  private static class GetOrganizationOrganizationIdUsersConnectionsResponse {
+    List<UserDto> connectedUsers;
+  }
 }

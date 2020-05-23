@@ -3,8 +3,13 @@ package tech.gruppone.stalker.server.controllers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Tag;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +18,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.api.UserDataDto;
+import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
+import tech.gruppone.stalker.server.repositories.UserDataRepository;
+import tech.gruppone.stalker.server.repositories.UserRepository;
+import tech.gruppone.stalker.server.services.OrganizationService;
 import tech.gruppone.stalker.server.services.PlaceService;
 
 @Tag("integrationTest")
@@ -26,6 +36,9 @@ class OrganizationControllerTest {
   @Autowired private WebTestClient webTestClient;
 
   @MockBean private OrganizationRepository organizationRepository;
+  @MockBean private UserRepository userRepository;
+  @MockBean private UserDataRepository userDataRepository;
+  @MockBean private OrganizationService organizationService;
   @MockBean private PlaceService placeService;
 
   @Test
@@ -101,5 +114,52 @@ class OrganizationControllerTest {
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+  public void testFindConnectedUsersByOrganizationId() {
+
+    long organizationId = 1L;
+
+    var userDto1 =
+        UserDto.builder()
+            .id(1L)
+            .userData(
+                UserDataDto.builder()
+                    .email("email1@gmail.com")
+                    .firstName("firstname1")
+                    .lastName("lastName1")
+                    .birthDate(LocalDate.now())
+                    .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
+                    .build())
+            .build();
+    var userDto2 =
+        UserDto.builder()
+            .id(2L)
+            .userData(
+                UserDataDto.builder()
+                    .email("email2@gmail.com")
+                    .firstName("firstname2")
+                    .lastName("lastName2")
+                    .birthDate(LocalDate.now())
+                    .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
+                    .build())
+            .build();
+
+    List<UserDto> connectedUsers = new ArrayList<>();
+    connectedUsers.add(userDto1);
+    connectedUsers.add(userDto2);
+
+    when(organizationService.findConnectedUsersByOrganizationId(organizationId))
+        .thenReturn(Flux.fromIterable(connectedUsers));
+
+    webTestClient
+        .get()
+        .uri("/organization/{organizationId}/users/connections", organizationId)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.connectedUsers")
+        .isArray();
+
+    verify(organizationService).findConnectedUsersByOrganizationId(organizationId);
   }
 }
