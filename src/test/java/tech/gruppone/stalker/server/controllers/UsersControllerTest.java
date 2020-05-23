@@ -27,19 +27,19 @@ import tech.gruppone.stalker.server.services.UsersService;
 public class UsersControllerTest {
 
   @Autowired
-  WebTestClient testClient;
+  private WebTestClient testClient;
 
   @Autowired
-  JwtService jwtService;
+  private JwtService jwtService;
 
   @MockBean
-  UsersService usersService;
+  private UsersService usersService;
 
   @MockBean
-  UserRepository userRepository;
+  private UserRepository userRepository;
 
   @MockBean
-  UserDataRepository userDataRepository;
+  private UserDataRepository userDataRepository;
 
   @Test
   public void testCreateUser(){
@@ -69,7 +69,7 @@ public class UsersControllerTest {
       .expectBody()
       .jsonPath("$.jwt").exists();
 
-
+     verify(usersService).signUpUser(userWithLoginDataDto);
   }
 
 }
