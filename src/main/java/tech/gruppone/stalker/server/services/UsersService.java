@@ -28,7 +28,7 @@ public class UsersService {
       && (!signUp.getUserData().getEmail().isBlank())
       && (!signUp.getUserData().getFirstName().isBlank())
       && (!signUp.getUserData().getLastName().isBlank())
-      && (!signUp.getUserData().getBirthDate().toString().isBlank())){
+      && (signUp.getUserData().getBirthDate()!= null)){
       UserDao userDao =
         UserDao.builder()
           .email(signUp.getLoginData().getEmail())
