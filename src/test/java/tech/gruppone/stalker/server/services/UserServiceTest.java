@@ -2,6 +2,7 @@ package tech.gruppone.stalker.server.services;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -183,50 +184,5 @@ class UserServiceTest {
     verify(userRepository).findById(userId);
     verify(userDataRepository).findById(userId);
     verify(userDataRepository).save(expectedUserDataDao);
-  }
-
-  @Test
-  public void testFindAll() {
-    // ARRANGE
-    long userId = 1L;
-    String email = "ciaociao@hotmail.it";
-    String firstName = "Riccardo";
-    String lastName = "Cestaro";
-    LocalDate birthdate = LocalDate.parse("1960-04-16");
-    LocalDateTime creationDateTime = LocalDateTime.parse("2020-05-14T14:34:50");
-    LocalDateTime lastModifiedDate = LocalDateTime.parse("2020-05-14T14:34:50");
-
-    UserDao user = UserDao.builder().id(userId).email(email).password("password").build();
-    UserDataDao userData =
-        UserDataDao.builder()
-            .firstName(firstName)
-            .lastName(lastName)
-            .birthDate(birthdate)
-            .createdDate(creationDateTime)
-            .lastModifiedDate(lastModifiedDate)
-            .build();
-
-    when(userRepository.findAll()).thenReturn(Flux.just(user));
-
-    when(userDataRepository.findAll()).thenReturn(Flux.just(userData));
-    // ACT
-    Flux<UserDto> userToCheck =
-        Flux.just(
-            UserDto.builder()
-                .id(userId)
-                .data(
-                    UserDataDto.builder()
-                        .email(email)
-                        .firstName(firstName)
-                        .lastName(lastName)
-                        .birthDate(birthdate)
-                        .creationDateTime(Timestamp.valueOf(creationDateTime))
-                        .build())
-                .build());
-
-    Flux<UserDto> sut = userService.findAll();
-    // ASSERTION
-
-    Assertions.assertThat(userToCheck.collectList().block()).isEqualTo(sut.collectList().block());
   }
 }

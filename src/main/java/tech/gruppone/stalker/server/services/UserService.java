@@ -7,15 +7,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
-import tech.gruppone.stalker.server.model.api.UserDataWithLoginData;
 import tech.gruppone.stalker.server.model.api.UserDto;
-import tech.gruppone.stalker.server.model.db.UserDao;
-import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
