@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.security;
+/*package tech.gruppone.stalker.server.security;
 
 
 import java.io.IOException;
@@ -11,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.db.Connection;
 import tech.gruppone.stalker.server.model.api.UserRole;
+import tech.gruppone.stalker.server.model.db.Connection;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 import tech.gruppone.stalker.server.services.JwtUtil;
 
@@ -35,7 +35,6 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     } else {
       List<Connection> connectionList = new ArrayList<>();
       Long id = Long.valueOf(jwtToken.getId(token));
-      connectionRepository.findConnectedUserById(id).subscribe(Connection -> connectionList.add(Connection));
       List<UserRole> userRoleList = new ArrayList<>();
       try {
         userRoleList = jwtToken.parseUserRoles(token);
@@ -54,4 +53,4 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
       return Mono.just(accessToken);
     }
   }
-}
+}*/

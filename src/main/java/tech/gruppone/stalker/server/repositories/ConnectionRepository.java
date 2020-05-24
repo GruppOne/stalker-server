@@ -6,7 +6,6 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.db.ConnectionDao;
-import tech.gruppone.stalker.server.model.db.Connection;
 
 public interface ConnectionRepository extends ReactiveCrudRepository<ConnectionDao, Long> {
 

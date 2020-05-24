@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.relational.core.mapping.Column;
 
 @Builder

@@ -1,14 +1,14 @@
-package tech.gruppone.stalker.server.security;
+/*package tech.gruppone.stalker.server.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
-
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+
 ;
 
 @EnableWebFluxSecurity()
@@ -43,4 +43,4 @@ public class SecurityConfiguration {
 
 
 
-}
+}*/
