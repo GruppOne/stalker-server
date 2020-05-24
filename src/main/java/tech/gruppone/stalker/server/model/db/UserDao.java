@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.model.db;
 
-
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;

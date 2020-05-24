@@ -35,7 +35,7 @@ public class UsersController {
   @ResponseStatus(HttpStatus.OK)
   public Mono<UsersResponse> getUsers() {
 
-    return userService.findAll().collectList().map(UsersResponse::new);
+    return usersService.findAll().collectList().map(UsersResponse::new);
   }
 
   @Value
