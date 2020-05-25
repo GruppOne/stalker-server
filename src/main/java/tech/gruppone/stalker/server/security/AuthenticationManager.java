@@ -1,39 +1,28 @@
-/*package tech.gruppone.stalker.server.security;
+package tech.gruppone.stalker.server.security;
 
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.UserRole;
-import tech.gruppone.stalker.server.model.db.Connection;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
-import tech.gruppone.stalker.server.services.JwtUtil;
+import tech.gruppone.stalker.server.services.JwtService;
 
 @Component
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
+  @Autowired JwtService jwtToken;
 
-  @Autowired
-  JwtUtil jwtToken;
-
-  @Autowired
-  ConnectionRepository connectionRepository;
-
+  @Autowired ConnectionRepository connectionRepository;
 
   @Override
   public Mono<Authentication> authenticate(Authentication authentication) {
     String token = authentication.getName();
-    if ( token== null || jwtToken.isTokenExpired(token) || !jwtToken.isTokenSigned(token)) {
+    if (token == null || jwtToken.isTokenExpired(token) || !jwtToken.isTokenSigned(token)) {
       return Mono.empty();
     } else {
-      List<Connection> connectionList = new ArrayList<>();
+      /*List<Connection> connectionList = new ArrayList<>();
       Long id = Long.valueOf(jwtToken.getId(token));
       List<UserRole> userRoleList = new ArrayList<>();
       try {
@@ -47,10 +36,10 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
       List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
       for(UserRole userRole : userRoleList){
-        authorityList.add(new SimpleGrantedAuthority(userRole.getRole()));
-      }
-      UsernamePasswordAuthenticationToken accessToken = new UsernamePasswordAuthenticationToken(jwtToken.getId(token), null, authorityList);
+        authorityList.add(new SimpleGrantedAuthority(userRole.getRole()));*/
+      UsernamePasswordAuthenticationToken accessToken =
+          new UsernamePasswordAuthenticationToken(jwtToken.getUserId(token), null);
       return Mono.just(accessToken);
     }
   }
-}*/
+}

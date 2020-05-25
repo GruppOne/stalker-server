@@ -10,5 +10,4 @@ public interface OrganizationRepository extends ReactiveCrudRepository<Organizat
   Flux<OrganizationDao> findAll();
 
   Mono<OrganizationDao> findById(final long id);
-
 }

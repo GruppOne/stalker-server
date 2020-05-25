@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.services;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
 import java.util.UUID;
@@ -14,26 +15,29 @@ public class JwtService {
 
   // TODO should probably move the following methods to a separate class called JwtTokenService
 
-  // public Claims getJWTString(String token) {
-  //   return Jwts.parserBuilder()
-  //       .setSigningKey(getEncodedKey())
-  //       .build()
-  //       .parseClaimsJws(token)
-  //       .getBody();
-  // }
+  public Claims getJWTString(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(jwtConfiguration.getEncodedKey())
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
+  }
 
-  /*public Boolean isTokenSigned(String token) {
-    return Jwts.parserBuilder().setSigningKey(getEncodedKey()).build().isSigned(token);
-  }*/
+  public Boolean isTokenSigned(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(jwtConfiguration.getEncodedKey())
+        .build()
+        .isSigned(token);
+  }
 
-  // public String getUserId(String token) {
-  //   return getJWTString(token).getSubject();
-  // }
+  public String getUserId(String token) {
+    return getJWTString(token).getSubject();
+  }
 
-  /*public boolean isTokenExpired(String token) {
+  public boolean isTokenExpired(String token) {
     Date date = new Date();
-    return getExpirationDate(token).before(date);
-  }*/
+    return getJWTString(token).getExpiration().before(date);
+  }
 
   public String createToken(Long id) {
     Date issuedAt = new Date();

@@ -63,17 +63,6 @@ INSERT INTO `User` (`email`, `password`) VALUES
 ('filippotest05@virgilio.it', '3d6f76dfaa46a99ae8eab36e3da56ec60fbd6a60e8c8ff17d0d15f1395fdfff4b3e178053639bf47d0976bf329e7620178a1e3f28d965112c4cc24cc315de028');
 
 --
--- Dump dei dati per la tabella `AdminType`
---
-
-INSERT INTO `AdminType` (`name`, `role`) VALUES
-('admin', 'ROLE_ADMIN'),
-('manager', 'ROLE_MANAGER'),
-('owner', 'ROLE_OWNER'),
-('viewer', 'ROLE_VIEWER');
-
-
---
 -- Dump dei dati per la tabella `userdata`
 --
 

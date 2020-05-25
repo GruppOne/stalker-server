@@ -17,8 +17,6 @@ import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
-;
-
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
@@ -26,10 +24,8 @@ import tech.gruppone.stalker.server.services.UserService;
 public class UserController {
 
   // FIXME should not depend on both repo and service
-  @Autowired
-  UserRepository userRepository;
+  @Autowired UserRepository userRepository;
   UserService userService;
-
 
   @GetMapping
   @ResponseBody
@@ -44,6 +40,5 @@ public class UserController {
   public Mono<Void> deleteUserById(@PathVariable final Long userId) {
 
     return userRepository.deleteUserById(userId);
-
   }
 }

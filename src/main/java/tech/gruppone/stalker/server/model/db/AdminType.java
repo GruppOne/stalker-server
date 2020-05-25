@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class AdminType {
 
-    private String role;
-    private String name;
+  private String role;
+  private String name;
 }

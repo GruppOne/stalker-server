@@ -8,7 +8,7 @@ import tech.gruppone.stalker.server.model.api.UserRole;
 
 public interface RoleRepository extends ReactiveCrudRepository<UserRole, Long> {
 
-  @Query("SELECT r.organizationId, a.role FROM OrganizationRole r, AdminType a, Users u WHERE u.id=r.userId AND a.name=r.name and u.email=:username")
+  @Query(
+      "SELECT r.organizationId, a.role FROM OrganizationRole r, AdminType a, Users u WHERE u.id=r.userId AND a.name=r.name and u.email=:username")
   public Flux<UserRole> findUserRoles(@Param("username") String username);
-
 }

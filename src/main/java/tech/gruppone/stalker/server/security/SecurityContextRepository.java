@@ -1,5 +1,4 @@
-/*package tech.gruppone.stalker.server.security;
-
+package tech.gruppone.stalker.server.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +13,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-public class SecurityContextRepository  implements ServerSecurityContextRepository {
+public class SecurityContextRepository implements ServerSecurityContextRepository {
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
+  @Autowired private AuthenticationManager authenticationManager;
 
   @Override
   public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
@@ -27,13 +25,13 @@ public class SecurityContextRepository  implements ServerSecurityContextReposito
   @Override
   public Mono<SecurityContext> load(ServerWebExchange exchange) {
     ServerHttpRequest request = exchange.getRequest();
+    System.out.println(request.getURI());
     String header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-    if(header != null && header.startsWith("Bearer ")){
+    if (header != null && header.startsWith("Bearer ")) {
       String token = header.substring(7);
-      Authentication auth = new UsernamePasswordAuthenticationToken(token,token);
-      return this.authenticationManager.authenticate(auth).map((authentication) -> new SecurityContextImpl(authentication));
+      Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
+      return this.authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
     }
     return Mono.empty();
   }
-}*/
-
+}

@@ -1,6 +1,4 @@
-
 package tech.gruppone.stalker.server.controllers;
-
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,28 +16,22 @@ import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.services.OrganizationService;
 
-
-
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
-
 @RequestMapping("/organization/{id}")
 public class OrganizationController {
 
   OrganizationService organizationService;
 
-
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
   public Mono<OrganizationDto> getOrganizationById(@PathVariable long id) {
     return organizationService.findById(id);
-
   }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-
   public Mono<OrganizationDto> putOrganizationById(@PathVariable long id) {
     return Mono.error(NotImplementedException::new);
   }
@@ -48,7 +40,5 @@ public class OrganizationController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<OrganizationDto> deleteOrganizationById(@PathVariable long id) {
     return Mono.error(NotImplementedException::new);
-
   }
-
 }

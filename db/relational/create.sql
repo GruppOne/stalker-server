@@ -8,6 +8,8 @@
 -- Versione PHP: 7.2.12
 -- TODO should dump this from mysql!
 
+
+
 SET
   SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,34 +18,41 @@ SET
 
 START TRANSACTION;
 
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */
+
 ;
 
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */
+
 ;
 
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */
+
 ;
 
 /*!40101 SET NAMES utf8mb4 */
-;
 
+;
 -- --------------------------------------------------------
 --
 -- Database: `stalker-rdb`
 --
-CREATE DATABASE IF NOT EXISTS `stalker-rdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE DATABASE IF NOT EXISTS `stalker-rdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `stalker-rdb`;
 
 -- --------------------------------------------------------
 --
 -- Struttura della tabella `AdministratorType`
 --
+
 CREATE TABLE `AdministratorType` (
+
   `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(50) NOT NULL,
   `role` varchar(20) NOT NULL
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 --
@@ -51,78 +60,103 @@ CREATE TABLE `AdministratorType` (
 --
 
 INSERT INTO `AdministratorType` (`id`, `name`, `role`) VALUES
+
 (1, 'Admin', 'ROLE_ADMIN'),
 (2, 'Manager', 'ROLE_MANAGER'),
 (3, 'Owner', 'ROLE_OWNER'),
 (4, 'Viewer', 'ROLE_VIEWER');
 
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `Connection`
 --
+
 CREATE TABLE `Connection` (
+
   `id` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `LdapConfiguration`
 --
+
 CREATE TABLE `LdapConfiguration` (
+
   `organizationId` int(11) NOT NULL,
   `host` varchar(50) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` char(64) NOT NULL
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `OrganizationRole`
 --
+
 CREATE TABLE `OrganizationRole` (
+
   `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-<<<<<<< HEAD
   `administratorType` int(11) NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-=======
-  `name` varchar(20) NOT NULL,
-  `createdDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
->>>>>>> f0cdb9a... fix: modify db tables
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `Organization`
 --
+
 CREATE TABLE `Organization` (
+
   `id` int(11) NOT NULL,
   `name` varchar(75) NOT NULL,
   `description` tinytext NOT NULL,
   `isPrivate` BOOLEAN NOT NULL DEFAULT 0,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- FIXME this should be 1 to 1 with place, not 0..1 to 1
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `PlacePosition`
 --
+
 CREATE TABLE `PlacePosition` (
+
   `id` int(11) NOT NULL,
   `position` polygon NOT NULL
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `Place`
 --
+
 CREATE TABLE `Place` (
+
   `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
@@ -130,40 +164,58 @@ CREATE TABLE `Place` (
   `city` varchar(75) NOT NULL,
   `zipcode` varchar(10) NOT NULL,
   `state` varchar(50) NOT NULL
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `UserData`
 --
+
 CREATE TABLE `UserData` (
+
   `userId` int(11) NOT NULL,
   `firstName` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `birthDate` date NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `UserLog`
 --
+
 CREATE TABLE `UserLog` (
+
   `userId` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+
 -- --------------------------------------------------------
+
 --
 -- Struttura della tabella `User`
 --
+
 CREATE TABLE `User` (
+
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` char(128) NOT NULL
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+
 
 --
 -- Indici per le tabelle scaricate
@@ -171,16 +223,20 @@ CREATE TABLE `User` (
 --
 -- Indici per le tabelle `AdministratorType`
 --
+
 ALTER TABLE
   `AdministratorType`
+
 ADD
-  PRIMARY KEY (`name`);
+  PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `Connection`
 --
+
 ALTER TABLE
   `Connection`
+
 ADD
   PRIMARY KEY (`id`),
 ADD
@@ -190,19 +246,25 @@ ADD
 ADD
   KEY `userId` (`userId`);
 
+
+
 --
 -- Indici per le tabelle `LdapConfiguration`
 --
+
 ALTER TABLE
   `LdapConfiguration`
+
 ADD
   PRIMARY KEY (`organizationId`);
 
 --
 -- Indici per le tabelle `OrganizationRole`
 --
+
 ALTER TABLE
   `OrganizationRole`
+
 ADD
   PRIMARY KEY (`id`),
 ADD
@@ -212,43 +274,48 @@ ADD
 ADD
   KEY `userId` (`userId`),
 ADD
-<<<<<<< HEAD
   KEY `administratorType` (`administratorType`);
-=======
-  KEY `name` (`name`);
->>>>>>> f0cdb9a... fix: modify db tables
 
 --
 -- Indici per le tabelle `Organization`
 --
+
 ALTER TABLE
   `Organization`
+
 ADD
   PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `PlacePosition`
 --
+
 ALTER TABLE
   `PlacePosition`
+
 ADD
   PRIMARY KEY `id` (`id`);
 
 --
 -- Indici per le tabelle `Place`
 --
+
 ALTER TABLE
   `Place`
+
 ADD
   PRIMARY KEY (`id`),
+
 ADD
   KEY `organizationId` (`organizationId`);
 
 --
 -- Indici per le tabelle `UserData`
 --
+
 ALTER TABLE
   `UserData`
+
 ADD
   PRIMARY KEY `userId` (`userId`);
 
@@ -257,14 +324,17 @@ ADD
 --
 ALTER TABLE
   `UserLog`
+
 ADD
   PRIMARY KEY `userId` (`userId`);
 
 --
 -- Indici per le tabelle `User`
 --
+
 ALTER TABLE
   `User`
+
 ADD
   PRIMARY KEY (`id`);
 
@@ -275,70 +345,77 @@ ADD
 --
 -- AUTO_INCREMENT per la tabella `AdministratorType`
 --
-<<<<<<< HEAD
-ALTER TABLE
-  `AdministratorType`
+
+ALTER TABLE `AdministratorType`
+
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Connection`
 --
-ALTER TABLE
-  `Connection`
+
+ALTER TABLE `Connection`
+
 MODIFY
-  `id` int(11) NOT NULL AUTO_INCREMENT;
-=======
->>>>>>> f0cdb9a... fix: modify db tables
+ `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `LdapConfiguration`
 --
-ALTER TABLE
-  `LdapConfiguration`
+
+ALTER TABLE `LdapConfiguration`
+
 MODIFY
-  `organizationId` int(11) NOT NULL AUTO_INCREMENT;
+`organizationId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `OrganizationRole`
 --
-ALTER TABLE
-  `OrganizationRole`
+
+ALTER TABLE `OrganizationRole`
+
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Organization`
 --
-ALTER TABLE
-  `Organization`
+
+ALTER TABLE `Organization`
+
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `Place`
+-- AUTO_INCREMENT per la tabella `Place
 --
-ALTER TABLE
-  `Place`
+
+ALTER TABLE `Place`
+
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `User`
 --
-ALTER TABLE
-  `User`
+
+ALTER TABLE `User`
+
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Limiti per le tabelle scaricate
 --
+
 --
 -- Limiti per la tabella `Connection`
 --
+
 ALTER TABLE
   `Connection`
+
 ADD
   CONSTRAINT `Connection_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`),
 ADD
@@ -347,47 +424,55 @@ ADD
 --
 -- Limiti per la tabella `LdapConfiguration`
 --
+
 ALTER TABLE
   `LdapConfiguration`
+
 ADD
-<<<<<<< HEAD
   CONSTRAINT `LdapConfiguration_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`);
-=======
-  CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`name`) REFERENCES `AdminType` (`name`);
->>>>>>> f0cdb9a... fix: modify db tables
 
 --
 -- Limiti per la tabella `OrganizationRole`
 --
+
 ALTER TABLE
   `OrganizationRole`
+
 ADD
   CONSTRAINT `OrganizationRole_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`),
+
 ADD
   CONSTRAINT `OrganizationRole_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
+
 ADD
   CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`administratorType`) REFERENCES `AdministratorType` (`id`);
 
 --
 -- Limiti per la tabella `PlacePosition`
 --
+
 ALTER TABLE
   `PlacePosition`
+
 ADD
   CONSTRAINT `PlacePosition_ibfk_1` FOREIGN KEY (`id`) REFERENCES `Place` (`id`);
 
 --
 -- Limiti per la tabella `Place`
 --
+
 ALTER TABLE
   `Place`
+
 ADD
   CONSTRAINT `Place_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`);
 
 --
 -- Limiti per la tabella `UserData`
 --
+
 ALTER TABLE
+
   `UserData`
 ADD
   CONSTRAINT `UserData_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
@@ -403,10 +488,13 @@ ADD
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */
+
 ;
 
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */
+
 ;
 
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */
+
 ;

@@ -10,9 +10,6 @@ import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-;
-;
-
 @Service
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,12 +20,15 @@ public class LoginService {
 
   public Mono<String> logUser(LoginDataDto loginData) {
     Mono<UserDao> userDao = userRepository.findByEmail(loginData.getEmail());
-    return userDao.switchIfEmpty(Mono.error(new UnauthorizedException())).handle((user, sink) -> {
-      if (!loginData.getPassword().equals(user.getPassword())) {
-        sink.error(new UnauthorizedException());
-      } else {
-        sink.next(jwtService.createToken(user.getId()));
-      }
-    });
+    return userDao
+        .switchIfEmpty(Mono.error(new UnauthorizedException()))
+        .handle(
+            (user, sink) -> {
+              if (!loginData.getPassword().equals(user.getPassword())) {
+                sink.error(new UnauthorizedException());
+              } else {
+                sink.next(jwtService.createToken(user.getId()));
+              }
+            });
   }
 }

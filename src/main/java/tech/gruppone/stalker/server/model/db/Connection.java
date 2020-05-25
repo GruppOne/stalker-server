@@ -14,16 +14,15 @@ import org.springframework.data.relational.core.mapping.Column;
 @NoArgsConstructor
 public class Connection {
 
-    @NonNull
-    @Column("organizationId")
-    Long organizationId;
+  @NonNull
+  @Column("organizationId")
+  Long organizationId;
 
-    @NonNull
-    @Column("userId")
-    Long userId;
+  @NonNull
+  @Column("userId")
+  Long userId;
 
-    @NonNull
-    @Column("createdDate")
-    LocalDateTime createdDate;
-
+  @NonNull
+  @Column("createdDate")
+  LocalDateTime createdDate;
 }

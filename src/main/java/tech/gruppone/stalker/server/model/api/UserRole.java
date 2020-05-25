@@ -12,9 +12,8 @@ import org.springframework.data.relational.core.mapping.Column;
 @AllArgsConstructor
 public class UserRole {
 
+  @Column("organizationId")
+  private Integer organizationId;
 
-    @Column("organizationId")
-    private Integer organizationId;
-
-    private String role;
+  private String role;
 }
