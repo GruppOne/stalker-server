@@ -2,6 +2,7 @@ package tech.gruppone.stalker.server.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,7 @@ public class JwtService {
   public Claims getJWTString(String token) {
     return Jwts.parserBuilder()
         .setSigningKey(jwtConfiguration.getEncodedKey())
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
+        .build().parseClaimsJws(token).getBody();
   }
 
   public Boolean isTokenSigned(String token) {
@@ -43,7 +42,7 @@ public class JwtService {
     Date issuedAt = new Date();
     Date expirationAt =
         new Date(
-            issuedAt.getTime() + Long.parseLong(jwtConfiguration.getExpirationTime()) * 1000000);
+            issuedAt.getTime() + Long.parseLong(jwtConfiguration.getExpirationTime())* 1000) ;
     return Jwts.builder()
         .setSubject(String.valueOf(id))
         .setIssuedAt(issuedAt)

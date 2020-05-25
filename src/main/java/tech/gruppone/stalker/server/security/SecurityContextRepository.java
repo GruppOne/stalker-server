@@ -25,7 +25,6 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
   @Override
   public Mono<SecurityContext> load(ServerWebExchange exchange) {
     ServerHttpRequest request = exchange.getRequest();
-    System.out.println(request.getURI());
     String header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if (header != null && header.startsWith("Bearer ")) {
       String token = header.substring(7);

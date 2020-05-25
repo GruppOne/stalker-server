@@ -19,7 +19,8 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
   @Override
   public Mono<Authentication> authenticate(Authentication authentication) {
     String token = authentication.getName();
-    if (token == null || jwtToken.isTokenExpired(token) || !jwtToken.isTokenSigned(token)) {
+    System.out.println(token);
+    if (token == null || jwtToken.isTokenExpired(token)  || !jwtToken.isTokenSigned(token)) {
       return Mono.empty();
     } else {
       /*List<Connection> connectionList = new ArrayList<>();
