@@ -30,13 +30,14 @@ public class ConnectionService {
 
     Mono<OrganizationDao> organization = organizationRepository.findById(organizationId);
     if (organization.block().getIsPrivate()) {
-
+      System.out.println("AREO");
       LdapConfigurationDao trueLdap = connectionRepository.getLdapById(organizationId).block();
 
       if (!(trueLdap.getPassword().equals(ldap.getPassword())
           && trueLdap.getUsername().equals(ldap.getUsername()))) {
         return Mono.error(ForbiddenException::new);
       }
+
       try (LdapConnection connection = new LdapNetworkConnection("localhost", 389)) {
         connection.bind(ldap.getUsername(), ldap.getPassword());
       } catch (LdapException e) {
@@ -46,5 +47,21 @@ public class ConnectionService {
     }
 
     return connectionRepository.createUserConnection(userId, organizationId);
+  }
+
+  public Mono<Void> deleteUserConnection(long userId, long organizationId) {
+
+    Mono<OrganizationDao> organization = organizationRepository.findById(organizationId);
+    if (organization.block().getIsPrivate()) {
+
+      try (LdapConnection connection = new LdapNetworkConnection("localhost", 389)) {
+        connection.unBind();
+      } catch (LdapException e) {
+      } catch (IOException e) {
+      } finally {
+      }
+    }
+
+    return connectionRepository.deleteUserConnection(userId, organizationId);
   }
 }

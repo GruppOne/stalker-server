@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
@@ -42,16 +40,10 @@ public class ConnectionController {
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> deleteUserByIdOrganizationByIdConnection(
-      @PathVariable("userId") final long userId,
-      @PathVariable("organizationId") final long organizationId) {
-    return connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId).then();
-  }
+  public Mono<Void> deleteUserConnectionToOrganization(
+      @PathVariable("userId") long userId, @PathVariable("organizationId") long organizationId) {
 
-  @Value
-  static class PostUserByIdOrganizationByIdConnectionBody {
 
-    @NonNull String rdn;
-    @NonNull String ldapPassword;
+    return connectionService.deleteUserConnection(userId, organizationId);
   }
 }
