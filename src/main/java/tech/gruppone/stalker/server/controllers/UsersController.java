@@ -26,7 +26,6 @@ import tech.gruppone.stalker.server.services.UsersService;
 public class UsersController {
 
   UserRepository userRepository;
-  UserService userService;
   UsersService usersService;
 
   // TODO
