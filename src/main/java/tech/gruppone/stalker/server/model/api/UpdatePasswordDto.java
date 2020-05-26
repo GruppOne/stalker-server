@@ -8,9 +8,7 @@ import lombok.Value;
 @Value
 public class UpdatePasswordDto {
 
-  @NonNull
-   String oldPassword;
+  @NonNull String oldPassword;
 
-  @NonNull
-   String newPassword;
+  @NonNull String newPassword;
 }

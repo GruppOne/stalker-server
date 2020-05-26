@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.api.UpdatePasswordDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
@@ -67,5 +68,26 @@ class UserServiceTest {
 
     // ASSERT
     assertThat(userToCheck.block()).isEqualTo(sut.block());
+  }
+
+  @Test
+  public void testUpdateUser() {
+    long userId = 1L;
+
+    UpdatePasswordDto updatePasswordDto =
+        UpdatePasswordDto.builder().oldPassword("mela").newPassword("ciao").build();
+    UserDao userDao1 =
+        UserDao.builder().id(userId).email("marioRossi@gmail.com").password("mela").build();
+    UserDao userDao2 =
+        UserDao.builder().id(userId).email("marioRossi@gmail.com").password("ciao").build();
+
+    // doReturn(Mono.just(userDao)).when(userRepository).save(userDao);
+
+    when(userRepository.findById(userId)).thenReturn(Mono.just(userDao1));
+    when(userRepository.save(userDao2)).thenReturn(Mono.just(userDao2));
+
+    Mono<Void> response = userService.updatePassword(updatePasswordDto, userId);
+
+    assertThat(response.block()).isEqualTo(null);
   }
 }
