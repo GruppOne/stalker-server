@@ -60,9 +60,8 @@ INSERT INTO `AdministratorType` (`id`, `name`, `role`) VALUES
 -- Struttura della tabella `Connection`
 --
 CREATE TABLE `Connection` (
-  `id` int(11) NOT NULL,
-  `userId` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -83,7 +82,6 @@ CREATE TABLE `LdapConfiguration` (
 -- Struttura della tabella `OrganizationRole`
 --
 CREATE TABLE `OrganizationRole` (
-  `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `administratorType` int(11) NOT NULL,
@@ -178,8 +176,6 @@ ADD
 ALTER TABLE
   `Connection`
 ADD
-  PRIMARY KEY (`id`),
-ADD
   UNIQUE KEY `ConnectionKey` (`organizationId`, `userId`),
 ADD
   KEY `organizationId` (`organizationId`),
@@ -200,9 +196,7 @@ ADD
 ALTER TABLE
   `OrganizationRole`
 ADD
-  PRIMARY KEY (`id`),
-ADD
-  UNIQUE KEY `OrganizationRoleKey` (`organizationId`, `userId`),
+  UNIQUE KEY `OrganizationRoleKey` (`organizationId`, `userId`,`administratorType`),
 ADD
   KEY `organizationId` (`organizationId`),
 ADD
@@ -264,20 +258,11 @@ ADD
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
-
 --
 -- AUTO_INCREMENT per la tabella `AdministratorType`
 --
 ALTER TABLE
   `AdministratorType`
-MODIFY
-  `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `Connection`
---
-ALTER TABLE
-  `Connection`
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -288,14 +273,6 @@ ALTER TABLE
   `LdapConfiguration`
 MODIFY
   `organizationId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `OrganizationRole`
---
-ALTER TABLE
-  `OrganizationRole`
-MODIFY
-  `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Organization`
