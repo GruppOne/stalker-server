@@ -107,6 +107,7 @@ ext {
   mysqlRootPassword = "${env.MYSQL_ROOT_PASSWORD.value}"
   influxdbAdminPassword = "${env.INFLUXDB_ADMIN_PASSWORD.value}"
   jwtSecret = "${env.JWT_SECRET.value}"
+  emailAccountPassword = "${env.EMAIL_ACCOUNT_PASSWORD.value}"
 }
 
 tasks.register("printCurrentSecrets") {
@@ -114,6 +115,7 @@ tasks.register("printCurrentSecrets") {
         println "MYSQL_ROOT_PASSWORD: ${env.MYSQL_ROOT_PASSWORD.value}"
         println "INFLUXDB_ADMIN_PASSWORD: ${env.INFLUXDB_ADMIN_PASSWORD.value}"
         println "JWT_SECRET: ${env.JWT_SECRET.value}"
+        println "EMAIL_ACCOUNT_PASSWORD: ${env.EMAIL_ACCOUNT_PASSWORD.value}"
     }
 }
 
