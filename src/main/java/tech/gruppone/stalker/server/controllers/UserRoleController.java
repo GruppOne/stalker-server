@@ -1,10 +1,10 @@
 package tech.gruppone.stalker.server.controllers;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +24,17 @@ public class UserRoleController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public Mono<UserUserIdOrganizationsRolesResponse> getUserByIdOrganizationsRoles(@PathVariable final Long userId){
+  public Mono<UserUserIdOrganizationsRolesResponse> getUserByIdOrganizationsRoles(
+      @PathVariable final Long userId) {
 
-    return userRoleService.findRoleByUserId(userId).collectList().map(UserUserIdOrganizationsRolesResponse::new);
+    return userRoleService
+        .findRoleByUserId(userId)
+        .collectList()
+        .map(UserUserIdOrganizationsRolesResponse::new);
   }
 
   @Value
-  private static class UserUserIdOrganizationsRolesResponse{
+  private static class UserUserIdOrganizationsRolesResponse {
     List<UserRoleInOrganizationDto> rolesInOrganizations;
   }
 }

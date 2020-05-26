@@ -15,16 +15,16 @@ public class UserRoleService {
 
   UserRoleRepository userRoleRepository;
 
-  public Flux<UserRoleInOrganizationDto> findRoleByUserId(final long userId){
+  public Flux<UserRoleInOrganizationDto> findRoleByUserId(final long userId) {
 
     return userRoleRepository
         .findByUserId(userId)
         .map(
-          result ->
-          UserRoleInOrganizationDto.builder()
-          .organizationId(result.getOrganizationId())
-          .role(result.getAdministratorType())
-          .build()
-        ).log();
+            result ->
+                UserRoleInOrganizationDto.builder()
+                    .organizationId(result.getOrganizationId())
+                    .role(result.getAdministratorType())
+                    .build())
+        .log();
   }
 }
