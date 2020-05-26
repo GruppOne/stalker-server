@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @SuppressWarnings("serial")
 public class EmailErrorException extends RuntimeException {
 
-  public EmailErrorException(String message) {
+  public EmailErrorException() {
 
-    super(message);
+    super("It is not possible to execute this operation: email not registered in Stalker.");
   }
 }

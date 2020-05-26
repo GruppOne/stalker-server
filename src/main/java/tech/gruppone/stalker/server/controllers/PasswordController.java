@@ -67,15 +67,12 @@ public class PasswordController {
                 smtpMailSender.send(
                     requestBody.getEmail(), "Stalker Recovery password", EMAIL_BODY);
               } catch (MessagingException e) {
-                e.printStackTrace();
+                log.info(e.getStackTrace());
               }
               log.info("The mail has been sent correctly to {} ", requestBody.getEmail());
               return Mono.empty();
             })
-        .switchIfEmpty(
-            Mono.error(
-                new EmailErrorException(
-                    "It is not possible to execute this operation: email not registered in Stalker.")))
+        .switchIfEmpty(Mono.error(new EmailErrorException()))
         .then();
   }
 
