@@ -121,7 +121,7 @@ class OrganizationControllerTest {
     var userDto1 =
         UserDto.builder()
             .id(1L)
-            .userData(
+            .data(
                 UserDataDto.builder()
                     .email("email1@gmail.com")
                     .firstName("firstname1")
@@ -133,7 +133,7 @@ class OrganizationControllerTest {
     var userDto2 =
         UserDto.builder()
             .id(2L)
-            .userData(
+            .data(
                 UserDataDto.builder()
                     .email("email2@gmail.com")
                     .firstName("firstname2")

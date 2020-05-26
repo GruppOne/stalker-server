@@ -87,7 +87,7 @@ public class OrganizationService {
               var t2 = result.getT2();
               return UserDto.builder()
                   .id(t1.getId())
-                  .userData(
+                  .data(
                       UserDataDto.builder()
                           .email(t1.getEmail())
                           .firstName(t2.getFirstName())
