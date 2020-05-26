@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.ForbiddenException;
+import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.UpdatePasswordDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
@@ -52,7 +53,7 @@ public class UserService {
 
     return userRepository.findById(userId)
       .filter(userDao -> userDao.getPassword().equals(updatePasswordDto.getOldPassword()) && !(updatePasswordDto.getNewPassword().isBlank()))
-      .switchIfEmpty(Mono.error(new ForbiddenException()))
+      .switchIfEmpty(Mono.error(new NotFoundException()))
       .flatMap(userDao -> userRepository.save(UserDao.builder()
        .id(userDao.getId())
        .email(userDao.getEmail())
