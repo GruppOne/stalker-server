@@ -9,6 +9,7 @@ env:
   MYSQL_ROOT_PASSWORD: definitelyNotASecurePassword
   INFLUXDB_ADMIN_PASSWORD: definitelyNotASecurePassword
   JWT_SECRET: definitelyNotASecurePassword
+  EMAIL_ACCOUNT_PASSWORD: definitelyNotTheRealPassword
 
 jobs:
   minimum-coverage:
