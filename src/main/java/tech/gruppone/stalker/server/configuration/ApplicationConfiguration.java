@@ -26,10 +26,9 @@ public class ApplicationConfiguration implements WebFluxConfigurer {
     registry
         .addMapping("*")
         // .allowedOrigins("https://gruppone.tech")
-        // this is the web app port when running locally
         // .allowedOrigins("http://localhost:4200")
-        // this relaxes the rule to all localhost ports
         .allowedOrigins("http://localhost")
+        // .allowedOrigins("*")
         .allowedMethods("GET", "POST", "PUT", "DELETE")
         .allowedHeaders("*")
         .allowCredentials(true)
