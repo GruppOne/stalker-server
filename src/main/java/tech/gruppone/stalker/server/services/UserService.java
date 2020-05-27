@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.exceptions.NotFoundException;
+import tech.gruppone.stalker.server.model.api.UpdatePasswordDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
+import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
@@ -40,5 +43,25 @@ public class UserService {
                           .build())
                   .build();
             });
+  }
+
+  public Mono<Void> updatePassword(UpdatePasswordDto updatePasswordDto, Long userId) {
+
+    return userRepository
+        .findById(userId)
+        .filter(
+            userDao ->
+                userDao.getPassword().equals(updatePasswordDto.getOldPassword())
+                    && !(updatePasswordDto.getNewPassword().isBlank()))
+        .switchIfEmpty(Mono.error(new NotFoundException()))
+        .flatMap(
+            userDao ->
+                userRepository.save(
+                    UserDao.builder()
+                        .id(userDao.getId())
+                        .email(userDao.getEmail())
+                        .password(updatePasswordDto.getNewPassword())
+                        .build()))
+        .then();
   }
 }
