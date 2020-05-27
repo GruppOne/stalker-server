@@ -1,8 +1,10 @@
 package tech.gruppone.stalker.server.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,10 +16,11 @@ import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
+@Tag("slow")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PasswordControllerTest {
 
-  @Autowired WebTestClient testClient;
+  @Autowired WebTestClient webTestClient;
 
   @MockBean UserService userService;
   @MockBean UserRepository userRepository;
@@ -45,7 +48,7 @@ class PasswordControllerTest {
     doReturn(Mono.just(userDao1)).when(userRepository).findById(userId);
     // when(userRepository.save(userDao)).thenReturn(userDao);
 
-    testClient
+    webTestClient
         .put()
         .uri("/user/{userId}/password", userId)
         .body(Mono.just(updatePasswordDto), PutUserByIdPasswordRequestBody.class)
@@ -54,5 +57,11 @@ class PasswordControllerTest {
         .isNoContent();
 
     verify(userService).updatePassword(oldPassword, newPassword, userId);
+  }
+
+  @Test
+  void testPostUserPasswordRecovery() {
+
+    assertTrue(false);
   }
 }

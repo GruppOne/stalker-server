@@ -1,9 +1,11 @@
 package tech.gruppone.stalker.server.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,10 +14,11 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
+@Tag("slow")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ConnectionsControllerTest {
 
-  @Autowired WebTestClient testClient;
+  @Autowired WebTestClient webTestClient;
 
   @MockBean ConnectionRepository connectionRepository;
 
@@ -28,7 +31,7 @@ class ConnectionsControllerTest {
     when(connectionRepository.findConnectedOrganizationsByUserId(userId))
         .thenReturn(Flux.fromIterable(listIds));
 
-    testClient
+    webTestClient
         .get()
         .uri("/user/{userId}/organizations/connections", userId)
         .exchange()
@@ -41,5 +44,11 @@ class ConnectionsControllerTest {
         .isEqualTo(1l);
 
     verify(connectionRepository).findConnectedOrganizationsByUserId(userId);
+  }
+
+  @Test
+  void testGetOrganizationByIdUsersConnections() {
+
+    assertTrue(false);
   }
 }
