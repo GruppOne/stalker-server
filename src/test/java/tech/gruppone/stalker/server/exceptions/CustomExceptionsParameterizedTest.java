@@ -14,14 +14,14 @@ class CustomExceptionsParameterizedTest {
     return Stream.of(
         arguments(
             BadRequestException.class,
-            "The server could not process the request due to a client error."),
+            "The server could not process the request due to a client mistake."),
         arguments(ForbiddenException.class, "The server could not authorize the user."),
         arguments(
-            InvalidLdapCredentialsException.class,
-            "The LDAP credentials for this organization were invalid."),
+            InvalidLdapCredentialsException.class, "The given LDAP credentials are not valid."),
         arguments(
-            InvalidUserCredentialsException.class, "This email/password combination is not valid."),
-        arguments(NotFoundException.class, "The server could not find the requested resource."),
+            InvalidUserCredentialsException.class,
+            "The given email/password combination is not valid."),
+        arguments(NotFoundException.class, "The requested resource does not exist."),
         arguments(NotImplementedException.class, "NOT IMPLEMENTED YET"),
         arguments(UnauthorizedException.class, "The server could not authenticate the user."),
         arguments(UnexpectedErrorException.class, "The server encountered an unexpected error."));
