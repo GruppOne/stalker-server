@@ -41,4 +41,10 @@ public class OrganizationController {
   public Mono<OrganizationDto> deleteOrganizationById(@PathVariable final long id) {
     return Mono.error(NotImplementedException::new);
   }
+
+  @GetMapping("/users/inside")
+  public Mono<Throwable> getOrganizationByIdUsersInside(@PathVariable final long id) {
+
+    return Mono.error(NotImplementedException::new);
+  }
 }
