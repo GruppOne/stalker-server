@@ -27,8 +27,14 @@ public class OrganizationsController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
+  // FIXME refactor this (no more places only place ids)
   public Mono<GetOrganizationsResponse> getOrganizations() {
     return organizationService.findAll().collectList().map(GetOrganizationsResponse::new);
+  }
+
+  @Value
+  private static class GetOrganizationsResponse {
+    List<OrganizationDto> organizations;
   }
 
   @PostMapping
@@ -36,11 +42,6 @@ public class OrganizationsController {
   public Mono<PostOrganizationsResponse> postOrganizations(
       @RequestBody final OrganizationDataDto organizationDataDto) {
     return organizationService.save(organizationDataDto).map(PostOrganizationsResponse::new);
-  }
-
-  @Value
-  private static class GetOrganizationsResponse {
-    List<OrganizationDto> organizations;
   }
 
   @Value
