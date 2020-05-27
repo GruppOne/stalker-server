@@ -521,6 +521,7 @@ paths:
                   message:
                     enum:
                       - The LDAP credentials for this organization were invalid.
+                      - The server could not authenticate the user.
                     type: string
                 type: object
           description: Unauthorized
@@ -825,7 +826,7 @@ paths:
                 properties:
                   message:
                     enum:
-                      - This email/password combination is not valid
+                      - This email/password combination is not valid.
                     type: string
                 required:
                   - message
