@@ -24,7 +24,7 @@ public class PlaceController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteOrganizationByIdPlaceById(
       @PathVariable("organizationId") final long organizationId,
-      @PathVariable("userId") final long userId) {
+      @PathVariable("placeId") final long placeId) {
 
     return Mono.error(NotImplementedException::new);
   }
@@ -33,7 +33,7 @@ public class PlaceController {
   @ResponseStatus(HttpStatus.OK)
   public Mono<Throwable> getOrganizationByIdPlaceById(
       @PathVariable("organizationId") final long organizationId,
-      @PathVariable("userId") final long userId) {
+      @PathVariable("placeId") final long placeId) {
 
     return Mono.error(NotImplementedException::new);
   }
@@ -42,7 +42,7 @@ public class PlaceController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> putOrganizationByIdPlaceById(
       @PathVariable("organizationId") final long organizationId,
-      @PathVariable("userId") final long userId) {
+      @PathVariable("placeId") final long placeId) {
 
     return Mono.error(NotImplementedException::new);
   }
