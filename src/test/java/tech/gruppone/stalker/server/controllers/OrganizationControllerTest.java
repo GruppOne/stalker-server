@@ -16,7 +16,7 @@ import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.services.PlaceService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class OrganizationControllerTest {
+class OrganizationControllerTest {
 
   @Autowired private WebTestClient webTestClient;
 
@@ -24,7 +24,7 @@ public class OrganizationControllerTest {
   @MockBean private PlaceService placeService;
 
   @Test
-  public void testGetOrganizationById() {
+  void testGetOrganizationById() {
 
     var organizationId = 1L;
     var name = "name";

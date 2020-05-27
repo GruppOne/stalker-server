@@ -23,7 +23,7 @@ class LoginServiceTest {
   @InjectMocks LoginService loginService;
 
   @Test
-  public void testLogUser() {
+  void testLogUser() {
     // Arrange
     Long id = 1L;
     String email = "mario@gmail.com";
@@ -45,7 +45,7 @@ class LoginServiceTest {
   }
 
   @Test
-  public void testLogUserWithWrongPassword() {
+  void testLogUserWithWrongPassword() {
     // Arrange
     Long id = 1L;
     String email = "mario@gmail.com";

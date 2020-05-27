@@ -15,7 +15,7 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PasswordControllerTest {
+class PasswordControllerTest {
 
   @Autowired WebTestClient testClient;
 
@@ -23,7 +23,7 @@ public class PasswordControllerTest {
   @MockBean UserRepository userRepository;
 
   @Test
-  public void testPutUserByIdPassword() {
+  void testPutUserByIdPassword() {
 
     final long userId = 1L;
     final String email = "marioRossi@gmail.com";

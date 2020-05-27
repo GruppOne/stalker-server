@@ -13,7 +13,7 @@ class ServerApplicationTest {
   @Autowired ApplicationConfiguration applicationConfiguration;
 
   @Test
-  public void contextLoads() {
+  void contextLoads() {
     assertThat(applicationConfiguration).isNotNull();
     assertThat(applicationConfiguration.getVersion()).isNotNull();
   }

@@ -25,7 +25,7 @@ class UserServiceTest {
   @Autowired UserService userService;
 
   @Test
-  public void testFindById() {
+  void testFindById() {
     // ARRANGE
     final long userId = 1L;
     final String email = "ciaociao@hotmail.it";
@@ -70,7 +70,7 @@ class UserServiceTest {
   }
 
   @Test
-  public void testUpdateUser() {
+  void testUpdateUser() {
     final long userId = 1L;
     final String oldPassword = "mela";
     final String newPassword = "ciao";
