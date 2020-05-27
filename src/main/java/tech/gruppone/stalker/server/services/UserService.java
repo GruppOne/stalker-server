@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
-import tech.gruppone.stalker.server.model.api.UpdatePasswordDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
@@ -29,8 +28,8 @@ public class UserService {
         .zipWith(userDataRepository.findById(userId))
         .map(
             result -> {
-              var t1 = result.getT1();
-              var t2 = result.getT2();
+              final var t1 = result.getT1();
+              final var t2 = result.getT2();
               return UserDto.builder()
                   .id(t1.getId())
                   .data(
@@ -45,14 +44,12 @@ public class UserService {
             });
   }
 
-  public Mono<Void> updatePassword(UpdatePasswordDto updatePasswordDto, Long userId) {
+  public Mono<Void> updatePassword(
+      final String oldPassword, final String newPassword, final Long userId) {
 
     return userRepository
         .findById(userId)
-        .filter(
-            userDao ->
-                userDao.getPassword().equals(updatePasswordDto.getOldPassword())
-                    && !(updatePasswordDto.getNewPassword().isBlank()))
+        .filter(userDao -> userDao.getPassword().equals(oldPassword) && !(newPassword.isBlank()))
         .switchIfEmpty(Mono.error(new NotFoundException()))
         .flatMap(
             userDao ->
@@ -60,7 +57,7 @@ public class UserService {
                     UserDao.builder()
                         .id(userDao.getId())
                         .email(userDao.getEmail())
-                        .password(updatePasswordDto.getNewPassword())
+                        .password(newPassword)
                         .build()))
         .then();
   }
