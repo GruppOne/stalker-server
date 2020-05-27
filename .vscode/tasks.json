@@ -82,7 +82,7 @@
     },
     {
       "label": "test java code continuously",
-      "command": "./gradlew test --fail-fast jacocoTestReport --fail-fast --continuous",
+      "command": "./gradlew test --fail-fast jacocoTestReport --continuous",
       "group": "build",
     },
     {

@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class InvalidLdapCredentialsException extends RuntimeException {
   public InvalidLdapCredentialsException() {
-    super("The LDAP credentials for this organization were invalid.");
+    super("The given LDAP credentials are not valid.");
   }
 }
