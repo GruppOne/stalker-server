@@ -11,7 +11,7 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTest {
+class UserControllerTest {
 
   @Autowired WebTestClient testClient;
 
@@ -20,7 +20,7 @@ public class UserControllerTest {
   @MockBean UserRepository userRepository;
 
   @Test
-  public void testGetUser() {
+  void testGetUser() {
 
     final long userId = 1L;
 
@@ -30,7 +30,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void testDeleteUser() {
+  void testDeleteUser() {
 
     final long userId = 1L;
 
