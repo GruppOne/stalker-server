@@ -1,5 +1,8 @@
 package tech.gruppone.stalker.server.services;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.time.Clock;
 import java.time.Instant;
@@ -20,26 +23,28 @@ public class JwtService {
   Clock clock;
   JwtConfiguration jwtConfiguration;
 
-  // public Claims getJWTString(String token) {
-  //   return Jwts.parserBuilder()
-  //       .setSigningKey(getEncodedKey())
-  //       .build()
-  //       .parseClaimsJws(token)
-  //       .getBody();
-  // }
+  public Jws<Claims> getJWTString(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(jwtConfiguration.getEncodedKey())
+        .build()
+        .parseClaimsJws(token);
+  }
 
-  /*public Boolean isTokenSigned(String token) {
-    return Jwts.parserBuilder().setSigningKey(getEncodedKey()).build().isSigned(token);
-  }*/
+  public boolean isTokenValid(String token) {
+    try {
+      getJWTString(token);
+    } catch (IllegalArgumentException e) {
+      return false;
+    } catch (JwtException e) {
+      return false;
+    }
 
-  // public String getUserId(String token) {
-  //   return getJWTString(token).getSubject();
-  // }
+    return true;
+  }
 
-  /*public boolean isTokenExpired(String token) {
-    Date date = new Date();
-    return getExpirationDate(token).before(date);
-  }*/
+  public int getUserId(String token) {
+    return Integer.parseInt(getJWTString(token).getBody().getSubject());
+  }
 
   public String createToken(Long id) {
     // we use this syntax because it's actually testable
