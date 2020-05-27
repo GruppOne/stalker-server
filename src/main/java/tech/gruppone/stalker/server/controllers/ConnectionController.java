@@ -32,14 +32,14 @@ public class ConnectionController {
   public Mono<Void> postUserByIdOrganizationByIdConnection(
       @PathVariable("userId") final long userId,
       @PathVariable("organizationId") final long organizationId,
-      @RequestBody(required = false) PostUserByIdOrganizationByIdConnectionBody requestBody) {
+      @RequestBody(required = false) final PostUserByIdOrganizationByIdConnectionBody requestBody) {
 
     if (requestBody != null) {
       log.info("connecting to private organization. Request body is: {}", requestBody);
       // TODO implement functionality. request should fail if given rdn + pw are not valid.
     }
 
-    ConnectionDao connectionDao =
+    final ConnectionDao connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 
     // TODO handle error. return 400 if connection is already present!
@@ -50,7 +50,7 @@ public class ConnectionController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteUserByIdOrganizationByIdConnection(
       @PathVariable("userId") final long userId,
-      @PathVariable("organizationId") long organizationId) {
+      @PathVariable("organizationId") final long organizationId) {
     return connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId).then();
   }
 

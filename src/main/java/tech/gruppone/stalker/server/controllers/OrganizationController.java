@@ -26,19 +26,19 @@ public class OrganizationController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public Mono<OrganizationDto> getOrganizationById(@PathVariable long id) {
+  public Mono<OrganizationDto> getOrganizationById(@PathVariable final long id) {
     return organizationService.findById(id);
   }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<OrganizationDto> putOrganizationById(@PathVariable long id) {
+  public Mono<OrganizationDto> putOrganizationById(@PathVariable final long id) {
     return Mono.error(NotImplementedException::new);
   }
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<OrganizationDto> deleteOrganizationById(@PathVariable long id) {
+  public Mono<OrganizationDto> deleteOrganizationById(@PathVariable final long id) {
     return Mono.error(NotImplementedException::new);
   }
 }
