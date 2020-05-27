@@ -1,7 +1,9 @@
 package tech.gruppone.stalker.server.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,32 +12,39 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
+@Tag("slow")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
-  @Autowired WebTestClient testClient;
+  @Autowired WebTestClient webTestClient;
 
   @MockBean UserService userService;
 
   @MockBean UserRepository userRepository;
 
   @Test
-  void testGetUser() {
+  void testGetUserById() {
 
     final long userId = 1L;
 
-    testClient.get().uri("/user/{userId}", userId).exchange().expectStatus().isOk();
+    webTestClient.get().uri("/user/{userId}", userId).exchange().expectStatus().isOk();
 
     verify(userService).findById(userId);
   }
 
   @Test
-  void testDeleteUser() {
+  void testDeleteUserById() {
 
     final long userId = 1L;
 
-    testClient.delete().uri("/user/{userId}", userId).exchange().expectStatus().isNoContent();
+    webTestClient.delete().uri("/user/{userId}", userId).exchange().expectStatus().isNoContent();
 
     verify(userRepository).deleteUserById(userId);
+  }
+
+  @Test
+  void testPutUserById() {
+
+    assertTrue(false);
   }
 }
