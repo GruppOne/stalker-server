@@ -114,6 +114,7 @@ except:
     - required-bad-request-response
     - required-forbidden-response
   'api/openapi.yaml#/paths/~1user~1password~1recovery/post/responses':
+    - required-bad-request-response
     - required-unauthorized-response
     - required-forbidden-response
   'api/openapi.yaml#/paths/~1version/get/responses':

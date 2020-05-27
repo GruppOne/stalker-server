@@ -17,8 +17,6 @@ class CustomExceptionsParameterizedTest {
             "The server could not process the request due to a client error."),
         arguments(ForbiddenException.class, "The server could not authorize the user."),
         arguments(
-            InvalidEmailException.class, "The given email address is not valid for this request."),
-        arguments(
             InvalidLdapCredentialsException.class,
             "The LDAP credentials for this organization were invalid."),
         arguments(
