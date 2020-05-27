@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.controllers.PasswordController.PutUserByIdPasswordRequestBody;
@@ -16,7 +16,7 @@ import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
-@Tag("slow")
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PasswordControllerTest {
 
@@ -62,6 +62,11 @@ class PasswordControllerTest {
   @Test
   void testPostUserPasswordRecovery() {
 
-    assertTrue(false);
+    webTestClient
+        .post()
+        .uri("/user/password/recovery")
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 }

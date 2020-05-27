@@ -1,33 +1,53 @@
 package tech.gruppone.stalker.server.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@Tag("slow")
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RoleControllerTest {
   @Autowired WebTestClient webTestClient;
 
   @Test
   void testDeleteOrganizationByIdUserByIdRole() {
+    final long userId = 1L;
+    final long organizationId = 1L;
 
-    assertTrue(false);
+    webTestClient
+        .delete()
+        .uri("/organization/{organizationId}/user/{userId}/role", organizationId, userId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 
   @Test
   void testPostOrganizationByIdUserByIdRole() {
+    final long userId = 1L;
+    final long organizationId = 1L;
 
-    assertTrue(false);
+    webTestClient
+        .post()
+        .uri("/organization/{organizationId}/user/{userId}/role", organizationId, userId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 
   @Test
   void testPutOrganizationByIdUserByIdRole() {
+    final long userId = 1L;
+    final long organizationId = 1L;
 
-    assertTrue(false);
+    webTestClient
+        .put()
+        .uri("/organization/{organizationId}/user/{userId}/role", organizationId, userId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 }

@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Tag;
@@ -8,11 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
-@Tag("slow")
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
@@ -44,7 +44,13 @@ class UserControllerTest {
 
   @Test
   void testPutUserById() {
+    final long userId = 1L;
 
-    assertTrue(false);
+    webTestClient
+        .put()
+        .uri("/user/{userId}", userId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 }
