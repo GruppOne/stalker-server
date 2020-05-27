@@ -3,11 +3,13 @@ package tech.gruppone.stalker.server.controllers;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
@@ -19,7 +21,8 @@ import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 public class RoleController {
 
   @DeleteMapping
-  public Mono<Throwable> deleteOrganizationByIdUserByIdRole(
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> deleteOrganizationByIdUserByIdRole(
       @PathVariable("organizationId") final long organizationId,
       @PathVariable("userId") final long userId) {
 
@@ -27,6 +30,7 @@ public class RoleController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public Mono<Throwable> postOrganizationByIdUserByIdRole(
       @PathVariable("organizationId") final long organizationId,
       @PathVariable("userId") final long userId) {
@@ -35,7 +39,8 @@ public class RoleController {
   }
 
   @PutMapping
-  public Mono<Throwable> putOrganizationByIdUserByIdRole(
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> putOrganizationByIdUserByIdRole(
       @PathVariable("organizationId") final long organizationId,
       @PathVariable("userId") final long userId) {
 

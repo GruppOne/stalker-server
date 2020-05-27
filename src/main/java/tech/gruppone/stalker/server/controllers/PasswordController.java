@@ -23,8 +23,10 @@ import tech.gruppone.stalker.server.services.UserService;
 public class PasswordController {
   UserService userService;
 
+  // TODO should throw InvalidEmailException!
   @PostMapping("/user/password/recovery")
-  public Mono<Throwable> postUserPasswordRecovery() {
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> postUserPasswordRecovery() {
 
     return Mono.error(NotImplementedException::new);
   }
@@ -34,6 +36,7 @@ public class PasswordController {
   public Mono<Void> putUserByIdPassword(
       @RequestBody final PutUserByIdPasswordRequestBody requestBody,
       @PathVariable final Long userId) {
+
     return userService.updatePassword(
         requestBody.getOldPassword(), requestBody.getNewPassword(), userId);
   }

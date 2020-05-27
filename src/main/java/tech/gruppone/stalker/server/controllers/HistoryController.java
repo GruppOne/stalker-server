@@ -3,8 +3,10 @@ package tech.gruppone.stalker.server.controllers;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
@@ -15,6 +17,7 @@ import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 public class HistoryController {
 
   @GetMapping("/organization/{organizationId}/user/{userId}/history")
+  @ResponseStatus(HttpStatus.OK)
   public Mono<Throwable> getOrganizationByIdUserByIdHistory(
       @PathVariable("organizationId") final long organizationId,
       @PathVariable("userId") final long userId) {
@@ -23,6 +26,7 @@ public class HistoryController {
   }
 
   @GetMapping("/user/{userId}/history")
+  @ResponseStatus(HttpStatus.OK)
   public Mono<Throwable> getUserByIdHistory(@PathVariable("userId") final long userId) {
 
     return Mono.error(NotImplementedException::new);

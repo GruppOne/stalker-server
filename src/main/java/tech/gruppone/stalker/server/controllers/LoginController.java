@@ -20,6 +20,7 @@ public class LoginController {
 
   LoginService loginService;
 
+  // TODO should throw InvalidUserCredentialsException
   @PostMapping("/user/login")
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<EncodedJwtDto> postUserLogin(@RequestBody final LoginDataDto loginDataDto) {

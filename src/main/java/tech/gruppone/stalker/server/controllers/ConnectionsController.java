@@ -21,6 +21,7 @@ public class ConnectionsController {
   ConnectionRepository connectionRepository;
 
   @GetMapping("/organization/{organizationId}/users/connections")
+  @ResponseStatus(HttpStatus.OK)
   public Mono<Throwable> getOrganizationByIdUsersConnections(
       @PathVariable("organizationId") final long organizationId) {
 

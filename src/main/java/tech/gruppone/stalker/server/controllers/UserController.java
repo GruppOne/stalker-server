@@ -42,7 +42,8 @@ public class UserController {
   }
 
   @PutMapping
-  public Mono<Throwable> putUserById(@PathVariable("userId") final Long userId) {
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> putUserById(@PathVariable("userId") final Long userId) {
 
     return Mono.error(NotImplementedException::new);
   }
