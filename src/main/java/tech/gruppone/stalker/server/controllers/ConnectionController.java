@@ -36,13 +36,14 @@ public class ConnectionController {
 
     if (requestBody != null) {
       log.info("connecting to private organization. Request body is: {}", requestBody);
-      // TODO implement functionality. request should fail if given rdn + pw are not valid.
+      // TODO implement functionality. should throw InvalidLdapCredentialsException if given rdn +
+      // pw are not valid.
     }
 
     final ConnectionDao connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 
-    // TODO handle error. return 400 if connection is already present!
+    // TODO handle error. throw BadRequestException if connection is already present!
     return connectionRepository.save(connectionDao).then();
   }
 
