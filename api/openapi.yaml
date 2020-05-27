@@ -855,19 +855,6 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
-          content:
-            application/json:
-              schema:
-                properties:
-                  message:
-                    enum:
-                      - The given email address is not valid for this request.
-                    type: string
-                required:
-                  - message
-                type: object
-          description: Bad Request
         default:
           $ref: '#/components/responses/DefaultResponse'
       security: []
