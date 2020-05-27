@@ -34,7 +34,7 @@ public class OrganizationsController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<PostOrganizationsResponse> postOrganizations(
-      @RequestBody OrganizationDataDto organizationDataDto) {
+      @RequestBody final OrganizationDataDto organizationDataDto) {
     return organizationService.save(organizationDataDto).map(PostOrganizationsResponse::new);
   }
 
