@@ -64,11 +64,16 @@
     },
     {
       "label": "test java code",
-      "command": "./gradlew test jacocoTestReport",
+      "command": "./gradlew test --fail-fast jacocoTestReport",
       "group": {
         "kind": "test",
         "isDefault": true
       }
+    },
+    {
+      "label": "verify test coverage >80%",
+      "command": "./gradlew test --fail-fast jacocoTestCoverageVerification --info",
+      "group": "test"
     },
     {
       "label": "open test and coverage report",
@@ -77,7 +82,7 @@
     },
     {
       "label": "test java code continuously",
-      "command": "./gradlew test jacocoTestReport --continuous",
+      "command": "./gradlew test --fail-fast jacocoTestReport --fail-fast --continuous",
       "group": "build",
     },
     {
