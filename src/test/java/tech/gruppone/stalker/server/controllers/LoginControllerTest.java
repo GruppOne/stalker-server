@@ -3,6 +3,7 @@ package tech.gruppone.stalker.server.controllers;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,17 +17,19 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.JwtService;
 import tech.gruppone.stalker.server.services.LoginService;
 
+@Tag("slow")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class LoginControllerTest {
 
-  @Autowired WebTestClient testClient;
+  @Autowired WebTestClient webTestClient;
+
   @Autowired JwtService jwtService;
 
   @MockBean private UserRepository userRepository;
   @MockBean private LoginService loginService;
 
   @Test
-  void testLoginUser() {
+  void testPostUserLogin() {
 
     final var email = "mariotest01@gmail.com";
     final var password =
@@ -41,7 +44,7 @@ class LoginControllerTest {
         .when(loginService)
         .logUser(loginData);
 
-    testClient
+    webTestClient
         .post()
         .uri("/user/login")
         .accept(MediaType.APPLICATION_JSON)

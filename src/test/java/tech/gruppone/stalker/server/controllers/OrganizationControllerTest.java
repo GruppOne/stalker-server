@@ -1,9 +1,11 @@
 package tech.gruppone.stalker.server.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +17,7 @@ import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.services.PlaceService;
 
+@Tag("slow")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationControllerTest {
 
@@ -59,5 +62,23 @@ class OrganizationControllerTest {
         .isArray();
 
     verify(organizationRepository).findById(organizationId);
+  }
+
+  @Test
+  void testPutOrganizationById() {
+
+    assertTrue(false);
+  }
+
+  @Test
+  void testDeleteOrganizationById() {
+
+    assertTrue(false);
+  }
+
+  @Test
+  void testGetOrganizationByIdUsersInside() {
+
+    assertTrue(false);
   }
 }
