@@ -45,7 +45,7 @@ public class UsersController {
   @PostMapping
   @ResponseBody
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<EncodedJwtDto> createUser(@RequestBody UserDataWithLoginData signUp) {
+  public Mono<EncodedJwtDto> postUsers(@RequestBody UserDataWithLoginData signUp) {
 
     return usersService.signUpUser(signUp).map(EncodedJwtDto::new);
   }
