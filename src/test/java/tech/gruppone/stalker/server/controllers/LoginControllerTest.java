@@ -17,7 +17,7 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.JwtService;
 import tech.gruppone.stalker.server.services.LoginService;
 
-@Tag("slow")
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class LoginControllerTest {
 

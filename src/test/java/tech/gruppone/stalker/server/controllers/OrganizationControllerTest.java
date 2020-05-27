@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,7 +17,7 @@ import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.services.PlaceService;
 
-@Tag("slow")
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationControllerTest {
 
@@ -29,11 +29,11 @@ class OrganizationControllerTest {
   @Test
   void testGetOrganizationById() {
 
-    var organizationId = 1L;
-    var name = "name";
-    var description = "description";
+    final var organizationId = 1L;
+    final var name = "name";
+    final var description = "description";
 
-    var organizationDao =
+    final var organizationDao =
         OrganizationDao.builder()
             .id(organizationId)
             .name(name)
@@ -67,18 +67,37 @@ class OrganizationControllerTest {
   @Test
   void testPutOrganizationById() {
 
-    assertTrue(false);
+    final long organizationId = 1L;
+
+    webTestClient
+        .put()
+        .uri("/organization/{organizationId}", organizationId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 
   @Test
   void testDeleteOrganizationById() {
+    final long organizationId = 1L;
 
-    assertTrue(false);
+    webTestClient
+        .delete()
+        .uri("/organization/{organizationId}", organizationId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 
   @Test
   void testGetOrganizationByIdUsersInside() {
+    final long organizationId = 1L;
 
-    assertTrue(false);
+    webTestClient
+        .get()
+        .uri("/organization/{organizationId}/users/inside", organizationId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 }

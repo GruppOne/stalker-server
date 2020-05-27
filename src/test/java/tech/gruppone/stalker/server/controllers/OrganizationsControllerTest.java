@@ -19,7 +19,7 @@ import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.services.PlaceService;
 
-@Tag("slow")
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationsControllerTest {
   @Autowired private WebTestClient webTestClient;
