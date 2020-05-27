@@ -10,7 +10,7 @@ class VersionControllerTest {
   @Autowired private WebTestClient webTestClient;
 
   @Test
-  public void testGetVersion() {
+  void testGetVersion() {
     webTestClient
         .get()
         .uri("/version")

@@ -14,7 +14,7 @@ properties:
       - $ref: ./GenericId.v1.yaml
       - type: boolean
         enum:
-          - "false"
+          - false
   inside:
     type: boolean
   placeIds:

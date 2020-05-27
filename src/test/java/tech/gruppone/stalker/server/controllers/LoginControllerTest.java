@@ -17,7 +17,7 @@ import tech.gruppone.stalker.server.services.JwtService;
 import tech.gruppone.stalker.server.services.LoginService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LoginControllerTest {
+class LoginControllerTest {
 
   @Autowired WebTestClient testClient;
   @Autowired JwtService jwtService;
@@ -26,7 +26,7 @@ public class LoginControllerTest {
   @MockBean private LoginService loginService;
 
   @Test
-  public void testLoginUser() {
+  void testLoginUser() {
 
     final var email = "mariotest01@gmail.com";
     final var password =
