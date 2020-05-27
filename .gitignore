@@ -41,6 +41,7 @@ gradle/wrapper/gradle-wrapper.properties!gradle/wrapper/gradle-wrapper.jar
 
 # SonarLint
 .idea/sonarlint/
+.idea/sonarlint-state.xml
 
 .idea/artifacts
 .idea/compiler.xml
