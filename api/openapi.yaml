@@ -861,7 +861,7 @@ paths:
                 properties:
                   message:
                     enum:
-                      - This email is not valid.
+                      - The given email address is not valid for this request.
                     type: string
                 required:
                   - message
