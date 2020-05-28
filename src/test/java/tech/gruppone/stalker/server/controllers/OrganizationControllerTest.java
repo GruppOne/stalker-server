@@ -3,8 +3,6 @@ package tech.gruppone.stalker.server.controllers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Tag;
@@ -18,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.UserDataDto;
-import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
@@ -114,8 +110,11 @@ class OrganizationControllerTest {
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
-  public void testFindConnectedUsersByOrganizationId() {
+  }
 
+  // FIXME THIS SHOULDNT BE HERE
+  @Test
+  public void testFindConnectedUsersByOrganizationId() {
     long organizationId = 1L;
 
     var userDto1 =

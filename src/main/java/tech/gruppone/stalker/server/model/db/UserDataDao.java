@@ -18,7 +18,7 @@ public class UserDataDao {
   @Id
   @NonNull
   @Column("userId")
-  Long userId;
+  long userId;
 
   @NonNull
   @Column("firstName")

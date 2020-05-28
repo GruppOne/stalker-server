@@ -11,21 +11,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.exceptions.NotImplementedException;
+import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
+import tech.gruppone.stalker.server.services.OrganizationService;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 public class ConnectionsController {
+  OrganizationService organizationService;
   ConnectionRepository connectionRepository;
 
   @GetMapping("/organization/{organizationId}/users/connections")
   @ResponseStatus(HttpStatus.OK)
-  public Mono<Throwable> getOrganizationByIdUsersConnections(
-      @PathVariable("organizationId") final long organizationId) {
+  public Mono<GetOrganizationOrganizationIdUsersConnectionsResponse>
+      getOrganizationByIdUsersConnections(
+          @PathVariable("organizationId") final long organizationId) {
 
-    return Mono.error(NotImplementedException::new);
+    return organizationService
+        .findConnectedUsersByOrganizationId(organizationId)
+        .collectList()
+        .map(GetOrganizationOrganizationIdUsersConnectionsResponse::new);
   }
 
   @GetMapping("/user/{userId}/organizations/connections")
@@ -36,6 +42,11 @@ public class ConnectionsController {
         .findConnectedOrganizationsByUserId(userId)
         .collectList()
         .map(GetUserByIdOrganizationsConnectionsResponse::new);
+  }
+
+  @Value
+  private static class GetOrganizationOrganizationIdUsersConnectionsResponse {
+    List<UserDto> connectedUsers;
   }
 
   @Value
