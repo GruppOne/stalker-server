@@ -13,9 +13,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.controllers.UsersController.UserDataWithLoginData;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
-import tech.gruppone.stalker.server.model.api.UserDataWithLoginData;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
@@ -77,7 +77,7 @@ class UsersControllerTest {
   }
 
   @Test
-  void testCreateUser() {
+  void testPostUsers() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -123,7 +123,7 @@ class UsersControllerTest {
     doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginDataDto.getEmail());
     doReturn(Mono.just(jwtService.createToken(10L)))
         .when(usersService)
-        .signUpUser(userWithLoginDataDto);
+        .signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     testClient
         .post()
@@ -136,6 +136,6 @@ class UsersControllerTest {
         .jsonPath("$.jwt")
         .exists();
 
-    verify(usersService).signUpUser(userWithLoginDataDto);
+    verify(usersService).signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
   }
 }

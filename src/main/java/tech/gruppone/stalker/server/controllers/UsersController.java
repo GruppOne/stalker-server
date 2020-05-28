@@ -1,6 +1,12 @@
 package tech.gruppone.stalker.server.controllers;
 
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.UserDataWithLoginData;
+import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
+import tech.gruppone.stalker.server.model.api.LoginDataDto;
+import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
@@ -30,7 +38,6 @@ public class UsersController {
 
   // TODO
   @GetMapping
-  @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   public Mono<UsersResponse> getUsers() {
 
@@ -43,15 +50,19 @@ public class UsersController {
   }
 
   @PostMapping
-  @ResponseBody
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<EncodedJwtDto> postUsers(@RequestBody UserDataWithLoginData signUp) {
 
-    return usersService.signUpUser(signUp).map(EncodedJwtDto::new);
+    return usersService.signUpUser(signUp.getLoginData(), signUp.getUserData()).map(EncodedJwtDto::new);
   }
 
   @Value
-  public static class EncodedJwtDto {
-    String jwt;
+  @Builder
+  public static class UserDataWithLoginData {
+
+    @NonNull LoginDataDto loginData;
+
+    @NonNull UserDataDto userData;
   }
+
 }
