@@ -65,7 +65,7 @@ class UserControllerTest {
     UpdatePasswordDto updatePasswordDto = UpdatePasswordDto.builder().oldPassword("mela").newPassword("ciao").build();
     UserDao userDao1 = UserDao.builder().id(userId).email("marioRossi@gmail.com").password("ciao").build();
     UserDao userDao2 = UserDao.builder().id(userId).email("marioRossi@gmail.com").password("ciao").build();
-    testClient.put()
+    webTestClient.put()
       .uri("/user/{userId}/password", userId)
       .body(Mono.just(updatePasswordDto), UpdatePasswordDto.class)
       .exchange()
@@ -90,22 +90,32 @@ class UserControllerTest {
     final LocalDate birthdate = LocalDate.now();
     final LocalDateTime localDateTime = LocalDateTime.now();
 
-    final UserDataDto userDataDto = UserDataDto.builder()
-      .firstName(firstname)
-      .lastName(lastname)
-      .email(email)
-      .birthDate(birthdate)
-      .creationDateTime(Timestamp.valueOf(localDateTime))
-      .build();
+    final UserDataDto userDataDto =
+        UserDataDto.builder()
+            .firstName(firstname)
+            .lastName(lastname)
+            .email(email)
+            .birthDate(birthdate)
+            .creationDateTime(Timestamp.valueOf(localDateTime))
+            .build();
 
-    UserDao userDao = UserDao.builder().id(userId).email("mariorossi@hotmail.it").password("ciao").build();
+    final UserDao userDao =
+        UserDao.builder().id(userId).email("mariorossi@hotmail.it").password("ciao").build();
 
-    UserDataDao userDataDao = UserDataDao.builder().userId(userId).firstName(firstname).lastName(lastname).birthDate(birthdate).createdDate(localDateTime).lastModifiedDate(localDateTime).build();
+    final UserDataDao userDataDao =
+        UserDataDao.builder()
+            .userId(userId)
+            .firstName(firstname)
+            .lastName(lastname)
+            .birthDate(birthdate)
+            .createdDate(localDateTime)
+            .lastModifiedDate(localDateTime)
+            .build();
 
     doReturn(Mono.just(userDao)).when(userRepository).findById(userId);
     doReturn(Mono.just(userDataDao)).when(userDataRepository).save(userDataDao);
 
-    testClient.put()
+    webTestClient.put()
       .uri("/user/{userId}", userId)
       .body(Mono.just(userDataDto), UserDataDto.class)
       .exchange()
