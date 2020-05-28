@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
+import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
-import tech.gruppone.stalker.server.model.api.UserDataWithLoginData;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
@@ -48,18 +48,18 @@ public class UsersService {
             });
   }
 
-  public Mono<String> signUpUser(UserDataWithLoginData signUp) {
+  public Mono<String> signUpUser(LoginDataDto loginDataDto, UserDataDto userDataDto) {
 
-    if ((!signUp.getLoginData().getEmail().isBlank())
-        && (signUp.getLoginData().getPassword().length() == 128)
-        && (!signUp.getUserData().getEmail().isBlank())
-        && (!signUp.getUserData().getFirstName().isBlank())
-        && (!signUp.getUserData().getLastName().isBlank())
-        && (signUp.getUserData().getBirthDate() != null)) {
+    if ((!loginDataDto.getEmail().isBlank())
+        && (loginDataDto.getPassword().length() == 128)
+        && (!userDataDto.getEmail().isBlank())
+        && (!userDataDto.getFirstName().isBlank())
+        && (!userDataDto.getLastName().isBlank())
+        && (userDataDto.getBirthDate() != null)) {
       UserDao userDao =
           UserDao.builder()
-              .email(signUp.getLoginData().getEmail())
-              .password(signUp.getLoginData().getPassword())
+              .email(loginDataDto.getEmail())
+              .password(loginDataDto.getPassword())
               .build();
       Mono<Long> userId =
           userRepository
@@ -71,9 +71,9 @@ public class UsersService {
               id ->
                   UserDataDao.builder()
                       .userId(id)
-                      .firstName(signUp.getUserData().getFirstName())
-                      .lastName(signUp.getUserData().getLastName())
-                      .birthDate(signUp.getUserData().getBirthDate())
+                      .firstName(userDataDto.getFirstName())
+                      .lastName(userDataDto.getLastName())
+                      .birthDate(userDataDto.getBirthDate())
                       .build());
 
       var toInsert =
@@ -86,7 +86,7 @@ public class UsersService {
                       userDataDao.getBirthDate()));
       Mono<String> jwtToken =
           userRepository
-              .findByEmail(signUp.getLoginData().getEmail())
+              .findByEmail(loginDataDto.getEmail())
               .map(userDao1 -> jwtService.createToken(userDao1.getId()));
       return toInsert.then(jwtToken);
     } else {

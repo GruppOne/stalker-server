@@ -14,10 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+import tech.gruppone.stalker.server.controllers.UsersController.UserDataWithLoginData;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
-import tech.gruppone.stalker.server.model.api.UserDataWithLoginData;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
@@ -122,7 +122,7 @@ class UsersServiceTest {
             userDataDao.getBirthDate());
     doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginDataDto.getEmail());
     String jwtToken = jwtService.createToken(11L);
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
+    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectNext(jwtToken);
   }
@@ -184,7 +184,7 @@ class UsersServiceTest {
                 "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
             .build();
 
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
+    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
@@ -225,7 +225,7 @@ class UsersServiceTest {
                 "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
             .build();
 
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
+    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
@@ -266,7 +266,7 @@ class UsersServiceTest {
                 "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
             .build();
 
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
+    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
@@ -289,7 +289,7 @@ class UsersServiceTest {
             .build();
     final var userWithLoginDataDto =
         UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
+    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
@@ -323,7 +323,7 @@ class UsersServiceTest {
             .build();
     final var userWithLoginDataDto =
         UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
+    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }

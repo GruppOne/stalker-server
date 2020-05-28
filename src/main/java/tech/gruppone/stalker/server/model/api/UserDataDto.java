@@ -8,7 +8,6 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Builder
-@Value
 public class UserDataDto {
   @NonNull String email;
 
