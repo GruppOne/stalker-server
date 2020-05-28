@@ -49,12 +49,12 @@ public class UsersController {
     List<UserDto> users;
   }
 
-  @PostMapping
+  /*@PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<EncodedJwtDto> postUsers(@RequestBody UserDataWithLoginData signUp) {
 
     return usersService.signUpUser(signUp.getLoginData(), signUp.getUserData()).map(EncodedJwtDto::new);
-  }
+  }*/
 
   @Value
   @Builder

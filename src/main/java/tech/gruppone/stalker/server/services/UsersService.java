@@ -1,6 +1,7 @@
 package tech.gruppone.stalker.server.services;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -10,6 +11,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
+import tech.gruppone.stalker.server.model.api.UserDataDto.UserDataDtoBuilder;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
@@ -26,68 +28,64 @@ public class UsersService {
   LoginService loginService;
 
   public Flux<UserDto> findAll() {
-
-    return userRepository
-        .findAll()
-        .zipWith(userDataRepository.findAll())
-        .map(
-            result -> {
-              var t1 = result.getT1();
-              var t2 = result.getT2();
-              return UserDto.builder()
-                  .id(t1.getId())
-                  .data(
-                      UserDataDto.builder()
-                          .email(t1.getEmail())
-                          .firstName(t2.getFirstName())
-                          .lastName(t2.getLastName())
-                          .birthDate(t2.getBirthDate())
-                          .creationDateTime(Timestamp.valueOf(t2.getCreatedDate()))
-                          .build())
-                  .build();
-            });
+    return userRepository.findAll().map(UserDao::getId).flatMap(this::findById);
   }
+
+  public Mono<UserDto> findById(final Long id) {
+    final Mono<String> email = userRepository.findById(id).map(UserDao::getEmail);
+    final Mono<UserDataDao> userDaoMono = userDataRepository.findById(id);
+
+    final UserDataDtoBuilder builder = UserDataDto.builder();
+
+    email.subscribe(builder::email);
+
+    return email.then(userDaoMono)
+      .map(userDao -> builder.firstName(userDao.getFirstName())
+        .lastName(userDao.getLastName())
+        .birthDate(userDao.getBirthDate()).creationDateTime(Timestamp.valueOf(LocalDateTime.now())).build()).map(data -> new UserDto(id, data));
+  }
+
+/*  public Flux<UserDto> findAll() {
+
+    return userRepository.findAll().zipWith(userDataRepository.findAll()).map(result -> {
+      var t1 = result.getT1();
+      var t2 = result.getT2();
+      return UserDto.builder()
+        .id(t1.getId())
+        .data(UserDataDto.builder()
+          .email(t1.getEmail())
+          .firstName(t2.getFirstName())
+          .lastName(t2.getLastName())
+          .birthDate(t2.getBirthDate())
+          .creationDateTime(Timestamp.valueOf(t2.getCreatedDate()))
+          .build())
+        .build();
+    });
+  }*/
 
   public Mono<String> signUpUser(LoginDataDto loginDataDto, UserDataDto userDataDto) {
 
-    if ((!loginDataDto.getEmail().isBlank())
-        && (loginDataDto.getPassword().length() == 128)
-        && (!userDataDto.getEmail().isBlank())
-        && (!userDataDto.getFirstName().isBlank())
-        && (!userDataDto.getLastName().isBlank())
-        && (userDataDto.getBirthDate() != null)) {
-      UserDao userDao =
-          UserDao.builder()
-              .email(loginDataDto.getEmail())
-              .password(loginDataDto.getPassword())
-              .build();
-      Mono<Long> userId =
-          userRepository
-              .save(userDao)
-              .onErrorResume(e -> Mono.error(new BadRequestException()))
-              .map(UserDao::getId);
-      var userDataDaoMono =
-          userId.map(
-              id ->
-                  UserDataDao.builder()
-                      .userId(id)
-                      .firstName(userDataDto.getFirstName())
-                      .lastName(userDataDto.getLastName())
-                      .birthDate(userDataDto.getBirthDate())
-                      .build());
+    if ((!loginDataDto.getEmail().isBlank()) && (loginDataDto.getPassword().length() == 128) && (!userDataDto.getEmail()
+      .isBlank()) && (!userDataDto.getFirstName().isBlank()) && (!userDataDto.getLastName().isBlank()) && (
+      userDataDto.getBirthDate() != null)) {
+      UserDao userDao = UserDao.builder().email(loginDataDto.getEmail()).password(loginDataDto.getPassword()).build();
+      Mono<Long> userId = userRepository.save(userDao)
+        .onErrorResume(e -> Mono.error(new BadRequestException()))
+        .map(UserDao::getId);
+      var userDataDaoMono = userId.map(id -> UserDataDao.builder()
+        .userId(id)
+        .firstName(userDataDto.getFirstName())
+        .lastName(userDataDto.getLastName())
+        .birthDate(userDataDto.getBirthDate())
+        .build());
 
-      var toInsert =
-          userDataDaoMono.flatMap(
-              userDataDao ->
-                  userDataRepository.insert(
-                      userDataDao.getUserId(),
-                      userDataDao.getFirstName(),
-                      userDataDao.getLastName(),
-                      userDataDao.getBirthDate()));
+      var toInsert = userDataDaoMono.flatMap(userDataDao -> userDataRepository.insert(userDataDao.getUserId(),
+        userDataDao.getFirstName(),
+        userDataDao.getLastName(),
+        userDataDao.getBirthDate()
+      ));
       Mono<String> jwtToken = loginService.logUser(userDao.getEmail(), userDao.getPassword());
-          /*userRepository
-              .findByEmail(loginDataDto.getEmail())
-              .map(userDao1 -> jwtService.createToken(userDao1.getId()));*/
+
       return toInsert.then(jwtToken);
     } else {
       return Mono.error(new BadRequestException());
