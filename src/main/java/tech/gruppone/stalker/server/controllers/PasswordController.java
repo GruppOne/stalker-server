@@ -1,44 +1,21 @@
 package tech.gruppone.stalker.server.controllers;
 
-import java.io.IOException;
-
-import javax.mail.MessagingException;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
-import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.configuration.SmtpMailSenderConfiguration;
-import tech.gruppone.stalker.server.exceptions.EmailErrorException;
-import tech.gruppone.stalker.server.repositories.UserRepository;
-import tech.gruppone.stalker.server.services.UserService;
-
-import lombok.Value;
 import org.springframework.http.HttpStatus;
-import reactor.core.publisher.Mono;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import io.jsonwebtoken.io.IOException;
+import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.configuration.SmtpMailSenderConfiguration;
+import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.PasswordService;
 import tech.gruppone.stalker.server.services.UserService;
 
