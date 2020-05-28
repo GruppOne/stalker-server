@@ -25,7 +25,7 @@ import tech.gruppone.stalker.server.services.JwtService;
 import tech.gruppone.stalker.server.services.UsersService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UsersControllerTest {
+class UsersControllerTest {
 
   @Autowired private WebTestClient testClient;
 
@@ -38,7 +38,7 @@ public class UsersControllerTest {
   @MockBean private UserDataRepository userDataRepository;
 
   @Test
-  public void testgetUsers() {
+  void testgetUsers() {
 
     Long id = 2L;
     String email = "mariorossi@hotmail.it";
@@ -77,7 +77,7 @@ public class UsersControllerTest {
   }
 
   @Test
-  public void testCreateUser() {
+  void testCreateUser() {
 
     final var loginDataDto =
         LoginDataDto.builder()

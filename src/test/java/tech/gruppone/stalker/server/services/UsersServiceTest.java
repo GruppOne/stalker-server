@@ -24,8 +24,8 @@ import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-@SpringBootTest
-public class UsersServiceTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class UsersServiceTest {
 
   @Autowired JwtService jwtService;
   @Autowired UsersService usersService;
@@ -33,7 +33,7 @@ public class UsersServiceTest {
   @MockBean UserDataRepository userDataRepository;
 
   @Test
-  public void testFindAll() {
+  void testFindAll() {
     // ARRANGE
     long userId = 1L;
     String email = "ciaociao@hotmail.it";
@@ -78,7 +78,7 @@ public class UsersServiceTest {
   }
 
   @Test
-  public void testSignUpUser() {
+  void testSignUpUser() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -149,7 +149,7 @@ public class UsersServiceTest {
   }*/
 
   @Test
-  public void testSignUpUserWithMissingEmailOnLoginData() {
+  void testSignUpUserWithMissingEmailOnLoginData() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -190,7 +190,7 @@ public class UsersServiceTest {
   }
 
   @Test
-  public void testSignUpUserWithMissingEmailOnUserData() {
+  void testSignUpUserWithMissingEmailOnUserData() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -231,7 +231,7 @@ public class UsersServiceTest {
   }
 
   @Test
-  public void testSignUpUserWithMissingfirstName() {
+  void testSignUpUserWithMissingfirstName() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -272,7 +272,7 @@ public class UsersServiceTest {
   }
 
   @Test
-  public void testSignUpUserWithMissingLastName() {
+  void testSignUpUserWithMissingLastName() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -294,7 +294,7 @@ public class UsersServiceTest {
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
   /*@Test
-  public void testSignUpUserWithMissingBirthDate(){
+  void testSignUpUserWithMissingBirthDate(){
 
     final var loginDataDto = LoginDataDto.builder().email("mariorossi@hotmail.it").password("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
     final var userDataDto = UserDataDto.builder().email("mariorossi@hotmai.it").firstName("Mario").lastName("Rossi").birthDate(new LocalDate(0
@@ -306,7 +306,7 @@ public class UsersServiceTest {
   }*/
 
   @Test
-  public void testSignUpUserWithShortPassword() {
+  void testSignUpUserWithShortPassword() {
 
     final var loginDataDto =
         LoginDataDto.builder()
