@@ -25,7 +25,7 @@ public class UserService {
   UserRepository userRepository;
   UserDataRepository userDataRepository;
 
-  public Mono<UserDto> findById(final long userId) {
+ /* public Mono<UserDto> findById(final long userId) {
 
     return userRepository
         .findById(userId)
@@ -115,4 +115,18 @@ public class UserService {
   }
 
 
+    return userRepository
+        .findById(userId)
+        .filter(userDao -> userDao.getPassword().equals(oldPassword) && !(newPassword.isBlank()))
+        .switchIfEmpty(Mono.error(new NotFoundException()))
+        .flatMap(
+            userDao ->
+                userRepository.save(
+                    UserDao.builder()
+                        .id(userDao.getId())
+                        .email(userDao.getEmail())
+                        .password(newPassword)
+                        .build()))
+        .then();
+  }*/
 }
