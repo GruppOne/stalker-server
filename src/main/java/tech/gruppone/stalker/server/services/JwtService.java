@@ -6,6 +6,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.gruppone.stalker.server.configuration.JwtConfiguration;
+import tech.gruppone.stalker.server.model.api.UserDataDto;
+import tech.gruppone.stalker.server.model.db.UserDao;
+import tech.gruppone.stalker.server.model.db.UserDataDao;
 
 @Service
 public class JwtService {
@@ -48,4 +51,5 @@ public class JwtService {
         .signWith(jwtConfiguration.getEncodedKey())
         .compact();
   }
+
 }

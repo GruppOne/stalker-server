@@ -42,7 +42,7 @@ class LoginControllerTest {
     doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginData.getEmail());
     doReturn(Mono.just(jwtService.createToken(userDao.getId())))
         .when(loginService)
-        .logUser(loginData);
+        .logUser(loginData.getEmail(), loginData.getPassword());
 
     webTestClient
         .post()
@@ -56,6 +56,6 @@ class LoginControllerTest {
         .jsonPath("$.jwt")
         .exists();
 
-    verify(loginService).logUser(loginData);
+    verify(loginService).logUser(loginData.getEmail(), loginData.getPassword());
   }
 }

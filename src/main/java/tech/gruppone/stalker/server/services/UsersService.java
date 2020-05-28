@@ -23,7 +23,7 @@ public class UsersService {
 
   UserRepository userRepository;
   UserDataRepository userDataRepository;
-  JwtService jwtService;
+  LoginService loginService;
 
   public Flux<UserDto> findAll() {
 
@@ -84,10 +84,10 @@ public class UsersService {
                       userDataDao.getFirstName(),
                       userDataDao.getLastName(),
                       userDataDao.getBirthDate()));
-      Mono<String> jwtToken =
-          userRepository
+      Mono<String> jwtToken = loginService.logUser(userDao.getEmail(), userDao.getPassword());
+          /*userRepository
               .findByEmail(loginDataDto.getEmail())
-              .map(userDao1 -> jwtService.createToken(userDao1.getId()));
+              .map(userDao1 -> jwtService.createToken(userDao1.getId()));*/
       return toInsert.then(jwtToken);
     } else {
       return Mono.error(new BadRequestException());
