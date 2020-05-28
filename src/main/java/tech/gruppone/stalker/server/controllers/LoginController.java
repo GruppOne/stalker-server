@@ -25,7 +25,7 @@ public class LoginController {
   @PostMapping("/user/login")
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<EncodedJwtDto> postUserLogin(@RequestBody final LoginDataDto loginDataDto) {
-    return loginService.logUser(loginDataDto).map(EncodedJwtDto::new);
+    return loginService.logUser(loginDataDto.getEmail(), loginDataDto.getPassword()).map(EncodedJwtDto::new);
   }
 
 }

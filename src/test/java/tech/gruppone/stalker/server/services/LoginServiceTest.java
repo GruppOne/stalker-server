@@ -38,7 +38,7 @@ class LoginServiceTest {
     String expectedEncodedJwt = jwtService.createToken(id);
 
     // Act
-    Mono<String> sut = loginService.logUser(loginData);
+    Mono<String> sut = loginService.logUser(loginData.getEmail(),loginData.getPassword());
 
     // Assert
     StepVerifier.create(sut).expectNext(expectedEncodedJwt);
@@ -60,7 +60,7 @@ class LoginServiceTest {
     when(userRepository.findByEmail(email)).thenReturn(Mono.just(savedUser));
 
     // Act
-    Mono<String> sut = loginService.logUser(loginData);
+    Mono<String> sut = loginService.logUser(loginData.getEmail(),loginData.getPassword());
 
     // Assert
     StepVerifier.create(sut).expectError(UnauthorizedException.class);
