@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
@@ -20,6 +21,7 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceTest {
+
   @MockBean UserDataRepository userDataRepository;
   @MockBean UserRepository userRepository;
   @Autowired UserService userService;
@@ -79,8 +81,7 @@ class UserServiceTest {
         UserDao.builder().id(userId).email("marioRossi@gmail.com").password(oldPassword).build();
     final UserDao userDao2 =
         UserDao.builder().id(userId).email("marioRossi@gmail.com").password(newPassword).build();
-
-    // doReturn(Mono.just(userDao)).when(userRepository).save(userDao);
+    ;
 
     when(userRepository.findById(userId)).thenReturn(Mono.just(userDao1));
     when(userRepository.save(userDao2)).thenReturn(Mono.just(userDao2));
@@ -88,5 +89,43 @@ class UserServiceTest {
     final Mono<Void> response = userService.updatePassword(oldPassword, newPassword, userId);
 
     assertThat(response.block()).isEqualTo(null);
+  }
+
+  @Test
+  void putUserById() {
+    final Long userId = 1L;
+    final String firstname = "Marco";
+    final String lastname = "Rossi";
+    final String email = "mariorossi@hotmail";
+    final LocalDate birthdate = LocalDate.now();
+    final LocalDateTime localDateTime = LocalDateTime.now();
+
+    final UserDataDto userDataDto =
+        UserDataDto.builder()
+            .firstName(firstname)
+            .lastName(lastname)
+            .email(email)
+            .birthDate(birthdate)
+            .creationDateTime(Timestamp.valueOf(localDateTime))
+            .build();
+
+    final UserDao userDao = UserDao.builder().id(userId).email(email).password("ciao").build();
+
+    final UserDataDao userDataDao =
+        UserDataDao.builder()
+            .userId(userId)
+            .firstName(firstname)
+            .lastName(lastname)
+            .birthDate(birthdate)
+            .createdDate(localDateTime)
+            .lastModifiedDate(localDateTime)
+            .build();
+
+    when(userRepository.findById(userId)).thenReturn(Mono.just(userDao));
+    when(userDataRepository.save(userDataDao)).thenReturn(Mono.just(userDataDao));
+
+    final Mono<Void> response = userService.putUserById(userDataDto, userId);
+
+    response.as(StepVerifier::create).expectComplete();
   }
 }
