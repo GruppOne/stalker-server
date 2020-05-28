@@ -1,10 +1,10 @@
 package tech.gruppone.stalker.server.services;
 
 import java.sql.Timestamp;
-import org.springframework.stereotype.Service;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
@@ -14,7 +14,6 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
-
 public class ConnectionsService {
   UserRepository userRepository;
   UserDataRepository userDataRepository;
