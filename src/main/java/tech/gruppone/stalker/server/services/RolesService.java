@@ -11,7 +11,7 @@ import tech.gruppone.stalker.server.repositories.UserRoleRepository;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
-public class UserRoleService {
+public class RolesService {
 
   UserRoleRepository userRoleRepository;
 
