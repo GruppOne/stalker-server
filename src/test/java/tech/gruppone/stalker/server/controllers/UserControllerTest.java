@@ -122,5 +122,4 @@ class UserControllerTest {
       .expectStatus()
       .isNoContent();
   }
-
 }
