@@ -56,21 +56,22 @@ public class UserService {
       .then();
   }
 
-  public Mono<Void> putUserById(UserDataDto userDataDto, Long userId) {
+  public Mono<Void> putUserById(final UserDataDto userDataDto, final Long userId) {
     return userRepository
         .findById(userId)
         .filter(userDao -> userDao.getEmail().equals(userDataDto.getEmail()))
         .switchIfEmpty(Mono.error(new NotFoundException()))
-        .then(
-            userDataRepository.save(
-                UserDataDao.builder()
-                    .userId(userId)
-                    .firstName(userDataDto.getFirstName())
-                    .lastName(userDataDto.getLastName())
-                    .birthDate(userDataDto.getBirthDate())
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
-                    .build()))
+        .flatMap(
+            userDao ->
+                userDataRepository.save(
+                    UserDataDao.builder()
+                        .userId(userDao.getId())
+                        .firstName(userDataDto.getFirstName())
+                        .lastName(userDataDto.getLastName())
+                        .birthDate(userDataDto.getBirthDate())
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build()))
         .then();
   }
 }
