@@ -24,6 +24,24 @@ import tech.gruppone.stalker.server.exceptions.EmailErrorException;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 
+import lombok.Value;
+import org.springframework.http.HttpStatus;
+import reactor.core.publisher.Mono;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import io.jsonwebtoken.io.IOException;
+import tech.gruppone.stalker.server.services.PasswordService;
+import tech.gruppone.stalker.server.services.UserService;
+
 @Log4j2
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -43,14 +61,7 @@ public class PasswordController {
   UserRepository userRepository;
 
   SmtpMailSenderConfiguration smtpMailSender;
-
-  // TODO move this to the corresponding service (not a controller's responsibility)
-  private static final String EMAIL_BODY =
-      String.join(
-          System.lineSeparator(),
-          "You're received this mail because you want to recovery your Stalker's password.",
-          "Follow this link: www.stalker.com.",
-          "The team GruppOne");
+  PasswordService passwordService;
 
   // TODO should throw InvalidEmailException!
   @PostMapping("/user/password/recovery")
@@ -58,22 +69,7 @@ public class PasswordController {
   public Mono<Void> postUserPasswordRecovery(
       @RequestBody final PostUserPasswordRecoveryRequestBody requestBody) {
 
-    return userRepository
-        .findByEmail(requestBody.getEmail())
-        .filter(result -> result.getEmail().equals(requestBody.getEmail()))
-        .map(
-            result -> {
-              try {
-                smtpMailSender.send(
-                    requestBody.getEmail(), "Stalker Recovery password", EMAIL_BODY);
-              } catch (MessagingException e) {
-                log.info(e.getStackTrace());
-              }
-              log.info("The mail has been sent correctly to {} ", requestBody.getEmail());
-              return Mono.empty();
-            })
-        .switchIfEmpty(Mono.error(new EmailErrorException()))
-        .then();
+    return passwordService.sendPasswordRecoveryEmail(requestBody.getEmail());
   }
 
   @Value
