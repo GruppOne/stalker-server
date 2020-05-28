@@ -92,24 +92,25 @@ class UserServiceTest {
   }
 
   @Test
-  void putUserById() {
-    final Long userId = 1L;
+  void testPutUserById() {
+    final long userId = 1L;
     final String firstname = "Marco";
     final String lastname = "Rossi";
     final String email = "mariorossi@hotmail";
     final LocalDate birthdate = LocalDate.now();
     final LocalDateTime localDateTime = LocalDateTime.now();
+    final String password = "ciao";
 
     final UserDataDto userDataDto =
         UserDataDto.builder()
+            .email(email)
             .firstName(firstname)
             .lastName(lastname)
-            .email(email)
             .birthDate(birthdate)
             .creationDateTime(Timestamp.valueOf(localDateTime))
             .build();
 
-    final UserDao userDao = UserDao.builder().id(userId).email(email).password("ciao").build();
+    final UserDao userDao = UserDao.builder().id(userId).email(email).password(password).build();
 
     final UserDataDao userDataDao =
         UserDataDao.builder()
