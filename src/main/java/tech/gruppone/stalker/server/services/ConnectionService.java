@@ -12,7 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.exceptions.ForbiddenException;
 import tech.gruppone.stalker.server.model.api.LdapConfigurationDto;
+import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
@@ -27,21 +29,42 @@ public class ConnectionService {
 
   public Mono<Void> createUserConnection(
       LdapConfigurationDto ldap, long userId, long organizationId) {
+        LdapConfigurationDao nn = connectionRepository.getLdapById(organizationId).block();
+        nn.getOrganizationId();
+        organizationRepository.findById(organizationId)
+        .subscribe(c ->  {
+          if(!c.getIsPrivate()){
+          log.info("creating public user connection for {}",userId);
+          }else{
+            log.info("get credentials from db ");
+            connectionRepository.getLdapById(organizationId)
+            .subscribe(c1 -> {
+                log.info("checking credentials for {}",organizationId);
+                if(c1.getPassword().equals(ldap.getPassword()) && c1.getUsername().equals(ldap.getUsername())){
+                  log.info("creating private user connection for {}",userId);
+                  try (LdapConnection connection = new LdapNetworkConnection("localhost", 389)) {
+                    connection.bind(ldap.getUsername(), ldap.getPassword());
+                    connectionRepository.createUserConnection(userId, organizationId);
+                  } catch (LdapException e) {
+                    log.info("fail to create private user connection for {}",userId);
+                  } catch (IOException e) {
+                    log.info("fail to create private user connection for {}",userId);
+                  }
 
-    Mono<OrganizationDao> organization = organizationRepository.findById(organizationId);
-    if (organization.block().getIsPrivate()) {
+                }else{
+                  log.info("wrong password or username for {}",organizationId);
+                  throw new ForbiddenException();
+                }
 
-      connectionRepository.getLdapById(organizationId)
-      .filter( result -> result.getPassword().equals(ldap.getPassword()) && result.getUsername().equals(ldap.getUsername()))
-      .doOnNext( result -> {
-        try (LdapConnection connection = new LdapNetworkConnection("localhost", 389)) {
-        connection.bind(ldap.getUsername(), ldap.getPassword());
-      } catch (LdapException e) {
-      } catch (IOException e) {
-      } finally {
-      }
-      });
-    }
+
+            });
+
+
+          }
+        });
+
+
+
 
     return connectionRepository.createUserConnection(userId, organizationId);
   }
