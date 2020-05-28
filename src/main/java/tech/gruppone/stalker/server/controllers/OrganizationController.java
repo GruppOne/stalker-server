@@ -1,9 +1,7 @@
 package tech.gruppone.stalker.server.controllers;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,21 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
-import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.services.OrganizationService;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
-@RequestMapping("/organization/{organizationId}")
+@RequestMapping("/organization/{id}")
 public class OrganizationController {
 
   OrganizationService organizationService;
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public Mono<OrganizationDto> getOrganizationById(@PathVariable long organizationId) {
-    return organizationService.findById(organizationId);
+  public Mono<OrganizationDto> getOrganizationById(@PathVariable final long id) {
+    return organizationService.findById(id);
   }
 
   @PutMapping
@@ -50,20 +47,5 @@ public class OrganizationController {
   public Mono<Throwable> getOrganizationByIdUsersInside(@PathVariable final long id) {
 
     return Mono.error(NotImplementedException::new);
-  }
-
-  @GetMapping("/users/connections")
-  @ResponseStatus(HttpStatus.OK)
-  public Mono<GetOrganizationOrganizationIdUsersConnectionsResponse>
-      getUsersConnectionsToOrganizationById(@PathVariable Long organizationId) {
-    return organizationService
-        .findConnectedUsersByOrganizationId(organizationId)
-        .collectList()
-        .map(GetOrganizationOrganizationIdUsersConnectionsResponse::new);
-  }
-
-  @Value
-  private static class GetOrganizationOrganizationIdUsersConnectionsResponse {
-    List<UserDto> connectedUsers;
   }
 }
