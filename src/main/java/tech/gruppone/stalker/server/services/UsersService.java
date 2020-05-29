@@ -1,7 +1,6 @@
 package tech.gruppone.stalker.server.services;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -11,7 +10,6 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
-import tech.gruppone.stalker.server.model.api.UserDataDto.UserDataDtoBuilder;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
@@ -27,7 +25,7 @@ public class UsersService {
   UserDataRepository userDataRepository;
   LoginService loginService;
 
-  public Flux<UserDto> findAll() {
+  /*public Flux<UserDto> findAll() {
     return userRepository.findAll().map(UserDao::getId).flatMap(this::findById);
   }
 
@@ -50,25 +48,30 @@ public class UsersService {
                     .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
                     .build())
         .map(data -> new UserDto(id, data));
-  }
-
-  /*  public Flux<UserDto> findAll() {
-
-    return userRepository.findAll().zipWith(userDataRepository.findAll()).map(result -> {
-      var t1 = result.getT1();
-      var t2 = result.getT2();
-      return UserDto.builder()
-        .id(t1.getId())
-        .data(UserDataDto.builder()
-          .email(t1.getEmail())
-          .firstName(t2.getFirstName())
-          .lastName(t2.getLastName())
-          .birthDate(t2.getBirthDate())
-          .creationDateTime(Timestamp.valueOf(t2.getCreatedDate()))
-          .build())
-        .build();
-    });
   }*/
+
+  public Flux<UserDto> findAll() {
+
+    return userRepository
+        .findAll()
+        .zipWith(userDataRepository.findAll())
+        .map(
+            result -> {
+              var t1 = result.getT1();
+              var t2 = result.getT2();
+              return UserDto.builder()
+                  .id(t1.getId())
+                  .data(
+                      UserDataDto.builder()
+                          .email(t1.getEmail())
+                          .firstName(t2.getFirstName())
+                          .lastName(t2.getLastName())
+                          .birthDate(t2.getBirthDate())
+                          .creationDateTime(Timestamp.valueOf(t2.getCreatedDate()))
+                          .build())
+                  .build();
+            });
+  }
 
   public Mono<String> signUpUser(LoginDataDto loginDataDto, UserDataDto userDataDto) {
 
