@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +31,7 @@ class UsersServiceTest {
   @MockBean UserRepository userRepository;
   @MockBean UserDataRepository userDataRepository;
 
-  /*long userId = 1L;
+  long userId = 1L;
   String email = "MarioRossi@gmail.com";
   String password = "ciao";
   String firstName = "Mario";
@@ -74,50 +73,6 @@ class UsersServiceTest {
     Flux<UserDto> sut = usersService.findAll();
 
     sut.as(StepVerifier::create).expectNext(userDto);
-  }*/
-  @Test
-  void testFindAll() {
-    // ARRANGE
-    long userId = 1L;
-    String email = "ciaociao@hotmail.it";
-    String firstName = "Riccardo";
-    String lastName = "Cestaro";
-    LocalDate birthdate = LocalDate.parse("1960-04-16");
-    LocalDateTime creationDateTime = LocalDateTime.parse("2020-05-14T14:34:50");
-    LocalDateTime lastModifiedDate = LocalDateTime.parse("2020-05-14T14:34:50");
-
-    UserDao user = UserDao.builder().id(userId).email(email).password("password").build();
-    UserDataDao userData =
-        UserDataDao.builder()
-            .firstName(firstName)
-            .lastName(lastName)
-            .birthDate(birthdate)
-            .createdDate(creationDateTime)
-            .lastModifiedDate(lastModifiedDate)
-            .build();
-
-    when(userRepository.findAll()).thenReturn(Flux.just(user));
-
-    when(userDataRepository.findAll()).thenReturn(Flux.just(userData));
-    // ACT
-    Flux<UserDto> userToCheck =
-        Flux.just(
-            UserDto.builder()
-                .id(userId)
-                .data(
-                    UserDataDto.builder()
-                        .email(email)
-                        .firstName(firstName)
-                        .lastName(lastName)
-                        .birthDate(birthdate)
-                        .creationDateTime(Timestamp.valueOf(creationDateTime))
-                        .build())
-                .build());
-
-    Flux<UserDto> sut = usersService.findAll();
-    // ASSERTION
-
-    Assertions.assertThat(userToCheck.collectList().block()).isEqualTo(sut.collectList().block());
   }
 
   @Test
