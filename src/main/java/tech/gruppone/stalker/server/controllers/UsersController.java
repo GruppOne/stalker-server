@@ -4,8 +4,6 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,12 +46,14 @@ public class UsersController {
     List<UserDto> users;
   }
 
-  /*@PostMapping
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<EncodedJwtDto> postUsers(@RequestBody UserDataWithLoginData signUp) {
 
-    return usersService.signUpUser(signUp.getLoginData(), signUp.getUserData()).map(EncodedJwtDto::new);
-  }*/
+    return usersService
+        .signUpUser(signUp.getLoginData(), signUp.getUserData())
+        .map(EncodedJwtDto::new);
+  }
 
   @Value
   @Builder
@@ -64,5 +63,4 @@ public class UsersController {
 
     @NonNull UserDataDto userData;
   }
-
 }

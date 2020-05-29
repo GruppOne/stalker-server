@@ -31,15 +31,15 @@ public class PasswordController {
     return Mono.error(NotImplementedException::new);
   }
 
-  /*@PutMapping("/user/{userId}/password")
+  @PutMapping("/user/{userId}/password")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> putUserByIdPassword(
       @RequestBody final PutUserByIdPasswordRequestBody requestBody,
       @PathVariable final Long userId) {
 
-   return userService.updatePassword(
+    return userService.updatePassword(
         requestBody.getOldPassword(), requestBody.getNewPassword(), userId);
-  }*/
+  }
 
   @Builder
   @Value

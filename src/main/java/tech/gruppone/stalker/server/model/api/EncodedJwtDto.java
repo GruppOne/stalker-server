@@ -5,6 +5,5 @@ import lombok.Value;
 @Value
 public class EncodedJwtDto {
 
-    String jwt;
-
+  String jwt;
 }

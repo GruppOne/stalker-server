@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
-import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 

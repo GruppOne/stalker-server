@@ -34,12 +34,12 @@ public class UserController {
     return userRepository.deleteById(userId);
   }
 
-  /*@GetMapping
+  @GetMapping
   @ResponseStatus(HttpStatus.OK)
   public Mono<UserDto> getUserById(@PathVariable("userId") final Long userId) {
 
     return userService.findById(userId);
-  }*/
+  }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
