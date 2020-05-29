@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +31,50 @@ class UsersServiceTest {
   @MockBean UserRepository userRepository;
   @MockBean UserDataRepository userDataRepository;
 
+  long userId = 1L;
+  String email = "MarioRossi@gmail.com";
+  String password = "ciao";
+  String firstName = "Mario";
+  String lastName = "Rossi";
+  LocalDateTime birthDate = LocalDateTime.now();
+  UserDao userDao = UserDao.builder().id(userId).email(email).password(password).build();
+  UserDataDao userDataDao =
+      UserDataDao.builder()
+          .firstName(firstName)
+          .lastName(lastName)
+          .createdDate(LocalDateTime.now())
+          .birthDate(LocalDate.now())
+          .lastModifiedDate(LocalDateTime.now())
+          .build();
+  UserDataDto userDataDto =
+      UserDataDto.builder()
+          .email(email)
+          .firstName(firstName)
+          .lastName(lastName)
+          .birthDate(LocalDate.now())
+          .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
+          .build();
+  UserDto userDto = UserDto.builder().id(userId).data(userDataDto).build();
+
   @Test
+  void findById() {
+    when(userRepository.findById(userId)).thenReturn(Mono.just(userDao));
+    when(userDataRepository.findById(userId)).thenReturn(Mono.just(userDataDao));
+
+    Mono<UserDto> sut = usersService.findById(userId);
+
+    sut.as(StepVerifier::create).expectNext(userDto);
+  }
+
+  @Test
+  void findAllById() {
+    when(userRepository.findAll()).thenReturn(Flux.just(userDao));
+
+    Flux<UserDto> sut = usersService.findAll();
+
+    sut.as(StepVerifier::create).expectNext(userDto);
+  }
+  /*@Test
   void testFindAll() {
     // ARRANGE
     long userId = 1L;
@@ -75,7 +117,7 @@ class UsersServiceTest {
     // ASSERTION
 
     Assertions.assertThat(userToCheck.collectList().block()).isEqualTo(sut.collectList().block());
-  }
+  }*/
 
   @Test
   void testSignUpUser() {
@@ -122,7 +164,9 @@ class UsersServiceTest {
             userDataDao.getBirthDate());
     doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginDataDto.getEmail());
     String jwtToken = jwtService.createToken(11L);
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    Mono<String> sut =
+        usersService.signUpUser(
+            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectNext(jwtToken);
   }
@@ -130,14 +174,18 @@ class UsersServiceTest {
   /*@Test
   public void testSignUpUserWithEmailJustUsed(){
 
-    final var loginDataDto = LoginDataDto.builder().email("mariorossi@hotmail.it").password("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
-    final var userDataDto = UserDataDto.builder().email("mariorossi@hotmail.it").firstName("Mario").lastName("Rossi").birthDate(
+    final var loginDataDto = LoginDataDto.builder().email("mariorossi@hotmail.it").password
+    ("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
+    final var userDataDto = UserDataDto.builder().email("mariorossi@hotmail.it").firstName("Mario").lastName("Rossi")
+    .birthDate(
       LocalDate.now()).build();
-    final var userWithLoginDataDto = UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
+    final var userWithLoginDataDto = UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto)
+    .build();
 
     final var userDataDao = UserDataDao.builder().userId(11L).firstName("Mario").lastName("Rossi").birthDate(
       LocalDate.now()).createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build();
-    final var userDao = UserDao.builder().email("mariorossi@hotmail.it").password("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
+    final var userDao = UserDao.builder().email("mariorossi@hotmail.it").password
+    ("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
 
     doReturn(Mono.error(new BadRequestException())).when(userRepository).save(userDao);
 
@@ -184,7 +232,9 @@ class UsersServiceTest {
                 "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
             .build();
 
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    Mono<String> sut =
+        usersService.signUpUser(
+            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
@@ -225,7 +275,9 @@ class UsersServiceTest {
                 "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
             .build();
 
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    Mono<String> sut =
+        usersService.signUpUser(
+            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
@@ -266,7 +318,9 @@ class UsersServiceTest {
                 "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
             .build();
 
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    Mono<String> sut =
+        usersService.signUpUser(
+            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
@@ -289,17 +343,22 @@ class UsersServiceTest {
             .build();
     final var userWithLoginDataDto =
         UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    Mono<String> sut =
+        usersService.signUpUser(
+            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
   /*@Test
   void testSignUpUserWithMissingBirthDate(){
 
-    final var loginDataDto = LoginDataDto.builder().email("mariorossi@hotmail.it").password("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
-    final var userDataDto = UserDataDto.builder().email("mariorossi@hotmai.it").firstName("Mario").lastName("Rossi").birthDate(new LocalDate(0
+    final var loginDataDto = LoginDataDto.builder().email("mariorossi@hotmail.it").password
+    ("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
+    final var userDataDto = UserDataDto.builder().email("mariorossi@hotmai.it").firstName("Mario").lastName("Rossi")
+    .birthDate(new LocalDate(0
      0 0)).build();
-    final var userWithLoginDataDto = UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
+    final var userWithLoginDataDto = UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto)
+    .build();
     Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
@@ -323,7 +382,9 @@ class UsersServiceTest {
             .build();
     final var userWithLoginDataDto =
         UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    Mono<String> sut =
+        usersService.signUpUser(
+            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }

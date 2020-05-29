@@ -25,7 +25,7 @@ public class UserService {
   UserRepository userRepository;
   UserDataRepository userDataRepository;
 
- /* public Mono<UserDto> findById(final long userId) {
+  public Mono<UserDto> findById(final long userId) {
 
     return userRepository
         .findById(userId)
@@ -128,5 +128,5 @@ public class UserService {
                         .password(newPassword)
                         .build()))
         .then();
-  }*/
+  }
 }

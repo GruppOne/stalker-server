@@ -136,6 +136,7 @@ class UsersControllerTest {
         .jsonPath("$.jwt")
         .exists();
 
-    verify(usersService).signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    verify(usersService)
+        .signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
   }
 }
