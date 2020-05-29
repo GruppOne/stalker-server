@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +32,7 @@ class UsersServiceTest {
   @MockBean UserRepository userRepository;
   @MockBean UserDataRepository userDataRepository;
 
-  long userId = 1L;
+  /*long userId = 1L;
   String email = "MarioRossi@gmail.com";
   String password = "ciao";
   String firstName = "Mario";
@@ -73,8 +74,8 @@ class UsersServiceTest {
     Flux<UserDto> sut = usersService.findAll();
 
     sut.as(StepVerifier::create).expectNext(userDto);
-  }
-  /*@Test
+  }*/
+  @Test
   void testFindAll() {
     // ARRANGE
     long userId = 1L;
@@ -117,7 +118,7 @@ class UsersServiceTest {
     // ASSERTION
 
     Assertions.assertThat(userToCheck.collectList().block()).isEqualTo(sut.collectList().block());
-  }*/
+  }
 
   @Test
   void testSignUpUser() {
