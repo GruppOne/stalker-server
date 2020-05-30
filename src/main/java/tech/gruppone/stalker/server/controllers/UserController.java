@@ -50,11 +50,4 @@ public class UserController {
 
     return userService.updateUserById(userDataDto, userId);
   }
-
-  @PutMapping("/password")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> putUserByIdPassword(
-      @RequestBody UpdatePasswordDto updatePasswordDto, @PathVariable final Long userId) {
-    return userService.updatePassword(updatePasswordDto, userId);
-  }
 }

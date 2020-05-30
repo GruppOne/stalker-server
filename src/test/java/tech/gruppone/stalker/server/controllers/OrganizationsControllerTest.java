@@ -22,9 +22,12 @@ import tech.gruppone.stalker.server.services.PlaceService;
 @Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationsControllerTest {
-  @Autowired private WebTestClient webTestClient;
+  private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
+
   @MockBean private OrganizationRepository organizationRepository;
   @MockBean private PlaceService placeService;
+
+  @Autowired private WebTestClient webTestClient;
 
   @Test
   void testGetOrganizations() {
@@ -37,8 +40,8 @@ class OrganizationsControllerTest {
             .id(organizationId)
             .name(name)
             .description(description)
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
+            .createdDate(LOCAL_DATETIME)
+            .lastModifiedDate(LOCAL_DATETIME)
             .build();
 
     when(organizationRepository.findAll()).thenReturn(Flux.just(organizationDao));

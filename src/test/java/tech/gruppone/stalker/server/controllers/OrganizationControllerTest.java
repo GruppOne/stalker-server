@@ -21,6 +21,8 @@ import tech.gruppone.stalker.server.services.PlaceService;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationControllerTest {
 
+  private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
+
   @Autowired private WebTestClient webTestClient;
 
   @MockBean private OrganizationRepository organizationRepository;
@@ -38,8 +40,8 @@ class OrganizationControllerTest {
             .id(organizationId)
             .name(name)
             .description(description)
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
+            .createdDate(LOCAL_DATETIME)
+            .lastModifiedDate(LOCAL_DATETIME)
             .build();
 
     when(organizationRepository.findById(organizationId)).thenReturn(Mono.just(organizationDao));
