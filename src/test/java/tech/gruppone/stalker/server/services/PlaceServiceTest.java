@@ -2,6 +2,8 @@ package tech.gruppone.stalker.server.services;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -112,26 +114,10 @@ class PlaceServiceTest {
 
     Flux<PlaceDao> sut = placeService.saveAll(placeDataDtos, 1L);
 
-    sut.as(StepVerifier::create).expectNext(expectedPlaceDao);
+    sut.as(StepVerifier::create).expectNext(expectedPlaceDao).verifyComplete();
+
+    // FIXME these should not be invoked twice!
+    verify(placeRepository, times(2)).save(newPlaceDao);
+    verify(placePositionService, times(2)).savePlacePosition(eq(id), any());
   }
-
-  // this test was kind of meaningless...
-  // void testSaveAll() {
-  //   PlaceDao newPlaceDao =
-  //       PlaceDao.builder()
-  //           .organizationId(organizationId)
-  //           .name(name)
-  //           .address(address)
-  //           .city(city)
-  //           .zipcode(zipcode)
-  //           .state(state)
-  //           .build();
-
-  //   when(placeRepository.saveAll(List.of(newPlaceDao))).thenReturn(Flux.just(placeDao));
-
-  //   Flux<PlaceDataDto> placeDataDtos = Flux.empty();
-  //   var sut = placeService.saveAll(placeDataDtos, 1L);
-
-  //   sut.as(StepVerifier::create).expectComplete();
-  // }
 }
