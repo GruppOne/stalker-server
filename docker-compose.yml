@@ -17,7 +17,6 @@ version: "3.7"
 
 ########################################################################################################################
 
-# TODO how do we define external services like our web-app?
 # TODO we should manage permissions differently in the production db (e.g. use docker/kube secrets to manage passwords)
 services:
   # TODO add server container configuration
