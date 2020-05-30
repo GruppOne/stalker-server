@@ -92,7 +92,7 @@ class UserServiceTest {
   }
 
   @Test
-  void testPutUserById() {
+  void testUpdateUserById() {
     final long userId = 1L;
     final String firstname = "Marco";
     final String lastname = "Rossi";
