@@ -1,14 +1,11 @@
 package tech.gruppone.stalker.server.model.api;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.NonNull;
-import org.springframework.data.annotation.Id;
+import lombok.Value;
 
-@Builder
-@Data
+@Value
 public class UserDto {
-  @Id long id;
+  long id;
 
   @NonNull UserDataDto data;
 }

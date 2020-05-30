@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -15,6 +16,7 @@ import org.springframework.data.relational.core.mapping.Table;
 public class UserDataDao {
 
   @Id
+  @NonNull
   @Column("userId")
   Long userId;
 
@@ -30,11 +32,10 @@ public class UserDataDao {
   @Column("birthDate")
   LocalDate birthDate;
 
-  @NonNull
   @Column("createdDate")
   LocalDateTime createdDate;
 
-  @NonNull
+  @With
   @Column("lastModifiedDate")
   LocalDateTime lastModifiedDate;
 }

@@ -26,7 +26,6 @@ import tech.gruppone.stalker.server.services.UserService;
 @RequestMapping("/user/{userId}")
 public class UserController {
 
-  // FIXME should not depend on both repo and service
   UserRepository userRepository;
   UserService userService;
 
@@ -34,7 +33,7 @@ public class UserController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteUserById(@PathVariable("userId") final Long userId) {
 
-    return userRepository.deleteUserById(userId);
+    return userRepository.deleteById(userId);
   }
 
   @GetMapping
@@ -46,9 +45,10 @@ public class UserController {
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> putUserById(@PathVariable("userId") final Long userId, @RequestBody UserDataDto userDataDto){
+  public Mono<Void> putUserById(
+      @PathVariable("userId") final Long userId, @RequestBody final UserDataDto userDataDto) {
 
-    return userService.putUserById(userDataDto, userId);
+    return userService.updateUserById(userDataDto, userId);
   }
 
   @PutMapping("/password")
