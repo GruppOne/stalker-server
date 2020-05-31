@@ -4,10 +4,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Tag;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -110,55 +107,5 @@ class OrganizationControllerTest {
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
-  }
-
-  // FIXME THIS SHOULDNT BE HERE
-  @Test
-  public void testFindConnectedUsersByOrganizationId() {
-    long organizationId = 1L;
-
-    var userDto1 =
-        UserDto.builder()
-            .id(1L)
-            .data(
-                UserDataDto.builder()
-                    .email("email1@gmail.com")
-                    .firstName("firstname1")
-                    .lastName("lastName1")
-                    .birthDate(LocalDate.now())
-                    .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
-                    .build())
-            .build();
-    var userDto2 =
-        UserDto.builder()
-            .id(2L)
-            .data(
-                UserDataDto.builder()
-                    .email("email2@gmail.com")
-                    .firstName("firstname2")
-                    .lastName("lastName2")
-                    .birthDate(LocalDate.now())
-                    .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
-                    .build())
-            .build();
-
-    List<UserDto> connectedUsers = new ArrayList<>();
-    connectedUsers.add(userDto1);
-    connectedUsers.add(userDto2);
-
-    when(organizationService.findConnectedUsersByOrganizationId(organizationId))
-        .thenReturn(Flux.fromIterable(connectedUsers));
-
-    webTestClient
-        .get()
-        .uri("/organization/{organizationId}/users/connections", organizationId)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("$.connectedUsers")
-        .isArray();
-
-    verify(organizationService).findConnectedUsersByOrganizationId(organizationId);
   }
 }

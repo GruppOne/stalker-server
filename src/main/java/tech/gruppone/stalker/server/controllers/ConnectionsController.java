@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
-import tech.gruppone.stalker.server.services.ConnectionsService;
+import tech.gruppone.stalker.server.services.ConnectionService;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 public class ConnectionsController {
-  ConnectionsService connectionsService;
+  ConnectionService connectionsService;
   ConnectionRepository connectionRepository;
 
   @GetMapping("/organization/{organizationId}/users/connections")
