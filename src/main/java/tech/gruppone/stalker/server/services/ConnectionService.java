@@ -14,14 +14,14 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
-public class ConnectionsService {
+public class ConnectionService {
   UserRepository userRepository;
   UserDataRepository userDataRepository;
 
   public Flux<UserDto> findConnectedUsersByOrganizationId(Long organizationId) {
 
     return userRepository
-        .findAllUsers(organizationId)
+        .findAllByOrganizationId(organizationId)
         .zipWith(userDataRepository.findAllUserData(organizationId))
         .map(
             result -> {
