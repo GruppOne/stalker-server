@@ -74,16 +74,18 @@ public class UserService {
         .filter(userDao -> userDao.getEmail().equals(userDataDto.getEmail()))
         .switchIfEmpty(Mono.error(BadRequestException::new))
         .map(UserDao::getId)
+        .flatMap(userDataRepository::findById)
         .flatMap(
-            id -> {
+            oldUserDataDao -> {
+              final var createdDate = oldUserDataDao.getCreatedDate();
+
               final UserDataDao updatedUserDataDao =
                   UserDataDao.builder()
-                      .userId(id)
+                      .userId(userId)
                       .firstName(userDataDto.getFirstName())
                       .lastName(userDataDto.getLastName())
                       .birthDate(userDataDto.getBirthDate())
-                      // FIXME this property should not be modifiable by clients
-                      .createdDate(userDataDto.getCreationDateTime().toLocalDateTime())
+                      .createdDate(createdDate)
                       .lastModifiedDate(LocalDateTime.now(clock))
                       .build();
 

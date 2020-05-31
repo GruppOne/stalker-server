@@ -8,7 +8,6 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,12 +32,15 @@ class UserServiceTest {
     public static final LocalDateTime FIXED_LOCAL_DATE_TIME =
         LocalDateTime.parse("2020-01-01T01:01:01.01");
 
-    // override system clock with a fixed clock
+    // override system clock with a utc-based fixed clock
     @Bean
     @Primary
     public Clock fixedClock() {
-      return Clock.fixed(
-          FIXED_LOCAL_DATE_TIME.toInstant(ZoneOffset.ofHours(1)), ZoneId.systemDefault());
+      // this is horrifyingly verbose
+      final var zoneId = ZoneId.of("Europe/Rome");
+      final var zoneOffset = zoneId.getRules().getOffset(FIXED_LOCAL_DATE_TIME);
+
+      return Clock.fixed(FIXED_LOCAL_DATE_TIME.toInstant(zoneOffset), zoneId);
     }
   }
 
@@ -126,33 +128,49 @@ class UserServiceTest {
     final long userId = 1L;
     final String email = "email@email.email";
     final String password = "password";
+    final LocalDate birthDate = LOCAL_DATE;
+    final LocalDateTime creationDateTime = LOCAL_DATETIME;
+
+    final String oldFirstName = "oldFirstName";
+    final String oldLastName = "oldLastName";
+
     final String newFirstName = "newFirstName";
-    final String lastName = "lastName";
-    final LocalDate birthdate = LOCAL_DATE;
-    final LocalDateTime localDateTime = LOCAL_DATETIME;
+    final String newLastName = "newLastName";
 
     final UserDataDto userDataDto =
         UserDataDto.builder()
             .email(email)
             .firstName(newFirstName)
-            .lastName(lastName)
-            .birthDate(birthdate)
-            .creationDateTime(Timestamp.valueOf(localDateTime))
+            .lastName(newLastName)
+            .birthDate(birthDate)
+            .creationDateTime(Timestamp.valueOf(creationDateTime))
             .build();
 
     final UserDao userDao = UserDao.builder().id(userId).email(email).password(password).build();
 
+    final var originalUserDataDao =
+        UserDataDao.builder()
+            .userId(userId)
+            .firstName(oldFirstName)
+            .lastName(oldLastName)
+            .birthDate(birthDate)
+            .createdDate(creationDateTime)
+            .lastModifiedDate(TestConfig.FIXED_LOCAL_DATE_TIME)
+            .build();
+
+    // modify firstName and lastName
     final var expectedUserDataDao =
         UserDataDao.builder()
             .userId(userId)
             .firstName(newFirstName)
-            .lastName(lastName)
-            .birthDate(birthdate)
-            .createdDate(localDateTime)
+            .lastName(newLastName)
+            .birthDate(birthDate)
+            .createdDate(creationDateTime)
             .lastModifiedDate(TestConfig.FIXED_LOCAL_DATE_TIME)
             .build();
 
     when(userRepository.findById(userId)).thenReturn(Mono.just(userDao));
+    when(userDataRepository.findById(userId)).thenReturn(Mono.just(originalUserDataDao));
     when(userDataRepository.save(expectedUserDataDao)).thenReturn(Mono.just(expectedUserDataDao));
 
     // ACT
@@ -162,6 +180,7 @@ class UserServiceTest {
     sut.as(StepVerifier::create).verifyComplete();
 
     verify(userRepository).findById(userId);
+    verify(userDataRepository).findById(userId);
     verify(userDataRepository).save(expectedUserDataDao);
   }
 }
