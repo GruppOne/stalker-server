@@ -15,9 +15,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
-import tech.gruppone.stalker.server.repositories.UserDataRepository;
-import tech.gruppone.stalker.server.repositories.UserRepository;
-import tech.gruppone.stalker.server.services.OrganizationService;
 import tech.gruppone.stalker.server.services.PlaceService;
 
 @Tag("integrationTest")
@@ -29,9 +26,6 @@ class OrganizationControllerTest {
   @Autowired private WebTestClient webTestClient;
 
   @MockBean private OrganizationRepository organizationRepository;
-  @MockBean private UserRepository userRepository;
-  @MockBean private UserDataRepository userDataRepository;
-  @MockBean private OrganizationService organizationService;
   @MockBean private PlaceService placeService;
 
   @Test
