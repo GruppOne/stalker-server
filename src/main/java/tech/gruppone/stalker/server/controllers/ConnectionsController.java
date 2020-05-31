@@ -19,8 +19,9 @@ import tech.gruppone.stalker.server.services.ConnectionService;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 public class ConnectionsController {
-  ConnectionService connectionsService;
+
   ConnectionRepository connectionRepository;
+  ConnectionService connectionService;
 
   @GetMapping("/organization/{organizationId}/users/connections")
   @ResponseStatus(HttpStatus.OK)
@@ -28,7 +29,7 @@ public class ConnectionsController {
       getOrganizationByIdUsersConnections(
           @PathVariable("organizationId") final long organizationId) {
 
-    return connectionsService
+    return connectionService
         .findConnectedUsersByOrganizationId(organizationId)
         .collectList()
         .map(GetOrganizationOrganizationIdUsersConnectionsResponse::new);
@@ -39,7 +40,7 @@ public class ConnectionsController {
   public Mono<GetUserByIdOrganizationsConnectionsResponse> getUserByIdOrganizationsConnections(
       @PathVariable("userId") final long userId) {
     return connectionRepository
-        .findConnectedOrganizationsByUserId(userId)
+        .findConnectedOrganizationIdsByUserId(userId)
         .collectList()
         .map(GetUserByIdOrganizationsConnectionsResponse::new);
   }

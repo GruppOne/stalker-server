@@ -35,7 +35,7 @@ class ConnectionsControllerTest {
 
     final long organizationId = 1L;
 
-    var userDto1 =
+    final var userDto1 =
         new UserDto(
             1L,
             UserDataDto.builder()
@@ -45,7 +45,7 @@ class ConnectionsControllerTest {
                 .birthDate(LocalDate.now())
                 .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
                 .build());
-    var userDto2 =
+    final var userDto2 =
         new UserDto(
             2L,
             UserDataDto.builder()
