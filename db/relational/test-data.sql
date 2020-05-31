@@ -27,9 +27,16 @@ START TRANSACTION;
 -- Dump dei dati per la tabella `organizations`
 --
 
-INSERT INTO `Organization` (`name`, `description`) VALUES
-('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software'),
-('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️');
+INSERT INTO `Organization`(`name`, `description`, `createdDate`)
+VALUES(
+    'GruppOne',
+    'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software',
+    '2020-01-01 01:01:01'
+),(
+    'Amici della Torre Archimede',
+    'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️',
+    '2020-01-01 01:01:01'
+);
 
 --
 -- Dump dei dati per la tabella `place`
@@ -66,12 +73,12 @@ INSERT INTO `User` (`email`, `password`) VALUES
 -- Dump dei dati per la tabella `userdata`
 --
 
-INSERT INTO `UserData` (`userId`, `firstName`, `lastName`, `birthDate`) VALUES
-(1, 'Mario', 'Rossi', '1960-04-16'),
-(2, 'Giorgio', 'Bianchi', '1983-11-21'),
-(3, 'Maria', 'Verdi', '1987-08-14'),
-(4, 'Barbara', 'Gialli', '1965-01-15'),
-(5, 'Filippo', 'Azzurri', '1999-06-25');
+INSERT INTO `UserData` (`userId`, `firstName`, `lastName`, `birthDate`, `createdDate`) VALUES
+(1, 'Mario', 'Rossi', '1960-04-16', '2020-01-01 01:01:01'),
+(2, 'Giorgio', 'Bianchi', '1983-11-21', '2020-01-01 01:01:01'),
+(3, 'Maria', 'Verdi', '1987-08-14', '2020-01-01 01:01:01'),
+(4, 'Barbara', 'Gialli', '1965-01-15', '2020-01-01 01:01:01'),
+(5, 'Filippo', 'Azzurri', '1999-06-25', '2020-01-01 01:01:01');
 
 --
 -- Dump dei dati per la tabella `Connection`

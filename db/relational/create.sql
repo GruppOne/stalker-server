@@ -100,7 +100,7 @@ CREATE TABLE `Organization` (
   `description` tinytext NOT NULL,
   `isPrivate` BOOLEAN NOT NULL DEFAULT 0,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+  `lastModifiedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- FIXME this should be 1 to 1 with place, not 0..1 to 1
