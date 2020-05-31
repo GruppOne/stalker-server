@@ -1,6 +1,7 @@
 package tech.gruppone.stalker.server.services;
 
 import java.sql.Timestamp;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,8 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class UserService {
+
+  Clock clock;
 
   UserRepository userRepository;
   UserDataRepository userDataRepository;
@@ -69,7 +72,7 @@ public class UserService {
     return userRepository
         .findById(userId)
         .filter(userDao -> userDao.getEmail().equals(userDataDto.getEmail()))
-        .switchIfEmpty(Mono.error(NotFoundException::new))
+        .switchIfEmpty(Mono.error(BadRequestException::new))
         .map(UserDao::getId)
         .flatMap(
             id -> {
@@ -79,9 +82,9 @@ public class UserService {
                       .firstName(userDataDto.getFirstName())
                       .lastName(userDataDto.getLastName())
                       .birthDate(userDataDto.getBirthDate())
+                      // FIXME this property should not be modifiable by clients
                       .createdDate(userDataDto.getCreationDateTime().toLocalDateTime())
-                      // FIXME this cannot be tested.
-                      .lastModifiedDate(LocalDateTime.now())
+                      .lastModifiedDate(LocalDateTime.now(clock))
                       .build();
 
               return userDataRepository.save(updatedUserDataDao);
