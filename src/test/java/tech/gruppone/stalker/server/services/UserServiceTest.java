@@ -1,16 +1,21 @@
 package tech.gruppone.stalker.server.services;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
@@ -22,6 +27,20 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceTest {
+
+  @TestConfiguration
+  static class TestConfig {
+    public static final LocalDateTime FIXED_LOCAL_DATE_TIME =
+        LocalDateTime.parse("2020-01-01T01:01:01.01");
+
+    // override system clock with a fixed clock
+    @Bean
+    @Primary
+    public Clock fixedClock() {
+      return Clock.fixed(
+          FIXED_LOCAL_DATE_TIME.toInstant(ZoneOffset.ofHours(1)), ZoneId.systemDefault());
+    }
+  }
 
   private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
   private static final LocalDate LOCAL_DATE = LocalDate.of(2000, 1, 1);
@@ -130,12 +149,11 @@ class UserServiceTest {
             .lastName(lastName)
             .birthDate(birthdate)
             .createdDate(localDateTime)
-            .lastModifiedDate(localDateTime)
+            .lastModifiedDate(TestConfig.FIXED_LOCAL_DATE_TIME)
             .build();
 
     when(userRepository.findById(userId)).thenReturn(Mono.just(userDao));
-    when(userDataRepository.save(any(UserDataDao.class)))
-        .thenReturn(Mono.just(expectedUserDataDao));
+    when(userDataRepository.save(expectedUserDataDao)).thenReturn(Mono.just(expectedUserDataDao));
 
     // ACT
     final Mono<Void> sut = userService.updateUserById(userDataDto, userId);
@@ -144,6 +162,6 @@ class UserServiceTest {
     sut.as(StepVerifier::create).verifyComplete();
 
     verify(userRepository).findById(userId);
-    verify(userDataRepository).save(any(UserDataDao.class));
+    verify(userDataRepository).save(expectedUserDataDao);
   }
 }
