@@ -40,6 +40,7 @@ public class ConnectionController {
       // pw are not valid.
     }
 
+    // FIXME controllers should not know daos
     final ConnectionDao connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 

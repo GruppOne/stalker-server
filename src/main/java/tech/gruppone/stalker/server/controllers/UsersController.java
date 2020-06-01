@@ -21,7 +21,6 @@ import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
-import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
 import tech.gruppone.stalker.server.services.UsersService;
 
@@ -30,6 +29,7 @@ import tech.gruppone.stalker.server.services.UsersService;
 @RequestMapping("/users")
 public class UsersController {
 
+  UserService userService;
   UsersService usersService;
 
   // TODO
@@ -37,7 +37,7 @@ public class UsersController {
   @ResponseStatus(HttpStatus.OK)
   public Mono<UsersResponse> getUsers() {
 
-    return usersService.findAll().collectList().map(UsersResponse::new);
+    return userService.findAll().collectList().map(UsersResponse::new);
   }
 
   @Value
