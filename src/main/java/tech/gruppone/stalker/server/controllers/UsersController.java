@@ -30,7 +30,6 @@ import tech.gruppone.stalker.server.services.UsersService;
 @RequestMapping("/users")
 public class UsersController {
 
-  UserRepository userRepository;
   UsersService usersService;
 
   // TODO
