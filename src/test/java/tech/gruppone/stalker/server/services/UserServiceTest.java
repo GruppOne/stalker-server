@@ -4,20 +4,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+import tech.gruppone.stalker.server.ApplicationTestConfiguration;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
@@ -25,26 +23,10 @@ import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
+@Import(ApplicationTestConfiguration.class)
 // TODO is it possible to refactor this without the spring context?
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceTest {
-
-  @TestConfiguration
-  static class TestConfig {
-    public static final LocalDateTime FIXED_LOCAL_DATE_TIME =
-        LocalDateTime.parse("2020-01-01T01:01:01.01");
-
-    // override system clock with a utc-based fixed clock
-    @Bean
-    @Primary
-    public Clock fixedClock() {
-      // this is horrifyingly verbose
-      final var zoneId = ZoneId.of("Europe/Rome");
-      final var zoneOffset = zoneId.getRules().getOffset(FIXED_LOCAL_DATE_TIME);
-
-      return Clock.fixed(FIXED_LOCAL_DATE_TIME.toInstant(zoneOffset), zoneId);
-    }
-  }
 
   private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
   private static final LocalDate LOCAL_DATE = LocalDate.of(2000, 1, 1);
@@ -157,7 +139,7 @@ class UserServiceTest {
             .lastName(oldLastName)
             .birthDate(birthDate)
             .createdDate(creationDateTime)
-            .lastModifiedDate(TestConfig.FIXED_LOCAL_DATE_TIME)
+            .lastModifiedDate(ApplicationTestConfiguration.FIXED_LOCAL_DATE_TIME)
             .build();
 
     // modify firstName and lastName
@@ -168,7 +150,7 @@ class UserServiceTest {
             .lastName(newLastName)
             .birthDate(birthDate)
             .createdDate(creationDateTime)
-            .lastModifiedDate(TestConfig.FIXED_LOCAL_DATE_TIME)
+            .lastModifiedDate(ApplicationTestConfiguration.FIXED_LOCAL_DATE_TIME)
             .build();
 
     when(userRepository.findById(userId)).thenReturn(Mono.just(userDao));
