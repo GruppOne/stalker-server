@@ -22,18 +22,18 @@ import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UsersServiceTest {
+class SignUpServiceTest {
 
   @Autowired JwtService jwtService;
-  @Autowired UsersService usersService;
+  @Autowired SignUpService signUpService;
   @MockBean UserRepository userRepository;
   @MockBean UserDataRepository userDataRepository;
 
   long userId = 1L;
-  String email = "MarioRossi@gmail.com";
-  String password = "ciao";
-  String firstName = "Mario";
-  String lastName = "Rossi";
+  String email = "email@email.email";
+  String password = "password";
+  String firstName = "firstName";
+  String lastName = "lastName";
   LocalDateTime birthDate = LocalDateTime.now();
   UserDao userDao = UserDao.builder().id(userId).email(email).password(password).build();
   UserDataDao userDataDao =
@@ -56,7 +56,7 @@ class UsersServiceTest {
   UserDto userDto = new UserDto(userId, userDataDto);
 
   @Test
-  void testSignUpUser() {
+  void testCreateNewUser() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -97,14 +97,14 @@ class UsersServiceTest {
 
     String jwtToken = jwtService.createToken(11L);
     Mono<String> sut =
-        usersService.signUpUser(
+        signUpService.createNewUser(
             userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectNext(jwtToken);
   }
 
   @Test
-  void testSignUpUserWithMissingEmailOnLoginData() {
+  void testCreateNewUserWithMissingEmailOnLoginData() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -140,14 +140,14 @@ class UsersServiceTest {
             .build();
 
     Mono<String> sut =
-        usersService.signUpUser(
+        signUpService.createNewUser(
             userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
 
   @Test
-  void testSignUpUserWithMissingEmailOnUserData() {
+  void testCreateNewUserWithMissingEmailOnUserData() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -183,14 +183,14 @@ class UsersServiceTest {
             .build();
 
     Mono<String> sut =
-        usersService.signUpUser(
+        signUpService.createNewUser(
             userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
 
   @Test
-  void testSignUpUserWithMissingfirstName() {
+  void testCreateNewUserWithMissingfirstName() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -226,14 +226,14 @@ class UsersServiceTest {
             .build();
 
     Mono<String> sut =
-        usersService.signUpUser(
+        signUpService.createNewUser(
             userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
 
   @Test
-  void testSignUpUserWithMissingLastName() {
+  void testCreateNewUserWithMissingLastName() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -251,13 +251,13 @@ class UsersServiceTest {
     final var userWithLoginDataDto =
         UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
     Mono<String> sut =
-        usersService.signUpUser(
+        signUpService.createNewUser(
             userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }
   /*@Test
-  void testSignUpUserWithMissingBirthDate(){
+  void testCreateNewUserWithMissingBirthDate(){
 
     final var loginDataDto = LoginDataDto.builder().email("mariorossi@hotmail.it").password
     ("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
@@ -266,13 +266,13 @@ class UsersServiceTest {
      0 0)).build();
     final var userWithLoginDataDto = UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto)
     .build();
-    Mono<String> sut = usersService.signUpUser(userWithLoginDataDto);
+    Mono<String> sut = signUpService.CreateNewUser(userWithLoginDataDto);
 
     StepVerifier.create(sut).expectError(BadRequestException.class);
   }*/
 
   @Test
-  void testSignUpUserWithShortPassword() {
+  void testCreateNewUserWithShortPassword() {
 
     final var loginDataDto =
         LoginDataDto.builder()
@@ -290,7 +290,7 @@ class UsersServiceTest {
     final var userWithLoginDataDto =
         UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
     Mono<String> sut =
-        usersService.signUpUser(
+        signUpService.createNewUser(
             userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
 
     StepVerifier.create(sut).expectError(BadRequestException.class);

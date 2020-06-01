@@ -16,13 +16,14 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
-public class UsersService {
+public class SignUpService {
 
   UserRepository userRepository;
   UserDataRepository userDataRepository;
   LoginService loginService;
 
-  public Mono<String> signUpUser(final LoginDataDto loginDataDto, final UserDataDto userDataDto) {
+  public Mono<String> createNewUser(
+      final LoginDataDto loginDataDto, final UserDataDto userDataDto) {
 
     final var email = loginDataDto.getEmail();
     final var userDataEmail = userDataDto.getEmail();
