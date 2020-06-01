@@ -3,14 +3,18 @@ package tech.gruppone.stalker.server.services;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import tech.gruppone.stalker.server.configuration.JwtConfiguration;
 
 @Service
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtService {
 
-  @Autowired JwtConfiguration jwtConfiguration;
+  JwtConfiguration jwtConfiguration;
 
   // TODO should probably move the following methods to a separate class called JwtTokenService
 

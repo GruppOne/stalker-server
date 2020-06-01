@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
-import tech.gruppone.stalker.server.services.ConnectionService;
+import tech.gruppone.stalker.server.services.UserService;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -21,7 +22,7 @@ import tech.gruppone.stalker.server.services.ConnectionService;
 public class ConnectionsController {
 
   ConnectionRepository connectionRepository;
-  ConnectionService connectionService;
+  UserService userService;
 
   @GetMapping("/organization/{organizationId}/users/connections")
   @ResponseStatus(HttpStatus.OK)
@@ -29,8 +30,11 @@ public class ConnectionsController {
       getOrganizationByIdUsersConnections(
           @PathVariable("organizationId") final long organizationId) {
 
-    return connectionService
-        .findConnectedUsersByOrganizationId(organizationId)
+    final Flux<Long> connectedUserIds =
+        connectionRepository.findConnectedUserIdsByOrganizationId(organizationId);
+
+    return userService
+        .findAllById(connectedUserIds)
         .collectList()
         .map(GetOrganizationOrganizationIdUsersConnectionsResponse::new);
   }
