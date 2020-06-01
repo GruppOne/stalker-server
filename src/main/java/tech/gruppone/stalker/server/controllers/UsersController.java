@@ -21,8 +21,8 @@ import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
+import tech.gruppone.stalker.server.services.SignUpService;
 import tech.gruppone.stalker.server.services.UserService;
-import tech.gruppone.stalker.server.services.UsersService;
 
 @Value
 @RestController
@@ -30,7 +30,7 @@ import tech.gruppone.stalker.server.services.UsersService;
 public class UsersController {
 
   UserService userService;
-  UsersService usersService;
+  SignUpService signUpService;
 
   // TODO
   @GetMapping
@@ -49,8 +49,8 @@ public class UsersController {
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<EncodedJwtDto> postUsers(@RequestBody UserDataWithLoginData signUp) {
 
-    return usersService
-        .signUpUser(signUp.getLoginData(), signUp.getUserData())
+    return signUpService
+        .createNewUser(signUp.getLoginData(), signUp.getUserData())
         .map(EncodedJwtDto::new);
   }
 

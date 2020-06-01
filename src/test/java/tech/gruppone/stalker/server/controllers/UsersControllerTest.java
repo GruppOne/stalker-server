@@ -21,8 +21,8 @@ import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.JwtService;
+import tech.gruppone.stalker.server.services.SignUpService;
 import tech.gruppone.stalker.server.services.UserService;
-import tech.gruppone.stalker.server.services.UsersService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UsersControllerTest {
@@ -32,7 +32,7 @@ class UsersControllerTest {
   @Autowired private JwtService jwtService;
 
   @MockBean private UserService userService;
-  @MockBean private UsersService usersService;
+  @MockBean private SignUpService signUpService;
 
   @MockBean private UserRepository userRepository;
   @MockBean private UserDataRepository userDataRepository;
@@ -117,7 +117,7 @@ class UsersControllerTest {
 
     when(userRepository.findByEmail(loginDataDto.getEmail())).thenReturn(Mono.just(userDao));
 
-    when(usersService.signUpUser(
+    when(signUpService.createNewUser(
             userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData()))
         .thenReturn(Mono.just(jwtService.createToken(10L)));
 
@@ -132,7 +132,7 @@ class UsersControllerTest {
         .jsonPath("$.jwt")
         .exists();
 
-    verify(usersService)
-        .signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    verify(signUpService)
+        .createNewUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
   }
 }
