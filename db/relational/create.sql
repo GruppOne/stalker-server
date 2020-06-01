@@ -48,12 +48,13 @@ CREATE TABLE `AdministratorType` (
 --
 -- Dump dei dati per la tabella `AdministratorType`
 --
-
-INSERT INTO `AdministratorType` (`id`, `name`, `role`) VALUES
-(1, 'Admin', 'ROLE_ADMIN'),
-(2, 'Manager', 'ROLE_MANAGER'),
-(3, 'Owner', 'ROLE_OWNER'),
-(4, 'Viewer', 'ROLE_VIEWER');
+INSERT INTO
+  `AdministratorType` (`id`, `name`, `role`)
+VALUES
+  (1, 'Admin', 'ROLE_ADMIN'),
+  (2, 'Manager', 'ROLE_MANAGER'),
+  (3, 'Owner', 'ROLE_OWNER'),
+  (4, 'Viewer', 'ROLE_VIEWER');
 
 -- --------------------------------------------------------
 --
@@ -116,6 +117,7 @@ CREATE TABLE `PlacePosition` (
 --
 -- Struttura della tabella `Place`
 --
+--XXX: keep this version with length of Place.name = 100
 CREATE TABLE `Place` (
   `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
@@ -264,7 +266,6 @@ ADD
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
-
 --
 -- AUTO_INCREMENT per la tabella `AdministratorType`
 --

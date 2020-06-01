@@ -59,32 +59,32 @@ INSERT INTO
   )
 VALUES
   (
-      1,
-      'Aule Luzzatti',
-      '#e64a19',
-      100,
-      'Via Paolotti',
-      'Padova',
-      '35131',
-      'Italia'
+    1,
+    'Aule Luzzatti',
+    '#e64a19',
+    100,
+    'Via Paolotti',
+    'Padova',
+    '35131',
+    'Italia'
   ),(
-      1,
-      'Complesso Paolotti',
-      '#283593',
-      100,
-      'Via Paolotti',
-      'Padova',
-      '35131',
-      'Italia'
+    1,
+    'Complesso Paolotti',
+    '#283593',
+    100,
+    'Via Paolotti',
+    'Padova',
+    '35131',
+    'Italia'
   ),(
-      2,
-      'Torre Archimede',
-      '#c8e6c9',
-      100,
-      'Via Trieste',
-      'Padova',
-      '35131',
-      'Italia'
+    2,
+    'Torre Archimede',
+    '#c8e6c9',
+    100,
+    'Via Trieste',
+    'Padova',
+    '35131',
+    'Italia'
   );
 
 --
@@ -147,7 +147,12 @@ VALUES
 --
 
 INSERT INTO
-  `OrganizationRole` (`organizationId`, `userId`, `administratorType`, `createdDate`)
+  `OrganizationRole` (
+    `organizationId`,
+    `userId`,
+    `administratorType`,
+    `createdDate`
+  )
 VALUES
   (2, 3, 4, '2020-02-07 16:31:38'),
   (1, 2, 3, '2020-03-17 16:31:38'),
