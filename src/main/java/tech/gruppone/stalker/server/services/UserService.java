@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
@@ -25,27 +26,28 @@ public class UserService {
   UserRepository userRepository;
   UserDataRepository userDataRepository;
 
+  public UserDto fromDaosTuple(final Tuple2<UserDao, UserDataDao> tuple) {
+    final var userDao = tuple.getT1();
+    final var userDataDao = tuple.getT2();
+
+    final var userDataDto =
+        UserDataDto.builder()
+            .email(userDao.getEmail())
+            .firstName(userDataDao.getFirstName())
+            .lastName(userDataDao.getLastName())
+            .birthDate(userDataDao.getBirthDate())
+            .creationDateTime(Timestamp.valueOf(userDataDao.getCreatedDate()))
+            .build();
+
+    return new UserDto(userDao.getId(), userDataDto);
+  }
+
   public Mono<UserDto> findById(final long userId) {
 
     return userRepository
         .findById(userId)
         .zipWith(userDataRepository.findById(userId))
-        .map(
-            result -> {
-              final var t1 = result.getT1();
-              final var t2 = result.getT2();
-
-              final var userDataDto =
-                  UserDataDto.builder()
-                      .email(t1.getEmail())
-                      .firstName(t2.getFirstName())
-                      .lastName(t2.getLastName())
-                      .birthDate(t2.getBirthDate())
-                      .creationDateTime(Timestamp.valueOf(t2.getLastModifiedDate()))
-                      .build();
-
-              return new UserDto(t1.getId(), userDataDto);
-            });
+        .map(this::fromDaosTuple);
   }
 
   public Mono<Void> updatePassword(
