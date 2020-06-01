@@ -17,7 +17,7 @@ import reactor.core.publisher.Flux;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
-import tech.gruppone.stalker.server.services.ConnectionService;
+import tech.gruppone.stalker.server.services.UserService;
 
 @Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,7 +28,7 @@ class ConnectionsControllerTest {
   @MockBean ConnectionRepository connectionRepository;
 
   // it's easier to mock the service than the three underlying repositories
-  @MockBean ConnectionService connectionService;
+  @MockBean UserService userService;
 
   @Test
   void testGetOrganizationByIdUsersConnections() {
@@ -56,8 +56,11 @@ class ConnectionsControllerTest {
                 .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
                 .build());
 
-    when(connectionService.findConnectedUsersByOrganizationId(organizationId))
-        .thenReturn(Flux.just(userDto1, userDto2));
+    final var userIds = Flux.just(1L, 2L);
+    when(connectionRepository.findConnectedUserIdsByOrganizationId(organizationId))
+        .thenReturn(userIds);
+
+    when(userService.findAllById(userIds)).thenReturn(Flux.just(userDto1, userDto2));
 
     webTestClient
         .get()
@@ -73,7 +76,8 @@ class ConnectionsControllerTest {
         .jsonPath("$.connectedUsers[1].data.lastName")
         .isEqualTo(userDto2.getData().getLastName());
 
-    verify(connectionService).findConnectedUsersByOrganizationId(organizationId);
+    verify(connectionRepository).findConnectedUserIdsByOrganizationId(organizationId);
+    verify(userService).findAllById(userIds);
   }
 
   @Test

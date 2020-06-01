@@ -25,13 +25,12 @@ import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PlaceServiceTest {
+  @Mock PlacePositionService placePositionService;
 
-  @Mock private PlacePositionService placePositionService;
+  @Mock PlaceRepository placeRepository;
+  @InjectMocks PlaceService placeService;
 
-  @Mock private PlaceRepository placeRepository;
-  @InjectMocks private PlaceService placeService;
-
-  // Should find a cleaner way to set these wariables across tests...
+  // Should find a cleaner way to set these variables across tests...
   long id = 1L;
   long organizationId = 11L;
   String name = "name";
@@ -70,8 +69,9 @@ class PlaceServiceTest {
   void testFindById() {
     when(placeRepository.findById(id)).thenReturn(Mono.just(placeDao));
 
-    var sut = placeService.findById(id);
+    final var sut = placeService.findById(id);
 
+    // FIXME function does not work as expected
     sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
   }
 
@@ -79,14 +79,15 @@ class PlaceServiceTest {
   void testFindAllByOrganizationId() {
     when(placeRepository.findAllByOrganizationId(organizationId)).thenReturn(Flux.just(placeDao));
 
-    var sut = placeService.findAllByOrganizationId(organizationId);
+    final var sut = placeService.findAllByOrganizationId(organizationId);
 
+    // FIXME function does not work as expected
     sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
   }
 
   @Test
   void testSaveAll() {
-    PlaceDao expectedPlaceDao =
+    final PlaceDao expectedPlaceDao =
         PlaceDao.builder()
             .id(1L)
             .organizationId(1L)
@@ -97,7 +98,7 @@ class PlaceServiceTest {
             .state(state)
             .build();
 
-    PlaceDao newPlaceDao =
+    final PlaceDao newPlaceDao =
         PlaceDao.builder()
             .organizationId(1L)
             .name(name)
@@ -110,9 +111,9 @@ class PlaceServiceTest {
     when(placeRepository.save(newPlaceDao)).thenReturn(Mono.just(expectedPlaceDao));
     when(placePositionService.savePlacePosition(eq(id), any())).thenReturn(Mono.just(1));
 
-    var placeDataDtos = Flux.just(expectedPlaceDto).map(PlaceDto::getData);
+    final var placeDataDtos = Flux.just(expectedPlaceDto).map(PlaceDto::getData);
 
-    Flux<PlaceDao> sut = placeService.saveAll(placeDataDtos, 1L);
+    final Flux<PlaceDao> sut = placeService.saveAll(placeDataDtos, 1L);
 
     sut.as(StepVerifier::create).expectNext(expectedPlaceDao).verifyComplete();
 

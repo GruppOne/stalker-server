@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.controllers;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -22,6 +21,7 @@ import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.JwtService;
+import tech.gruppone.stalker.server.services.UserService;
 import tech.gruppone.stalker.server.services.UsersService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,10 +31,10 @@ class UsersControllerTest {
 
   @Autowired private JwtService jwtService;
 
+  @MockBean private UserService userService;
   @MockBean private UsersService usersService;
 
   @MockBean private UserRepository userRepository;
-
   @MockBean private UserDataRepository userDataRepository;
 
   @Test
@@ -45,15 +45,15 @@ class UsersControllerTest {
     final var userDao = UserDao.builder().id(id).email(email).password("ciao").build();
     final var userDataDto =
         UserDataDto.builder()
-            .email("mariorossi@hotmail.it")
+            .email(email)
             .firstName("Mario")
             .lastName("Rossi")
             .birthDate(LocalDate.now())
             .build();
-    final var userDto = UserDto.builder().id(2L).data(userDataDto).build();
+    final var userDto = new UserDto(2L, userDataDto);
 
     when(userRepository.findAll()).thenReturn(Flux.just(userDao));
-    when(usersService.findAll()).thenReturn(Flux.just(userDto));
+    when(userService.findAll()).thenReturn(Flux.just(userDto));
 
     testClient
         .get()
@@ -73,7 +73,7 @@ class UsersControllerTest {
         .jsonPath("$.users[0].data.lastName")
         .isEqualTo("Rossi");
 
-    verify(usersService).findAll();
+    verify(userService).findAll();
   }
 
   @Test
@@ -112,18 +112,14 @@ class UsersControllerTest {
                 "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
             .build();
 
-    doReturn(Mono.just(userDao)).when(userRepository).save(userDao);
-    doReturn(Mono.just(userDataDao))
-        .when(userDataRepository)
-        .insert(
-            userDataDao.getUserId(),
-            userDataDao.getFirstName(),
-            userDataDao.getLastName(),
-            userDataDao.getBirthDate());
-    doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginDataDto.getEmail());
-    doReturn(Mono.just(jwtService.createToken(10L)))
-        .when(usersService)
-        .signUpUser(userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    when(userRepository.save(userDao)).thenReturn(Mono.just(userDao));
+    when(userDataRepository.save(userDataDao)).thenReturn(Mono.just(userDataDao));
+
+    when(userRepository.findByEmail(loginDataDto.getEmail())).thenReturn(Mono.just(userDao));
+
+    when(usersService.signUpUser(
+            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData()))
+        .thenReturn(Mono.just(jwtService.createToken(10L)));
 
     testClient
         .post()
