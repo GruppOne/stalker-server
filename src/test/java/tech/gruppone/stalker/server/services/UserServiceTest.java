@@ -15,6 +15,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.ApplicationTestConfiguration;
+import tech.gruppone.stalker.server.exceptions.BadRequestException;
+import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
@@ -63,7 +65,7 @@ class UserServiceTest {
     when(userRepository.findAll()).thenReturn(Flux.just(userDao));
     when(userDataRepository.findAll()).thenReturn(Flux.just(userData));
 
-    var expectedUserDto =
+    final var expectedUserDto =
         new UserDto(
             userId,
             UserDataDto.builder()
@@ -74,7 +76,7 @@ class UserServiceTest {
                 .creationDateTime(Timestamp.valueOf(creationDateTime))
                 .build());
 
-    var sut = userService.findAll();
+    final var sut = userService.findAll();
 
     StepVerifier.create(sut).expectNext(expectedUserDto).verifyComplete();
   }
@@ -119,12 +121,12 @@ class UserServiceTest {
             .lastModifiedDate(lastModifiedDate)
             .build();
 
-    var userIds = Flux.just(userId1, userId2);
+    final var userIds = Flux.just(userId1, userId2);
 
     when(userRepository.findAllById(userIds)).thenReturn(Flux.just(userDao1, userDao2));
     when(userDataRepository.findAllById(userIds)).thenReturn(Flux.just(userData2, userData1));
 
-    var expectedUserDto1 =
+    final var expectedUserDto1 =
         new UserDto(
             userId1,
             UserDataDto.builder()
@@ -134,7 +136,7 @@ class UserServiceTest {
                 .birthDate(birthdate)
                 .creationDateTime(Timestamp.valueOf(creationDateTime))
                 .build());
-    var expectedUserDto2 =
+    final var expectedUserDto2 =
         new UserDto(
             userId2,
             UserDataDto.builder()
@@ -146,7 +148,7 @@ class UserServiceTest {
                 .build());
 
     // ACT
-    var sut = userService.findAllById(userIds);
+    final var sut = userService.findAllById(userIds);
 
     // ASSERT
     StepVerifier.create(sut)
@@ -226,6 +228,46 @@ class UserServiceTest {
 
     // ASSERT
     sut.as(StepVerifier::create).verifyComplete();
+
+    verify(userRepository).findById(userId);
+    verify(userRepository).save(newUserDao);
+  }
+
+  @Test
+  void testUpdatePasswordWrongOldPassword() {
+    // ARRANGE
+    final long userId = 1L;
+    final String email = "email@email.email";
+    final String wrongOldPassword = "wrongOldPassword";
+    final String savedOldPassword = "savedOldPassword";
+    final String newPassword = "newPassword";
+
+    final UserDao oldUserDao =
+        UserDao.builder().id(userId).email(email).password(savedOldPassword).build();
+
+    when(userRepository.findById(userId)).thenReturn(Mono.just(oldUserDao));
+
+    // ACT
+    final Mono<Void> sut = userService.updatePassword(wrongOldPassword, newPassword, userId);
+
+    // ASSERT
+    sut.as(StepVerifier::create).expectError(NotFoundException.class).verify();
+
+    verify(userRepository).findById(userId);
+  }
+
+  @Test
+  void testUpdatePasswordBlankNewPassword() {
+    // ARRANGE
+    final long userId = 1L;
+    final String oldPassword = "oldPassword";
+    final String newPassword = "";
+
+    // ACT
+    final Mono<Void> sut = userService.updatePassword(oldPassword, newPassword, userId);
+
+    // ASSERT
+    sut.as(StepVerifier::create).expectError(BadRequestException.class).verify();
   }
 
   @Test
