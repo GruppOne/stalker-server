@@ -4,8 +4,6 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Value
-@Builder
-@AllArgsConstructor
 public class UserDto {
   long id;
 

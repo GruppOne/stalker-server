@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.EncodedJwtDto;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
@@ -23,7 +21,8 @@ import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.services.SignUpService;
 import tech.gruppone.stalker.server.services.UserService;
 
-@Value
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/users")
 public class UsersController {
@@ -31,7 +30,6 @@ public class UsersController {
   UserService userService;
   SignUpService signUpService;
 
-  // TODO
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
   public Mono<UsersResponse> getUsers() {

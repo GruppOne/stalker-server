@@ -5,5 +5,5 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.db.UserDao;
 
 public interface UserRepository extends ReactiveCrudRepository<UserDao, Long> {
-  public Mono<UserDao> findByEmail(final String email);
+  Mono<UserDao> findByEmail(final String email);
 }
