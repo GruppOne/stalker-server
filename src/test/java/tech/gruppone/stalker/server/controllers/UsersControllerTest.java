@@ -57,7 +57,7 @@ class UsersControllerTest {
     when(userRepository.findAll()).thenReturn(Flux.just(userDao));
     when(userDataRepository.findAll()).thenReturn(Flux.just(userDataDao));
 
-    testClient
+    webTestClient
         .get()
         .uri("/users")
         .exchange()
@@ -117,7 +117,7 @@ class UsersControllerTest {
     final String jwt = "jwt-token";
     when(loginService.login(email, password)).thenReturn(Mono.just(jwt));
 
-    testClient
+    webTestClient
         .post()
         .uri("/users")
         .body(Mono.just(userWithLoginDataDto), UserDataWithLoginData.class)
