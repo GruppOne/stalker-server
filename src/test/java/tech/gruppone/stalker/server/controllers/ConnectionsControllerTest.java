@@ -22,6 +22,8 @@ import tech.gruppone.stalker.server.services.UserService;
 @Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ConnectionsControllerTest {
+  private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
+  private static final LocalDate LOCAL_DATE = LocalDate.of(2000, 1, 1);
 
   @Autowired WebTestClient webTestClient;
 
@@ -42,8 +44,8 @@ class ConnectionsControllerTest {
                 .email("email1@gmail.com")
                 .firstName("firstname1")
                 .lastName("lastName1")
-                .birthDate(LocalDate.now())
-                .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
+                .birthDate(LOCAL_DATE)
+                .creationDateTime(Timestamp.valueOf(LOCAL_DATETIME))
                 .build());
     final var userDto2 =
         new UserDto(
@@ -52,8 +54,8 @@ class ConnectionsControllerTest {
                 .email("email2@gmail.com")
                 .firstName("firstname2")
                 .lastName("lastName2")
-                .birthDate(LocalDate.now())
-                .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
+                .birthDate(LOCAL_DATE)
+                .creationDateTime(Timestamp.valueOf(LOCAL_DATETIME))
                 .build());
 
     final var userIds = Flux.just(1L, 2L);

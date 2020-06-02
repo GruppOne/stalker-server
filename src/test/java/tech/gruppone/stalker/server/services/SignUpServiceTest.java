@@ -1,21 +1,23 @@
 package tech.gruppone.stalker.server.services;
 
-import static org.mockito.Mockito.doReturn;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import tech.gruppone.stalker.server.controllers.UsersController.UserDataWithLoginData;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
-import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
@@ -23,276 +25,94 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SignUpServiceTest {
+  private static final LocalDate LOCAL_DATE = LocalDate.of(2000, 1, 1);
 
-  @Autowired JwtService jwtService;
   @Autowired SignUpService signUpService;
+
+  @MockBean LoginService loginService;
   @MockBean UserRepository userRepository;
   @MockBean UserDataRepository userDataRepository;
 
-  long userId = 1L;
-  String email = "email@email.email";
-  String password = "password";
-  String firstName = "firstName";
-  String lastName = "lastName";
-  LocalDateTime birthDate = LocalDateTime.now();
-  UserDao userDao = UserDao.builder().id(userId).email(email).password(password).build();
-  UserDataDao userDataDao =
-      UserDataDao.builder()
-          .userId(userId)
-          .firstName(firstName)
-          .lastName(lastName)
-          .createdDate(LocalDateTime.now())
-          .birthDate(LocalDate.now())
-          .lastModifiedDate(LocalDateTime.now())
-          .build();
-  UserDataDto userDataDto =
-      UserDataDto.builder()
-          .email(email)
-          .firstName(firstName)
-          .lastName(lastName)
-          .birthDate(LocalDate.now())
-          .creationDateTime(Timestamp.valueOf(LocalDateTime.now()))
-          .build();
-  UserDto userDto = new UserDto(userId, userDataDto);
+  // correct fields
+  private static final String correctEmail = "email@email.email";
+  private static final String correctPassword =
+      "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531";
+  private static final String correctFirstName = "firstName";
+  private static final String correctLastName = "lastName";
 
   @Test
   void testCreateNewUser() {
 
-    final var loginDataDto =
-        LoginDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
-            .build();
+    final var loginDataDto = new LoginDataDto(correctEmail, correctPassword);
     final var userDataDto =
         UserDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
+            .email(correctEmail)
+            .firstName(correctFirstName)
+            .lastName(correctLastName)
+            .birthDate(LOCAL_DATE)
             .build();
-    final var userWithLoginDataDto =
-        UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
 
+    long createdUserId = 11111L;
+
+    final var userDao = UserDao.builder().email(correctEmail).password(correctPassword).build();
     final var userDataDao =
         UserDataDao.builder()
-            .userId(11L)
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
-            .build();
-    final var userDao =
-        UserDao.builder()
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
+            .userId(createdUserId)
+            .firstName(correctFirstName)
+            .lastName(correctLastName)
+            .birthDate(LOCAL_DATE)
+            // .createdDate(LOCAL_DATETIME)
+            // .lastModifiedDate(LOCAL_DATETIME)
             .build();
 
-    doReturn(Mono.just(userDao)).when(userRepository).save(userDao);
-    doReturn(Mono.just(userDataDao)).when(userDataRepository).save(userDataDao);
+    when(userRepository.save(userDao)).thenReturn(Mono.just(userDao.withId(createdUserId)));
+    when(userDataRepository.save(userDataDao)).thenReturn(Mono.just(userDataDao));
 
-    doReturn(Mono.just(userDao)).when(userRepository).findByEmail(loginDataDto.getEmail());
+    final var jwtToken = "jwt-token";
+    when(loginService.logUser(correctEmail, correctPassword)).thenReturn(Mono.just(jwtToken));
 
-    String jwtToken = jwtService.createToken(11L);
-    Mono<String> sut =
-        signUpService.createNewUser(
-            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    // ACT
+    Mono<String> sut = signUpService.createNewUser(loginDataDto, userDataDto);
 
-    StepVerifier.create(sut).expectNext(jwtToken);
+    // ASSERT
+    StepVerifier.create(sut).expectNext(jwtToken).verifyComplete();
+
+    verify(userRepository).save(userDao);
+    verify(userDataRepository).save(userDataDao);
+    verify(loginService).logUser(correctEmail, correctPassword);
   }
 
-  @Test
-  void testCreateNewUserWithMissingEmailOnLoginData() {
-
-    final var loginDataDto =
-        LoginDataDto.builder()
-            .email("")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
-            .build();
-    final var userDataDto =
-        UserDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .build();
-    final var userWithLoginDataDto =
-        UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-
-    final var userDataDao =
-        UserDataDao.builder()
-            .userId(10L)
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
-            .build();
-    final var userDao =
-        UserDao.builder()
-            .id(10L)
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
-            .build();
-
-    Mono<String> sut =
-        signUpService.createNewUser(
-            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
-
-    StepVerifier.create(sut).expectError(BadRequestException.class);
+  static Stream<Arguments> testParameters() {
+    // loginDataEmail, userDataEmail, password, firstName, lastName
+    return Stream.of(
+        arguments("wrong email", correctEmail, correctPassword, correctFirstName, correctLastName),
+        arguments(correctEmail, "wrong email", correctPassword, correctFirstName, correctLastName),
+        arguments("", "", correctPassword, correctFirstName, correctLastName),
+        arguments(correctEmail, correctEmail, "short password", correctFirstName, correctLastName),
+        arguments(correctEmail, correctEmail, correctPassword, "", correctLastName),
+        arguments(correctEmail, correctEmail, correctPassword, correctFirstName, ""));
   }
 
-  @Test
-  void testCreateNewUserWithMissingEmailOnUserData() {
+  @ParameterizedTest
+  @MethodSource("testParameters")
+  void testCreateNewUserFailsWithInvalidParameters(
+      String loginDataEmail,
+      String userDataEmail,
+      String password,
+      String firstName,
+      String lastName) {
+    final var loginDataDto = new LoginDataDto(loginDataEmail, password);
 
-    final var loginDataDto =
-        LoginDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
-            .build();
     final var userDataDto =
         UserDataDto.builder()
-            .email("")
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .build();
-    final var userWithLoginDataDto =
-        UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-
-    final var userDataDao =
-        UserDataDao.builder()
-            .userId(10L)
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
-            .build();
-    final var userDao =
-        UserDao.builder()
-            .id(10L)
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
+            .email(userDataEmail)
+            .firstName(firstName)
+            .lastName(lastName)
+            .birthDate(LOCAL_DATE)
             .build();
 
-    Mono<String> sut =
-        signUpService.createNewUser(
-            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
+    final var sut = signUpService.createNewUser(loginDataDto, userDataDto);
 
-    StepVerifier.create(sut).expectError(BadRequestException.class);
-  }
-
-  @Test
-  void testCreateNewUserWithMissingfirstName() {
-
-    final var loginDataDto =
-        LoginDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
-            .build();
-    final var userDataDto =
-        UserDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .firstName("")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .build();
-    final var userWithLoginDataDto =
-        UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-
-    final var userDataDao =
-        UserDataDao.builder()
-            .userId(10L)
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
-            .build();
-    final var userDao =
-        UserDao.builder()
-            .id(10L)
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
-            .build();
-
-    Mono<String> sut =
-        signUpService.createNewUser(
-            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
-
-    StepVerifier.create(sut).expectError(BadRequestException.class);
-  }
-
-  @Test
-  void testCreateNewUserWithMissingLastName() {
-
-    final var loginDataDto =
-        LoginDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531")
-            .build();
-    final var userDataDto =
-        UserDataDto.builder()
-            .email("mariorossi@hotmai.it")
-            .firstName("Mario")
-            .lastName("")
-            .birthDate(LocalDate.now())
-            .build();
-    final var userWithLoginDataDto =
-        UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-    Mono<String> sut =
-        signUpService.createNewUser(
-            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
-
-    StepVerifier.create(sut).expectError(BadRequestException.class);
-  }
-  /*@Test
-  void testCreateNewUserWithMissingBirthDate(){
-
-    final var loginDataDto = LoginDataDto.builder().email("mariorossi@hotmail.it").password
-    ("ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531").build();
-    final var userDataDto = UserDataDto.builder().email("mariorossi@hotmai.it").firstName("Mario").lastName("Rossi")
-    .birthDate(new LocalDate(0
-     0 0)).build();
-    final var userWithLoginDataDto = UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto)
-    .build();
-    Mono<String> sut = signUpService.CreateNewUser(userWithLoginDataDto);
-
-    StepVerifier.create(sut).expectError(BadRequestException.class);
-  }*/
-
-  @Test
-  void testCreateNewUserWithShortPassword() {
-
-    final var loginDataDto =
-        LoginDataDto.builder()
-            .email("mariorossi@hotmail.it")
-            .password(
-                "ba191a9ej8625cacdf7dfe60e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba38d3d7446d7d781417aa1956e")
-            .build();
-    final var userDataDto =
-        UserDataDto.builder()
-            .email("mariorossi@hotmai.it")
-            .firstName("Mario")
-            .lastName("Rossi")
-            .birthDate(LocalDate.now())
-            .build();
-    final var userWithLoginDataDto =
-        UserDataWithLoginData.builder().loginData(loginDataDto).userData(userDataDto).build();
-    Mono<String> sut =
-        signUpService.createNewUser(
-            userWithLoginDataDto.getLoginData(), userWithLoginDataDto.getUserData());
-
-    StepVerifier.create(sut).expectError(BadRequestException.class);
+    sut.as(StepVerifier::create).expectError(BadRequestException.class).verify();
   }
 }
