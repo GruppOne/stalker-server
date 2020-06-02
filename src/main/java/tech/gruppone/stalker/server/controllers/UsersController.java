@@ -3,7 +3,6 @@ package tech.gruppone.stalker.server.controllers;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -55,7 +54,6 @@ public class UsersController {
   }
 
   @Value
-  @Builder
   public static class UserDataWithLoginData {
 
     @NonNull LoginDataDto loginData;
