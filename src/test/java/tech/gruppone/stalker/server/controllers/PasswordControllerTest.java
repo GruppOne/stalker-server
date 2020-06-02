@@ -34,10 +34,7 @@ class PasswordControllerTest {
     final String newPassword = "ciao";
 
     final PutUserByIdPasswordRequestBody updatePasswordDto =
-        PutUserByIdPasswordRequestBody.builder()
-            .oldPassword(oldPassword)
-            .newPassword(newPassword)
-            .build();
+        new PutUserByIdPasswordRequestBody(oldPassword, newPassword);
 
     final UserDao userDao1 =
         UserDao.builder().id(userId).email(email).password(newPassword).build();

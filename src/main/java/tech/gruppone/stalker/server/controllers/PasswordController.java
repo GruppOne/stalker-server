@@ -2,7 +2,6 @@ package tech.gruppone.stalker.server.controllers;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
@@ -41,7 +40,6 @@ public class PasswordController {
         requestBody.getOldPassword(), requestBody.getNewPassword(), userId);
   }
 
-  @Builder
   @Value
   public static class PutUserByIdPasswordRequestBody {
     @NonNull String oldPassword;
