@@ -115,7 +115,7 @@ class UsersControllerTest {
     when(userDataRepository.save(userDataDao)).thenReturn(Mono.just(userDataDao));
 
     final String jwt = "jwt-token";
-    when(loginService.logUser(email, password)).thenReturn(Mono.just(jwt));
+    when(loginService.login(email, password)).thenReturn(Mono.just(jwt));
 
     testClient
         .post()
@@ -130,6 +130,6 @@ class UsersControllerTest {
 
     verify(userRepository).save(userDaoWithoutId);
     verify(userDataRepository).save(userDataDao);
-    verify(loginService).logUser(email, password);
+    verify(loginService).login(email, password);
   }
 }
