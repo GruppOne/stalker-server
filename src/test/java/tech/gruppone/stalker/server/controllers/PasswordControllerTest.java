@@ -1,7 +1,7 @@
 package tech.gruppone.stalker.server.controllers;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.controllers.PasswordController.PutUserByIdPasswordRequestBody;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
-import tech.gruppone.stalker.server.services.UserService;
 
 @Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -22,28 +21,26 @@ class PasswordControllerTest {
 
   @Autowired WebTestClient webTestClient;
 
-  @MockBean UserService userService;
   @MockBean UserRepository userRepository;
 
   @Test
   void testPutUserByIdPassword() {
 
     final long userId = 1L;
-    final String email = "marioRossi@gmail.com";
-    final String oldPassword = "mela";
-    final String newPassword = "ciao";
+    final String email = "email@email.email";
+    final String oldPassword = "oldPassword";
+    final String newPassword = "newPassword";
 
     final PutUserByIdPasswordRequestBody updatePasswordDto =
         new PutUserByIdPasswordRequestBody(oldPassword, newPassword);
 
-    final UserDao userDao1 =
-        UserDao.builder().id(userId).email(email).password(newPassword).build();
-    final UserDao userDao2 =
+    final UserDao userDaoOldPassword =
+        UserDao.builder().id(userId).email(email).password(oldPassword).build();
+    final UserDao userDaoNewPassword =
         UserDao.builder().id(userId).email(email).password(newPassword).build();
 
-    doReturn(Mono.just(userDao2)).when(userRepository).save(userDao2);
-    doReturn(Mono.just(userDao1)).when(userRepository).findById(userId);
-    // when(userRepository.save(userDao)).thenReturn(userDao);
+    when(userRepository.findById(userId)).thenReturn(Mono.just(userDaoOldPassword));
+    when(userRepository.save(userDaoNewPassword)).thenReturn(Mono.just(userDaoNewPassword));
 
     webTestClient
         .put()
@@ -53,7 +50,8 @@ class PasswordControllerTest {
         .expectStatus()
         .isNoContent();
 
-    verify(userService).updatePassword(oldPassword, newPassword, userId);
+    verify(userRepository).findById(userId);
+    verify(userRepository).save(userDaoNewPassword);
   }
 
   @Test

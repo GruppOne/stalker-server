@@ -17,8 +17,8 @@ public class LoginService {
   UserRepository userRepository;
   JwtService jwtService;
 
-  public Mono<String> logUser(String email, String password) {
-    Mono<UserDao> userDao = userRepository.findByEmail(email);
+  public Mono<String> logUser(final String email, final String password) {
+    final Mono<UserDao> userDao = userRepository.findByEmail(email);
     return userDao
         .switchIfEmpty(Mono.error(new UnauthorizedException()))
         .handle(
