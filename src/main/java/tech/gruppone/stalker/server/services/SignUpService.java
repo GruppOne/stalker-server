@@ -63,7 +63,7 @@ public class SignUpService {
     final Mono<UserDataDao> insertedUserDataDao =
         userId.map(id -> userDataDaoBuilder.userId(id).build()).flatMap(userDataRepository::save);
 
-    final Mono<String> jwtToken = loginService.logUser(email, password);
+    final Mono<String> jwtToken = loginService.login(email, password);
 
     return insertedUserDataDao.then(jwtToken);
   }

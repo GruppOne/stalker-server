@@ -69,7 +69,7 @@ class SignUpServiceTest {
     when(userDataRepository.save(userDataDao)).thenReturn(Mono.just(userDataDao));
 
     final var jwtToken = "jwt-token";
-    when(loginService.logUser(correctEmail, correctPassword)).thenReturn(Mono.just(jwtToken));
+    when(loginService.login(correctEmail, correctPassword)).thenReturn(Mono.just(jwtToken));
 
     // ACT
     Mono<String> sut = signUpService.createNewUser(loginDataDto, userDataDto);
@@ -79,7 +79,7 @@ class SignUpServiceTest {
 
     verify(userRepository).save(userDao);
     verify(userDataRepository).save(userDataDao);
-    verify(loginService).logUser(correctEmail, correctPassword);
+    verify(loginService).login(correctEmail, correctPassword);
   }
 
   static Stream<Arguments> testParameters() {
