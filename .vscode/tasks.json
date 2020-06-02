@@ -63,7 +63,18 @@
       "command": "./gradlew spotlessApply classes testClasses --continuous --info",
     },
     {
-      "label": "test java code",
+      "label": "verify test coverage >80%",
+      "command": "./gradlew test --fail-fast jacocoTestCoverageVerification --info",
+      "group": "test"
+    },
+    {
+      "label": "open test and coverage report",
+      // unreadable powershell oneliner
+      "command": "chrome --guest --new-window [System.Uri][String](get-item './build/reports/tests/test/index.html') [System.Uri][String](get-item './build/reports/jacoco/test/html/index.html')",
+      "group": "test"
+    },
+    {
+      "label": "run all tests",
       "command": "./gradlew test --fail-fast jacocoTestReport",
       "group": {
         "kind": "test",
@@ -71,19 +82,14 @@
       }
     },
     {
-      "label": "verify test coverage >80%",
-      "command": "./gradlew test --fail-fast jacocoTestCoverageVerification --info",
-      "group": "test"
+      "label": "run some tests continuously",
+      "command": "./gradlew test --continuous ${input:testFilter}",
+      "group": "test",
     },
     {
-      "label": "open test and coverage report",
-      "command": "& ./build/reports/tests/test/index.html ; & build/reports/jacoco/test/html/index.html",
-      "group": "test"
-    },
-    {
-      "label": "test java code continuously",
+      "label": "run all tests continuously",
       "command": "./gradlew test --fail-fast jacocoTestReport --continuous",
-      "group": "build",
+      "group": "test",
     },
     {
       "label": "bootRun - run spring boot application",
@@ -113,5 +119,13 @@
       },
       "group": "build",
     },
-  ]
+  ],
+  "inputs": [
+    {
+      "id": "testFilter",
+      "type": "promptString",
+      "description": "--tests + simple pattern",
+      "default": "--tests "
+    }
+  ],
 }
