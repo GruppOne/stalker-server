@@ -57,10 +57,8 @@ dependencies {
 //  Provides fast application restarts, LiveReload, and configurations for enhanced development experience.
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-//  MySQL JDBC and R2DBC driver.
-  runtimeOnly 'dev.miku:r2dbc-mysql'
-  // TODO probably unnecessary
-  runtimeOnly 'mysql:mysql-connector-java'
+  // MySQL JDBC and R2DBC driver.
+  implementation 'dev.miku:r2dbc-mysql:0.8.1.RELEASE'
 
  // Provides support for JSON web Token
   implementation 'io.jsonwebtoken:jjwt-api:0.11.1'
@@ -69,7 +67,7 @@ dependencies {
   runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'
   runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.1'
 
-//  Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).
+  // Generate metadata for developers to offer contextual help and "code completion" when working with custom configuration keys (ex.application.properties/.yml files).
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
   annotationProcessor 'org.projectlombok:lombok'
