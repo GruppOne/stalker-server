@@ -50,6 +50,15 @@
       "isBackground": false,
     },
     {
+      "label": "clean gradle artifacts",
+      "command": "./gradlew clean",
+      "isBackground": false,
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+      },
+    },
+    {
       "label": "format java code continuously",
       "command": "./gradlew spotlessApply --continuous",
     },
