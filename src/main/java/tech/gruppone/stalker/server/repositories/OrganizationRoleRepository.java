@@ -12,7 +12,7 @@ public interface OrganizationRoleRepository
 
   @Modifying
   @Query(
-      "DELETE FROM `OrganizationRoleDao` WHERE userId = :userId AND organizationId = :organizationId")
+      "DELETE FROM `OrganizationRole` WHERE userId = :userId AND organizationId = :organizationId")
   Mono<Integer> deleteByOrganizationIdAndUserId(
       @Param("organizationId") final long organizationId, @Param("userId") final long userId);
 
