@@ -329,25 +329,4 @@ class UserServiceTest {
     verify(userDataRepository).findById(userId);
     verify(userDataRepository).save(expectedUserDataDao);
   }
-
-  @Test
-  void testUpdateUser() {
-    final long userId = 1L;
-    final String oldPassword = "mela";
-    final String newPassword = "ciao";
-
-    final UserDao userDao1 =
-        UserDao.builder().id(userId).email("marioRossi@gmail.com").password(oldPassword).build();
-    final UserDao userDao2 =
-        UserDao.builder().id(userId).email("marioRossi@gmail.com").password(newPassword).build();
-
-    // doReturn(Mono.just(userDao)).when(userRepository).save(userDao);
-
-    when(userRepository.findById(userId)).thenReturn(Mono.just(userDao1));
-    when(userRepository.save(userDao2)).thenReturn(Mono.just(userDao2));
-
-    final Mono<Void> response = userService.updatePassword(oldPassword, newPassword, userId);
-
-    assertThat(response.block()).isEqualTo(null);
-  }
 }

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
@@ -107,18 +106,5 @@ class ConnectionsControllerTest {
         .isEqualTo(organizationIds.get(1));
 
     verify(connectionRepository).findConnectedOrganizationIdsByUserId(userId);
-  }
-
-  @Test
-  void testGetOrganizationByIdUsersConnections() {
-
-    final long organizationId = 1L;
-
-    webTestClient
-        .get()
-        .uri("/organization/{organizationId}/users/connections", organizationId)
-        .exchange()
-        .expectStatus()
-        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 }
