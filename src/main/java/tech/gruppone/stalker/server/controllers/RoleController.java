@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,18 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.AdministratorType;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
 import tech.gruppone.stalker.server.repositories.OrganizationRoleRepository;
+import tech.gruppone.stalker.server.services.RoleService;
 
-@Log4j2
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping("/organization/{organizationId}/user/{userId}/role")
 public class RoleController {
   OrganizationRoleRepository organizationRoleRepository;
+  RoleService roleService;
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -36,43 +34,35 @@ public class RoleController {
       @PathVariable("organizationId") final long organizationId,
       @PathVariable("userId") final long userId) {
 
-    return Mono.error(NotImplementedException::new);
+    return organizationRoleRepository
+        .deleteByOrganizationIdAndUserId(organizationId, userId)
+        .then();
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> postOrganizationByIdUserByIdRole(
-      @PathVariable("organizationId") long organizationId,
-      @PathVariable("userId") long userId,
-      @RequestBody RoleRequestBody requestBody) {
+      @PathVariable("organizationId") final long organizationId,
+      @PathVariable("userId") final long userId,
+      @RequestBody final RoleRequestBody requestBody) {
 
-    log.info("request body: {}", requestBody);
-
-    OrganizationRole organizationRole =
-        OrganizationRole.builder()
-            .userId(userId)
-            .organizationId(organizationId)
-            .administratorType(requestBody.getAdministratorType())
-            .build();
-
-    log.info(organizationRole);
-
-    return organizationRoleRepository.save(organizationRole).then();
+    return roleService.create(organizationId, userId, requestBody.getAdministratorType());
   }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> putOrganizationByIdUserByIdRole(
       @PathVariable("organizationId") final long organizationId,
-      @PathVariable("userId") final long userId) {
+      @PathVariable("userId") final long userId,
+      @RequestBody final RoleRequestBody requestBody) {
 
-    return Mono.error(NotImplementedException::new);
+    return roleService.update(organizationId, userId, requestBody.getAdministratorType());
   }
 
   @Value
-  private static class RoleRequestBody {
-    @JsonAlias({"newRole", "modifiedRole"})
+  static class RoleRequestBody {
     @NonNull
+    @JsonAlias({"newRole", "modifiedRole"})
     AdministratorType administratorType;
   }
 }
