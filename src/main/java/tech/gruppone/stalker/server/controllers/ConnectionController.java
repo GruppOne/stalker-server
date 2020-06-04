@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.db.ConnectionDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
@@ -36,15 +37,16 @@ public class ConnectionController {
 
     if (requestBody != null) {
       log.info("connecting to private organization. Request body is: {}", requestBody);
-      // TODO implement functionality. should throw InvalidLdapCredentialsException if given rdn +
-      // pw are not valid.
+      // TODO implement functionality.
+      // TODO should throw InvalidLdapCredentialsException if given rdn + pw are not valid.
+      return Mono.error(NotImplementedException::new);
     }
 
     // FIXME controllers should not know daos
     final ConnectionDao connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 
-    // TODO handle error. throw BadRequestException if connection is already present!
+    // TODO should throw BadRequestException if connection is already present.
     return connectionRepository.save(connectionDao).then();
   }
 
@@ -57,14 +59,9 @@ public class ConnectionController {
   }
 
   @Value
-  private static class PostUserByIdOrganizationByIdConnectionBody {
+  static class PostUserByIdOrganizationByIdConnectionBody {
 
-    @NonNull LdapAuthentication ldapAuthentication;
-
-    @Value
-    private static class LdapAuthentication {
-      @NonNull String rdn;
-      @NonNull String ldapPassword;
-    }
+    @NonNull String rdn;
+    @NonNull String ldapPassword;
   }
 }
