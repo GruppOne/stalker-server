@@ -1,0 +1,17 @@
+title: UsersWithRoles
+type: object
+properties:
+  usersWithRoles:
+    type: array
+    items:
+      type: object
+      properties:
+        userId:
+          $ref: ../GenericId.v1.yaml
+        role:
+          $ref: ../AdministratorType.v1.yaml
+      required:
+        - userId
+        - role
+required:
+  - usersWithRoles

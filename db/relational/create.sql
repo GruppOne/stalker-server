@@ -257,8 +257,9 @@ ADD
 ALTER TABLE
   `User`
 ADD
-  PRIMARY KEY (`id`);
-
+  PRIMARY KEY (`id`),
+ADD
+  KEY `email` UNIQUE (`email`);
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --

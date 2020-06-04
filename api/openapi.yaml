@@ -504,6 +504,7 @@ paths:
               required:
                 - rdn
                 - ldapPassword
+        description: ''
       responses:
         '201':
           description: Created
@@ -572,15 +573,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  rolesInOrganizations:
-                    type: array
-                    uniqueItems: true
-                    items:
-                      $ref: ./model/user/UserRoleInOrganization.v1.yaml
-                required:
-                  - rolesInOrganizations
+                $ref: ./model/user/RolesInOrganizations.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -716,15 +709,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  usersWithRoles:
-                    type: array
-                    uniqueItems: true
-                    items:
-                      $ref: ./model/organization/OrganizationRole.v1.yaml
-                required:
-                  - usersWithRoles
+                $ref: ./model/organization/UsersWithRoles.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
