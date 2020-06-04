@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.model.db.converters;
+package tech.gruppone.stalker.server.repositories.converters;
 
 import io.r2dbc.spi.Row;
 import java.time.LocalDateTime;
@@ -7,14 +7,13 @@ import org.springframework.data.convert.ReadingConverter;
 import tech.gruppone.stalker.server.model.AdministratorType;
 import tech.gruppone.stalker.server.model.db.OrganizationRole;
 
-// TODO move to repositories.converters
 @ReadingConverter
-public class OrganizationRoleReadConverter implements Converter<Row, OrganizationRole> {
+public class OrganizationRoleDaoReadConverter implements Converter<Row, OrganizationRole> {
 
   public OrganizationRole convert(Row source) {
-    // this is as horrifyingly verbose as expected
-    final AdministratorType administratorType =
-        AdministratorType.values()[source.get("administratorType", Integer.class)];
+    // TODO handle enum in a humane way
+    final Integer roleKey = source.get("administratorType", Integer.class);
+    final AdministratorType administratorType = AdministratorType.values()[roleKey - 1];
 
     return OrganizationRole.builder()
         .id(source.get("id", Long.class))
