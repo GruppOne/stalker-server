@@ -9,7 +9,7 @@ import io.r2dbc.spi.Row;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import tech.gruppone.stalker.server.model.AdministratorType;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
+import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 
 public class OrganizationRoleDaoReadConverterTest {
   private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
@@ -21,8 +21,8 @@ public class OrganizationRoleDaoReadConverterTest {
     final long organizationId = 1L;
     final AdministratorType administratorType = AdministratorType.VIEWER;
 
-    final OrganizationRole expectedOrganizationRoleDao =
-        OrganizationRole.builder()
+    final OrganizationRoleDao expectedOrganizationRoleDao =
+        OrganizationRoleDao.builder()
             .id(id)
             .userId(userId)
             .organizationId(organizationId)

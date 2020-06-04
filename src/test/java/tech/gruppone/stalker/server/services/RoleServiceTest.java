@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.ApplicationTestConfiguration;
 import tech.gruppone.stalker.server.model.AdministratorType;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
+import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRoleRepository;
 
 @Import(ApplicationTestConfiguration.class)
@@ -34,7 +34,7 @@ public class RoleServiceTest {
 
     final AdministratorType newRole = AdministratorType.ADMIN;
     final var organizationRole =
-        OrganizationRole.builder()
+        OrganizationRoleDao.builder()
             .userId(userId)
             .organizationId(organizationId)
             .administratorType(newRole)
@@ -57,7 +57,7 @@ public class RoleServiceTest {
 
   //   final AdministratorType newRole = AdministratorType.ADMIN;
   //   final var organizationRole =
-  //       OrganizationRole.builder()
+  //       OrganizationRoleDao.builder()
   //           .userId(userId)
   //           .organizationId(organizationId)
   //           .administratorType(newRole)
@@ -84,7 +84,7 @@ public class RoleServiceTest {
     final AdministratorType modifiedRole = AdministratorType.ADMIN;
 
     final var originalOrganizationRole =
-        OrganizationRole.builder()
+        OrganizationRoleDao.builder()
             .id(id)
             .userId(userId)
             .organizationId(organizationId)

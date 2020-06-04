@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.r2dbc.mapping.OutboundRow;
 import org.springframework.data.relational.core.sql.SqlIdentifier;
 import tech.gruppone.stalker.server.model.AdministratorType;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
+import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 
 public class OrganizationRoleDaoWriteConverterTest {
   private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
@@ -19,8 +19,8 @@ public class OrganizationRoleDaoWriteConverterTest {
     final long organizationId = 1L;
     final AdministratorType administratorType = AdministratorType.ADMIN;
 
-    final OrganizationRole organizationRoleDao =
-        OrganizationRole.builder()
+    final OrganizationRoleDao organizationRoleDao =
+        OrganizationRoleDao.builder()
             .id(id)
             .userId(userId)
             .organizationId(organizationId)

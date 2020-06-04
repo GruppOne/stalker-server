@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.ApplicationTestConfiguration;
 import tech.gruppone.stalker.server.controllers.RoleController.RoleRequestBody;
 import tech.gruppone.stalker.server.model.AdministratorType;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
+import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRoleRepository;
 
 @Tag("integrationTest")
@@ -59,7 +59,7 @@ class RoleControllerTest {
     final var requestBody = new RoleRequestBody(newRole);
 
     final var organizationRole =
-        OrganizationRole.builder()
+        OrganizationRoleDao.builder()
             .userId(userId)
             .organizationId(organizationId)
             .administratorType(newRole)
@@ -94,7 +94,7 @@ class RoleControllerTest {
     final var requestBody = new RoleRequestBody(modifiedRole);
 
     final var originalOrganizationRole =
-        OrganizationRole.builder()
+        OrganizationRoleDao.builder()
             .id(id)
             .userId(userId)
             .organizationId(organizationId)

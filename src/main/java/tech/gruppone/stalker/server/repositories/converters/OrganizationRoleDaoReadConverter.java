@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import tech.gruppone.stalker.server.model.AdministratorType;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
+import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 
 @ReadingConverter
-public class OrganizationRoleDaoReadConverter implements Converter<Row, OrganizationRole> {
+public class OrganizationRoleDaoReadConverter implements Converter<Row, OrganizationRoleDao> {
 
-  public OrganizationRole convert(Row source) {
+  public OrganizationRoleDao convert(Row source) {
     // TODO handle enum in a humane way
     final Integer roleKey = source.get("administratorType", Integer.class);
     final AdministratorType administratorType = AdministratorType.values()[roleKey - 1];
 
-    return OrganizationRole.builder()
+    return OrganizationRoleDao.builder()
         .id(source.get("id", Long.class))
         .organizationId(source.get("organizationId", Long.class))
         .userId(source.get("userId", Long.class))
