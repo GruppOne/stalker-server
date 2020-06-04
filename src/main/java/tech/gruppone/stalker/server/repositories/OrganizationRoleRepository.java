@@ -4,6 +4,7 @@ import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 
@@ -18,4 +19,9 @@ public interface OrganizationRoleRepository
 
   Mono<OrganizationRoleDao> findByOrganizationIdAndUserId(
       @Param("organizationId") final long organizationId, @Param("userId") final long userId);
+
+  Flux<OrganizationRoleDao> findAllByOrganizationId(
+      @Param("organizationId") final long organizationId);
+
+  Flux<OrganizationRoleDao> findAllByUserId(@Param("userId") final long userId);
 }

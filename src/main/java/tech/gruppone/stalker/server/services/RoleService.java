@@ -12,6 +12,10 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.AdministratorType;
+import tech.gruppone.stalker.server.model.api.RolesInOrganizationsDto;
+import tech.gruppone.stalker.server.model.api.RolesInOrganizationsDto.RoleInOrganization;
+import tech.gruppone.stalker.server.model.api.UsersWithRolesDto;
+import tech.gruppone.stalker.server.model.api.UsersWithRolesDto.UserWithRole;
 import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRoleRepository;
 
@@ -62,5 +66,29 @@ public class RoleService {
               return organizationRoleRepository.save(updatedOrganizationRole);
             })
         .then();
+  }
+
+  public Mono<UsersWithRolesDto> findUsersWithRolesByOrganizationId(final long organizationId) {
+
+    return organizationRoleRepository
+        .findAllByOrganizationId(organizationId)
+        .map(
+            organizationRole ->
+                new UserWithRole(
+                    organizationRole.getUserId(), organizationRole.getAdministratorType()))
+        .collectList()
+        .map(UsersWithRolesDto::new);
+  }
+
+  public Mono<RolesInOrganizationsDto> findRolesInOrganizationsByUserId(final long userId) {
+
+    return organizationRoleRepository
+        .findAllByUserId(userId)
+        .map(
+            organizationRole ->
+                new RoleInOrganization(
+                    organizationRole.getOrganizationId(), organizationRole.getAdministratorType()))
+        .collectList()
+        .map(RolesInOrganizationsDto::new);
   }
 }
