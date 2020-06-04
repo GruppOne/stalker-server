@@ -5,16 +5,17 @@ import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
+import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 
-public interface OrganizationRoleRepository extends ReactiveCrudRepository<OrganizationRole, Long> {
+public interface OrganizationRoleRepository
+    extends ReactiveCrudRepository<OrganizationRoleDao, Long> {
 
   @Modifying
   @Query(
-      "DELETE FROM `OrganizationRole` WHERE userId = :userId AND organizationId = :organizationId")
+      "DELETE FROM `OrganizationRoleDao` WHERE userId = :userId AND organizationId = :organizationId")
   Mono<Integer> deleteByOrganizationIdAndUserId(
       @Param("organizationId") final long organizationId, @Param("userId") final long userId);
 
-  Mono<OrganizationRole> findByOrganizationIdAndUserId(
+  Mono<OrganizationRoleDao> findByOrganizationIdAndUserId(
       @Param("organizationId") final long organizationId, @Param("userId") final long userId);
 }

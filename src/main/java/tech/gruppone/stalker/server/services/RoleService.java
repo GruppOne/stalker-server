@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.AdministratorType;
-import tech.gruppone.stalker.server.model.db.OrganizationRole;
+import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRoleRepository;
 
 @Log4j2
@@ -26,15 +26,15 @@ public class RoleService {
   public Mono<Void> create(
       final long organizationId, final long userId, final AdministratorType administratorType) {
 
-    final OrganizationRole organizationRole =
-        OrganizationRole.builder()
+    final OrganizationRoleDao organizationRoleDao =
+        OrganizationRoleDao.builder()
             .userId(userId)
             .organizationId(organizationId)
             .administratorType(administratorType)
             .build();
 
     return organizationRoleRepository
-        .save(organizationRole)
+        .save(organizationRoleDao)
         .onErrorMap(
             DataIntegrityViolationException.class,
             error -> {

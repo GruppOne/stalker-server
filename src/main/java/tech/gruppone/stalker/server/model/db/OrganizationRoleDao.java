@@ -12,8 +12,8 @@ import tech.gruppone.stalker.server.model.AdministratorType;
 
 @Builder
 @Value
-@Table("OrganizationRole")
-public class OrganizationRole {
+@Table("OrganizationRoleDao")
+public class OrganizationRoleDao {
 
   @Id
   @With
