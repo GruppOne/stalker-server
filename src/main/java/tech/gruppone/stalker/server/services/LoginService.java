@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
-import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
@@ -18,13 +17,13 @@ public class LoginService {
   UserRepository userRepository;
   JwtService jwtService;
 
-  public Mono<String> logUser(LoginDataDto loginData) {
-    Mono<UserDao> userDao = userRepository.findByEmail(loginData.getEmail());
+  public Mono<String> login(final String email, final String password) {
+    final Mono<UserDao> userDao = userRepository.findByEmail(email);
     return userDao
         .switchIfEmpty(Mono.error(new UnauthorizedException()))
         .handle(
             (user, sink) -> {
-              if (!loginData.getPassword().equals(user.getPassword())) {
+              if (!password.equals(user.getPassword())) {
                 sink.error(new UnauthorizedException());
               } else {
                 sink.next(jwtService.createToken(user.getId()));

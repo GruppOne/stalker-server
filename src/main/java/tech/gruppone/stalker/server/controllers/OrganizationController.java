@@ -37,13 +37,20 @@ public class OrganizationController {
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<OrganizationDto> putOrganizationById(@PathVariable long organizationId) {
+  public Mono<Void> putOrganizationById(@PathVariable final long id) {
     return Mono.error(NotImplementedException::new);
   }
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<OrganizationDto> deleteOrganizationById(@PathVariable long organizationId) {
+  public Mono<Void> deleteOrganizationById(@PathVariable final long id) {
+    return Mono.error(NotImplementedException::new);
+  }
+
+  @GetMapping("/users/inside")
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<Throwable> getOrganizationByIdUsersInside(@PathVariable final long id) {
+
     return Mono.error(NotImplementedException::new);
   }
 

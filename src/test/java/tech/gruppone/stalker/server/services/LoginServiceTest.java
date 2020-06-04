@@ -7,14 +7,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Import;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+import tech.gruppone.stalker.server.configuration.JwtConfiguration;
 import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
+@Import(JwtConfiguration.class)
 class LoginServiceTest {
 
   @Mock UserRepository userRepository;
@@ -23,46 +26,48 @@ class LoginServiceTest {
   @InjectMocks LoginService loginService;
 
   @Test
-  public void testLogUser() {
+  void testLogUser() {
     // Arrange
-    Long id = 1L;
-    String email = "mario@gmail.com";
-    String password =
+    final Long id = 1L;
+    final String email = "mario@gmail.com";
+    final String password =
         "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352";
 
-    LoginDataDto loginData = new LoginDataDto(email, password);
+    final LoginDataDto loginData = new LoginDataDto(email, password);
 
-    UserDao user = UserDao.builder().email(email).password(password).id(id).build();
+    final UserDao user = UserDao.builder().email(email).password(password).id(id).build();
+
+    final String expectedEncodedJwt = "example-token";
+
     when(userRepository.findByEmail(email)).thenReturn(Mono.just(user));
-
-    String expectedEncodedJwt = jwtService.createToken(id);
+    when(jwtService.createToken(id)).thenReturn(expectedEncodedJwt);
 
     // Act
-    Mono<String> sut = loginService.logUser(loginData);
+    final Mono<String> sut = loginService.login(loginData.getEmail(), loginData.getPassword());
 
     // Assert
-    StepVerifier.create(sut).expectNext(expectedEncodedJwt);
+    StepVerifier.create(sut).expectNext(expectedEncodedJwt).verifyComplete();
   }
 
   @Test
-  public void testLogUserWithWrongPassword() {
+  void testLogUserWithWrongPassword() {
     // Arrange
-    Long id = 1L;
-    String email = "mario@gmail.com";
-    String savedPassword =
+    final Long id = 1L;
+    final String email = "mario@gmail.com";
+    final String savedPassword =
         "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2351";
-    String wrongPassword =
+    final String wrongPassword =
         "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352";
 
-    LoginDataDto loginData = new LoginDataDto(email, wrongPassword);
+    final LoginDataDto loginData = new LoginDataDto(email, wrongPassword);
 
-    UserDao savedUser = UserDao.builder().email(email).password(savedPassword).id(id).build();
+    final UserDao savedUser = UserDao.builder().email(email).password(savedPassword).id(id).build();
     when(userRepository.findByEmail(email)).thenReturn(Mono.just(savedUser));
 
     // Act
-    Mono<String> sut = loginService.logUser(loginData);
+    final Mono<String> sut = loginService.login(loginData.getEmail(), loginData.getPassword());
 
     // Assert
-    StepVerifier.create(sut).expectError(UnauthorizedException.class);
+    StepVerifier.create(sut).expectError(UnauthorizedException.class).verify();
   }
 }

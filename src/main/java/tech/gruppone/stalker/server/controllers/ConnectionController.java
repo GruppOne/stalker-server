@@ -32,17 +32,19 @@ public class ConnectionController {
   public Mono<Void> postUserByIdOrganizationByIdConnection(
       @PathVariable("userId") final long userId,
       @PathVariable("organizationId") final long organizationId,
-      @RequestBody(required = false) PostUserByIdOrganizationByIdConnectionBody requestBody) {
+      @RequestBody(required = false) final PostUserByIdOrganizationByIdConnectionBody requestBody) {
 
     if (requestBody != null) {
       log.info("connecting to private organization. Request body is: {}", requestBody);
-      // TODO implement functionality. request should fail if given rdn + pw are not valid.
+      // TODO implement functionality. should throw InvalidLdapCredentialsException if given rdn +
+      // pw are not valid.
     }
 
-    ConnectionDao connectionDao =
+    // FIXME controllers should not know daos
+    final ConnectionDao connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 
-    // TODO handle error. return 400 if connection is already present!
+    // TODO handle error. throw BadRequestException if connection is already present!
     return connectionRepository.save(connectionDao).then();
   }
 
@@ -50,7 +52,7 @@ public class ConnectionController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteUserByIdOrganizationByIdConnection(
       @PathVariable("userId") final long userId,
-      @PathVariable("organizationId") long organizationId) {
+      @PathVariable("organizationId") final long organizationId) {
     return connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId).then();
   }
 

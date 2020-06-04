@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,11 +19,15 @@ import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.services.PlaceService;
 
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationsControllerTest {
-  @Autowired private WebTestClient webTestClient;
+  private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
+
   @MockBean private OrganizationRepository organizationRepository;
   @MockBean private PlaceService placeService;
+
+  @Autowired private WebTestClient webTestClient;
 
   @Test
   void testGetOrganizations() {
@@ -37,8 +42,8 @@ class OrganizationsControllerTest {
             .name(name)
             .description(description)
             .isPrivate(isPrivate)
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
+            .createdDate(LOCAL_DATETIME)
+            .lastModifiedDate(LOCAL_DATETIME)
             .build();
 
     when(organizationRepository.findAll()).thenReturn(Flux.just(organizationDao));

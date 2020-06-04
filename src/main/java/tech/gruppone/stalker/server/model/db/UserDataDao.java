@@ -3,20 +3,23 @@ package tech.gruppone.stalker.server.model.db;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NonNull;
+import lombok.Value;
+import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Builder
-@Data
+@Value
 @Table("UserData")
 public class UserDataDao {
 
+  @With
   @Id
+  @NonNull
   @Column("userId")
-  long userId;
+  Long userId;
 
   @NonNull
   @Column("firstName")
@@ -30,11 +33,10 @@ public class UserDataDao {
   @Column("birthDate")
   LocalDate birthDate;
 
-  @NonNull
   @Column("createdDate")
   LocalDateTime createdDate;
 
-  @NonNull
+  @With
   @Column("lastModifiedDate")
   LocalDateTime lastModifiedDate;
 }

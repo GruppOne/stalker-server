@@ -4,10 +4,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,8 +19,11 @@ import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRoleRepository;
 import tech.gruppone.stalker.server.services.PlaceService;
 
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class OrganizationControllerTest {
+class OrganizationControllerTest {
+
+  private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
 
   @Autowired private WebTestClient webTestClient;
 
@@ -27,21 +32,19 @@ public class OrganizationControllerTest {
   @MockBean private OrganizationRoleRepository organizationRoleRepository;
 
   @Test
-  public void testGetOrganizationById() {
+  void testGetOrganizationById() {
 
-    var organizationId = 1L;
-    var name = "name";
-    var description = "description";
-    var isPrivate = 0L;
+    final var organizationId = 1L;
+    final var name = "name";
+    final var description = "description";
 
-    var organizationDao =
+    final var organizationDao =
         OrganizationDao.builder()
             .id(organizationId)
             .name(name)
             .description(description)
-            .isPrivate(isPrivate)
-            .createdDate(LocalDateTime.now())
-            .lastModifiedDate(LocalDateTime.now())
+            .createdDate(LOCAL_DATETIME)
+            .lastModifiedDate(LOCAL_DATETIME)
             .build();
 
     when(organizationRepository.findById(organizationId)).thenReturn(Mono.just(organizationDao));
@@ -65,6 +68,44 @@ public class OrganizationControllerTest {
 
     verify(organizationRepository).findById(organizationId);
   }
+
+  @Test
+  void testPutOrganizationById() {
+
+    final long organizationId = 1L;
+
+    webTestClient
+        .put()
+        .uri("/organization/{organizationId}", organizationId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @Test
+  void testDeleteOrganizationById() {
+    final long organizationId = 1L;
+
+    webTestClient
+        .delete()
+        .uri("/organization/{organizationId}", organizationId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @Test
+  void testGetOrganizationByIdUsersInside() {
+    final long organizationId = 1L;
+
+    webTestClient
+        .get()
+        .uri("/organization/{organizationId}/users/inside", organizationId)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+  }
+
 
   @Test
   void testGetUsersRoleOfOrganizationById() {

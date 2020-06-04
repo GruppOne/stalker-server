@@ -100,7 +100,7 @@ CREATE TABLE `Organization` (
   `description` tinytext NOT NULL,
   `isPrivate` BOOLEAN NOT NULL DEFAULT 0,
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastModifiedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+  `lastModifiedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- FIXME this should be 1 to 1 with place, not 0..1 to 1
@@ -328,9 +328,9 @@ MODIFY
 ALTER TABLE
   `Connection`
 ADD
-  CONSTRAINT `Connection_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`),
+  CONSTRAINT `Connection_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`) ON DELETE CASCADE,
 ADD
-  CONSTRAINT `Connection_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
+  CONSTRAINT `Connection_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `LdapConfiguration`
@@ -338,7 +338,7 @@ ADD
 ALTER TABLE
   `LdapConfiguration`
 ADD
-  CONSTRAINT `LdapConfiguration_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`);
+  CONSTRAINT `LdapConfiguration_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `OrganizationRole`
@@ -346,9 +346,9 @@ ADD
 ALTER TABLE
   `OrganizationRole`
 ADD
-  CONSTRAINT `OrganizationRole_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`),
+  CONSTRAINT `OrganizationRole_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`) ON DELETE CASCADE,
 ADD
-  CONSTRAINT `OrganizationRole_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
+  CONSTRAINT `OrganizationRole_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE,
 ADD
   CONSTRAINT `OrganizationRole_ibfk_3` FOREIGN KEY (`administratorType`) REFERENCES `AdministratorType` (`id`);
 
@@ -358,7 +358,7 @@ ADD
 ALTER TABLE
   `PlacePosition`
 ADD
-  CONSTRAINT `PlacePosition_ibfk_1` FOREIGN KEY (`id`) REFERENCES `Place` (`id`);
+  CONSTRAINT `PlacePosition_ibfk_1` FOREIGN KEY (`id`) REFERENCES `Place` (`id`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `Place`
@@ -366,7 +366,7 @@ ADD
 ALTER TABLE
   `Place`
 ADD
-  CONSTRAINT `Place_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`);
+  CONSTRAINT `Place_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `Organization` (`id`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `UserData`
@@ -374,7 +374,7 @@ ADD
 ALTER TABLE
   `UserData`
 ADD
-  CONSTRAINT `UserData_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
+  CONSTRAINT `UserData_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `UserLog`
@@ -382,7 +382,12 @@ ADD
 ALTER TABLE
   `UserLog`
 ADD
-  CONSTRAINT `UserLog_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`);
+  CONSTRAINT `UserLog_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE
+  `User`
+ADD
+  CONSTRAINT `email` UNIQUE (`email`);
 
 COMMIT;
 

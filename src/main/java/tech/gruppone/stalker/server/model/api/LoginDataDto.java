@@ -1,11 +1,12 @@
 package tech.gruppone.stalker.server.model.api;
 
+import lombok.NonNull;
 import lombok.Value;
 
 @Value
 public class LoginDataDto {
 
-  String email;
+  @NonNull String email;
 
-  String password;
+  @NonNull String password;
 }

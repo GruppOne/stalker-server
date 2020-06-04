@@ -520,7 +520,8 @@ paths:
                 properties:
                   message:
                     enum:
-                      - The LDAP credentials for this organization were invalid.
+                      - The given LDAP credentials are not valid.
+                      - The server could not authenticate the user.
                     type: string
                 type: object
           description: Unauthorized
@@ -825,7 +826,7 @@ paths:
                 properties:
                   message:
                     enum:
-                      - This email/password combination is not valid
+                      - The given email/password combination is not valid.
                     type: string
                 required:
                   - message
@@ -854,19 +855,6 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
-          content:
-            application/json:
-              schema:
-                properties:
-                  message:
-                    enum:
-                      - This email is not valid.
-                    type: string
-                required:
-                  - message
-                type: object
-          description: Bad Request
         default:
           $ref: '#/components/responses/DefaultResponse'
       security: []
@@ -990,7 +978,7 @@ components:
         $ref: ./model/GenericId.v1.yaml
   responses:
     BadRequest:
-      description: The server could not process the request due to a client error.
+      description: The server could not process the request due to a client mistake.
       content:
         application/json:
           schema:
@@ -999,7 +987,7 @@ components:
               message:
                 type: string
                 enum:
-                  - The server could not process the request due to a client error.
+                  - The server could not process the request due to a client mistake.
             required:
               - message
     Unauthorized:
@@ -1029,7 +1017,7 @@ components:
             required:
               - message
     NotFound:
-      description: The server could not find the requested resource.
+      description: The requested resource does not exist.
       content:
         application/json:
           schema:
@@ -1038,7 +1026,7 @@ components:
               message:
                 type: string
                 enum:
-                  - The server could not find the requested resource.
+                  - The requested resource does not exist.
                 description: Resource not found.
             required:
               - message

@@ -3,6 +3,7 @@ package tech.gruppone.stalker.server.controllers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.db.ConnectionDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
+@Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ConnectionControllerTest {
 
@@ -22,10 +24,10 @@ class ConnectionControllerTest {
   @Test
   void testPostUserByIdOrganizationByIdConnection() {
 
-    long userId = 1L;
-    long organizationId = 1L;
+    final long userId = 1L;
+    final long organizationId = 1L;
 
-    var connectionDao =
+    final var connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 
     when(connectionRepository.save(connectionDao)).thenReturn(Mono.empty());
@@ -43,8 +45,8 @@ class ConnectionControllerTest {
 
   @Test
   void testDeleteUserByIdOrganizationByIdConnection() {
-    long userId = 1L;
-    long organizationId = 1L;
+    final long userId = 1L;
+    final long organizationId = 1L;
 
     when(connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId))
         .thenReturn(Mono.empty());

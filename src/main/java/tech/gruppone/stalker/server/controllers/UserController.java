@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.UpdatePasswordDto;
+import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 import tech.gruppone.stalker.server.services.UserService;
@@ -25,29 +24,28 @@ import tech.gruppone.stalker.server.services.UserService;
 @RequestMapping("/user/{userId}")
 public class UserController {
 
-  // FIXME should not depend on both repo and service
   UserRepository userRepository;
   UserService userService;
 
+  @DeleteMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> deleteUserById(@PathVariable("userId") final Long userId) {
+
+    return userRepository.deleteById(userId);
+  }
+
   @GetMapping
-  @ResponseBody
   @ResponseStatus(HttpStatus.OK)
-  public Mono<UserDto> getUserById(@PathVariable final Long userId) {
+  public Mono<UserDto> getUserById(@PathVariable("userId") final Long userId) {
 
     return userService.findById(userId);
   }
 
-  @DeleteMapping
+  @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> deleteUserById(@PathVariable final Long userId) {
+  public Mono<Void> putUserById(
+      @PathVariable("userId") final Long userId, @RequestBody final UserDataDto userDataDto) {
 
-    return userRepository.deleteUserById(userId);
-  }
-
-  @PutMapping("/password")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> updatePassword(
-      @RequestBody UpdatePasswordDto updatePasswordDto, @PathVariable final Long userId) {
-    return userService.updatePassword(updatePasswordDto, userId);
+    return userService.updateUserById(userDataDto, userId);
   }
 }

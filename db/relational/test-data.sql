@@ -27,9 +27,16 @@ START TRANSACTION;
 -- Dump dei dati per la tabella `organizations`
 --
 
-INSERT INTO `Organization` (`name`, `description`) VALUES
-('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software'),
-('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️');
+INSERT INTO `Organization`(`name`, `description`, `createdDate`)
+VALUES(
+    'GruppOne',
+    'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software',
+    '2020-01-01 01:01:01'
+),(
+    'Amici della Torre Archimede',
+    'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️',
+    '2020-01-01 01:01:01'
+);
 
 --
 -- Dump dei dati per la tabella `place`
@@ -56,22 +63,22 @@ INSERT INTO `PlacePosition` (`id`, `position`) VALUES
 --
 
 INSERT INTO `User` (`email`, `password`) VALUES
-('mariotest01@gmail.com', 'f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352'),
-('giorgiotest02@hotmail.it', '95f9d376cada5e12dac91abb345c8d1d53f30fd7469a144796d547ca73db1ceb05aadbd7ba0d4ea36c57e5e5c30098d13140beb93d306b0bf73d25a9a5281cbd'),
-('mariatest03@live.it', 'ba191a9e86125cacf7dfe63e97728b88dfac7e1b6b90b853dbc6677cfdacf241630ba438d3d7446d7d781417aa1956ecd68d651a8da4523b134144e6ccb0a531'),
-('barbaratest04@alice.it', '86cb25a23ac98ac634130b4b76308f42f56ed05fac97c11b19f3e142581bdfbee5813adf7d3408cb318fbac869efe70944aedfd7c8e90df587d19f34d7578525'),
-('filippotest05@virgilio.it', '3d6f76dfaa46a99ae8eab36e3da56ec60fbd6a60e8c8ff17d0d15f1395fdfff4b3e178053639bf47d0976bf329e7620178a1e3f28d965112c4cc24cc315de028');
+('mariotest01@gmail.com', SHA2('Mario01!',512)),
+('giorgiotest02@hotmail.it', SHA2('Giorgio02!',512)),
+('mariatest03@live.it', SHA2('Maria03!',512)),
+('barbaratest04@alice.it', SHA2('Barbara04!',512)),
+('filippotest05@virgilio.it', SHA2('Filippo05!',512));
 
 --
 -- Dump dei dati per la tabella `userdata`
 --
 
-INSERT INTO `UserData` (`userId`, `firstName`, `lastName`, `birthDate`) VALUES
-(1, 'Mario', 'Rossi', '1960-04-16'),
-(2, 'Giorgio', 'Bianchi', '1983-11-21'),
-(3, 'Maria', 'Verdi', '1987-08-14'),
-(4, 'Barbara', 'Gialli', '1965-01-15'),
-(5, 'Filippo', 'Azzurri', '1999-06-25');
+INSERT INTO `UserData` (`userId`, `firstName`, `lastName`, `birthDate`, `createdDate`) VALUES
+(1, 'Mario', 'Rossi', '1960-04-16', '2020-01-01 01:01:01'),
+(2, 'Giorgio', 'Bianchi', '1983-11-21', '2020-01-01 01:01:01'),
+(3, 'Maria', 'Verdi', '1987-08-14', '2020-01-01 01:01:01'),
+(4, 'Barbara', 'Gialli', '1965-01-15', '2020-01-01 01:01:01'),
+(5, 'Filippo', 'Azzurri', '1999-06-25', '2020-01-01 01:01:01');
 
 --
 -- Dump dei dati per la tabella `Connection`

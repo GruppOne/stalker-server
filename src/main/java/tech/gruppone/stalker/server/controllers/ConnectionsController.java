@@ -10,28 +10,48 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
+import tech.gruppone.stalker.server.services.UserService;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 public class ConnectionsController {
-  ConnectionRepository connectionRepository;
 
-  // TODO implement me here!
-  // @GetMapping("/organization/{organizationId}/users/connections")
-  // public Mono<...> getOrganizationByIdUsersConnections(@PathVariable("organizationId") long
-  // organizationId) {}
+  ConnectionRepository connectionRepository;
+  UserService userService;
+
+  @GetMapping("/organization/{organizationId}/users/connections")
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<GetOrganizationOrganizationIdUsersConnectionsResponse>
+      getOrganizationByIdUsersConnections(
+          @PathVariable("organizationId") final long organizationId) {
+
+    final Flux<Long> connectedUserIds =
+        connectionRepository.findConnectedUserIdsByOrganizationId(organizationId);
+
+    return userService
+        .findAllById(connectedUserIds)
+        .collectList()
+        .map(GetOrganizationOrganizationIdUsersConnectionsResponse::new);
+  }
 
   @GetMapping("/user/{userId}/organizations/connections")
   @ResponseStatus(HttpStatus.OK)
   public Mono<GetUserByIdOrganizationsConnectionsResponse> getUserByIdOrganizationsConnections(
-      @PathVariable("userId") long userId) {
+      @PathVariable("userId") final long userId) {
     return connectionRepository
-        .findConnectedOrganizationsByUserId(userId)
+        .findConnectedOrganizationIdsByUserId(userId)
         .collectList()
         .map(GetUserByIdOrganizationsConnectionsResponse::new);
+  }
+
+  @Value
+  private static class GetOrganizationOrganizationIdUsersConnectionsResponse {
+    List<UserDto> connectedUsers;
   }
 
   @Value
