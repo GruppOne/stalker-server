@@ -1,0 +1,17 @@
+title: RolesInOrganizations
+type: object
+properties:
+  rolesInOrganizations:
+    type: array
+    items:
+      type: object
+      properties:
+        organizationId:
+          $ref: ../GenericId.v1.yaml
+        role:
+          $ref: ../AdministratorType.v1.yaml
+      required:
+        - organizationId
+        - role
+required:
+  - rolesInOrganizations
