@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.controllers.PasswordController.PostUserPasswordRecoveryRequestBody;
 import tech.gruppone.stalker.server.controllers.PasswordController.PutUserByIdPasswordRequestBody;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
@@ -56,10 +57,14 @@ class PasswordControllerTest {
 
   @Test
   void testPostUserPasswordRecovery() {
+    final String email = "email@email.email";
+    final PostUserPasswordRecoveryRequestBody requestBody =
+        new PostUserPasswordRecoveryRequestBody(email);
 
     webTestClient
         .post()
         .uri("/user/password/recovery")
+        .body(Mono.just(requestBody), PostUserPasswordRecoveryRequestBody.class)
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
