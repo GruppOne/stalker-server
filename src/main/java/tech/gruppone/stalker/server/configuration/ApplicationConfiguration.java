@@ -1,7 +1,6 @@
 package tech.gruppone.stalker.server.configuration;
 
 import java.time.Clock;
-import lombok.NonNull;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +17,7 @@ public class ApplicationConfiguration implements WebFluxConfigurer {
 
   String version;
 
-  public ApplicationConfiguration(@NonNull @Value("${spring.application.version}") String version) {
+  public ApplicationConfiguration(@Value("${spring.application.version}") String version) {
     this.version = version;
   }
 

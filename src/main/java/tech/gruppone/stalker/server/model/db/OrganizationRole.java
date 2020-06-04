@@ -28,10 +28,12 @@ public class OrganizationRole {
   @Column("userId")
   Long userId;
 
+  @With
   @NonNull
   @Column("administratorType")
   AdministratorType administratorType;
 
+  @With
   @Column("createdDate")
   LocalDateTime createdDate;
 }
