@@ -84,7 +84,7 @@
     },
     {
       "label": "run all tests",
-      "command": "./gradlew test --fail-fast jacocoTestReport",
+      "command": "./gradlew test --fail-fast",
       "group": {
         "kind": "test",
         "isDefault": true
@@ -97,7 +97,7 @@
     },
     {
       "label": "run all tests continuously",
-      "command": "./gradlew test --fail-fast jacocoTestReport --continuous",
+      "command": "./gradlew test --fail-fast --continuous",
       "group": "test",
     },
     {
@@ -120,7 +120,8 @@
     {
       "label": "compose down (remove built images and volumes)",
       "type": "shell",
-      "command": "docker-compose down --remove-orphans --volumes --rmi local",
+      "command": "docker-compose down --remove-orphans --volumes",
+      // "command": "docker-compose down --remove-orphans --volumes --rmi local",
       "isBackground": false,
       "presentation": {
         "reveal": "always",
