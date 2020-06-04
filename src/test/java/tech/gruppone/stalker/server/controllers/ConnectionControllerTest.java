@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.controllers.ConnectionController.PostUserByIdOrganizationByIdConnectionBody;
 import tech.gruppone.stalker.server.model.db.ConnectionDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 
@@ -41,6 +43,26 @@ class ConnectionControllerTest {
 
     // checks that the mock method has been called with the given parameters
     verify(connectionRepository).save(connectionDao);
+  }
+
+  @Test
+  void testPostUserByIdOrganizationByIdConnectionWithRequestBody() {
+
+    final long userId = 1L;
+    final long organizationId = 1L;
+
+    final String rdn = "rdn";
+    final String ldapPassword = "ldapPassword";
+
+    final var requestBody = new PostUserByIdOrganizationByIdConnectionBody(rdn, ldapPassword);
+
+    webTestClient
+        .post()
+        .uri("/user/{userId}/organization/{organizationId}/connection", userId, organizationId)
+        .body(Mono.just(requestBody), PostUserByIdOrganizationByIdConnectionBody.class)
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
   }
 
   @Test

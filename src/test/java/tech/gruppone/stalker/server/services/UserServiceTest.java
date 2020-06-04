@@ -24,7 +24,6 @@ import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-// @ExtendWith(MockitoExtension.class)
 @Import(ApplicationTestConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceTest {
@@ -35,7 +34,6 @@ class UserServiceTest {
   @MockBean UserRepository userRepository;
   @MockBean UserDataRepository userDataRepository;
 
-  // need to autowire the imported clock
   @Autowired UserService userService;
 
   @Test

@@ -28,7 +28,7 @@ tags:
   - name: both clients
     description: 'This operation should be available to both clients (mobile & web app).'
   - name: mobile app
-    description: 'This operation should be available to mobile app users.'
+    description: This operation should be available to mobile app users.
   - name: web app
     description: 'This operation should be available to web app users (owners, managers, viewers).'
 paths:
@@ -297,7 +297,7 @@ paths:
         default:
           $ref: '#/components/responses/DefaultResponse'
       operationId: get-organization-organizationId-user-userId-history
-      description: Get the history of this user's visited places in this organization.
+      description: "Get the history of this user's visited places in this organization."
   '/organization/{organizationId}/user/{userId}/role':
     delete:
       description: Delete an existing role for a user (without deleting the user or their connection to the organization).
@@ -490,24 +490,20 @@ paths:
       description: The request body should have an LDAP property only if the organization is private.
       operationId: post-user-userId-organization-organizationId-connect
       requestBody:
+        required: false
         content:
           application/json:
             schema:
               type: object
               properties:
-                ldapAuthentication:
-                  type: object
-                  properties:
-                    rdn:
-                      type: string
-                      description: "The user's RDN in his organization's LDAP server."
-                    ldapPassword:
-                      type: string
-                      format: password
-                      description: "The user password for this organization's LDAP server."
-                  required:
-                    - rdn
-                    - ldapPassword
+                rdn:
+                  type: string
+                ldapPassword:
+                  type: string
+                  format: password
+              required:
+                - rdn
+                - ldapPassword
       responses:
         '201':
           description: Created

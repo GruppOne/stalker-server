@@ -14,6 +14,8 @@ class ServerApplicationTest {
 
   @Test
   void contextLoads() {
+    ServerApplication.main(new String[] {});
+
     assertThat(applicationConfiguration).isNotNull();
     assertThat(applicationConfiguration.getVersion()).isNotNull();
   }
