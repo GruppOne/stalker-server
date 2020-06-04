@@ -259,7 +259,7 @@ ALTER TABLE
 ADD
   PRIMARY KEY (`id`),
 ADD
-  KEY `email` UNIQUE (`email`);
+  KEY `email` (`email`);
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
@@ -384,11 +384,6 @@ ALTER TABLE
   `UserLog`
 ADD
   CONSTRAINT `UserLog_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE;
-
-ALTER TABLE
-  `User`
-ADD
-  CONSTRAINT `email` UNIQUE (`email`);
 
 COMMIT;
 

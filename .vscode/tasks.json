@@ -120,14 +120,18 @@
     {
       "label": "compose down (remove built images and volumes)",
       "type": "shell",
-      "command": "docker-compose down --remove-orphans --volumes",
-      // "command": "docker-compose down --remove-orphans --volumes --rmi local",
+      "command": "docker-compose down --remove-orphans --volumes --rmi local",
       "isBackground": false,
       "presentation": {
         "reveal": "always",
         "focus": true,
       },
       "group": "build",
+    },
+    {
+      "label": "compose down then up rdb and rdb-gui",
+      "type": "shell",
+      "command": "docker-compose down --remove-orphans --volumes --rmi local && docker-compose up -d rdb-gui && docker-compose up rdb",
     },
   ],
   "inputs": [
