@@ -91,8 +91,6 @@ dependencies {
 test {
   useJUnitPlatform()
 
-  // this is opinable. feel free to change it to false if it feels better for you :)
-  // failFast = true
   failFast = false
 
   finalizedBy {

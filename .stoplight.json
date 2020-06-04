@@ -1,0 +1,20 @@
+{
+  "exclude": [
+    ".github",
+    ".vscode",
+    "bin",
+    "build",
+    "db",
+    "gradle",
+    "src",
+    ".classpath",
+    ".env*",
+    ".project",
+    ".versionrc.json",
+    "docker*",
+    "*.gradle",
+    "gradlew",
+    "gradlew.bat",
+    "docs/develop-stalker-server.md"
+  ]
+}
