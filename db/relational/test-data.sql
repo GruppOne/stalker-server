@@ -41,10 +41,35 @@ VALUES(
 --
 -- Dump dei dati per la tabella `place`
 --
-INSERT INTO `Place` (`organizationId`, `name`, `address`, `city`, `zipcode`, `state`) VALUES
-(1, 'Aule Luzzatti', 'Via Paolotti', 'Padova', '351d31', 'Italia'),
-(1, 'Complesso Paolotti', 'Via Paolotti', 'Padova', '35131', 'Italia'),
-(2, 'Torre Archimede', 'Via Trieste', 'Padova', '35131', 'Italia');
+INSERT INTO `Place` (`organizationId`, `name`, `color`, `maxConcurrentUsers`, `address`, `city`, `zipcode`, `state`)
+VALUES(
+    1,
+    'Aule Luzzatti',
+    '#e64a19'
+    100,
+    'Via Paolotti',
+    'Padova',
+    '35131',
+    'Italia'
+),(
+    1,
+    'Complesso Paolotti',
+    '#283593'
+    100,
+    'Via Paolotti',
+    'Padova',
+    '35131',
+    'Italia'
+),(
+    2,
+    'Torre Archimede',
+    '#c8e6c9'
+    100,
+    'Via Trieste',
+    'Padova',
+    '35131',
+    'Italia'
+);
 
 --
 -- Dump dei dati per la tabella `placeposition`
