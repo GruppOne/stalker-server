@@ -173,10 +173,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  place:
-                    $ref: ./model/organization/Place.v1.yaml
+                $ref: ./model/organization/Place.v1.yaml
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
