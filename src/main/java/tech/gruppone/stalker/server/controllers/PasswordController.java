@@ -1,5 +1,6 @@
 package tech.gruppone.stalker.server.controllers;
 
+import java.security.NoSuchAlgorithmException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -23,11 +24,11 @@ public class PasswordController {
   PasswordService passwordService;
   UserService userService;
 
-  // TODO should throw InvalidEmailException!
   @PostMapping("/user/password/recovery")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> postUserPasswordRecovery(
-      @RequestBody final PostUserPasswordRecoveryRequestBody requestBody) {
+      @RequestBody final PostUserPasswordRecoveryRequestBody requestBody)
+      throws NoSuchAlgorithmException {
 
     return passwordService.sendPasswordRecoveryEmail(requestBody.getEmail());
   }
