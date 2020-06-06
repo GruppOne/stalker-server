@@ -11,6 +11,11 @@ public class PlaceDataDto {
 
   @NonNull String name;
 
+  // an hex value saved as string
+  @NonNull String color;
+
+  @NonNull Integer maxConcurrentUsers;
+
   // this does not need @Singular. We always treat polygons as a whole entity
   @NonNull List<GeographicalPoint> polygon;
   @NonNull PlaceInfo placeInfo;

@@ -6,12 +6,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+// TODO refactor this
 @Value
 @Table("LdapConfiguration")
 public class LdapConfigurationDao {
   @Id
   @Column("organizationId")
-  long organizationId;
+  Long organizationId;
 
   @Column("host")
   @NonNull

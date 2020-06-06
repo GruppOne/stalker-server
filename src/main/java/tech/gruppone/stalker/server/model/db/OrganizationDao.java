@@ -28,8 +28,8 @@ public class OrganizationDao {
   String description;
 
   @Builder.Default
-  @Column("isPrivate")
-  Boolean isPrivate = false;
+  @Column("organizationType")
+  String organizationType = "public";
 
   @Column("createdDate")
   LocalDateTime createdDate;
