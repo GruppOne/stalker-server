@@ -31,7 +31,7 @@ public class UserService {
   UserRepository userRepository;
   UserDataRepository userDataRepository;
 
-  private UserDto fromDaosTuple(final Tuple2<UserDao, UserDataDao> tuple) {
+  private UserDto fromTuple(final Tuple2<UserDao, UserDataDao> tuple) {
     final var userDao = tuple.getT1();
     final var userDataDao = tuple.getT2();
 
@@ -47,7 +47,7 @@ public class UserService {
     return new UserDto(userDao.getId(), userDataDto);
   }
 
-  private Flux<Tuple2<UserDao, UserDataDao>> mergeUsersWithTheirUserData(
+  private Flux<Tuple2<UserDao, UserDataDao>> mergeUsersWithTheirData(
       final Flux<UserDao> userDaos, final Flux<UserDataDao> userDataDaos) {
 
     return userDaos
@@ -70,14 +70,14 @@ public class UserService {
     final var userDaos = userRepository.findAll();
     final var userDataDaos = userDataRepository.findAll();
 
-    return mergeUsersWithTheirUserData(userDaos, userDataDaos).map(this::fromDaosTuple);
+    return mergeUsersWithTheirData(userDaos, userDataDaos).map(this::fromTuple);
   }
 
   public Flux<UserDto> findAllById(final Flux<Long> ids) {
     final var userDaos = userRepository.findAllById(ids);
     final var userDataDaos = userDataRepository.findAllById(ids);
 
-    return mergeUsersWithTheirUserData(userDaos, userDataDaos).map(this::fromDaosTuple);
+    return mergeUsersWithTheirData(userDaos, userDataDaos).map(this::fromTuple);
   }
 
   public Mono<UserDto> findById(final long userId) {
@@ -85,7 +85,7 @@ public class UserService {
     return userRepository
         .findById(userId)
         .zipWith(userDataRepository.findById(userId))
-        .map(this::fromDaosTuple);
+        .map(this::fromTuple);
   }
 
   public Mono<Void> updatePassword(

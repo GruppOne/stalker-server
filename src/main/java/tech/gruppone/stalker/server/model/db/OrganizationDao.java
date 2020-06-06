@@ -31,6 +31,7 @@ public class OrganizationDao {
   @Column("organizationType")
   String organizationType = "public";
 
+  @With
   @Column("createdDate")
   LocalDateTime createdDate;
 
