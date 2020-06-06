@@ -45,7 +45,7 @@ INSERT INTO `Place` (`organizationId`, `name`, `color`, `maxConcurrentUsers`, `a
 VALUES(
     1,
     'Aule Luzzatti',
-    '#e64a19'
+    '#e64a19',
     100,
     'Via Paolotti',
     'Padova',
@@ -54,7 +54,7 @@ VALUES(
 ),(
     1,
     'Complesso Paolotti',
-    '#283593'
+    '#283593',
     100,
     'Via Paolotti',
     'Padova',
@@ -63,7 +63,7 @@ VALUES(
 ),(
     2,
     'Torre Archimede',
-    '#c8e6c9'
+    '#c8e6c9',
     100,
     'Via Trieste',
     'Padova',
