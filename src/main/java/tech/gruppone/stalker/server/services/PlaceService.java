@@ -123,6 +123,7 @@ public class PlaceService {
         .then(updateOrganizationLastModified(organizationId));
   }
 
+  // not sure this is the correct way to handle this
   private Mono<Void> updateOrganizationLastModified(final Long organizationId) {
     return organizationRepository
         .findById(organizationId)

@@ -32,7 +32,6 @@ public class R2dbcConvertersConfiguration extends AbstractR2dbcConfiguration {
   @Bean
   @Override
   public R2dbcCustomConversions r2dbcCustomConversions() {
-    // TODO implement PlacePosition converters
     List<Converter<?, ?>> converterList =
         List.of(new OrganizationRoleDaoReadConverter(), new OrganizationRoleDaoWriteConverter());
 
