@@ -14,7 +14,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.PlaceDataDto;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 import tech.gruppone.stalker.server.model.db.PlacePositionDao;
 import tech.gruppone.stalker.server.repositories.PlacePositionRepository;
@@ -29,20 +28,19 @@ public class PlacePositionService {
 
   PlacePositionRepository placePositionRepository;
 
-  public Mono<List<PlaceDataDto.GeographicalPoint>> findGeographicalPointsByPlaceId(final Long id) {
+  public Mono<List<GeographicalPoint>> findGeographicalPointsByPlaceId(final Long id) {
     return placePositionRepository
         .findById(id)
         .map(PlacePositionDao::getRawPositionJson)
         .map(this::convertRawPositionJson);
   }
 
-  public Mono<Integer> savePlacePosition(
-      final Long placeId, final List<GeographicalPoint> geographicalPoints) {
+  public Mono<Integer> save(final Long placeId, final List<GeographicalPoint> geographicalPoints) {
     log.info("saving position for place {}", placeId);
 
-    String rawPositionJson = convertGeographicalPoints(geographicalPoints);
+    final String rawPositionJson = convertGeographicalPoints(geographicalPoints);
 
-    var createdPlacePositionNumber = placePositionRepository.create(placeId, rawPositionJson);
+    final var createdPlacePositionNumber = placePositionRepository.save(placeId, rawPositionJson);
 
     createdPlacePositionNumber.subscribe(
         howMany -> log.info("if 1 then placeposition was created: {}", howMany));
@@ -50,15 +48,14 @@ public class PlacePositionService {
     return createdPlacePositionNumber;
   }
 
-  // TODO these could be private!
-  public List<GeographicalPoint> convertRawPositionJson(final String rawPositionJson) {
+  List<GeographicalPoint> convertRawPositionJson(final String rawPositionJson) {
     JsonNode coordinates;
     try {
       coordinates = jacksonObjectMapper.readTree(rawPositionJson).at("/coordinates/0");
 
       final Iterable<JsonNode> iterable = coordinates::elements;
 
-      var geographicalPoints =
+      final var geographicalPoints =
           StreamSupport.stream(iterable.spliterator(), false)
               .map(
                   node -> {
@@ -83,7 +80,7 @@ public class PlacePositionService {
     }
   }
 
-  public String convertGeographicalPoints(final List<GeographicalPoint> geographicalPoints) {
+  String convertGeographicalPoints(final List<GeographicalPoint> geographicalPoints) {
 
     JsonNode jsonNode;
     try {

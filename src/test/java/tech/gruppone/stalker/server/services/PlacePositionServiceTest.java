@@ -22,7 +22,8 @@ class PlacePositionServiceTest {
 
   @MockBean PlacePositionRepository placePositionRepository;
 
-  @Autowired private PlacePositionService placePositionService;
+  // need to autowire the objectmapper
+  @Autowired PlacePositionService placePositionService;
 
   @Test
   void testConvertRawPositionJson() {

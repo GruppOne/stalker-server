@@ -16,5 +16,5 @@ public interface PlacePositionRepository extends ReactiveCrudRepository<PlacePos
   @Modifying
   @Query(
       "INSERT INTO `PlacePosition`(`id`, `position`) VALUES (:id, ST_GeomFromGeoJSON(:rawPositionJson))")
-  Mono<Integer> create(final Long id, final String rawPositionJson);
+  Mono<Integer> save(final Long id, final String rawPositionJson);
 }
