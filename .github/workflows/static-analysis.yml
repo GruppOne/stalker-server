@@ -46,20 +46,20 @@ jobs:
 
       - name: Compile all Java code
         run: ./gradlew --console=plain --warning-mode=all --info --continue classes testClasses
-
-  lint:
-    name: Lint with Checkstyle
-    runs-on: ubuntu-18.04
-
-    steps:
-      # - uses: actions/checkout@v2
-
-      # - name: Setup JDK 11
-      #   uses: actions/setup-java@v1
-      #   with:
-      #     java-version: 11
-
-      # - name: Setup Gradle wrapper
-      #   run: ./gradlew --console=plain --warning-mode=all --info
-
-      - run: echo "nothing here (yet)"
+  #
+  # lint:
+  #   name: Lint with Checkstyle
+  #   runs-on: ubuntu-18.04
+  #
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #
+  #     - name: Setup JDK 11
+  #       uses: actions/setup-java@v1
+  #       with:
+  #         java-version: 11
+  #
+  #     - name: Setup Gradle wrapper
+  #       run: ./gradlew --console=plain --warning-mode=all --info
+  #
+  #     - run: echo "nothing here (yet)"
