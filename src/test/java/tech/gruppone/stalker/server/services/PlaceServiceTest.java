@@ -1,8 +1,5 @@
 package tech.gruppone.stalker.server.services;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,104 +18,191 @@ import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.PlaceInfo;
 import tech.gruppone.stalker.server.model.api.PlaceDto;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PlaceServiceTest {
+
+  @Mock OrganizationRepository organizationRepository;
+  @Mock PlaceRepository placeRepository;
   @Mock PlacePositionService placePositionService;
 
-  @Mock PlaceRepository placeRepository;
   @InjectMocks PlaceService placeService;
 
-  // Should find a cleaner way to set these variables across tests...
-  long id = 1L;
-  long organizationId = 11L;
-  String name = "name";
-  String polygonJson = "{\"zzz\":false}";
-  List<GeographicalPoint> polygonList = Collections.emptyList();
-  String address = "address";
-  String city = "city";
-  String zipcode = "zipcode";
-  String state = "state";
-  PlaceDao placeDao =
-      PlaceDao.builder()
-          .id(id)
-          .organizationId(organizationId)
-          .name(name)
-          .address(address)
-          .city(city)
-          .zipcode(zipcode)
-          .state(state)
-          .build();
-  PlaceDto expectedPlaceDto =
-      new PlaceDto(
-          id,
-          PlaceDataDto.builder()
-              .name(name)
-              .polygon(polygonList)
-              .placeInfo(
-                  PlaceInfo.builder()
-                      .address(address)
-                      .city(city)
-                      .zipcode(zipcode)
-                      .state(state)
-                      .build())
-              .build());
+  // Set common variables
+  final Long placeId = 1L;
+  final Long organizationId = 11L;
+  final String name = "name";
+  final String color = "#ffffff";
+  final Integer maxConcurrentUsers = 111;
+  final String polygonJson = "{\"zzz\":false}";
+  final List<GeographicalPoint> polygonList = Collections.emptyList();
+  final String address = "address";
+  final String city = "city";
+  final String zipcode = "zipcode";
+  final String state = "state";
 
   @Test
   void testFindById() {
-    when(placeRepository.findById(id)).thenReturn(Mono.just(placeDao));
+    final var placeDao =
+        PlaceDao.builder()
+            .id(placeId)
+            .organizationId(organizationId)
+            .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
+            .address(address)
+            .city(city)
+            .zipcode(zipcode)
+            .state(state)
+            .build();
 
-    final var sut = placeService.findById(id);
+    final var expectedPlaceInfo =
+        PlaceInfo.builder().address(address).city(city).zipcode(zipcode).state(state).build();
+    final var expectedPlaceDataDto =
+        PlaceDataDto.builder()
+            .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
+            .polygon(polygonList)
+            .placeInfo(expectedPlaceInfo)
+            .build();
+    final var expectedPlaceDto = new PlaceDto(placeId, expectedPlaceDataDto);
 
-    // FIXME function does not work as expected
-    sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
+    when(placeRepository.findById(placeId)).thenReturn(Mono.just(placeDao));
+    when(placePositionService.findGeographicalPointsByPlaceId(placeId))
+        .thenReturn(Mono.just(polygonList));
+
+    final var sut = placeService.findById(placeId);
+
+    StepVerifier.create(sut).expectNext(expectedPlaceDto).verifyComplete();
+
+    verify(placeRepository).findById(placeId);
+    verify(placePositionService).findGeographicalPointsByPlaceId(placeId);
   }
 
   @Test
   void testFindAllByOrganizationId() {
+    final var placeDao =
+        PlaceDao.builder()
+            .id(placeId)
+            .organizationId(organizationId)
+            .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
+            .address(address)
+            .city(city)
+            .zipcode(zipcode)
+            .state(state)
+            .build();
+
+    final var expectedPlaceInfo =
+        PlaceInfo.builder().address(address).city(city).zipcode(zipcode).state(state).build();
+    final var expectedPlaceDataDto =
+        PlaceDataDto.builder()
+            .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
+            .polygon(polygonList)
+            .placeInfo(expectedPlaceInfo)
+            .build();
+    final var expectedPlaceDto = new PlaceDto(placeId, expectedPlaceDataDto);
+
     when(placeRepository.findAllByOrganizationId(organizationId)).thenReturn(Flux.just(placeDao));
+    when(placePositionService.findGeographicalPointsByPlaceId(placeId))
+        .thenReturn(Mono.just(polygonList));
 
     final var sut = placeService.findAllByOrganizationId(organizationId);
 
-    // FIXME function does not work as expected
-    sut.as(StepVerifier::create).expectNext(expectedPlaceDto);
+    StepVerifier.create(sut).expectNext(expectedPlaceDto).verifyComplete();
+
+    verify(placeRepository).findAllByOrganizationId(organizationId);
+    verify(placePositionService).findGeographicalPointsByPlaceId(placeId);
   }
 
   @Test
-  void testSaveAll() {
-    final PlaceDao expectedPlaceDao =
-        PlaceDao.builder()
-            .id(1L)
-            .organizationId(1L)
+  void testSave() {
+    final var placeInfo =
+        PlaceInfo.builder().address(address).city(city).zipcode(zipcode).state(state).build();
+    final var placeDataDto =
+        PlaceDataDto.builder()
             .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
+            .polygon(polygonList)
+            .placeInfo(placeInfo)
+            .build();
+
+    final Long newPlaceId = 111L;
+
+    final var placeDao =
+        PlaceDao.builder()
+            .organizationId(organizationId)
+            .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
             .address(address)
             .city(city)
             .zipcode(zipcode)
             .state(state)
             .build();
 
-    final PlaceDao newPlaceDao =
-        PlaceDao.builder()
-            .organizationId(1L)
+    when(placeRepository.save(placeDao)).thenReturn(Mono.just(placeDao.withId(newPlaceId)));
+    when(placePositionService.save(newPlaceId, polygonList)).thenReturn(Mono.just(1));
+
+    // meaningless
+    when(organizationRepository.findById(organizationId)).thenReturn(Mono.empty());
+
+    final var sut = placeService.save(organizationId, placeDataDto);
+
+    StepVerifier.create(sut).expectNext(newPlaceId).verifyComplete();
+
+    verify(placeRepository).save(placeDao);
+    verify(placePositionService).save(newPlaceId, polygonList);
+    verify(organizationRepository).findById(organizationId);
+  }
+
+  @Test
+  void testUpdateById() {
+    final var placeInfo =
+        PlaceInfo.builder().address(address).city(city).zipcode(zipcode).state(state).build();
+    final var placeDataDto =
+        PlaceDataDto.builder()
             .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
+            .polygon(polygonList)
+            .placeInfo(placeInfo)
+            .build();
+
+    final Long placeId = 111L;
+
+    final var placeDao =
+        PlaceDao.builder()
+            .id(placeId)
+            .organizationId(organizationId)
+            .name(name)
+            .color(color)
+            .maxConcurrentUsers(maxConcurrentUsers)
             .address(address)
             .city(city)
             .zipcode(zipcode)
             .state(state)
             .build();
 
-    when(placeRepository.save(newPlaceDao)).thenReturn(Mono.just(expectedPlaceDao));
-    when(placePositionService.savePlacePosition(eq(id), any())).thenReturn(Mono.just(1));
+    when(placeRepository.save(placeDao)).thenReturn(Mono.just(placeDao));
+    when(placePositionService.save(placeId, polygonList)).thenReturn(Mono.just(1));
 
-    final var placeDataDtos = Flux.just(expectedPlaceDto).map(PlaceDto::getData);
+    // meaningless
+    when(organizationRepository.findById(organizationId)).thenReturn(Mono.empty());
 
-    final Flux<PlaceDao> sut = placeService.saveAll(placeDataDtos, 1L);
+    final var sut = placeService.updateById(placeId, organizationId, placeDataDto);
 
-    sut.as(StepVerifier::create).expectNext(expectedPlaceDao).verifyComplete();
+    StepVerifier.create(sut).verifyComplete();
 
-    // FIXME these should not be invoked twice!
-    verify(placeRepository, times(2)).save(newPlaceDao);
-    verify(placePositionService, times(2)).savePlacePosition(eq(id), any());
+    verify(placeRepository).save(placeDao);
+    verify(placePositionService).save(placeId, polygonList);
+    verify(organizationRepository).findById(organizationId);
   }
 }
