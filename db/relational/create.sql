@@ -6,7 +6,6 @@
 -- Creato il: Mar 16, 2020 alle 13:09
 -- Versione del server: 10.1.37-MariaDB
 -- Versione PHP: 7.2.12
--- TODO should dump this from mysql!
 
 SET
   SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -98,12 +97,11 @@ CREATE TABLE `Organization` (
   `id` int(11) NOT NULL,
   `name` varchar(75) NOT NULL,
   `description` tinytext NOT NULL,
-  `isPrivate` BOOLEAN NOT NULL DEFAULT 0,
+  `organizationType` varchar(10) NOT NULL DEFAULT "public",
   `createdDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastModifiedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
--- FIXME this should be 1 to 1 with place, not 0..1 to 1
 -- --------------------------------------------------------
 --
 -- Struttura della tabella `PlacePosition`
