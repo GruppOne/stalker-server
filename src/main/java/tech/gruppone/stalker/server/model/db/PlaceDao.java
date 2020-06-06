@@ -27,6 +27,14 @@ public class PlaceDao {
   String name;
 
   @NonNull
+  @Column("color")
+  String color;
+
+  @NonNull
+  @Column("maxConcurrentUsers")
+  Integer maxConcurrentUsers;
+
+  @NonNull
   @Column("address")
   String address;
 

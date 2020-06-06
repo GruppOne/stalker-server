@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("PlacePosition")
 public class PlacePositionDao {
 
-  // non null because this placedata's place needs to already exist when inserting
+  // non null because this PlacePosition's place needs to already exist when inserting
   @NonNull
   @Id
   @Column("id")
