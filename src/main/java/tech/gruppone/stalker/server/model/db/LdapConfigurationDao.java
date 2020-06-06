@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-// TODO refactor this
 @Value
 @Table("LdapConfiguration")
 public class LdapConfigurationDao {
@@ -14,15 +13,19 @@ public class LdapConfigurationDao {
   @Column("organizationId")
   Long organizationId;
 
-  @Column("host")
+  @Column("url")
   @NonNull
-  String host;
+  String url;
 
-  @Column("username")
+  @Column("searchQuery")
   @NonNull
-  String username;
+  String searchQuery;
 
-  @Column("password")
+  @Column("bindDn")
   @NonNull
-  String password;
+  String bindDn;
+
+  @Column("bindPassword")
+  @NonNull
+  String bindPassword;
 }
