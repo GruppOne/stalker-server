@@ -88,6 +88,7 @@ public class UserService {
         .map(this::fromTuple);
   }
 
+  // TODO move this to PasswordService
   public Mono<Void> updatePassword(
       final String oldPassword, final String newPassword, final Long userId) {
 

@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.controllers;
 
-import java.security.NoSuchAlgorithmException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -27,10 +26,12 @@ public class PasswordController {
   @PostMapping("/user/password/recovery")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> postUserPasswordRecovery(
-      @RequestBody final PostUserPasswordRecoveryRequestBody requestBody)
-      throws NoSuchAlgorithmException {
+      @RequestBody final PostUserPasswordRecoveryRequestBody requestBody) {
 
-    return passwordService.sendPasswordRecoveryEmail(requestBody.getEmail());
+    passwordService.resetPassword(requestBody.getEmail());
+
+    // this method should never throw errors, even if no users are registered with this email.
+    return Mono.empty();
   }
 
   @Value
