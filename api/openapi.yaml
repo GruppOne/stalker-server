@@ -776,6 +776,29 @@ paths:
       summary: Create an organization.
       tags:
         - web app
+  /user/anonymous:
+    post:
+      summary: Create a request for an anonymous token.
+      operationId: post-user-anonymous
+      responses:
+        '200':
+          description: 'OK. The response is an encoded JWT that contains the claim "anonymous": true and the subject field is a random UUID.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  anonymousJwt:
+                    $ref: ./model/user/EncodedJwt.v1.yaml
+                required:
+                  - anonymousJwt
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+      description: Obtain a token to be used as anonymous id in /location/update requests.
+      tags:
+        - mobile app
   /user/login:
     post:
       description: This endpoint should not have a security scheme.
