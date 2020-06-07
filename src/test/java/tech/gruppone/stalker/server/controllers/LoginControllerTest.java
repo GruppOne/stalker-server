@@ -22,7 +22,6 @@ class LoginControllerTest {
   @Autowired WebTestClient webTestClient;
 
   @MockBean UserRepository userRepository;
-
   @MockBean JwtService jwtService;
 
   @Test
@@ -55,5 +54,21 @@ class LoginControllerTest {
 
     verify(userRepository).findByEmail(email);
     verify(jwtService).createToken(userId);
+  }
+
+  @Test
+  void testPostUserAnonymous() {
+
+    when(jwtService.createAnonymousToken()).thenReturn("not.really.a-jwt");
+
+    webTestClient
+        .post()
+        .uri("/user/anonymous")
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectBody()
+        .jsonPath("$.anonymousJwt")
+        .exists();
   }
 }

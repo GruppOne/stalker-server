@@ -59,4 +59,20 @@ public class JwtService {
         .signWith(jwtConfiguration.getEncodedKey())
         .compact();
   }
+
+  public String createAnonymousToken() {
+    Date issuedAt = Date.from(Instant.now(clock));
+    Date expirationAt =
+        new Date(
+            issuedAt.getTime() + Long.parseLong(jwtConfiguration.getExpirationTime()) * 1000000);
+
+    // no jti field because the spec says it's optional
+    return Jwts.builder()
+        .setSubject(UUID.randomUUID().toString())
+        .setIssuedAt(issuedAt)
+        .setExpiration(expirationAt)
+        .claim("anonymous", true)
+        .signWith(jwtConfiguration.getEncodedKey())
+        .compact();
+  }
 }
