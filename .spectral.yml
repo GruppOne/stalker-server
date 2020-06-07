@@ -110,6 +110,9 @@ except:
     - required-not-found-response
   'api/openapi.yaml#/paths/~1users/get/responses':
     - required-not-found-response
+  'api/openapi.yaml#/paths/~1user~1anonymous/post/responses':
+    - required-bad-request-response
+    - required-forbidden-response
   'api/openapi.yaml#/paths/~1user~1login/post/responses':
     - required-bad-request-response
     - required-forbidden-response
