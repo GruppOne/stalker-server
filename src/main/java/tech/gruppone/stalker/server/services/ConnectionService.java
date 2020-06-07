@@ -77,6 +77,6 @@ public class ConnectionService {
       }
     }
 
-    return connectionRepository.deleteUserConnection(userId, organizationId);
+    return connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId).then();
   }
 }
