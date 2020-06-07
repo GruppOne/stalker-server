@@ -41,7 +41,7 @@ public class PlaceController {
       @PathVariable("organizationId") final long organizationId,
       @PathVariable("placeId") final long placeId) {
 
-    return placeService.findById(placeId);
+    return placeService.findById(placeId, organizationId);
   }
 
   @PutMapping

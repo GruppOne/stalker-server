@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -58,9 +59,11 @@ public class PlaceService {
     return new PlaceDto(id, placeDataDto);
   }
 
-  public Mono<PlaceDto> findById(final long id) {
+  public Mono<PlaceDto> findById(final long id, final long organizationId) {
     return placeRepository
         .findById(id)
+        .filter(place -> place.getOrganizationId().equals(organizationId))
+        .switchIfEmpty(Mono.error(NotFoundException::new))
         .zipWith(placePositionService.findGeographicalPointsByPlaceId(id))
         .map(this::fromTuple);
   }

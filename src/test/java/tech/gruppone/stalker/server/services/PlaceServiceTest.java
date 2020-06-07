@@ -74,7 +74,7 @@ class PlaceServiceTest {
     when(placePositionService.findGeographicalPointsByPlaceId(placeId))
         .thenReturn(Mono.just(polygonList));
 
-    final var sut = placeService.findById(placeId);
+    final var sut = placeService.findById(placeId, organizationId);
 
     StepVerifier.create(sut).expectNext(expectedPlaceDto).verifyComplete();
 
