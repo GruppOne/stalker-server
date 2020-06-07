@@ -3,21 +3,29 @@ package tech.gruppone.stalker.server.controllers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.ApplicationTestConfiguration;
+import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
+import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
+import tech.gruppone.stalker.server.model.db.PlaceDao;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
-import tech.gruppone.stalker.server.services.PlaceService;
+import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @Tag("integrationTest")
+@Import(ApplicationTestConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationControllerTest {
 
@@ -26,12 +34,36 @@ class OrganizationControllerTest {
   @Autowired private WebTestClient webTestClient;
 
   @MockBean private OrganizationRepository organizationRepository;
-  @MockBean private PlaceService placeService;
+  @MockBean private PlaceRepository placeRepository;
+
+  // set some common variables
+  final long organizationId = 1L;
+
+  // place related variables
+  final Long placeId = 11L;
+  final String placeName = "placeName";
+  final String color = "color";
+  final String address = "address";
+  final String city = "city";
+  final String zipcode = "zipcode";
+  final String state = "state";
+  final PlaceDao place =
+      PlaceDao.builder()
+          .id(placeId)
+          .organizationId(organizationId)
+          .name(placeName)
+          .color(color)
+          .maxConcurrentUsers(111)
+          .address(address)
+          .city(city)
+          .zipcode(zipcode)
+          .state(state)
+          .build();
+  final List<Long> placeIds = List.of(placeId);
 
   @Test
   void testGetOrganizationById() {
 
-    final var organizationId = 1L;
     final var name = "name";
     final var description = "description";
 
@@ -45,7 +77,7 @@ class OrganizationControllerTest {
             .build();
 
     when(organizationRepository.findById(organizationId)).thenReturn(Mono.just(organizationDao));
-    when(placeService.findAllByOrganizationId(organizationId)).thenReturn(Flux.empty());
+    when(placeRepository.findAllByOrganizationId(organizationId)).thenReturn(Flux.just(place));
 
     webTestClient
         .get()
@@ -60,41 +92,79 @@ class OrganizationControllerTest {
         .isEqualTo(name)
         .jsonPath("$.data.description")
         .isEqualTo(description)
-        .jsonPath("$.data.places")
-        .isArray();
+        .jsonPath("$.placeIds")
+        .isArray()
+        .jsonPath("$.placeIds[0]")
+        .isEqualTo(placeId)
+        .jsonPath("$.placeIds[1]")
+        .doesNotExist();
 
     verify(organizationRepository).findById(organizationId);
+    verify(placeRepository).findAllByOrganizationId(organizationId);
   }
 
   @Test
   void testPutOrganizationById() {
+    final var newName = "newName";
+    final var newDescription = "newDescription";
+    final var organizationType = "public";
 
-    final long organizationId = 1L;
+    final var organizationDataDto =
+        OrganizationDataDto.builder()
+            .name(newName)
+            .description(newDescription)
+            .organizationType(organizationType)
+            .creationDateTime(Timestamp.valueOf(LOCAL_DATETIME))
+            .lastChangeDateTime(Timestamp.valueOf(LOCAL_DATETIME))
+            .build();
+
+    final var organizationDto =
+        OrganizationDto.builder()
+            .id(organizationId)
+            .data(organizationDataDto)
+            .placeIds(List.of())
+            .build();
+
+    final var updatedOrganization =
+        OrganizationDao.builder()
+            .id(organizationId)
+            .name(newName)
+            .description(newDescription)
+            .organizationType(organizationType)
+            .createdDate(LOCAL_DATETIME)
+            .lastModifiedDate(ApplicationTestConfiguration.FIXED_LOCAL_DATE_TIME)
+            .build();
+
+    when(organizationRepository.save(updatedOrganization))
+        .thenReturn(Mono.just(updatedOrganization));
 
     webTestClient
         .put()
         .uri("/organization/{organizationId}", organizationId)
+        .body(Mono.just(organizationDto), OrganizationDto.class)
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+        .isNoContent();
+
+    verify(organizationRepository).save(updatedOrganization);
   }
 
   @Test
   void testDeleteOrganizationById() {
-    final long organizationId = 1L;
+    when(organizationRepository.deleteById(organizationId)).thenReturn(Mono.empty());
 
     webTestClient
         .delete()
         .uri("/organization/{organizationId}", organizationId)
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+        .isNoContent();
+
+    verify(organizationRepository).deleteById(organizationId);
   }
 
   @Test
   void testGetOrganizationByIdUsersInside() {
-    final long organizationId = 1L;
-
     webTestClient
         .get()
         .uri("/organization/{organizationId}/users/inside", organizationId)
