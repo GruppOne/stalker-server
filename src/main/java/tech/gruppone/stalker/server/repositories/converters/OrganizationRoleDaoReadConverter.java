@@ -11,7 +11,7 @@ import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 public class OrganizationRoleDaoReadConverter implements Converter<Row, OrganizationRoleDao> {
 
   public OrganizationRoleDao convert(Row source) {
-    // TODO handle enum in a humane way
+    // should find a way to handle enums in a humane way
     final Integer roleKey = source.get("administratorType", Integer.class);
     final AdministratorType administratorType = AdministratorType.values()[roleKey - 1];
 

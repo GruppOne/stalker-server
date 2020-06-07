@@ -1,6 +1,5 @@
 package tech.gruppone.stalker.server.services;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -91,11 +90,13 @@ public class PasswordService {
     }
 
     final byte[] messageDigest = md.digest(password.getBytes());
-    final BigInteger no = new BigInteger(1, messageDigest);
-    String hashtext = no.toString(16);
-    while (hashtext.length() < 32) hashtext = "0" + hashtext;
+    final StringBuilder stringBuilder = new StringBuilder();
 
-    return hashtext;
+    for (int i = 0; i < messageDigest.length; i++) {
+      stringBuilder.append(Integer.toString((messageDigest[i] & 0xff) + 0x100, 16).substring(1));
+    }
+
+    return stringBuilder.toString();
   }
 
   // careful: not mockable

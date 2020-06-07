@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.sql.SqlIdentifier;
 import tech.gruppone.stalker.server.model.AdministratorType;
 import tech.gruppone.stalker.server.model.db.OrganizationRoleDao;
 
-public class OrganizationRoleDaoWriteConverterTest {
+class OrganizationRoleDaoWriteConverterTest {
   private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
 
   @Test

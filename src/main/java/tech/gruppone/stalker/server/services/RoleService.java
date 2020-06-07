@@ -51,7 +51,6 @@ public class RoleService {
 
   public Mono<Void> update(
       final long organizationId, final long userId, final AdministratorType modifiedRole) {
-    // TODO can we avoid the db round trip?
 
     return organizationRoleRepository
         .findByOrganizationIdAndUserId(organizationId, userId)

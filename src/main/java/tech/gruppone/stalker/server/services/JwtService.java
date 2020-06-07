@@ -20,8 +20,6 @@ public class JwtService {
   Clock clock;
   JwtConfiguration jwtConfiguration;
 
-  // TODO should probably move the following methods to a separate class called JwtTokenService
-
   // public Claims getJWTString(String token) {
   //   return Jwts.parserBuilder()
   //       .setSigningKey(getEncodedKey())

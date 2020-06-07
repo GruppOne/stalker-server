@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -22,12 +23,11 @@ class ConnectionControllerTest {
   @Autowired WebTestClient webTestClient;
 
   @MockBean ConnectionRepository connectionRepository;
+  final long userId = 1L;
+  final long organizationId = 1L;
 
   @Test
   void testPostUserByIdOrganizationByIdConnection() {
-
-    final long userId = 1L;
-    final long organizationId = 1L;
 
     final var connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
@@ -46,10 +46,27 @@ class ConnectionControllerTest {
   }
 
   @Test
-  void testPostUserByIdOrganizationByIdConnectionWithRequestBody() {
+  void testPostUserByIdOrganizationByIdConnectionExistingConnection() {
 
-    final long userId = 1L;
-    final long organizationId = 1L;
+    final var connectionDao =
+        ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
+
+    when(connectionRepository.save(connectionDao))
+        .thenReturn(Mono.error(new DataIntegrityViolationException("message")));
+
+    webTestClient
+        .post()
+        .uri("/user/{userId}/organization/{organizationId}/connection", userId, organizationId)
+        .exchange()
+        .expectStatus()
+        .isBadRequest();
+
+    // checks that the mock method has been called with the given parameters
+    verify(connectionRepository).save(connectionDao);
+  }
+
+  @Test
+  void testPostUserByIdOrganizationByIdConnectionWithRequestBody() {
 
     final String rdn = "rdn";
     final String ldapPassword = "ldapPassword";
@@ -67,8 +84,6 @@ class ConnectionControllerTest {
 
   @Test
   void testDeleteUserByIdOrganizationByIdConnection() {
-    final long userId = 1L;
-    final long organizationId = 1L;
 
     when(connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId))
         .thenReturn(Mono.empty());

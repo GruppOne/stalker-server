@@ -82,15 +82,6 @@ public class PlacePositionService {
   }
 
   String convertGeographicalPoints(final List<GeographicalPoint> geographicalPoints) {
-
-    // JsonNode jsonNode;
-    // try {
-    //   final String baseJson = "{\"type\": \"Polygon\", \"coordinates\": [[]]}";
-    //   jsonNode = jacksonObjectMapper.readTree(baseJson);
-    // } catch (final JsonProcessingException e) {
-    //   jsonNode = jacksonObjectMapper.createObjectNode();
-    // }
-
     final ObjectNode jsonNode = jacksonObjectMapper.createObjectNode().put("type", "Polygon");
     final ArrayNode externalCoordinates = jsonNode.putArray("coordinates");
     final ArrayNode innerCoordinates = jacksonObjectMapper.createArrayNode();
@@ -100,8 +91,6 @@ public class PlacePositionService {
     if (geographicalPoints.isEmpty()) {
       return jsonNode.toString();
     }
-
-    // final ArrayNode innerCoordinates = (ArrayNode) jsonNode.get("coordinates").get(0);
 
     final var first = geographicalPoints.get(0);
     final var last = geographicalPoints.get(geographicalPoints.size() - 1);

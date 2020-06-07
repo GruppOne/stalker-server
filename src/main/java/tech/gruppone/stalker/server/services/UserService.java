@@ -12,7 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
-import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
@@ -86,23 +85,6 @@ public class UserService {
         .findById(userId)
         .zipWith(userDataRepository.findById(userId))
         .map(this::fromTuple);
-  }
-
-  // TODO move this to PasswordService
-  public Mono<Void> updatePassword(
-      final String oldPassword, final String newPassword, final Long userId) {
-
-    if (newPassword.isBlank()) {
-      // TODO this exception being thrown by the endpoint is not documented in the API
-      return Mono.error(BadRequestException::new);
-    }
-
-    return userRepository
-        .findById(userId)
-        .filter(userDao -> userDao.getPassword().equals(oldPassword))
-        .switchIfEmpty(Mono.error(NotFoundException::new))
-        .flatMap(userDao -> userRepository.save(userDao.withPassword(newPassword)))
-        .then();
   }
 
   public Mono<Void> updateUserById(final UserDataDto userDataDto, final Long userId) {
