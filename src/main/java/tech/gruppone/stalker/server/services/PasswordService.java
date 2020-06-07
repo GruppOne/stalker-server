@@ -14,6 +14,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.exceptions.BadRequestException;
+import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Log4j2
@@ -25,6 +28,21 @@ public class PasswordService {
   JavaMailSender javaMailSender;
 
   UserRepository userRepository;
+
+  public Mono<Void> updatePassword(
+      final String oldPassword, final String newPassword, final Long userId) {
+
+    if (newPassword.isBlank()) {
+      return Mono.error(BadRequestException::new);
+    }
+
+    return userRepository
+        .findById(userId)
+        .filter(userDao -> userDao.getPassword().equals(oldPassword))
+        .switchIfEmpty(Mono.error(NotFoundException::new))
+        .flatMap(userDao -> userRepository.save(userDao.withPassword(newPassword)))
+        .then();
+  }
 
   public void resetPassword(final String userEmail) {
     final String newPassword = generateRandomSecurePassword();

@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.services.PasswordService;
-import tech.gruppone.stalker.server.services.UserService;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 public class PasswordController {
   PasswordService passwordService;
-  UserService userService;
 
   @PostMapping("/user/password/recovery")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -45,7 +43,7 @@ public class PasswordController {
       @RequestBody final PutUserByIdPasswordRequestBody requestBody,
       @PathVariable final Long userId) {
 
-    return userService.updatePassword(
+    return passwordService.updatePassword(
         requestBody.getOldPassword(), requestBody.getNewPassword(), userId);
   }
 
