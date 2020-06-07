@@ -119,7 +119,7 @@ CREATE TABLE `PlacePosition` (
 CREATE TABLE `Place` (
   `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `color` varchar(9) NOT NULL,
   `maxConcurrentUsers` int NOT NULL,
   `address` varchar(150) NOT NULL,
