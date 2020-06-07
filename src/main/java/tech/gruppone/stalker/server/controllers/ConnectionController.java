@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.db.ConnectionDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
@@ -42,12 +44,19 @@ public class ConnectionController {
       return Mono.error(NotImplementedException::new);
     }
 
-    // FIXME controllers should not know daos
     final ConnectionDao connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 
-    // TODO should throw BadRequestException if connection is already present.
-    return connectionRepository.save(connectionDao).then();
+    return connectionRepository
+        .save(connectionDao)
+        .onErrorMap(
+            DataIntegrityViolationException.class,
+            error -> {
+              log.error(error.getMessage());
+
+              return new BadRequestException();
+            })
+        .then();
   }
 
   @DeleteMapping

@@ -111,7 +111,6 @@ public class PlaceService {
                     // update organization lastModified field after insert is successful
                     .then(updateOrganizationLastModified(organizationId))
                     .subscribe())
-        // .doOnNext( rowsUpdated -> updateOrganizationLastModified(organizationId))
         .map(PlaceDao::getId);
   }
 

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.configuration.JwtConfiguration;
-import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
+import tech.gruppone.stalker.server.exceptions.InvalidUserCredentialsException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
@@ -29,7 +29,7 @@ class LoginServiceTest {
   void testLogUser() {
     // Arrange
     final Long id = 1L;
-    final String email = "mario@gmail.com";
+    final String email = "email@email.email";
     final String password =
         "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2352";
 
@@ -53,7 +53,7 @@ class LoginServiceTest {
   void testLogUserWithWrongPassword() {
     // Arrange
     final Long id = 1L;
-    final String email = "mario@gmail.com";
+    final String email = "email@email.email";
     final String savedPassword =
         "f853a81c51cdc3b75d5af43379965c56ff55a6fcf67d7cbc5daca8e1f7db01df46b768a35d8e472abda7a9ecc5bc46da4d56c4c85658ebd3557d6d08225a2351";
     final String wrongPassword =
@@ -68,6 +68,6 @@ class LoginServiceTest {
     final Mono<String> sut = loginService.login(loginData.getEmail(), loginData.getPassword());
 
     // Assert
-    StepVerifier.create(sut).expectError(UnauthorizedException.class).verify();
+    StepVerifier.create(sut).expectError(InvalidUserCredentialsException.class).verify();
   }
 }

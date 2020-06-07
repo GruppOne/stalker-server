@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.exceptions.UnauthorizedException;
-import tech.gruppone.stalker.server.model.db.UserDao;
+import tech.gruppone.stalker.server.exceptions.InvalidUserCredentialsException;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Service
@@ -18,16 +17,11 @@ public class LoginService {
   JwtService jwtService;
 
   public Mono<String> login(final String email, final String password) {
-    final Mono<UserDao> userDao = userRepository.findByEmail(email);
-    return userDao
-        .switchIfEmpty(Mono.error(new UnauthorizedException()))
-        .handle(
-            (user, sink) -> {
-              if (!password.equals(user.getPassword())) {
-                sink.error(new UnauthorizedException());
-              } else {
-                sink.next(jwtService.createToken(user.getId()));
-              }
-            });
+
+    return userRepository
+        .findByEmail(email)
+        .filter(user -> user.getPassword().equals(password))
+        .switchIfEmpty(Mono.error(InvalidUserCredentialsException::new))
+        .map(user -> jwtService.createToken(user.getId()));
   }
 }

@@ -24,7 +24,7 @@ import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @Import(ApplicationTestConfiguration.class)
 @SpringBootTest
-public class OrganizationServiceTest {
+class OrganizationServiceTest {
 
   @MockBean OrganizationRepository organizationRepository;
   @MockBean PlaceRepository placeRepository;
