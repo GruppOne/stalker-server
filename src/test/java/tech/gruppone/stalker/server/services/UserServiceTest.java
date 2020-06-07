@@ -301,7 +301,7 @@ class UserServiceTest {
             .lastName(oldLastName)
             .birthDate(birthDate)
             .createdDate(creationDateTime)
-            .lastModifiedDate(ApplicationTestConfiguration.FIXED_LOCAL_DATE_TIME)
+            .lastModifiedDate(creationDateTime)
             .build();
 
     // modify firstName and lastName

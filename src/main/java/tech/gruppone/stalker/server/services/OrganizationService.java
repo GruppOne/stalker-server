@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
-import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
@@ -31,7 +30,7 @@ public class OrganizationService {
   // TODO will need to merge organization with ldapconfiguration when implementing private orgs
   private OrganizationDto fromTuple(final Tuple2<OrganizationDao, List<Long>> tuple) {
     final var organization = tuple.getT1();
-    final var placeIds = tuple.getT2();
+    final List<Long> placeIds = tuple.getT2();
 
     final Long id = organization.getId();
     final String name = organization.getName();
@@ -49,7 +48,7 @@ public class OrganizationService {
             .lastChangeDateTime(lastChangeDateTime)
             .build();
 
-    return new OrganizationDto(id, organizationData, placeIds);
+    return OrganizationDto.builder().id(id).data(organizationData).placeIds(placeIds).build();
   }
 
   public Flux<OrganizationDto> findAll() {
@@ -104,16 +103,10 @@ public class OrganizationService {
     final OrganizationDao updatedOrganization =
         fromDataDtoWithoutDates(organizationDataDto)
             .withId(id)
+            .withCreatedDate(organizationDataDto.getCreationDateTime().toLocalDateTime())
             .withLastModifiedDate(LocalDateTime.now(clock));
     // TODO update ldapconfiguration if needed
 
-    return organizationRepository
-        .findById(id)
-        .switchIfEmpty(Mono.error(NotFoundException::new))
-        .flatMap(
-            oldOrganization ->
-                organizationRepository.save(
-                    updatedOrganization.withCreatedDate(oldOrganization.getCreatedDate())))
-        .then();
+    return organizationRepository.save(updatedOrganization).then();
   }
 }
