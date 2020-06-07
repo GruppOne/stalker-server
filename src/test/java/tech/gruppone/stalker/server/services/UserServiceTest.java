@@ -15,8 +15,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.ApplicationTestConfiguration;
-import tech.gruppone.stalker.server.exceptions.BadRequestException;
-import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.api.UserDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
@@ -202,70 +200,6 @@ class UserServiceTest {
 
     verify(userRepository).findById(userId);
     verify(userDataRepository).findById(userId);
-  }
-
-  @Test
-  void testUpdatePassword() {
-    // ARRANGE
-    final long userId = 1L;
-    final String email = "email@email.email";
-    final String oldPassword = "oldPassword";
-    final String newPassword = "newPassword";
-
-    final UserDao oldUserDao =
-        UserDao.builder().id(userId).email(email).password(oldPassword).build();
-    final UserDao newUserDao =
-        UserDao.builder().id(userId).email(email).password(newPassword).build();
-    ;
-
-    when(userRepository.findById(userId)).thenReturn(Mono.just(oldUserDao));
-    when(userRepository.save(newUserDao)).thenReturn(Mono.just(newUserDao));
-
-    // ACT
-    final Mono<Void> sut = userService.updatePassword(oldPassword, newPassword, userId);
-
-    // ASSERT
-    sut.as(StepVerifier::create).verifyComplete();
-
-    verify(userRepository).findById(userId);
-    verify(userRepository).save(newUserDao);
-  }
-
-  @Test
-  void testUpdatePasswordWrongOldPassword() {
-    // ARRANGE
-    final long userId = 1L;
-    final String email = "email@email.email";
-    final String wrongOldPassword = "wrongOldPassword";
-    final String savedOldPassword = "savedOldPassword";
-    final String newPassword = "newPassword";
-
-    final UserDao oldUserDao =
-        UserDao.builder().id(userId).email(email).password(savedOldPassword).build();
-
-    when(userRepository.findById(userId)).thenReturn(Mono.just(oldUserDao));
-
-    // ACT
-    final Mono<Void> sut = userService.updatePassword(wrongOldPassword, newPassword, userId);
-
-    // ASSERT
-    sut.as(StepVerifier::create).expectError(NotFoundException.class).verify();
-
-    verify(userRepository).findById(userId);
-  }
-
-  @Test
-  void testUpdatePasswordBlankNewPassword() {
-    // ARRANGE
-    final long userId = 1L;
-    final String oldPassword = "oldPassword";
-    final String newPassword = "";
-
-    // ACT
-    final Mono<Void> sut = userService.updatePassword(oldPassword, newPassword, userId);
-
-    // ASSERT
-    sut.as(StepVerifier::create).expectError(BadRequestException.class).verify();
   }
 
   @Test
