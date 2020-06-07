@@ -1,7 +1,10 @@
 package tech.gruppone.stalker.server.configuration;
 
 import java.util.concurrent.TimeUnit;
-
+import lombok.NonNull;
+import lombok.experimental.NonFinal;
+import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.LogLevel;
@@ -12,11 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
-
-import lombok.NonNull;
-import lombok.experimental.NonFinal;
-import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 
 @Log4j2
 @Configuration
@@ -46,7 +44,7 @@ public class InfluxDbConfiguration {
 
   // FIXME fails silently when connection cannot be established
   // TODO handle errors when establishing the connection. maybe add spring retry?
-  @Bean(name="influxDbConnection",destroyMethod = "close")
+  @Bean(name = "influxDbConnection", destroyMethod = "close")
   public InfluxDB getInfluxDBConnection() {
     log.info("creating connection to InfluxDB {} on db {}", url, database);
 
@@ -75,5 +73,4 @@ public class InfluxDbConfiguration {
   public InfluxDBMapper getInfluxDBMapper(InfluxDB influxDB) {
     return new InfluxDBMapper(influxDB);
   }
-
 }

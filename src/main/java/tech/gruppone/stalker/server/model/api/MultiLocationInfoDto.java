@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+// TODO check if it works as expected
 @Builder
 @Value
 public class MultiLocationInfoDto {
