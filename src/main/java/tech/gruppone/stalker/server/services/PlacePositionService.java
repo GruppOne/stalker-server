@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import java.util.Collections;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -52,57 +52,64 @@ public class PlacePositionService {
     JsonNode coordinates;
     try {
       coordinates = jacksonObjectMapper.readTree(rawPositionJson).at("/coordinates/0");
-
-      final Iterable<JsonNode> iterable = coordinates::elements;
-
-      final var geographicalPoints =
-          StreamSupport.stream(iterable.spliterator(), false)
-              .map(
-                  node -> {
-                    final double latitude = Double.parseDouble(node.get(0).asText());
-                    final double longitude = Double.parseDouble(node.get(1).asText());
-
-                    return new GeographicalPoint(latitude, longitude);
-                  })
-              .collect(Collectors.toList());
-
-      // drop last point if list is not empty. I don't know if a single-point polygon is allowed by
-      // the GeoJSON spec
-      if (geographicalPoints.size() > 1) {
-        geographicalPoints.remove(geographicalPoints.size() - 1);
-      }
-
-      return geographicalPoints;
     } catch (final JsonProcessingException e) {
       log.error(e.getMessage());
 
-      return Collections.emptyList();
+      return List.of();
     }
+
+    final Iterable<JsonNode> iterable = coordinates::elements;
+
+    final var geographicalPoints =
+        StreamSupport.stream(iterable.spliterator(), false)
+            .sequential()
+            .map(
+                node -> {
+                  final double latitude = Double.parseDouble(node.get(0).asText());
+                  final double longitude = Double.parseDouble(node.get(1).asText());
+
+                  return new GeographicalPoint(latitude, longitude);
+                })
+            .collect(Collectors.toList());
+
+    // drop last point if list is not empty.
+    // I don't know if a single-point polygon is allowed by the GeoJSON spec.
+    if (geographicalPoints.size() > 1) {
+      geographicalPoints.remove(geographicalPoints.size() - 1);
+    }
+
+    return geographicalPoints;
   }
 
   String convertGeographicalPoints(final List<GeographicalPoint> geographicalPoints) {
 
-    JsonNode jsonNode;
-    try {
-      final String baseJson = "{\"type\": \"Polygon\", \"coordinates\": [[]]}";
-      jsonNode = jacksonObjectMapper.readTree(baseJson);
-    } catch (final JsonProcessingException e) {
-      jsonNode = jacksonObjectMapper.createObjectNode();
-    }
+    // JsonNode jsonNode;
+    // try {
+    //   final String baseJson = "{\"type\": \"Polygon\", \"coordinates\": [[]]}";
+    //   jsonNode = jacksonObjectMapper.readTree(baseJson);
+    // } catch (final JsonProcessingException e) {
+    //   jsonNode = jacksonObjectMapper.createObjectNode();
+    // }
+
+    final ObjectNode jsonNode = jacksonObjectMapper.createObjectNode().put("type", "Polygon");
+    final ArrayNode externalCoordinates = jsonNode.putArray("coordinates");
+    final ArrayNode innerCoordinates = jacksonObjectMapper.createArrayNode();
+
+    externalCoordinates.add(innerCoordinates);
 
     if (geographicalPoints.isEmpty()) {
       return jsonNode.toString();
     }
 
-    final ArrayNode innerCoordinates = (ArrayNode) jsonNode.get("coordinates").get(0);
+    // final ArrayNode innerCoordinates = (ArrayNode) jsonNode.get("coordinates").get(0);
 
     final var first = geographicalPoints.get(0);
     final var last = geographicalPoints.get(geographicalPoints.size() - 1);
 
-    if (!first.equals(last)) {
-      geographicalPoints.add(new GeographicalPoint(first.getLatitude(), first.getLongitude()));
+    if (first.getLatitude() == last.getLatitude() && first.getLongitude() == last.getLongitude()) {
+      log.info("the last polygon point is already equal to the first point.");
     } else {
-      log.info("the last polygon point was already present.");
+      geographicalPoints.add(new GeographicalPoint(first.getLatitude(), first.getLongitude()));
     }
 
     geographicalPoints.stream()
