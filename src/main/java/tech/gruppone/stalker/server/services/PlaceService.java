@@ -109,7 +109,9 @@ public class PlaceService {
                 placePositionService
                     .save(createdPlace.getId(), polygon)
                     // update organization lastModified field after insert is successful
-                    .then(updateOrganizationLastModified(organizationId)))
+                    .then(updateOrganizationLastModified(organizationId))
+                    .subscribe())
+        // .doOnNext( rowsUpdated -> updateOrganizationLastModified(organizationId))
         .map(PlaceDao::getId);
   }
 
