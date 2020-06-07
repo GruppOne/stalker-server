@@ -12,9 +12,8 @@ properties:
   userId:
     oneOf:
       - $ref: ./GenericId.v1.yaml
-      - type: boolean
-        enum:
-          - false
+      - type: string
+    description: "Either an user's id or a random UUID. Discriminated by the property userType."
   inside:
     type: boolean
   placeIds:
@@ -23,6 +22,7 @@ properties:
       $ref: ./GenericId.v1.yaml
 required:
   - timestamp
+  - userType
   - userId
   - inside
   - placeIds

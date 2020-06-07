@@ -782,7 +782,7 @@ paths:
       operationId: post-user-anonymous
       responses:
         '200':
-          description: 'OK. The response is an encoded JWT that contains the claim "anonymous": true and the subject field is a random UUID.'
+          description: 'OK. The response is an encoded JWT that contains the claim "anonymous": true and a random UUID in the subject field.'
           content:
             application/json:
               schema:
