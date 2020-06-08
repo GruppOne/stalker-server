@@ -114,7 +114,9 @@ VALUES
 -- Dump dei dati per la tabella `LdapConfiguration`
 --
 
-INSERT INTO `LdapConfiguration` (`organizationId`, `host`, `username`, `password`) VALUES
-(3, 'localhost', 'cn=user,dc=stalker,dc=intern', 'user_temp_password_to_crypt');
+-- INSERT INTO `LdapConfiguration` (`organizationId`, `host`, `username`, `password`) VALUES
+-- (3, 'localhost', 'cn=user,dc=stalker,dc=intern', 'user_temp_password_to_crypt');
+--
+-- BAD VALUES: INSERT THEM IN RIGHT WAY
 
 COMMIT;
