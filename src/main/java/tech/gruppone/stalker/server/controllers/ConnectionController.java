@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.LdapConfigurationDto;
-import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 import tech.gruppone.stalker.server.services.ConnectionService;
 
 @Log4j2
@@ -21,7 +24,6 @@ import tech.gruppone.stalker.server.services.ConnectionService;
 @RequestMapping("/user/{userId}/organization/{organizationId}/connection")
 public class ConnectionController {
 
-  ConnectionRepository connectionRepository;
   ConnectionService connectionService;
 
   @PostMapping
@@ -41,6 +43,13 @@ public class ConnectionController {
     // }
 
     // return connectionService.createUserConnection(ldap, userId, organizationId);
+
+    // // FIXME controllers should not know daos
+    // final ConnectionDao connectionDao =
+    //     ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
+
+    // // TODO should throw BadRequestException if connection is already present.
+    // return connectionRepository.save(connectionDao).then();
   }
 
   @DeleteMapping
