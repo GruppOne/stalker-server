@@ -102,7 +102,7 @@
     },
     {
       "label": "bootRun - run spring boot application",
-      "command": "./gradlew bootRun --info",
+      "command": "./gradlew bootRun",
       "presentation": {
         "reveal": "always",
       },
@@ -114,7 +114,13 @@
     {
       "label": "compose up rdb and rdb-gui",
       "type": "shell",
-      "command": "docker-compose up -d rdb rdb-gui && docker-compose logs -f rdb",
+      "command": "docker-compose up --build --force-recreate -d rdb rdb-gui && docker-compose logs -f rdb",
+      "group": "build",
+    },
+    {
+      "label": "compose up tsdb and tsdb-gui",
+      "type": "shell",
+      "command": "docker-compose up --build --force-recreate -d tsdb tsdb-gui && docker-compose logs -f tsdb",
       "group": "build",
     },
     {
@@ -127,12 +133,7 @@
         "focus": true,
       },
       "group": "build",
-    },
-    {
-      "label": "compose down then up rdb and rdb-gui",
-      "type": "shell",
-      "command": "docker-compose down --remove-orphans --volumes --rmi local && docker-compose up -d rdb-gui && docker-compose up rdb",
-    },
+    }
   ],
   "inputs": [
     {
