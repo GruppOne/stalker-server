@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.model.api.LdapConfigurationDto;
 import tech.gruppone.stalker.server.services.ConnectionService;
 
 @Log4j2
@@ -28,10 +27,13 @@ public class ConnectionController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<Void> createUserConnection(
-      @RequestBody LdapConfigurationDto ldap,
-      @PathVariable("userId") long userId,
-      @PathVariable("organizationId") long organizationId) {
+  public Mono<Void> postUserByIdOrganizationByIdConnection(
+    @RequestBody PostUserByIdOrganizationByIdConnectionBody ldap,
+    @PathVariable("userId") long userId,
+    @PathVariable("organizationId") long organizationId) {
+      // @PathVariable("userId") final long userId,
+      // @PathVariable("organizationId") final long organizationId,
+      // @RequestBody(required = false) final PostUserByIdOrganizationByIdConnectionBody requestBody) {
 
     return connectionService.createUserConnection(ldap, userId, organizationId);
 
@@ -54,8 +56,14 @@ public class ConnectionController {
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> deleteUserConnectionToOrganization(
-      @PathVariable("userId") long userId, @PathVariable("organizationId") long organizationId) {
+  public Mono<Void> deleteUserByIdOrganizationByIdConnection(
+      @PathVariable("userId") final long userId,
+      @PathVariable("organizationId") final long organizationId) {
+    return connectionService.deleteUserConnection(userId, organizationId);
+  }
+
+  @Value
+  public static class PostUserByIdOrganizationByIdConnectionBody {
 
     return connectionService.deleteUserConnection(userId, organizationId);
   }

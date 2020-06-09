@@ -30,10 +30,11 @@ START TRANSACTION;
 -- Dump dei dati per la tabella `organizations`
 --
 
-INSERT INTO `Organization` (`name`, `description`) VALUES
-('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software'),
-('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️'),
-('Organizzazione di test Ldap', 'Test Ldap');
+INSERT INTO `Organization` (`name`, `description`, `organizationType`, `createdDate`) VALUES
+('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software', 'public', '2020-01-01 00:01:01'),
+('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️', 'public', '2020-01-01 00:01:01'),
+('Organizzazione di test Ldap', 'Test Ldap', 'private', '2020-01-01 00:01:01');
+
 --
 -- Dump dei dati per la tabella `place`
 --
@@ -114,9 +115,7 @@ VALUES
 -- Dump dei dati per la tabella `LdapConfiguration`
 --
 
--- INSERT INTO `LdapConfiguration` (`organizationId`, `host`, `username`, `password`) VALUES
--- (3, 'localhost', 'cn=user,dc=stalker,dc=intern', 'user_temp_password_to_crypt');
---
--- BAD VALUES: INSERT THEM IN RIGHT WAY
+INSERT INTO `LdapConfiguration` (`organizationId`, `url`, `bindDn`, `bindPassword`) VALUES
+(3, 'localhost', 'cn=user,dc=stalker,dc=intern', 'user_temp_password_to_crypt');
 
 COMMIT;
