@@ -27,5 +27,4 @@ public interface ConnectionRepository extends ReactiveCrudRepository<ConnectionD
   @Query("DELETE FROM Connection WHERE userId = :userId AND organizationId = :organizationId")
   Mono<Void> deleteByUserIdAndOrganizationId(
       @Param("userId") long userId, @Param("organizationId") long organizationId);
-
 }
