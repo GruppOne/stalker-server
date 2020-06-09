@@ -10,6 +10,7 @@ import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import tech.gruppone.stalker.server.controllers.ConnectionController;
 import tech.gruppone.stalker.server.exceptions.ForbiddenException;
 import tech.gruppone.stalker.server.model.api.LdapConfigurationDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
@@ -25,13 +26,13 @@ public class ConnectionService {
   OrganizationRepository organizationRepository;
 
   public Mono<Void> createUserConnection(
-      LdapConfigurationDto ldap, long userId, long organizationId) {
+    ConnectionController.PostUserByIdOrganizationByIdConnectionBody ldap, long userId, long organizationId) {
 
     organizationRepository
         .findById(organizationId)
         .subscribe(
             c -> {
-              if (!c.getIsPrivate()) {
+              if (c.getOrganizationType().contains("public")) {
                 log.info("creating public user connection for {}", userId);
               } else {
                 log.info("get credentials from db ");
@@ -40,12 +41,12 @@ public class ConnectionService {
                     .subscribe(
                         c1 -> {
                           log.info("checking credentials for {}", organizationId);
-                          if (c1.getPassword().equals(ldap.getPassword())
-                              && c1.getUsername().equals(ldap.getUsername())) {
+                          if (c1.getBindPassword().equals(ldap.getLdapPassword())
+                              && c1.getBindDn().equals(ldap.getRdn())) {
                             log.info("creating private user connection for {}", userId);
                             try (LdapConnection connection =
-                                new LdapNetworkConnection("localhost", 389)) {
-                              connection.bind(ldap.getUsername(), ldap.getPassword());
+                                new LdapNetworkConnection(c1.getUrl(), 389)) {
+                              connection.bind(ldap.getRdn(), ldap.getLdapPassword());
                               connectionRepository.createUserConnection(userId, organizationId);
                             } catch (LdapException e) {
                               log.info("fail to create private user connection for {}", userId);
@@ -67,7 +68,7 @@ public class ConnectionService {
   public Mono<Void> deleteUserConnection(long userId, long organizationId) {
 
     Mono<OrganizationDao> organization = organizationRepository.findById(organizationId);
-    if (organization.block().getIsPrivate()) {
+    if (organization.block().getOrganizationType().equals("private")) {
 
       try (LdapConnection connection = new LdapNetworkConnection("localhost", 389)) {
         connection.unBind();
