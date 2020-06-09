@@ -1,4 +1,4 @@
-title: user
+title: User
 description: Data representing a user.
 type: object
 properties:
