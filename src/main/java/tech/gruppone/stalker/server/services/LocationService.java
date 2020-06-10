@@ -4,11 +4,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
-import org.influxdb.impl.InfluxDBMapper;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
+import tech.gruppone.stalker.server.repositories.MeasurementsRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @Log4j2
@@ -17,7 +17,8 @@ import tech.gruppone.stalker.server.repositories.PlaceRepository;
 @Service
 public class LocationService {
 
-  InfluxDBMapper influxDBMapper;
+  MeasurementsRepository measurementsRepository;
+
   PlaceRepository placeRepository;
 
   public Mono<Void> saveMulti(final MultiLocationInfoDto multiLocationInfo) {
@@ -43,7 +44,7 @@ public class LocationService {
         .doOnNext(
             locationInfo -> {
               log.info("saving row {}", locationInfo);
-              influxDBMapper.save(locationInfo);
+              measurementsRepository.save(locationInfo);
             })
         .then();
   }
