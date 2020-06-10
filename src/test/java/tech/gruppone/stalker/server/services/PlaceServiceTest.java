@@ -219,7 +219,7 @@ class PlaceServiceTest {
             .build();
 
     when(placeRepository.save(placeDao)).thenReturn(Mono.just(placeDao));
-    when(placePositionService.save(placeId, polygonList)).thenReturn(Mono.just(1));
+    when(placePositionService.update(placeId, polygonList)).thenReturn(Mono.just(1));
 
     // meaningless
     when(organizationRepository.findById(organizationId)).thenReturn(Mono.empty());
@@ -233,7 +233,7 @@ class PlaceServiceTest {
     StepVerifier.create(sut).verifyComplete();
 
     verify(placeRepository).save(placeDao);
-    verify(placePositionService).save(placeId, polygonList);
+    verify(placePositionService).update(placeId, polygonList);
 
     verify(organizationRepository).findById(organizationId);
     verify(organizationRepository).save(updatedOrganization);

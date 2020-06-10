@@ -122,8 +122,8 @@ public class PlaceService {
 
     return placeRepository
         .save(placeDao)
-        // save place position even if not modified
-        .then(placePositionService.save(placeId, polygon))
+        // ALWAYS updates place position!
+        .then(placePositionService.update(placeId, polygon))
         .then(updateOrganizationLastModified(organizationId));
   }
 

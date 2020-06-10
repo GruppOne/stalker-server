@@ -169,4 +169,19 @@ class PlacePositionServiceTest {
 
     verify(placePositionRepository).save(placeId, rawPositionJson);
   }
+
+  @Test
+  void testUpdate() {
+
+    final var placeId = 1L;
+
+    when(placePositionRepository.update(placeId, rawPositionJson)).thenReturn(Mono.just(1));
+
+    final var sut =
+        placePositionService.update(placeId, PlacePositionServiceTest.pointsWithLastPoint);
+
+    StepVerifier.create(sut).expectNext(1).verifyComplete();
+
+    verify(placePositionRepository).update(placeId, rawPositionJson);
+  }
 }
