@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import reactor.core.publisher.Flux;
@@ -23,7 +24,7 @@ import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @Import(ApplicationTestConfiguration.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class OrganizationServiceTest {
 
   @MockBean OrganizationRepository organizationRepository;

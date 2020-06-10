@@ -23,7 +23,7 @@ import tech.gruppone.stalker.server.model.db.UserDataDao;
 import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class SignUpServiceTest {
   private static final LocalDate LOCAL_DATE = LocalDate.of(2000, 1, 1);
 

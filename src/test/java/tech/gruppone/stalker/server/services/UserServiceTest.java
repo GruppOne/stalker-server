@@ -23,7 +23,7 @@ import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Import(ApplicationTestConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class UserServiceTest {
 
   private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");

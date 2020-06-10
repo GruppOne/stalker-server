@@ -3,27 +3,24 @@ package tech.gruppone.stalker.server.services;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Import;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import tech.gruppone.stalker.server.configuration.JwtConfiguration;
 import tech.gruppone.stalker.server.exceptions.InvalidUserCredentialsException;
 import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-@ExtendWith(MockitoExtension.class)
-@Import(JwtConfiguration.class)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class LoginServiceTest {
 
-  @Mock UserRepository userRepository;
-  @Mock JwtService jwtService;
+  @MockBean UserRepository userRepository;
+  @MockBean JwtService jwtService;
 
-  @InjectMocks LoginService loginService;
+  @Autowired LoginService loginService;
 
   @Test
   void testLogUser() {
