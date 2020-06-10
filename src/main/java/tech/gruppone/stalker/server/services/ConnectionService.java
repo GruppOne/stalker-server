@@ -1,9 +1,12 @@
 package tech.gruppone.stalker.server.services;
 
 import io.micrometer.core.lang.NonNull;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.apache.directory.api.ldap.model.exception.LdapException;
@@ -16,7 +19,7 @@ import tech.gruppone.stalker.server.exceptions.BadPrivateConnectionException;
 import tech.gruppone.stalker.server.exceptions.BadPublicConnectionException;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.InvalidLdapCredentialsException;
-import tech.gruppone.stalker.server.model.db.OrganizationDao;
+import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
@@ -27,6 +30,8 @@ import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 public class ConnectionService {
   ConnectionRepository connectionRepository;
   OrganizationRepository organizationRepository;
+
+  List<ListLDAPServers> ldapServers = new ArrayList<ListLDAPServers>();
 
   // NEEDED FOR ENCRYPT PASSWORD --> ONLY IF THIS OPERATION IS SERVER-SIDE
   // private static String hashPassword(final String password) {
@@ -75,20 +80,32 @@ public class ConnectionService {
 
     return organizationRepository
         .findById(organizationId)
-        .filter(c -> c.getOrganizationType().equals("private"))
+        .filter(o -> o.getOrganizationType().equals("private"))
         .switchIfEmpty(Mono.error(BadPrivateConnectionException::new))
         .doOnNext(
             o -> {
               connectionRepository
                   .getLdapById(o.getId())
                   .doOnNext(
-                      c1 -> {
-                        log.info("I'm enter in flatMap2");
-                        if (c1.getBindDn().equals(ldap.getRdn())
-                            && c1.getBindPassword().equals(ldap.getLdapPassword())) {
-                          try (LdapConnection connection =
-                              new LdapNetworkConnection(c1.getUrl(), 389)) {
+                      c -> {
+                        if (c.getBindDn().equals(ldap.getRdn())
+                            && c.getBindPassword().equals(ldap.getLdapPassword())) {
+                          try {
+                            LdapConnection connection = new LdapNetworkConnection(c.getUrl(), 389);
                             connection.bind(ldap.getRdn(), ldap.getLdapPassword());
+
+                            if (!(connection.equals(
+                                ldapServers.get(o.getId().intValue()).getConnection()))) {
+                              ldapServers.add(new ListLDAPServers(o.getId(), connection, 1));
+                              Collections.sort(ldapServers);
+                            } else
+                              ldapServers
+                                  .get(o.getId().intValue())
+                                  .setTotalUsers(
+                                      ldapServers.get(o.getId().intValue()).getTotalUsers() + 1);
+
+                            // TODO searchQuery??
+
                             log.info(
                                 "Private user connection created for user {} into the organization {}",
                                 userId,
@@ -96,11 +113,6 @@ public class ConnectionService {
                           } catch (LdapException e) {
                             log.info(
                                 "Fail to create private user connection for {}: LDAP authentication doesn't work",
-                                userId);
-                            throw new BadRequestException();
-                          } catch (IOException e) {
-                            log.info(
-                                "Fail to create private user connection for {}: IO Exception",
                                 userId);
                             throw new BadRequestException();
                           }
@@ -117,17 +129,81 @@ public class ConnectionService {
 
   public Mono<Void> deleteUserConnection(long userId, long organizationId) {
 
-    Mono<OrganizationDao> organization = organizationRepository.findById(organizationId);
-    if (organization.block().getOrganizationType().equals("private")) {
+    return connectionRepository
+        .findConnectionByUserIdAndOrganizationId(userId, organizationId)
+        .filter(c -> c.getUserId().equals(userId) && c.getOrganizationId().equals(organizationId))
+        .switchIfEmpty(Mono.error(NotFoundException::new))
+        .doOnNext(
+            c -> {
+              organizationRepository
+                  .findById(organizationId)
+                  .doOnNext(
+                      o -> {
+                        if (o.getOrganizationType().equals("private")) {
+                          connectionRepository
+                              .getLdapById(o.getId())
+                              .doOnNext(
+                                  c1 -> {
+                                    try {
+                                      if (ldapServers
+                                          .get(c1.getOrganizationId().intValue())
+                                          .getConnection()
+                                          .isConnected()) {
 
-      try (LdapConnection connection = new LdapNetworkConnection("localhost", 389)) {
-        connection.unBind();
-      } catch (LdapException e) {
-      } catch (IOException e) {
-      } finally {
-      }
+                                        if (ldapServers
+                                                .get(c1.getOrganizationId().intValue())
+                                                .getTotalUsers()
+                                            > 1)
+                                          ldapServers
+                                              .get(c1.getOrganizationId().intValue())
+                                              .setTotalUsers(
+                                                  ldapServers
+                                                          .get(c1.getOrganizationId().intValue())
+                                                          .getTotalUsers()
+                                                      - 1);
+                                        else {
+                                          ldapServers
+                                              .get(c1.getOrganizationId().intValue())
+                                              .getConnection()
+                                              .unBind();
+
+                                          log.info(
+                                              "Connection unbinded for organization {}",
+                                              organizationId);
+                                        }
+
+                                      } else throw new NotFoundException();
+                                    } catch (LdapException e) {
+                                      log.info(
+                                          "Fail to create private user connection for {}: LDAP authentication doesn't work",
+                                          userId);
+                                      throw new BadRequestException();
+                                    }
+                                  });
+                        }
+                      });
+            })
+        .flatMap(
+            o -> {
+              log.info("User {} exited now by the organization {}", userId, organizationId);
+              return connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId);
+            });
+  }
+
+  /* THIS CLASS HAS BEEN CREATED BECAUSE WE NEED A LIST OF ALL THE SERVER WHICH HAVE AT LEAST ONE ACTIVE CONNECTION.
+  EVERY TIME WE ADD A LDAP CONNECTION, THE LIST IS UPDATED, ORDERING (ASC) THE ORGANIZATION IDS. */
+  @Data
+  @AllArgsConstructor
+  private static class ListLDAPServers implements Comparable<ListLDAPServers> {
+
+    @NonNull Long organizationId;
+    LdapConnection connection;
+    int totalUsers;
+
+    @Override
+    public int compareTo(ListLDAPServers o) {
+
+      return this.getOrganizationId().compareTo(o.getOrganizationId());
     }
-
-    return connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId).then();
   }
 }
