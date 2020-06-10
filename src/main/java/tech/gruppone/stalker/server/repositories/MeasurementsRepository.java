@@ -17,4 +17,9 @@ public class MeasurementsRepository {
   public <T> void save(final T model) {
     influxDBMapper.save(model);
   }
+
+  public List<LocationInfo> findByOrganizationId(long organizationId) {
+
+    throw new NotImplementedException();
+  }
 }
