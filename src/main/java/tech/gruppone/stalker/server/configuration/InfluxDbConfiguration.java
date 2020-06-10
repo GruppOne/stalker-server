@@ -24,6 +24,8 @@ public class InfluxDbConfiguration {
   @Getter String database;
   @Getter String retentionPolicy;
 
+  @Getter String measurement = "complete_log";
+
   // XXX fails silently when influxdb connection cannot be established
   public InfluxDbConfiguration(
       @Value("${influxdb.database}") String database,

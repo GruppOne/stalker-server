@@ -11,6 +11,7 @@ import org.influxdb.annotation.Measurement;
 @Builder
 @Value
 @Measurement(
+    // must match the string in InfluxDbConfiguration.measurement
     name = "complete_log",
     database = "stalker-tsdb",
     retentionPolicy = "default",
