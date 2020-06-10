@@ -32,8 +32,8 @@ public class ConnectionController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> postUserByIdOrganizationByIdConnection(
-      @RequestBody(required = false) PostUserByIdOrganizationByIdConnectionBody ldap,
-      @PathVariable("userId") long userId,
+      @RequestBody(required = false) final PostUserByIdOrganizationByIdConnectionBody ldap,
+      @PathVariable("userId") final long userId,
       @PathVariable("organizationId") long organizationId) {
 
     if (ldap == null)
