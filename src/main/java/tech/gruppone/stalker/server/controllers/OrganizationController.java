@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
+import tech.gruppone.stalker.server.model.api.UsersInsideOrganizationDto;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
+import tech.gruppone.stalker.server.services.LocationService;
 import tech.gruppone.stalker.server.services.OrganizationService;
 
 @AllArgsConstructor
@@ -26,6 +27,8 @@ public class OrganizationController {
 
   OrganizationService organizationService;
   OrganizationRepository organizationRepository;
+
+  LocationService locationService;
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
@@ -50,8 +53,9 @@ public class OrganizationController {
 
   @GetMapping("/users/inside")
   @ResponseStatus(HttpStatus.OK)
-  public Mono<Throwable> getOrganizationByIdUsersInside(@PathVariable final long id) {
+  public Mono<UsersInsideOrganizationDto> getOrganizationByIdUsersInside(
+      @PathVariable final long id) {
 
-    return Mono.error(NotImplementedException::new);
+    return locationService.countUsersCurrentlyInsideOrganizationById(id);
   }
 }
