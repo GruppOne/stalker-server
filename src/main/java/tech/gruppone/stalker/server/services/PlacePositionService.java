@@ -48,6 +48,12 @@ public class PlacePositionService {
     return createdPlacePositionNumber;
   }
 
+  public Mono<Integer> update(
+      final Long placeId, final List<GeographicalPoint> geographicalPoints) {
+
+    return placePositionRepository.update(placeId, convertGeographicalPoints(geographicalPoints));
+  }
+
   List<GeographicalPoint> convertRawPositionJson(final String rawPositionJson) {
     JsonNode coordinates;
     try {
