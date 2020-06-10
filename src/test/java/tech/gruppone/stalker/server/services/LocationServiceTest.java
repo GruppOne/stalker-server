@@ -1,4 +1,4 @@
-package tech.gruppone.stalker.server.controllers;
+package tech.gruppone.stalker.server.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -9,46 +9,46 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import org.influxdb.impl.InfluxDBMapper;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
-@Tag("integrationTest")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class LocationUpdateControllerTest {
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+class LocationServiceTest {
   private static final Instant INSTANT = Instant.ofEpochSecond(1577840461);
-
-  @Autowired WebTestClient webTestClient;
 
   @MockBean InfluxDBMapper influxDBMapper;
   @MockBean PlaceRepository placeRepository;
 
+  @Autowired LocationService locationService;
+
+  // set some common place variables
+  final Long placeId1 = 1L;
+  final Long placeId2 = 2L;
+  final Long organizationId = 1L;
+  final String placeName = "placeName";
+  final String color = "color";
+  final String address = "address";
+  final String city = "city";
+  final String zipcode = "zipcode";
+  final String state = "state";
+
+  final List<Long> placeIds = List.of(placeId1, placeId2);
+
   @Test
-  void testPostLocationUpdate() {
+  void testSaveMulti() {
 
-    final Long placeId = 1L;
-    final Long organizationId = 1L;
-    final String placeName = "placeName";
-    final String color = "color";
-    final String address = "address";
-    final String city = "city";
-    final String zipcode = "zipcode";
-    final String state = "state";
-    final List<Long> placeIds = List.of(placeId);
-
-    final var place =
+    final var placeBuilder =
         PlaceDao.builder()
-            .id(placeId)
             .organizationId(organizationId)
             .name(placeName)
             .color(color)
@@ -56,10 +56,10 @@ class LocationUpdateControllerTest {
             .address(address)
             .city(city)
             .zipcode(zipcode)
-            .state(state)
-            .build();
+            .state(state);
 
-    when(placeRepository.findAllById(placeIds)).thenReturn(Flux.just(place));
+    final var place1 = placeBuilder.id(placeId1).build();
+    final var place2 = placeBuilder.id(placeId2).build();
 
     final String userId = "1";
     final var inside = true;
@@ -74,17 +74,13 @@ class LocationUpdateControllerTest {
             .build();
     final var anonymous = multiLocationInfo.isAnonymous();
 
-    final ArgumentCaptor<LocationInfo> captor = ArgumentCaptor.forClass(LocationInfo.class);
+    when(placeRepository.findAllById(placeIds)).thenReturn(Flux.just(place1, place2));
 
-    webTestClient
-        .post()
-        .uri("/location/update")
-        .body(Mono.just(multiLocationInfo), MultiLocationInfoDto.class)
-        .exchange()
-        .expectStatus()
-        .isCreated()
-        .expectBody()
-        .isEmpty();
+    ArgumentCaptor<LocationInfo> captor = ArgumentCaptor.forClass(LocationInfo.class);
+
+    final var sut = locationService.saveMulti(multiLocationInfo);
+
+    StepVerifier.create(sut).verifyComplete();
 
     verify(placeRepository).findAllById(placeIds);
     verify(influxDBMapper, times(placeIds.size())).save(captor.capture());

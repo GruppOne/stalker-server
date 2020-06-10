@@ -23,6 +23,6 @@ public class LocationUpdateController {
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> postLocationUpdate(@RequestBody final MultiLocationInfoDto multiLocationInfo) {
 
-    return locationInfoService.save(multiLocationInfo).then();
+    return locationInfoService.saveMulti(multiLocationInfo).then();
   }
 }
