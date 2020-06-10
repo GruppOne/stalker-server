@@ -12,6 +12,7 @@ import lombok.Value;
 public class MultiLocationInfoDto {
   @NonNull Timestamp timestamp;
 
+  // can only be "known" or "anonymous"
   @NonNull String userType;
 
   // this is redundant. the information is included in the SecurityContext
@@ -20,4 +21,8 @@ public class MultiLocationInfoDto {
   @NonNull Boolean inside;
 
   @NonNull List<Long> placeIds;
+
+  public boolean isAnonymous() {
+    return this.userType.equals("anonymous");
+  }
 }
