@@ -71,8 +71,8 @@ public class ConnectionService {
                     .switchIfEmpty(Mono.error(NotFoundException::new))
                     .flatMap(
                         c -> {
-                          if (c.getUsername().equals(ldap.getUsername())
-                              && c.getPassword().equals(ldap.getPassword())) {
+                          if (c.getUsername().equals(ldap.getLdapUsername())
+                              && c.getPassword().equals(ldap.getLdapPassword())) {
                             try {
                               LdapConnection connection =
                                   new LdapNetworkConnection(c.getUrl(), 389);
@@ -83,14 +83,14 @@ public class ConnectionService {
                               EntryCursor cursor =
                                   connection.search(
                                       "dc=stalker,dc=intern",
-                                      "(uid=" + ldap.getUsername() + ")",
+                                      "(uid=" + ldap.getLdapUsername() + ")",
                                       SearchScope.SUBTREE);
 
                               boolean existsUsername = false;
                               boolean existsPassword = false;
                               for (var entry : cursor) {
                                 if (entry.getAttributes().stream()
-                                    .anyMatch(e -> e.get().getString().equals(ldap.getPassword())))
+                                    .anyMatch(e -> e.get().getString().equals(ldap.getLdapPassword())))
                                   existsPassword = true;
 
                                 existsUsername = true;

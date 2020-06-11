@@ -48,7 +48,7 @@ public class ConnectionController {
   @Value
   public static class PostUserByIdOrganizationByIdConnectionBody {
 
-    @NonNull String username;
-    @NonNull String password;
+    @NonNull String ldapUsername;
+    @NonNull String ldapPassword;
   }
 }
