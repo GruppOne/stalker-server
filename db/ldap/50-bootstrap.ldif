@@ -1,0 +1,49 @@
+dn: dc=stalker,dc=intern
+dc: stalker
+o: Stalker
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+
+dn: cn=admin,dc=stalker,dc=intern
+cn: admin
+description: LDAP administrator
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+userPassword: adminPassword
+
+dn: ou=groups,dc=stalker,dc=intern
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: cn=admins,ou=groups,dc=stalker,dc=intern
+cn: admins
+gidNumber: 500
+objectClass: posixGroup
+objectClass: top
+
+dn: cn=users,ou=groups,dc=stalker,dc=intern
+cn: users
+gidNumber: 501
+objectClass: posixGroup
+objectClass: top
+
+dn: ou=users,dc=stalker,dc=intern
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: cn=imolainformatica,ou=users,dc=stalker,dc=intern
+cn: imolainformatica
+objectClass: inetOrgPerson
+sn: user
+uid: ImolaInformatica
+userPassword: 7df32dd4ba9d81704373a2034e2f5b4bfa97f35e4533e90ef261fabc20a9eaf328307dae6e5577fa19fb3cce974f68f2ed1c56532cfdbe729a31be553dcbd1ff
+
+dn: cn=casamia,ou=users,dc=stalker,dc=intern
+cn: casamia
+objectClass: inetOrgPerson
+sn: admin
+uid: CasaMia
+userPassword: 3a80fbeef468e89454878c9de232d8c99940d6fc8638c46aece750d94c17524339858f643cbd8d5203853607011226d3178da15853f7536fedbb0fffa9dc2f44
