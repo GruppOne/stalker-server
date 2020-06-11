@@ -34,18 +34,3 @@ services:
 
     ports:
       - "8888:8888"
-
-  ldap-server:
-    ports:
-      - "389:389"
-      - "636:636"
-
-  ldap-server-gui:
-    image: osixia/phpldapadmin:0.7.2
-
-    environment:
-      PHPLDAPADMIN_LDAP_HOSTS: ldap-server
-      PHPLDAPADMIN_HTTPS: "false"
-
-    ports:
-      - 8090:80
