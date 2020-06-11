@@ -34,7 +34,7 @@ public class ConnectionController {
   public Mono<Void> postUserByIdOrganizationByIdConnection(
       @RequestBody(required = false) final PostUserByIdOrganizationByIdConnectionBody ldap,
       @PathVariable("userId") final long userId,
-      @PathVariable("organizationId") long organizationId) {
+      @PathVariable("organizationId") final long organizationId) {
 
     if (ldap == null)
       return connectionService.createPublicUserConnection(ldap, userId, organizationId);
