@@ -30,9 +30,8 @@ properties:
         description: The password for the bind DN.
     required:
       - url
-      - searchQuery
-      - bindDn
-      - bindPassword
+      - username
+      - password
   creationDateTime:
     $ref: ../GenericTimestamp.v1.yaml
   lastChangeDateTime:
