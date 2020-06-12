@@ -1,10 +1,12 @@
 package tech.gruppone.stalker.server.services;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,6 +15,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.core.DatabaseClient.InsertIntoSpec;
+import org.springframework.data.r2dbc.core.DatabaseClient.InsertSpec;
+import org.springframework.data.r2dbc.core.DatabaseClient.TypedInsertSpec;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
@@ -20,7 +26,6 @@ import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
-import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -31,7 +36,7 @@ class SignUpServiceTest {
 
   @MockBean LoginService loginService;
   @MockBean UserRepository userRepository;
-  @MockBean UserDataRepository userDataRepository;
+  @MockBean DatabaseClient databaseClient;
 
   // correct fields
   private static final String correctEmail = "email@email.email";
@@ -66,7 +71,18 @@ class SignUpServiceTest {
             .build();
 
     when(userRepository.save(userDao)).thenReturn(Mono.just(userDao.withId(createdUserId)));
-    when(userDataRepository.save(userDataDao)).thenReturn(Mono.just(userDataDao));
+
+    var mockInsertIntoSpec = mock(InsertIntoSpec.class);
+    // warning suppressed because it's safe to cast mocks
+    @SuppressWarnings("unchecked")
+    var mockTypedInsertSpec = (TypedInsertSpec<UserDataDao>) mock(TypedInsertSpec.class);
+    @SuppressWarnings("unchecked")
+    var mockInsertSpec = (InsertSpec<Map<String, Object>>) mock(InsertSpec.class);
+
+    when(databaseClient.insert()).thenReturn(mockInsertIntoSpec);
+    when(mockInsertIntoSpec.into(UserDataDao.class)).thenReturn(mockTypedInsertSpec);
+    when(mockTypedInsertSpec.using(userDataDao)).thenReturn(mockInsertSpec);
+    when(mockInsertSpec.then()).thenReturn(Mono.empty().then());
 
     final var jwtToken = "jwt-token";
     when(loginService.login(correctEmail, correctPassword)).thenReturn(Mono.just(jwtToken));
@@ -78,7 +94,7 @@ class SignUpServiceTest {
     StepVerifier.create(sut).expectNext(jwtToken).verifyComplete();
 
     verify(userRepository).save(userDao);
-    verify(userDataRepository).save(userDataDao);
+    verify(mockTypedInsertSpec).using(userDataDao);
     verify(loginService).login(correctEmail, correctPassword);
   }
 

@@ -1,15 +1,21 @@
 package tech.gruppone.stalker.server.controllers;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.core.DatabaseClient.InsertIntoSpec;
+import org.springframework.data.r2dbc.core.DatabaseClient.InsertSpec;
+import org.springframework.data.r2dbc.core.DatabaseClient.TypedInsertSpec;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,8 +36,11 @@ class UsersControllerTest {
 
   @Autowired WebTestClient webTestClient;
 
+  @MockBean DatabaseClient databaseClient;
+
   @MockBean UserRepository userRepository;
   @MockBean UserDataRepository userDataRepository;
+
   @MockBean LoginService loginService;
 
   @Test
@@ -112,7 +121,18 @@ class UsersControllerTest {
 
     when(userRepository.save(userDaoWithoutId))
         .thenReturn(Mono.just(userDaoWithoutId.withId(newUserId)));
-    when(userDataRepository.save(userDataDao)).thenReturn(Mono.just(userDataDao));
+
+    var mockInsertIntoSpec = mock(InsertIntoSpec.class);
+    // warning suppressed because it's safe to cast mocks
+    @SuppressWarnings("unchecked")
+    var mockTypedInsertSpec = (TypedInsertSpec<UserDataDao>) mock(TypedInsertSpec.class);
+    @SuppressWarnings("unchecked")
+    var mockInsertSpec = (InsertSpec<Map<String, Object>>) mock(InsertSpec.class);
+
+    when(databaseClient.insert()).thenReturn(mockInsertIntoSpec);
+    when(mockInsertIntoSpec.into(UserDataDao.class)).thenReturn(mockTypedInsertSpec);
+    when(mockTypedInsertSpec.using(userDataDao)).thenReturn(mockInsertSpec);
+    when(mockInsertSpec.then()).thenReturn(Mono.empty().then());
 
     final String jwt = "jwt-token";
     when(loginService.login(email, password)).thenReturn(Mono.just(jwt));
@@ -129,7 +149,8 @@ class UsersControllerTest {
         .isEqualTo(jwt);
 
     verify(userRepository).save(userDaoWithoutId);
-    verify(userDataRepository).save(userDataDao);
+    // verify(userDataRepository).save(userDataDao);
+    verify(mockTypedInsertSpec).using(userDataDao);
     verify(loginService).login(email, password);
   }
 }
