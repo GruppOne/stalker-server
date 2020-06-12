@@ -90,7 +90,8 @@ public class ConnectionService {
                               boolean existsPassword = false;
                               for (var entry : cursor) {
                                 if (entry.getAttributes().stream()
-                                    .anyMatch(e -> e.get().getString().equals(ldap.getLdapPassword())))
+                                    .anyMatch(
+                                        e -> e.get().getString().equals(ldap.getLdapPassword())))
                                   existsPassword = true;
 
                                 existsUsername = true;
