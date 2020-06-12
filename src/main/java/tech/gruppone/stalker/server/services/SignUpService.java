@@ -3,6 +3,7 @@ package tech.gruppone.stalker.server.services;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
@@ -10,7 +11,6 @@ import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.api.UserDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.model.db.UserDataDao;
-import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @AllArgsConstructor
@@ -18,8 +18,9 @@ import tech.gruppone.stalker.server.repositories.UserRepository;
 @Service
 public class SignUpService {
 
+  DatabaseClient databaseClient;
+
   UserRepository userRepository;
-  UserDataRepository userDataRepository;
   LoginService loginService;
 
   public Mono<String> createNewUser(
@@ -60,8 +61,12 @@ public class SignUpService {
     final var userDataDaoBuilder =
         UserDataDao.builder().firstName(firstName).lastName(lastName).birthDate(birthDate);
 
-    final Mono<UserDataDao> insertedUserDataDao =
-        userId.map(id -> userDataDaoBuilder.userId(id).build()).flatMap(userDataRepository::save);
+    final var insertedUserDataDao =
+        userId
+            .map(id -> userDataDaoBuilder.userId(id).build())
+            // must use dbclient to force an insert when the row id is not null
+            .flatMap(
+                userData -> databaseClient.insert().into(UserDataDao.class).using(userData).then());
 
     final Mono<String> jwtToken = loginService.login(email, password);
 
