@@ -21,13 +21,10 @@ properties:
         type: string
         format: uri
         description: "The organization's LDAP server URL."
-      searchQuery:
+      username:
         type: string
-        description: An LDAP search query that returns the list of users registered to the LDAP server.
-      bindDn:
-        type: string
-        description: the fully qualified DN to use for binding the connection.
-      bindPassword:
+        description: The username for the bind DN.
+      password:
         type: string
         format: password
         description: The password for the bind DN.
