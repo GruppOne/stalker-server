@@ -7,18 +7,23 @@ import lombok.NonNull;
 import lombok.Value;
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
+import org.influxdb.annotation.TimeColumn;
 
+// @Data
+// @NoArgsConstructor
+// @AllArgsConstructor
+// @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 @Builder
 @Value
 @Measurement(
     // must match the string in InfluxDbConfiguration.measurement
-    name = "complete_log",
+    name = "access_log",
     database = "stalker-tsdb",
-    retentionPolicy = "default",
     timeUnit = TimeUnit.MILLISECONDS)
 public class LocationInfo {
 
   @NonNull
+  @TimeColumn
   @Column(name = "time")
   Instant time;
 
