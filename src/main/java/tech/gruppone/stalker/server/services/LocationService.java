@@ -42,12 +42,30 @@ public class LocationService {
 
               return locationInfoBuilder.placeId(placeId).organizationId(organizationId).build();
             })
+        // XXX the controller will respond with 201 CREATED even if there are errors here
+        .doOnNext(this::conditionallyUpdateAccessLog)
         .doOnNext(
             locationInfo -> {
               log.info("saving row with default retention policy");
               measurementsRepository.save(locationInfo);
             })
         .then();
+  }
+
+  private void conditionallyUpdateAccessLog(final LocationInfo currentlocationInfo) {
+    final var placeId = currentlocationInfo.getPlaceId();
+    final var currentInside = currentlocationInfo.getInside().booleanValue();
+
+    measurementsRepository
+        .findLastStatusByUserIdAndPlaceId(currentlocationInfo.getUserId(), placeId)
+        .filter(lastInside -> lastInside.booleanValue() != currentInside)
+        .subscribe(
+            lastInside -> {
+              log.info(
+                  "saving row with infinite retention policy. last 'inside' value was {}",
+                  lastInside);
+              measurementsRepository.saveInfinite(currentlocationInfo);
+            });
   }
 
   public Mono<UsersInsideOrganizationDto> countUsersCurrentlyInsideOrganizationById(
