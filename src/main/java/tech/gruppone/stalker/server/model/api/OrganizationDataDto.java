@@ -27,9 +27,11 @@ public class OrganizationDataDto {
 
     @NonNull String url;
 
-    @NonNull String username;
+    @NonNull String baseDn;
 
-    @NonNull String password;
+    @NonNull String bindCn;
+
+    @NonNull String bindPassword;
   }
 
 }
