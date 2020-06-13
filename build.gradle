@@ -37,7 +37,7 @@ dependencies {
 //  Supports built in (or custom) endpoints that let you monitor and manage your application - such as application health, metrics, sessions, etc.
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-  implementation 'org.springframework.boot:spring-boot-starter-web'
+//  implementation 'org.springframework.boot:spring-boot-starter-web'
 
 //  Provides Reactive Relational Database Connectivity to persist data in SQL stores using Spring Data in reactive applications.
   implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
