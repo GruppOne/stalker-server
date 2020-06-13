@@ -6,16 +6,14 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-// TODO check if it works as expected
 @Builder
 @Value
 public class MultiLocationInfoDto {
   @NonNull Timestamp timestamp;
 
-  // can only be "known" or "anonymous"
+  // can only be the string "known" or "anonymous"
   @NonNull String userType;
 
-  // this is redundant. the information is included in the SecurityContext
   @NonNull String userId;
 
   @NonNull Boolean inside;
