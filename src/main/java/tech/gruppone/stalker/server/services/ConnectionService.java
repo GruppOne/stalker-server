@@ -71,22 +71,20 @@ public class ConnectionService {
                     .switchIfEmpty(Mono.error(NotFoundException::new))
                     .flatMap(
                         c -> {
-                          if (c.getUsername().equals(ldap.getLdapUsername())
-                              && c.getPassword().equals(ldap.getLdapPassword())) {
                             try {
                               LdapConnection connection =
                                   new LdapNetworkConnection(c.getUrl(), 389);
-                              // TODO find a way to hide the admin credentials (the only ones which
-                              // permits to open a connection)
-                              connection.bind("cn=admin,dc=stalker,dc=intern", "adminPassword");
+                              connection.bind(c.getBindDn(), c.getBindPassword());
+
+                              System.out.println("Funziona la connessione.");
 
                               EntryCursor cursor =
                                   connection.search(
-                                      "dc=stalker,dc=intern",
-                                      "(uid=" + ldap.getLdapUsername() + ")",
+                                      c.getBaseDn(),
+                                      "(cn=" + ldap.getLdapCn() + ")",
                                       SearchScope.SUBTREE);
 
-                              boolean existsUsername = false;
+                              boolean existsCn = false;
                               boolean existsPassword = false;
                               for (var entry : cursor) {
                                 if (entry.getAttributes().stream()
@@ -94,9 +92,11 @@ public class ConnectionService {
                                         e -> e.get().getString().equals(ldap.getLdapPassword())))
                                   existsPassword = true;
 
-                                existsUsername = true;
+                                  System.out.println("Dentro.");
+
+                                existsCn = true;
                               }
-                              if (!existsUsername | !existsPassword)
+                              if (!existsCn | !existsPassword)
                                 throw new InvalidLdapCredentialsException();
 
                               try {
@@ -123,7 +123,6 @@ public class ConnectionService {
                                     .userId(userId)
                                     .organizationId(organizationId)
                                     .build());
-                          } else throw new InvalidLdapCredentialsException();
                         }))
         .then();
   }
