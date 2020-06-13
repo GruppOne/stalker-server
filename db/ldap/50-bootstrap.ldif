@@ -39,5 +39,5 @@ cn: utenteStalker
 objectClass: inetOrgPerson
 sn: user
 uid: UtenteStalker
-userPassword: a21ea0bc7ebc8dacd2b84aa0cef532a233b941eb87a30e86a639a02087e5b9d3418a10016d5ea2a09cc926252aee6e6b67cd4fca9b6e923eaedd247f1559ad83
+userPassword: passwordStalker
 
