@@ -1,6 +1,7 @@
 package tech.gruppone.stalker.server.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -8,7 +9,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import org.influxdb.impl.InfluxDBMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -21,6 +21,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.MeasurementsRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @Tag("integrationTest")
@@ -30,7 +31,8 @@ class LocationUpdateControllerTest {
 
   @Autowired WebTestClient webTestClient;
 
-  @MockBean InfluxDBMapper influxDBMapper;
+  // TODO should only mock the influxdbstuff, not the repository!
+  @MockBean MeasurementsRepository measurementsRepository;
   @MockBean PlaceRepository placeRepository;
 
   @Test
@@ -74,6 +76,9 @@ class LocationUpdateControllerTest {
             .build();
     final var anonymous = multiLocationInfo.isAnonymous();
 
+    when(measurementsRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId)))
+        .thenReturn(Mono.just(inside));
+
     final ArgumentCaptor<LocationInfo> captor = ArgumentCaptor.forClass(LocationInfo.class);
 
     webTestClient
@@ -87,7 +92,8 @@ class LocationUpdateControllerTest {
         .isEmpty();
 
     verify(placeRepository).findAllById(placeIds);
-    verify(influxDBMapper, times(placeIds.size())).save(captor.capture());
+    verify(measurementsRepository, times(placeIds.size())).save(captor.capture());
+    verify(measurementsRepository, times(0)).saveInfinite(any());
 
     captor
         .getAllValues()
