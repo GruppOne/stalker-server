@@ -76,7 +76,7 @@ public class LocationInfoRepository {
     return Mono.just(value);
   }
 
-  public List<LocationInfo> findByOrganizationId(long organizationId) {
+  public List<LocationInfo> findByOrganizationId(final long organizationId) {
 
     throw new NotImplementedException();
   }
