@@ -70,6 +70,9 @@
     {
       "label": "format and compile java code continuously",
       "command": "./gradlew spotlessApply classes testClasses --continuous --info",
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
     },
     {
       "label": "verify test coverage >80%",

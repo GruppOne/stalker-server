@@ -62,7 +62,7 @@ services:
     volumes:
       - type: volume
         source: tsdb-data
-        target: /var/lib/influxdb/data
+        target: /var/lib/influxdb
 
 volumes:
   rdb-data:
