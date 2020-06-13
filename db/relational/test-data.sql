@@ -33,8 +33,7 @@ START TRANSACTION;
 INSERT INTO `Organization` (`name`, `description`, `organizationType`, `createdDate`) VALUES
 ('GruppOne', 'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software', 'public', '2020-01-01 00:01:01'),
 ('Amici della Torre Archimede', 'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️', 'public', '2020-01-01 00:01:01'),
-('Imola Informatica', 'Richiesta autenticazione in entrata e in uscita', 'private', '2020-01-01 00:01:01'),
-('Casa mia','Accesso autenticato alle mie proprietà','private','2020-01-01 00:01:01');
+('Imola Informatica S.P.A.', 'Azienda proponente del progetto Stalker. Richiesta autenticazione in entrata e in uscita', 'private', '2020-01-01 00:01:01');
 
 --
 -- Dump dei dati per la tabella `place`
@@ -116,8 +115,7 @@ VALUES
 -- Dump dei dati per la tabella `LdapConfiguration`
 --
 
-INSERT INTO `LdapConfiguration` (`organizationId`, `url`, `username`, `password`) VALUES
-(3, '127.0.0.1', 'ImolaInformatica', '7df32dd4ba9d81704373a2034e2f5b4bfa97f35e4533e90ef261fabc20a9eaf328307dae6e5577fa19fb3cce974f68f2ed1c56532cfdbe729a31be553dcbd1ff'),
-(4, 'localhost', 'CasaMia', '3a80fbeef468e89454878c9de232d8c99940d6fc8638c46aece750d94c17524339858f643cbd8d5203853607011226d3178da15853f7536fedbb0fffa9dc2f44');
+INSERT INTO `LdapConfiguration` (`organizationId`, `url`, `baseDn`, `bindDn`, `bindPassword`) VALUES
+(3, '127.0.0.1', 'dc=stalker,dc=intern', 'cn=admin,dc=stalker,dc=intern', 'adminPassword');
 
 COMMIT;
