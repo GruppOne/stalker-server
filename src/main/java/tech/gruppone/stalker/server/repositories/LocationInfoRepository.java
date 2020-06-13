@@ -19,12 +19,12 @@ import tech.gruppone.stalker.server.configuration.InfluxDbConfiguration;
 import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 
-// TODO rename to LocationInfoRepository
 @Log4j2
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Repository
-public class MeasurementsRepository {
+// TODO refactor so as to return monos and fluxes?
+public class LocationInfoRepository {
   InfluxDB influxDB;
   InfluxDBMapper influxDBMapper;
 
@@ -43,7 +43,7 @@ public class MeasurementsRepository {
     save(model, influxDbConfiguration.getDefaultRetentionPolicy());
   }
 
-  public void saveInfinite(final LocationInfo model) {
+  public void saveWithInfiniteRp(final LocationInfo model) {
     save(model, influxDbConfiguration.getInfiniteRetentionPolicy());
   }
 

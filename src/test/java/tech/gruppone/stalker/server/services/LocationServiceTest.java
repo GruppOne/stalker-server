@@ -20,14 +20,14 @@ import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
-import tech.gruppone.stalker.server.repositories.MeasurementsRepository;
+import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = LocationService.class)
 class LocationServiceTest {
   private static final Instant INSTANT = Instant.ofEpochSecond(1577840461);
 
-  @MockBean MeasurementsRepository measurementsRepository;
+  @MockBean LocationInfoRepository locationInfoRepository;
   @MockBean PlaceRepository placeRepository;
 
   @Autowired LocationService locationService;
@@ -77,9 +77,9 @@ class LocationServiceTest {
 
     when(placeRepository.findAllById(placeIds)).thenReturn(Flux.just(place1, place2));
 
-    when(measurementsRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId1)))
+    when(locationInfoRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId1)))
         .thenReturn(Mono.just(!inside));
-    when(measurementsRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId2)))
+    when(locationInfoRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId2)))
         .thenReturn(Mono.just(inside));
 
     ArgumentCaptor<LocationInfo> saveCaptor = ArgumentCaptor.forClass(LocationInfo.class);
@@ -90,8 +90,8 @@ class LocationServiceTest {
     StepVerifier.create(sut).verifyComplete();
 
     verify(placeRepository).findAllById(placeIds);
-    verify(measurementsRepository, times(placeIds.size())).save(saveCaptor.capture());
-    verify(measurementsRepository).saveInfinite(saveInfiniteCaptor.capture());
+    verify(locationInfoRepository, times(placeIds.size())).save(saveCaptor.capture());
+    verify(locationInfoRepository).saveWithInfiniteRp(saveInfiniteCaptor.capture());
 
     saveCaptor
         .getAllValues()

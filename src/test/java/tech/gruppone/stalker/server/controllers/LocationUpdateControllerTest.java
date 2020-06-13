@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
-import tech.gruppone.stalker.server.repositories.MeasurementsRepository;
+import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @Tag("integrationTest")
@@ -32,7 +32,7 @@ class LocationUpdateControllerTest {
   @Autowired WebTestClient webTestClient;
 
   // TODO should only mock the influxdbstuff, not the repository!
-  @MockBean MeasurementsRepository measurementsRepository;
+  @MockBean LocationInfoRepository locationinfoRepository;
   @MockBean PlaceRepository placeRepository;
 
   @Test
@@ -76,7 +76,7 @@ class LocationUpdateControllerTest {
             .build();
     final var anonymous = multiLocationInfo.isAnonymous();
 
-    when(measurementsRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId)))
+    when(locationinfoRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId)))
         .thenReturn(Mono.just(inside));
 
     final ArgumentCaptor<LocationInfo> captor = ArgumentCaptor.forClass(LocationInfo.class);
@@ -92,8 +92,8 @@ class LocationUpdateControllerTest {
         .isEmpty();
 
     verify(placeRepository).findAllById(placeIds);
-    verify(measurementsRepository, times(placeIds.size())).save(captor.capture());
-    verify(measurementsRepository, times(0)).saveInfinite(any());
+    verify(locationinfoRepository, times(placeIds.size())).save(captor.capture());
+    verify(locationinfoRepository, times(0)).saveWithInfiniteRp(any());
 
     captor
         .getAllValues()
