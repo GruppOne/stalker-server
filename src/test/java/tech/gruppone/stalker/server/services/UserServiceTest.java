@@ -23,9 +23,7 @@ import tech.gruppone.stalker.server.repositories.UserDataRepository;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Import(ApplicationTestConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-// TODO uncomment this, check that it works and then do the same for every service test!
-// @ContextConfiguration(classes = UserService.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = UserService.class)
 class UserServiceTest {
 
   private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");

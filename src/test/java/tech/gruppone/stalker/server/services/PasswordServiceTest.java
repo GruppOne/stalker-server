@@ -23,7 +23,9 @@ import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
 @Import(ApplicationTestConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.NONE,
+    classes = PasswordService.class)
 @TestPropertySource(properties = {"management.health.mail.enabled=false"})
 class PasswordServiceTest {
   @MockBean UserRepository userRepository;
