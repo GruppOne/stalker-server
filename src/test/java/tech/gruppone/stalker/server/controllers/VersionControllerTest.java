@@ -21,6 +21,6 @@ class VersionControllerTest {
         .isOk()
         .expectBody()
         .jsonPath("$.version")
-        .isEqualTo("0.8.1");
+        .isEqualTo("1.0.0");
   }
 }
