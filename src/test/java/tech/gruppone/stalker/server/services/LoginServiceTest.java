@@ -14,7 +14,7 @@ import tech.gruppone.stalker.server.model.api.LoginDataDto;
 import tech.gruppone.stalker.server.model.db.UserDao;
 import tech.gruppone.stalker.server.repositories.UserRepository;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = LoginService.class)
 class LoginServiceTest {
 
   @MockBean UserRepository userRepository;

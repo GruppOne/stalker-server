@@ -5,6 +5,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,18 +18,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.PlaceDataDto.GeographicalPoint;
 import tech.gruppone.stalker.server.model.db.PlacePositionDao;
 import tech.gruppone.stalker.server.repositories.PlacePositionRepository;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@Import(ObjectMapper.class)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = PlacePositionService.class)
 class PlacePositionServiceTest {
 
   @MockBean PlacePositionRepository placePositionRepository;
 
-  // need to autowire the jackson objectmapper
   @Autowired PlacePositionService placePositionService;
 
   // raw position json string saved and selected from db. always has last point == first point
