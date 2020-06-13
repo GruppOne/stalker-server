@@ -17,11 +17,15 @@ public class LdapConfigurationDao {
   @NonNull
   String url;
 
-  @Column("username")
+  @Column("baseDn")
   @NonNull
-  String username;
+  String baseDn;
 
-  @Column("password")
+  @Column("bindDn")
   @NonNull
-  String password;
+  String bindDn;
+
+  @Column("bindPassword")
+  @NonNull
+  String bindPassword;
 }

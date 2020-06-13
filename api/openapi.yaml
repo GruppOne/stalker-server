@@ -493,13 +493,13 @@ paths:
             schema:
               type: object
               properties:
-                ldapUsername:
+                ldapCn:
                   type: string
                 ldapPassword:
                   type: string
                   format: password
               required:
-                - ldapUsername
+                - ldapCn
                 - ldapPassword
         description: ''
       responses:
