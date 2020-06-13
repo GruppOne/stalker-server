@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import org.influxdb.impl.InfluxDBMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +15,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.MeasurementsRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = LocationService.class)
 class LocationServiceTest {
   private static final Instant INSTANT = Instant.ofEpochSecond(1577840461);
 
-  @MockBean InfluxDBMapper influxDBMapper;
+  @MockBean MeasurementsRepository measurementsRepository;
   @MockBean PlaceRepository placeRepository;
 
   @Autowired LocationService locationService;
@@ -76,16 +77,23 @@ class LocationServiceTest {
 
     when(placeRepository.findAllById(placeIds)).thenReturn(Flux.just(place1, place2));
 
-    ArgumentCaptor<LocationInfo> captor = ArgumentCaptor.forClass(LocationInfo.class);
+    when(measurementsRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId1)))
+        .thenReturn(Mono.just(!inside));
+    when(measurementsRepository.findLastStatusByUserIdAndPlaceId(userId, String.valueOf(placeId2)))
+        .thenReturn(Mono.just(inside));
+
+    ArgumentCaptor<LocationInfo> saveCaptor = ArgumentCaptor.forClass(LocationInfo.class);
+    ArgumentCaptor<LocationInfo> saveInfiniteCaptor = ArgumentCaptor.forClass(LocationInfo.class);
 
     final var sut = locationService.saveMulti(multiLocationInfo);
 
     StepVerifier.create(sut).verifyComplete();
 
     verify(placeRepository).findAllById(placeIds);
-    verify(influxDBMapper, times(placeIds.size())).save(captor.capture());
+    verify(measurementsRepository, times(placeIds.size())).save(saveCaptor.capture());
+    verify(measurementsRepository).saveInfinite(saveInfiniteCaptor.capture());
 
-    captor
+    saveCaptor
         .getAllValues()
         .forEach(
             locationInfo -> {
@@ -98,7 +106,12 @@ class LocationServiceTest {
             });
 
     // shouldnt modify the actual values tested, only the expectations...
-    assertThat(captor.getAllValues().stream().map(LocationInfo::getPlaceId).map(Long::valueOf))
+    assertThat(saveCaptor.getAllValues().stream().map(LocationInfo::getPlaceId).map(Long::valueOf))
         .containsAll(placeIds);
+
+    final var saveInfiniteValues = saveInfiniteCaptor.getAllValues();
+
+    assertThat(saveInfiniteValues.size()).isEqualTo(1);
+    assertThat(saveInfiniteValues.get(0).getPlaceId()).isEqualTo(String.valueOf(placeId1));
   }
 }
