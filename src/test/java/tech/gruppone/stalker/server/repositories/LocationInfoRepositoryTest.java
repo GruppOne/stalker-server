@@ -94,7 +94,7 @@ class LocationInfoRepositoryTest {
     final QueryResult queryResult = new QueryResult();
 
     series.setColumns(List.of("inside"));
-    series.setValues(List.of(List.of(true)));
+    series.setValues(List.of(List.of(lastStatus)));
     result.setSeries(List.of(series));
     queryResult.setResults(List.of(result));
 
@@ -103,6 +103,31 @@ class LocationInfoRepositoryTest {
     final var sut = locationInfoRepository.findLastStatusByUserIdAndPlaceId(userId, placeId);
 
     StepVerifier.create(sut).expectNext(lastStatus).verifyComplete();
+
+    verify(influxDB).query(query);
+  }
+
+  @Test
+  void testFindLastStatusByUserIdAndPlaceIdWhenNoPreviousStatus() {
+    final Query query =
+        QueryBuilder.select("inside")
+            .from("stalker-tsdb", "access_log")
+            .where(QueryBuilder.eq("user_id", userId))
+            .and(QueryBuilder.eq("place_id", placeId))
+            .orderBy(QueryBuilder.desc())
+            .limit(1);
+
+    final var result = new QueryResult.Result();
+    final QueryResult queryResult = new QueryResult();
+
+    result.setSeries(null);
+    queryResult.setResults(List.of(result));
+
+    when(influxDB.query(query)).thenReturn(queryResult);
+
+    final var sut = locationInfoRepository.findLastStatusByUserIdAndPlaceId(userId, placeId);
+
+    StepVerifier.create(sut).verifyComplete();
 
     verify(influxDB).query(query);
   }
