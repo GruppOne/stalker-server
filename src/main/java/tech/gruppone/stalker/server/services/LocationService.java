@@ -10,7 +10,7 @@ import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.api.UsersInsideOrganizationDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
-import tech.gruppone.stalker.server.repositories.MeasurementsRepository;
+import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
 @Log4j2
@@ -19,7 +19,7 @@ import tech.gruppone.stalker.server.repositories.PlaceRepository;
 @Service
 public class LocationService {
 
-  MeasurementsRepository measurementsRepository;
+  LocationInfoRepository locationInfoRepository;
 
   PlaceRepository placeRepository;
 
@@ -47,7 +47,7 @@ public class LocationService {
         .doOnNext(
             locationInfo -> {
               log.info("saving row with default retention policy");
-              measurementsRepository.save(locationInfo);
+              locationInfoRepository.save(locationInfo);
             })
         .then();
   }
@@ -56,7 +56,7 @@ public class LocationService {
     final var placeId = currentlocationInfo.getPlaceId();
     final var currentInside = currentlocationInfo.getInside().booleanValue();
 
-    measurementsRepository
+    locationInfoRepository
         .findLastStatusByUserIdAndPlaceId(currentlocationInfo.getUserId(), placeId)
         .filter(lastInside -> lastInside.booleanValue() != currentInside)
         .subscribe(
@@ -64,7 +64,7 @@ public class LocationService {
               log.info(
                   "saving row with infinite retention policy. last 'inside' value was {}",
                   lastInside);
-              measurementsRepository.saveInfinite(currentlocationInfo);
+              locationInfoRepository.saveWithInfiniteRp(currentlocationInfo);
             });
   }
 
