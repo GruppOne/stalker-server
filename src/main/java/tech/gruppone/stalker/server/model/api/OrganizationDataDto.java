@@ -33,5 +33,4 @@ public class OrganizationDataDto {
 
     @NonNull String bindPassword;
   }
-
 }

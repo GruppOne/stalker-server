@@ -71,58 +71,57 @@ public class ConnectionService {
                     .switchIfEmpty(Mono.error(NotFoundException::new))
                     .flatMap(
                         c -> {
+                          try {
+                            LdapConnection connection = new LdapNetworkConnection(c.getUrl(), 389);
+                            connection.bind(c.getBindDn(), c.getBindPassword());
+
+                            System.out.println("Funziona la connessione.");
+
+                            EntryCursor cursor =
+                                connection.search(
+                                    c.getBaseDn(),
+                                    "(cn=" + ldap.getLdapCn() + ")",
+                                    SearchScope.SUBTREE);
+
+                            boolean existsCn = false;
+                            boolean existsPassword = false;
+                            for (var entry : cursor) {
+                              if (entry.getAttributes().stream()
+                                  .anyMatch(
+                                      e -> e.get().getString().equals(ldap.getLdapPassword())))
+                                existsPassword = true;
+
+                              System.out.println("Dentro.");
+
+                              existsCn = true;
+                            }
+                            if (!existsCn | !existsPassword)
+                              throw new InvalidLdapCredentialsException();
+
                             try {
-                              LdapConnection connection =
-                                  new LdapNetworkConnection(c.getUrl(), 389);
-                              connection.bind(c.getBindDn(), c.getBindPassword());
-
-                              System.out.println("Funziona la connessione.");
-
-                              EntryCursor cursor =
-                                  connection.search(
-                                      c.getBaseDn(),
-                                      "(cn=" + ldap.getLdapCn() + ")",
-                                      SearchScope.SUBTREE);
-
-                              boolean existsCn = false;
-                              boolean existsPassword = false;
-                              for (var entry : cursor) {
-                                if (entry.getAttributes().stream()
-                                    .anyMatch(
-                                        e -> e.get().getString().equals(ldap.getLdapPassword())))
-                                  existsPassword = true;
-
-                                  System.out.println("Dentro.");
-
-                                existsCn = true;
-                              }
-                              if (!existsCn | !existsPassword)
-                                throw new InvalidLdapCredentialsException();
-
-                              try {
-                                cursor.close();
-                              } catch (IOException e) {
-                                throw new UnexpectedErrorException();
-                              }
-
-                              connection.unBind();
-
-                              log.info(
-                                  "Private user connection created for user {} into the organization {}",
-                                  userId,
-                                  organizationId);
-                            } catch (LdapException e) {
-                              log.info(
-                                  "Fail to create private user connection for {}: the LDAP credentials saved are not valid.",
-                                  userId);
-                              throw new BadRequestException();
+                              cursor.close();
+                            } catch (IOException e) {
+                              throw new UnexpectedErrorException();
                             }
 
-                            return connectionRepository.save(
-                                ConnectionDao.builder()
-                                    .userId(userId)
-                                    .organizationId(organizationId)
-                                    .build());
+                            connection.unBind();
+
+                            log.info(
+                                "Private user connection created for user {} into the organization {}",
+                                userId,
+                                organizationId);
+                          } catch (LdapException e) {
+                            log.info(
+                                "Fail to create private user connection for {}: the LDAP credentials saved are not valid.",
+                                userId);
+                            throw new BadRequestException();
+                          }
+
+                          return connectionRepository.save(
+                              ConnectionDao.builder()
+                                  .userId(userId)
+                                  .organizationId(organizationId)
+                                  .build());
                         }))
         .then();
   }
