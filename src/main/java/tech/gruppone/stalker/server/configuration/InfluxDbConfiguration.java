@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.LogLevel;
 import org.influxdb.impl.InfluxDBMapper;
@@ -22,16 +23,20 @@ import org.springframework.context.annotation.PropertySource;
 public class InfluxDbConfiguration {
 
   @Getter String database;
-  @Getter String retentionPolicy;
+  @Getter String measurement;
+  @Getter String defaultRetentionPolicy;
+  @Getter String infiniteRetentionPolicy;
 
-  @Getter String measurement = "complete_log";
-
-  // XXX fails silently when influxdb connection cannot be established
   public InfluxDbConfiguration(
-      @Value("${influxdb.database}") String database,
-      @Value("${influxdb.retention}") String retentionPolicy) {
+      @Value("${influxdb.database}") final String database,
+      @Value("${influxdb.measurement}") final String measurement,
+      @Value("${influxdb.default-retention}") final String defaultRetentionPolicy,
+      @Value("${influxdb.infinite-retention}") final String infiniteRetentionPolicy) {
+
     this.database = database;
-    this.retentionPolicy = retentionPolicy;
+    this.measurement = measurement;
+    this.defaultRetentionPolicy = defaultRetentionPolicy;
+    this.infiniteRetentionPolicy = infiniteRetentionPolicy;
   }
 
   @Bean
@@ -47,15 +52,15 @@ public class InfluxDbConfiguration {
   }
 
   @Bean
-  public InfluxDBMapper influxDBMapper(InfluxDB influxDb) {
+  public InfluxDBMapper influxDBMapper(final InfluxDB influxDb) {
     // this isn't the most appropriate place to configure this stuff
     log.info("configuring InfluxDB connection");
     influxDb
         .setDatabase(database)
-        .setRetentionPolicy(retentionPolicy)
-        // .enableGzip()
-        .enableBatch()
-        // .enableBatch(BatchOptions.DEFAULTS.precision(TimeUnit.MILLISECONDS))
+        .setRetentionPolicy(defaultRetentionPolicy)
+        .enableGzip()
+        // .enableBatch()
+        .enableBatch(BatchOptions.DEFAULTS.precision(TimeUnit.MILLISECONDS))
         .setLogLevel(LogLevel.FULL);
 
     log.info("instantiating InfluxDBMapper bean");

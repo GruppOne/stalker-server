@@ -1,0 +1,15 @@
+USE "stalker-tsdb"
+ALTER RETENTION POLICY "infinite" ON "stalker-tsdb" DEFAULT
+INSERT access_log,user_id=1,organization_id=1,place_id=1 anonymous=false,inside=true 1589955300000000000
+INSERT access_log,user_id=1,organization_id=1,place_id=1 anonymous=false,inside=false 1589956800000000000
+INSERT access_log,user_id=1,organization_id=1,place_id=1 anonymous=false,inside=true 1589957700000000000
+INSERT access_log,user_id=1,organization_id=1,place_id=1 anonymous=false,inside=false 1589958600000000000
+INSERT access_log,user_id=1,organization_id=1,place_id=1 anonymous=false,inside=true 1589959800000000000
+INSERT access_log,user_id=2,organization_id=1,place_id=1 anonymous=false,inside=false 1589956525000000000
+INSERT access_log,user_id=2,organization_id=1,place_id=1 anonymous=false,inside=true 1589959225000000000
+INSERT access_log,user_id=2,organization_id=1,place_id=1 anonymous=false,inside=false 1589959825000000000
+INSERT access_log,user_id=3,organization_id=1,place_id=2 anonymous=false,inside=true 1589957150000000000
+INSERT access_log,user_id=3,organization_id=1,place_id=2 anonymous=false,inside=false 1589960750000000000
+INSERT access_log,user_id=4,organization_id=2,place_id=3 anonymous=false,inside=true 1589956875000000000
+INSERT access_log,user_id=4,organization_id=2,place_id=3 anonymous=false,inside=false 1589960175000000000
+ALTER RETENTION POLICY "default" ON "stalker-tsdb" DEFAULT
