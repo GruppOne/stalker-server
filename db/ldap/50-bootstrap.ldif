@@ -34,16 +34,10 @@ objectClass: organizationalUnit
 objectClass: top
 ou: users
 
-dn: cn=imolainformatica,ou=users,dc=stalker,dc=intern
-cn: imolainformatica
+dn: cn=utenteStalker,ou=users,dc=stalker,dc=intern
+cn: utenteStalker
 objectClass: inetOrgPerson
 sn: user
-uid: ImolaInformatica
-userPassword: 7df32dd4ba9d81704373a2034e2f5b4bfa97f35e4533e90ef261fabc20a9eaf328307dae6e5577fa19fb3cce974f68f2ed1c56532cfdbe729a31be553dcbd1ff
+uid: UtenteStalker
+userPassword: a21ea0bc7ebc8dacd2b84aa0cef532a233b941eb87a30e86a639a02087e5b9d3418a10016d5ea2a09cc926252aee6e6b67cd4fca9b6e923eaedd247f1559ad83
 
-dn: cn=casamia,ou=users,dc=stalker,dc=intern
-cn: casamia
-objectClass: inetOrgPerson
-sn: admin
-uid: CasaMia
-userPassword: 3a80fbeef468e89454878c9de232d8c99940d6fc8638c46aece750d94c17524339858f643cbd8d5203853607011226d3178da15853f7536fedbb0fffa9dc2f44
