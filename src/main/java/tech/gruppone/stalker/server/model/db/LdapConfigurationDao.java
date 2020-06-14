@@ -30,9 +30,9 @@ public class LdapConfigurationDao {
   @NonNull
   String baseDn;
 
-  @Column("bindDn")
+  @Column("bindRdn")
   @NonNull
-  String bindDn;
+  String bindRdn;
 
   @Column("bindPassword")
   @NonNull

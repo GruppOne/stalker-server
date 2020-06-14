@@ -75,7 +75,7 @@ CREATE TABLE `LdapConfiguration` (
   `organizationId` int(11) NOT NULL,
   `url` varchar(250) NOT NULL,
   `baseDn` varchar(250) NOT NULL,
-  `bindDn` varchar(250) NOT NULL,
+  `bindRdn` varchar(250) NOT NULL,
   `bindPassword` varchar(250) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 

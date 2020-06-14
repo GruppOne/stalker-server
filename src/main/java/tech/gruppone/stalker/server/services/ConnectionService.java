@@ -71,7 +71,7 @@ public class ConnectionService {
                           try {
                             LdapConnection connection = new LdapNetworkConnection(c.getUrl(), 389);
                             connection.bind(
-                                c.getBindDn() + "," + c.getBaseDn(), c.getBindPassword());
+                                c.getBindRdn() + "," + c.getBaseDn(), c.getBindPassword());
 
                             EntryCursor cursor =
                                 connection.search(

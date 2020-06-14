@@ -24,9 +24,9 @@ properties:
       baseDn:
         type: string
         description: The base DN to search query.
-      bindDn:
+      bindRdn:
         type: string
-        description: The admin DN to bind LDAP connection.
+        description: The admin RDN to bind LDAP connection.
       bindPassword:
         type: string
         format: password
@@ -34,7 +34,7 @@ properties:
     required:
       - url
       - baseDn
-      - bindDn
+      - bindRdn
       - bindPassword
   creationDateTime:
     $ref: ../GenericTimestamp.v1.yaml

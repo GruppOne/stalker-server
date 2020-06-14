@@ -101,14 +101,14 @@ public class OrganizationService {
     final Long organizationId = newOrganizationId;
     final String url = organizationDataDto.getLdapConfiguration().getUrl();
     final String baseDn = organizationDataDto.getLdapConfiguration().getBaseDn();
-    final String bindDn = organizationDataDto.getLdapConfiguration().getBindDn();
+    final String bindRdn = organizationDataDto.getLdapConfiguration().getBindRdn();
     final String bindPassword = organizationDataDto.getLdapConfiguration().getBindPassword();
 
     return LdapConfigurationDao.builder()
         .organizationId(organizationId)
         .url(url)
         .baseDn(baseDn)
-        .bindDn(bindDn)
+        .bindRdn(bindRdn)
         .bindPassword(bindPassword)
         .build();
   }
@@ -162,7 +162,7 @@ public class OrganizationService {
                                 updatedLdapConfiguration.getOrganizationId(),
                                 updatedLdapConfiguration.getUrl(),
                                 updatedLdapConfiguration.getBaseDn(),
-                                updatedLdapConfiguration.getBindDn(),
+                                updatedLdapConfiguration.getBindRdn(),
                                 updatedLdapConfiguration.getBindPassword()))
                     .then();
               } else return Mono.empty();
