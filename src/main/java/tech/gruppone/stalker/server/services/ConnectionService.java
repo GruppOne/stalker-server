@@ -66,14 +66,14 @@ public class ConnectionService {
         .flatMap(
             l ->
                 ldapConfigurationRepository
-                    .findById(l.getId())
+                    .findByOrganizationId(l.getId())
                     .filter(f -> f.getOrganizationId() != null)
                     .switchIfEmpty(Mono.error(NotFoundException::new))
                     .flatMap(
                         c -> {
                           try {
                             LdapConnection connection = new LdapNetworkConnection(c.getUrl(), 389);
-                            connection.bind(c.getBindDn(), c.getBindPassword());
+                            connection.bind(c.getBindDn() + "," + c.getBaseDn(), c.getBindPassword());
 
                             EntryCursor cursor =
                                 connection.search(
@@ -90,6 +90,7 @@ public class ConnectionService {
                                 existsPassword = true;
 
                               existsCn = true;
+                              System.out.println("Dentro.");
                             }
                             if (!existsCn | !existsPassword)
                               throw new InvalidLdapCredentialsException();
