@@ -101,10 +101,12 @@ public class ConnectionService {
                                 organizationId);
                           } catch (LdapException e) {
                             log.info(
-                                "Fail to create private user connection for {}: the LDAP credentials saved are not valid.",
+                                e
+                                    + "\nFail to create private user connection for {}: the LDAP credentials saved are not valid.",
                                 userId);
                             throw new BadRequestException();
                           } catch (IOException e) {
+                            log.error(e);
                             throw new UnexpectedErrorException();
                           }
 
