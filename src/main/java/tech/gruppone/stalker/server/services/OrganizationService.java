@@ -13,8 +13,10 @@ import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
+import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
@@ -26,6 +28,7 @@ public class OrganizationService {
 
   OrganizationRepository organizationRepository;
   PlaceRepository placeRepository;
+  LdapConfigurationRepository ldapConfigurationRepository;
 
   // TODO will need to merge organization with ldapconfiguration when implementing private orgs
   private OrganizationDto fromTuple(final Tuple2<OrganizationDao, List<Long>> tuple) {
@@ -90,14 +93,48 @@ public class OrganizationService {
         .build();
   }
 
+  private LdapConfigurationDao fromLdapConfigurationDataDtoWithoutDates(
+      final OrganizationDataDto organizationDataDto) {
+
+    final String url = organizationDataDto.getLdapConfiguration().getUrl();
+    final String baseDn = organizationDataDto.getLdapConfiguration().getBaseDn();
+    final String bindDn = organizationDataDto.getLdapConfiguration().getBindDn();
+    final String bindPassword = organizationDataDto.getLdapConfiguration().getBindPassword();
+
+    return LdapConfigurationDao.builder()
+        .url(url)
+        .baseDn(baseDn)
+        .bindDn(bindDn)
+        .bindPassword(bindPassword)
+        .build();
+  }
+
+  // FIXME if the org is private, this method doesn't print the new organization's orgId
   public Mono<Long> save(final OrganizationDataDto organizationDataDto) {
 
     final OrganizationDao newOrganizationDao = fromDataDtoWithoutDates(organizationDataDto);
-    // TODO insert ldapconfiguration if needed
 
-    return organizationRepository.save(newOrganizationDao).map(OrganizationDao::getId);
+    return organizationRepository
+        .save(newOrganizationDao)
+        .map(OrganizationDao::getId)
+        .flatMap(
+            o -> {
+              if (newOrganizationDao.getOrganizationType().equals("private")) {
+                return ldapConfigurationRepository
+                    .save(
+                        o.longValue(),
+                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto).getUrl(),
+                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto).getBaseDn(),
+                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto).getBindDn(),
+                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto)
+                            .getBindPassword())
+                    .map(LdapConfigurationDao::getOrganizationId);
+              }
+              return Mono.just(o);
+            });
   }
 
+  // TODO insert ldapConfiguration for POST /organization/{organizationId}
   public Mono<Void> updateById(final Long id, final OrganizationDataDto organizationDataDto) {
 
     final OrganizationDao updatedOrganization =
@@ -105,7 +142,7 @@ public class OrganizationService {
             .withId(id)
             .withCreatedDate(organizationDataDto.getCreationDateTime().toLocalDateTime())
             .withLastModifiedDate(LocalDateTime.now(clock));
-    // TODO update ldapconfiguration if needed
+    // TODO update ldapconfiguration here if needed
 
     return organizationRepository.save(updatedOrganization).then();
   }
