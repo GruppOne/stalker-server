@@ -6,9 +6,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.exceptions.NotImplementedException;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
 import tech.gruppone.stalker.server.model.api.UsersInsideOrganizationDto;
+import tech.gruppone.stalker.server.model.api.UsersInsideOrganizationDto.UsersInsidePlaceDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
@@ -71,6 +71,10 @@ public class LocationService {
   public Mono<UsersInsideOrganizationDto> countUsersCurrentlyInsideOrganizationById(
       final long organizationId) {
 
-    return Mono.error(NotImplementedException::new);
+    return locationInfoRepository
+        .findByOrganizationIdGroupByPlaceId(organizationId)
+        .map(tuple -> new UsersInsidePlaceDto(tuple.getT1(), tuple.getT2()))
+        .collectList()
+        .map(UsersInsideOrganizationDto::new);
   }
 }
