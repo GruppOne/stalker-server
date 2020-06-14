@@ -126,7 +126,7 @@ public class OrganizationService {
                 final LdapConfigurationDao newLdapConfigurationDao =
                     fromLdapConfigurationDataDtoWithoutDates(
                         newOrganizationId, organizationDataDto);
-                if(newLdapConfigurationDao.equals(null)) throw new BadRequestException();
+                if(newLdapConfigurationDao == null)) throw new BadRequestException();
                 return ldapConfigurationRepository
                     .save(newLdapConfigurationDao)
                     .map(LdapConfigurationDao::getOrganizationId);
