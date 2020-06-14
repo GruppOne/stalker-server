@@ -52,7 +52,7 @@ CREATE TABLE `AdministratorType` (
 INSERT INTO `AdministratorType` (`id`, `name`, `role`) VALUES
 (1, 'Admin', 'ROLE_ADMIN'),
 (2, 'Owner', 'ROLE_MANAGER'),
-(3, 'manager', 'ROLE_OWNER'),
+(3, 'Manager', 'ROLE_OWNER'),
 (4, 'Viewer', 'ROLE_VIEWER');
 
 -- --------------------------------------------------------
