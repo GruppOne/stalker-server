@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
+import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
@@ -122,10 +123,8 @@ public class OrganizationService {
         .flatMap(
             o -> {
               if (newOrganizationDao.getOrganizationType().equals("private")) {
-                Long newOrganizationId = o.longValue();
                 final LdapConfigurationDao newLdapConfigurationDao =
-                    fromLdapConfigurationDataDtoWithoutDates(
-                        newOrganizationId, organizationDataDto);
+                    fromLdapConfigurationDataDtoWithoutDates(o.longValue(), organizationDataDto);
                 if (newLdapConfigurationDao == null) throw new BadRequestException();
                 return ldapConfigurationRepository
                     .save(newLdapConfigurationDao)
@@ -135,7 +134,6 @@ public class OrganizationService {
             });
   }
 
-  // TODO insert ldapConfiguration for POST /organization/{organizationId}
   public Mono<Void> updateById(final Long id, final OrganizationDataDto organizationDataDto) {
 
     final OrganizationDao updatedOrganization =
@@ -143,8 +141,33 @@ public class OrganizationService {
             .withId(id)
             .withCreatedDate(organizationDataDto.getCreationDateTime().toLocalDateTime())
             .withLastModifiedDate(LocalDateTime.now(clock));
-    // TODO update ldapconfiguration here if needed
 
-    return organizationRepository.save(updatedOrganization).then();
+    final LdapConfigurationDao updatedLdapConfiguration =
+        fromLdapConfigurationDataDtoWithoutDates(id, organizationDataDto);
+
+    return organizationRepository
+        .save(updatedOrganization)
+        .flatMap(
+            o -> {
+              if (o.getOrganizationType().equals("private")) {
+                if (organizationDataDto.getLdapConfiguration() == null)
+                  throw new BadRequestException();
+                return ldapConfigurationRepository
+                    .findByOrganizationId(id)
+                    .switchIfEmpty(Mono.error(NotFoundException::new))
+                    .flatMap(
+                        l -> {
+                          return ldapConfigurationRepository
+                              .update(
+                                  l.getId(),
+                                  updatedLdapConfiguration.getOrganizationId(),
+                                  updatedLdapConfiguration.getUrl(),
+                                  updatedLdapConfiguration.getBaseDn(),
+                                  updatedLdapConfiguration.getBindDn(),
+                                  updatedLdapConfiguration.getBindPassword())
+                              .then();
+                        });
+              } else return Mono.empty();
+            });
   }
 }
