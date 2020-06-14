@@ -94,14 +94,16 @@ public class OrganizationService {
   }
 
   private LdapConfigurationDao fromLdapConfigurationDataDtoWithoutDates(
-      final OrganizationDataDto organizationDataDto) {
+      final Long newOrganizationId, final OrganizationDataDto organizationDataDto) {
 
+    final Long organizationId = newOrganizationId;
     final String url = organizationDataDto.getLdapConfiguration().getUrl();
     final String baseDn = organizationDataDto.getLdapConfiguration().getBaseDn();
     final String bindDn = organizationDataDto.getLdapConfiguration().getBindDn();
     final String bindPassword = organizationDataDto.getLdapConfiguration().getBindPassword();
 
     return LdapConfigurationDao.builder()
+        .organizationId(organizationId)
         .url(url)
         .baseDn(baseDn)
         .bindDn(bindDn)
@@ -109,7 +111,6 @@ public class OrganizationService {
         .build();
   }
 
-  // FIXME if the org is private, this method doesn't print the new organization's orgId
   public Mono<Long> save(final OrganizationDataDto organizationDataDto) {
 
     final OrganizationDao newOrganizationDao = fromDataDtoWithoutDates(organizationDataDto);
@@ -120,14 +121,12 @@ public class OrganizationService {
         .flatMap(
             o -> {
               if (newOrganizationDao.getOrganizationType().equals("private")) {
+                Long newOrganizationId = o.longValue();
+                final LdapConfigurationDao newLdapConfigurationDao =
+                    fromLdapConfigurationDataDtoWithoutDates(
+                        newOrganizationId, organizationDataDto);
                 return ldapConfigurationRepository
-                    .save(
-                        o.longValue(),
-                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto).getUrl(),
-                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto).getBaseDn(),
-                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto).getBindDn(),
-                        fromLdapConfigurationDataDtoWithoutDates(organizationDataDto)
-                            .getBindPassword())
+                    .save(newLdapConfigurationDao)
                     .map(LdapConfigurationDao::getOrganizationId);
               }
               return Mono.just(o);
