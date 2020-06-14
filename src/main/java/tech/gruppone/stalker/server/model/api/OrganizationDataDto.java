@@ -29,7 +29,7 @@ public class OrganizationDataDto {
 
     @NonNull String baseDn;
 
-    @NonNull String bindCn;
+    @NonNull String bindDn;
 
     @NonNull String bindPassword;
   }
