@@ -3,6 +3,7 @@ package tech.gruppone.stalker.server.repositories;
 import static org.influxdb.querybuilder.BuiltQuery.QueryBuilder.desc;
 import static org.influxdb.querybuilder.BuiltQuery.QueryBuilder.eq;
 
+import java.sql.Timestamp;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 import tech.gruppone.stalker.server.configuration.InfluxDbConfiguration;
+import tech.gruppone.stalker.server.model.api.UserHistoryPerOrganizationDto.PlaceHistoryDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 
 @Log4j2
@@ -107,6 +109,7 @@ public class LocationInfoRepository {
             .orderBy(desc())
             .limit(1);
 
+    // should refactor this with influxDBMapper
     final var series = influxDB.query(query).getResults().get(0).getSeries();
 
     if (series == null) {
@@ -136,5 +139,37 @@ public class LocationInfoRepository {
                 placeCounter.reduce(
                     (accumulator, next) ->
                         Tuples.of(placeCounter.key(), accumulator.getT2() + next.getT2())));
+  }
+
+  public Flux<PlaceHistoryDto> findHistoryByOrganizationIdAndUserId(
+      final Long organizationId, final Long userId) {
+    final String database = influxDbConfiguration.getDatabase();
+    final String measurement = influxDbConfiguration.getMeasurement();
+    final String infiniteRetentionPolicy = influxDbConfiguration.getInfiniteRetentionPolicy();
+    final String fullyQualifiedFrom =
+        String.format("\"%s\".\"%s\".\"%s\"", database, infiniteRetentionPolicy, measurement);
+
+    final Query query =
+        QueryBuilder.select()
+            .from(database, fullyQualifiedFrom)
+            .where(eq(ORGANIZATION_ID_TAG_NAME, String.valueOf(organizationId)))
+            .and(eq(USER_ID_TAG_NAME, String.valueOf(userId)))
+            .orderBy(desc());
+
+    final var result = influxDBMapper.query(query, LocationInfo.class);
+
+    return Flux.fromIterable(result)
+        .map(
+            locationInfo -> {
+              Timestamp timestamp = Timestamp.from(locationInfo.getTime());
+              Long placeId = Long.valueOf(locationInfo.getPlaceId());
+              Boolean inside = locationInfo.getInside();
+
+              return PlaceHistoryDto.builder()
+                  .timestamp(timestamp)
+                  .placeId(placeId)
+                  .inside(inside)
+                  .build();
+            });
   }
 }
