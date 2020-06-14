@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
+import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
@@ -125,6 +126,7 @@ public class OrganizationService {
                 final LdapConfigurationDao newLdapConfigurationDao =
                     fromLdapConfigurationDataDtoWithoutDates(
                         newOrganizationId, organizationDataDto);
+                if(newLdapConfigurationDao.equals(null)) throw new BadRequestException();
                 return ldapConfigurationRepository
                     .save(newLdapConfigurationDao)
                     .map(LdapConfigurationDao::getOrganizationId);
