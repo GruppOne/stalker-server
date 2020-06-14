@@ -17,7 +17,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+import reactor.util.function.Tuples;
 import tech.gruppone.stalker.server.model.api.MultiLocationInfoDto;
+import tech.gruppone.stalker.server.model.api.UsersInsideOrganizationDto;
 import tech.gruppone.stalker.server.model.db.LocationInfo;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
 import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
@@ -113,5 +115,40 @@ class LocationServiceTest {
 
     assertThat(saveInfiniteValues.size()).isEqualTo(1);
     assertThat(saveInfiniteValues.get(0).getPlaceId()).isEqualTo(String.valueOf(placeId1));
+  }
+
+  @Test
+  void testCountUsersCurrentlyInsideOrganizationById() {
+    final var organizationId = 1L;
+    final var placeId = 11L;
+    final var usersInside = 1;
+    final var expectedDto =
+        new UsersInsideOrganizationDto(
+            List.of(new UsersInsideOrganizationDto.UsersInsidePlaceDto(placeId, usersInside)));
+
+    when(locationInfoRepository.findByOrganizationIdGroupByPlaceId(organizationId))
+        .thenReturn(Flux.just(Tuples.of(placeId, usersInside)));
+
+    final var sut = locationService.countUsersCurrentlyInsideOrganizationById(organizationId);
+
+    StepVerifier.create(sut).expectNext(expectedDto).verifyComplete();
+
+    verify(locationInfoRepository).findByOrganizationIdGroupByPlaceId(organizationId);
+  }
+
+  @Test
+  void testCountUsersCurrentlyInsideOrganizationByIdWhenNoOneInside() {
+    final var organizationId = 1L;
+
+    final var expectedDto = new UsersInsideOrganizationDto(List.of());
+
+    when(locationInfoRepository.findByOrganizationIdGroupByPlaceId(organizationId))
+        .thenReturn(Flux.empty());
+
+    final var sut = locationService.countUsersCurrentlyInsideOrganizationById(organizationId);
+
+    StepVerifier.create(sut).expectNext(expectedDto).verifyComplete();
+
+    verify(locationInfoRepository).findByOrganizationIdGroupByPlaceId(organizationId);
   }
 }

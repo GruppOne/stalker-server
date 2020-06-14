@@ -12,15 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuples;
 import tech.gruppone.stalker.server.ApplicationTestConfiguration;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.LocationInfoRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
@@ -29,12 +30,14 @@ import tech.gruppone.stalker.server.repositories.PlaceRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrganizationControllerTest {
 
-  private static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
+  static final LocalDateTime LOCAL_DATETIME = LocalDateTime.parse("2020-01-01T01:01:01.01");
 
-  @Autowired private WebTestClient webTestClient;
+  @Autowired WebTestClient webTestClient;
 
-  @MockBean private OrganizationRepository organizationRepository;
-  @MockBean private PlaceRepository placeRepository;
+  @MockBean OrganizationRepository organizationRepository;
+  @MockBean PlaceRepository placeRepository;
+
+  @MockBean LocationInfoRepository locationInfoRepository;
 
   // set some common variables
   final long organizationId = 1L;
@@ -165,11 +168,25 @@ class OrganizationControllerTest {
 
   @Test
   void testGetOrganizationByIdUsersInside() {
+
+    final var usersInside = 1;
+    when(locationInfoRepository.findByOrganizationIdGroupByPlaceId(organizationId))
+        .thenReturn(Flux.just(Tuples.of(placeId, usersInside)));
+
     webTestClient
         .get()
         .uri("/organization/{organizationId}/users/inside", organizationId)
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+        .isOk()
+        .expectBody()
+        .jsonPath("$.usersInside")
+        .isEqualTo(usersInside)
+        .jsonPath("$.places[0].placeId")
+        .isEqualTo(placeId)
+        .jsonPath("$.places[0].usersInside")
+        .isEqualTo(usersInside);
+
+    verify(locationInfoRepository).findByOrganizationIdGroupByPlaceId(organizationId);
   }
 }
