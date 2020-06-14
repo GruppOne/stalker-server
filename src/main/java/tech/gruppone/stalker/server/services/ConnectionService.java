@@ -33,10 +33,7 @@ public class ConnectionService {
   OrganizationRepository organizationRepository;
   LdapConfigurationRepository ldapConfigurationRepository;
 
-  public Mono<Void> createPublicUserConnection(
-      ConnectionController.PostUserByIdOrganizationByIdConnectionBody ldap,
-      long userId,
-      long organizationId) {
+  public Mono<Void> createPublicUserConnection(long userId, long organizationId) {
 
     return organizationRepository
         .findById(organizationId)
@@ -73,7 +70,8 @@ public class ConnectionService {
                         c -> {
                           try {
                             LdapConnection connection = new LdapNetworkConnection(c.getUrl(), 389);
-                            connection.bind(c.getBindDn() + "," + c.getBaseDn(), c.getBindPassword());
+                            connection.bind(
+                                c.getBindDn() + "," + c.getBaseDn(), c.getBindPassword());
 
                             EntryCursor cursor =
                                 connection.search(
@@ -90,17 +88,11 @@ public class ConnectionService {
                                 existsPassword = true;
 
                               existsCn = true;
-                              System.out.println("Dentro.");
                             }
                             if (!existsCn | !existsPassword)
                               throw new InvalidLdapCredentialsException();
 
-                            try {
-                              cursor.close();
-                            } catch (IOException e) {
-                              throw new UnexpectedErrorException();
-                            }
-
+                            cursor.close();
                             connection.unBind();
 
                             log.info(
@@ -112,6 +104,8 @@ public class ConnectionService {
                                 "Fail to create private user connection for {}: the LDAP credentials saved are not valid.",
                                 userId);
                             throw new BadRequestException();
+                          } catch (IOException e) {
+                            throw new UnexpectedErrorException();
                           }
 
                           return connectionRepository.save(

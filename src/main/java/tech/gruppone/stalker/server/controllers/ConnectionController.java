@@ -32,8 +32,7 @@ public class ConnectionController {
       @PathVariable("userId") final long userId,
       @PathVariable("organizationId") final long organizationId) {
 
-    if (ldap == null)
-      return connectionService.createPublicUserConnection(ldap, userId, organizationId);
+    if (ldap == null) return connectionService.createPublicUserConnection(userId, organizationId);
     else return connectionService.createPrivateUserConnection(ldap, userId, organizationId);
   }
 
