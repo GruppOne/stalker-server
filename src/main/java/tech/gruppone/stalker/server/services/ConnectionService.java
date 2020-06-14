@@ -75,8 +75,6 @@ public class ConnectionService {
                             LdapConnection connection = new LdapNetworkConnection(c.getUrl(), 389);
                             connection.bind(c.getBindDn(), c.getBindPassword());
 
-                            System.out.println("Funziona la connessione.");
-
                             EntryCursor cursor =
                                 connection.search(
                                     c.getBaseDn(),
@@ -90,8 +88,6 @@ public class ConnectionService {
                                   .anyMatch(
                                       e -> e.get().getString().equals(ldap.getLdapPassword())))
                                 existsPassword = true;
-
-                              System.out.println("Dentro.");
 
                               existsCn = true;
                             }
