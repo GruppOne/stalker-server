@@ -71,6 +71,7 @@ CREATE TABLE `Connection` (
 -- Struttura della tabella `LdapConfiguration`
 --
 CREATE TABLE `LdapConfiguration` (
+  `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `url` varchar(250) NOT NULL,
   `baseDn` varchar(250) NOT NULL,
@@ -192,7 +193,9 @@ ADD
 ALTER TABLE
   `LdapConfiguration`
 ADD
-  PRIMARY KEY (`organizationId`);
+  PRIMARY KEY (`id`),
+ADD
+  KEY `organizationId` (`organizationId`);
 
 --
 -- Indici per le tabelle `OrganizationRole`
@@ -287,7 +290,7 @@ MODIFY
 ALTER TABLE
   `LdapConfiguration`
 MODIFY
-  `organizationId` int(11) NOT NULL AUTO_INCREMENT;
+  `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `OrganizationRole`
