@@ -39,12 +39,26 @@ services:
     expose:
       - "3306"
 
+    healthcheck:
+      test:
+        - "CMD"
+        - "mysql"
+        - "-u"
+        - "root"
+        - "--password=$MYSQL_ROOT_PASSWORD"
+        - "-e"
+        - "SELECT table_name FROM information_schema.tables WHERE table_schema = 'stalker-rdb'"
+        - "stalker-rdb"
+      interval: 1m
+      timeout: 30s
+      retries: 3
+      start_period: 3m
+
     volumes:
       - type: volume
         source: rdb-data
         target: /var/lib/mysql
 
-  # TODO check if this influxdb configuration works
   tsdb:
     build:
       context: ./db/time-series
