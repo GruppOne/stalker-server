@@ -143,6 +143,7 @@ public class LocationInfoRepository {
 
   public Flux<PlaceHistoryDto> findHistoryByOrganizationIdAndUserId(
       final Long organizationId, final Long userId) {
+
     final String database = influxDbConfiguration.getDatabase();
     final String measurement = influxDbConfiguration.getMeasurement();
     final String infiniteRetentionPolicy = influxDbConfiguration.getInfiniteRetentionPolicy();
@@ -161,9 +162,9 @@ public class LocationInfoRepository {
     return Flux.fromIterable(result)
         .map(
             locationInfo -> {
-              Timestamp timestamp = Timestamp.from(locationInfo.getTime());
-              Long placeId = Long.valueOf(locationInfo.getPlaceId());
-              Boolean inside = locationInfo.getInside();
+              final Timestamp timestamp = Timestamp.from(locationInfo.getTime());
+              final Long placeId = Long.valueOf(locationInfo.getPlaceId());
+              final Boolean inside = locationInfo.getInside();
 
               return PlaceHistoryDto.builder()
                   .timestamp(timestamp)
