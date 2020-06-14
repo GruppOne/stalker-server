@@ -116,6 +116,6 @@ VALUES
 --
 
 INSERT INTO `LdapConfiguration` (`id`, `organizationId`, `url`, `baseDn`, `bindDn`, `bindPassword`) VALUES
-(1, 3, '127.0.0.1', 'dc=stalker,dc=intern', 'cn=admin,dc=stalker,dc=intern', 'adminPassword');
+(1, 3, '127.0.0.1', 'dc=stalker,dc=intern', 'cn=admin', 'adminPassword');
 
 COMMIT;

@@ -156,17 +156,15 @@ public class OrganizationService {
                     .findByOrganizationId(id)
                     .switchIfEmpty(Mono.error(NotFoundException::new))
                     .flatMap(
-                        l -> {
-                          return ldapConfigurationRepository
-                              .update(
-                                  l.getId(),
-                                  updatedLdapConfiguration.getOrganizationId(),
-                                  updatedLdapConfiguration.getUrl(),
-                                  updatedLdapConfiguration.getBaseDn(),
-                                  updatedLdapConfiguration.getBindDn(),
-                                  updatedLdapConfiguration.getBindPassword())
-                              .then();
-                        });
+                        l ->
+                            ldapConfigurationRepository.update(
+                                l.getId(),
+                                updatedLdapConfiguration.getOrganizationId(),
+                                updatedLdapConfiguration.getUrl(),
+                                updatedLdapConfiguration.getBaseDn(),
+                                updatedLdapConfiguration.getBindDn(),
+                                updatedLdapConfiguration.getBindPassword()))
+                    .then();
               } else return Mono.empty();
             });
   }
