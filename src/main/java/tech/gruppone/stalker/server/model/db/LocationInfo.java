@@ -2,24 +2,29 @@ package tech.gruppone.stalker.server.model.db;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.experimental.FieldDefaults;
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
-// @Data
-// @NoArgsConstructor
-// @AllArgsConstructor
-// @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 @Builder
-@Value
+@AllArgsConstructor
+// these are required by influxdb java client library
+@Data
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Measurement(
     // must match the string in InfluxDbConfiguration.measurement
     name = "access_log",
     database = "stalker-tsdb",
     timeUnit = TimeUnit.MILLISECONDS)
+// XXX careful: the nonnull are blatantly disregarded by influxDBMapper!
 public class LocationInfo {
 
   @NonNull
