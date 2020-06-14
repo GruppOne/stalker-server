@@ -115,7 +115,7 @@ VALUES
 -- Dump dei dati per la tabella `LdapConfiguration`
 --
 
-INSERT INTO `LdapConfiguration` (`id`, `organizationId`, `url`, `baseDn`, `bindDn`, `bindPassword`) VALUES
+INSERT INTO `LdapConfiguration` (`id`, `organizationId`, `url`, `baseDn`, `bindRdn`, `bindPassword`) VALUES
 (1, 3, '127.0.0.1', 'dc=stalker,dc=intern', 'cn=admin', 'adminPassword');
 
 COMMIT;
