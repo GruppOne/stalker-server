@@ -8,6 +8,6 @@ import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
 public interface LdapConfigurationRepository
     extends ReactiveCrudRepository<LdapConfigurationDao, Long> {
 
-      public Mono<LdapConfigurationDao> findByOrganizationId(@Param("organizationId") final long organizationId);
-
-    }
+  public Mono<LdapConfigurationDao> findByOrganizationId(
+      @Param("organizationId") final long organizationId);
+}
