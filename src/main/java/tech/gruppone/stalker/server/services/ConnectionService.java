@@ -10,16 +10,15 @@ import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import tech.gruppone.stalker.server.controllers.ConnectionController;
-import tech.gruppone.stalker.server.exceptions.BadPrivateConnectionException;
-import tech.gruppone.stalker.server.exceptions.BadPublicConnectionException;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.exceptions.InvalidLdapCredentialsException;
 import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.exceptions.UnexpectedErrorException;
 import tech.gruppone.stalker.server.model.db.ConnectionDao;
+import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
 import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
@@ -30,96 +29,118 @@ import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 @Log4j2
 public class ConnectionService {
   ConnectionRepository connectionRepository;
-  OrganizationRepository organizationRepository;
+
   LdapConfigurationRepository ldapConfigurationRepository;
+  OrganizationRepository organizationRepository;
 
-  public Mono<Void> createPublicUserConnection(long userId, long organizationId) {
+  private Mono<Void> createConnection(final long userId, final long organizationId) {
 
-    return organizationRepository
-        .findById(organizationId)
-        .filter(c -> c.getOrganizationType().equals("public"))
-        .switchIfEmpty(Mono.error(BadPublicConnectionException::new))
-        .flatMap(
-            o -> {
-              log.info(
-                  "Public user connection created for user {} into the organization {}",
-                  userId,
-                  organizationId);
-              return connectionRepository.save(
-                  ConnectionDao.builder().userId(userId).organizationId(organizationId).build());
+    final ConnectionDao connectionDao =
+        ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
+
+    return connectionRepository
+        .save(connectionDao)
+        .onErrorMap(
+            DataIntegrityViolationException.class,
+            error -> {
+              log.error(error.getMessage());
+
+              return new BadRequestException();
             })
         .then();
   }
 
-  public Mono<Void> createPrivateUserConnection(
-      ConnectionController.PostUserByIdOrganizationByIdConnectionBody ldap,
-      long userId,
-      long organizationId) {
+  public Mono<Void> forceCreateConnection(final long userId, final long organizationId) {
+    return createConnection(userId, organizationId);
+  }
+
+  public Mono<Void> createPublicConnection(final long userId, final long organizationId) {
 
     return organizationRepository
         .findById(organizationId)
-        .filter(o -> o.getOrganizationType().equals("private"))
-        .switchIfEmpty(Mono.error(BadPrivateConnectionException::new))
-        .flatMap(
-            l ->
-                ldapConfigurationRepository
-                    .findByOrganizationId(l.getId())
-                    .filter(f -> f.getOrganizationId() != null)
-                    .switchIfEmpty(Mono.error(NotFoundException::new))
-                    .flatMap(
-                        c -> {
-                          try {
-                            LdapConnection connection = new LdapNetworkConnection(c.getUrl(), 389);
-                            connection.bind(
-                                c.getBindRdn() + "," + c.getBaseDn(), c.getBindPassword());
-
-                            EntryCursor cursor =
-                                connection.search(
-                                    c.getBaseDn(),
-                                    "(cn=" + ldap.getLdapCn() + ")",
-                                    SearchScope.SUBTREE);
-
-                            boolean existsCn = false;
-                            boolean existsPassword = false;
-                            for (var entry : cursor) {
-                              if (entry.getAttributes().stream()
-                                  .anyMatch(
-                                      e -> e.get().getString().equals(ldap.getLdapPassword())))
-                                existsPassword = true;
-
-                              existsCn = true;
-                            }
-                            if (!existsCn | !existsPassword)
-                              throw new InvalidLdapCredentialsException();
-
-                            cursor.close();
-                            connection.unBind();
-
-                            log.info(
-                                "Private user connection created for user {} into the organization {}",
-                                userId,
-                                organizationId);
-                          } catch (LdapException e) {
-                            log.info(
-                                e
-                                    + "\nFail to create private user connection for {}: the LDAP credentials saved are not valid.",
-                                userId);
-                            throw new BadRequestException();
-                          } catch (IOException e) {
-                            log.error(e);
-                            throw new UnexpectedErrorException();
-                          }
-
-                          return connectionRepository.save(
-                              ConnectionDao.builder()
-                                  .userId(userId)
-                                  .organizationId(organizationId)
-                                  .build());
-                        }))
+        .map(OrganizationDao::getOrganizationType)
+        .filter(organizationType -> organizationType.equals("public"))
+        .switchIfEmpty(Mono.error(BadRequestException::new))
+        // only create connection if organization is actually public
+        .flatMap((value) -> createConnection(userId, organizationId))
         .then();
   }
 
-  public Mono<Void> deleteUserConnection(long userId, long organizationId) {
+  public Mono<Void> createPrivateConnection(
+      final String ldapUserCn,
+      final String ldapUserPassword,
+      final long userId,
+      final long organizationId) {
+
+    return ldapConfigurationRepository
+        .findByOrganizationId(organizationId)
+        // could not find a suitable ldap configuration
+        .switchIfEmpty(Mono.error(BadRequestException::new))
+        .flatMap(
+            ldapConfiguration -> {
+              final var url = ldapConfiguration.getUrl();
+              final var baseDn = ldapConfiguration.getBaseDn();
+              final var bindRdn = ldapConfiguration.getBindRdn();
+              final var bindPassword = ldapConfiguration.getBindPassword();
+
+              try {
+                // FIXME RESOURCE LEAK: THE CONNECTION ISN'T CLOSED IN SOME OF THE BRANCHES
+                LdapConnection connection = new LdapNetworkConnection(url, 389);
+
+                connection.bind(bindRdn + "," + baseDn, bindPassword);
+
+                final EntryCursor cursor =
+                    connection.search(
+                        baseDn, String.format("(cn=%s)", ldapUserCn), SearchScope.SUBTREE);
+
+                boolean existsCn = false;
+                boolean existsPassword = false;
+
+                for (final var entry : cursor) {
+                  if (entry.getAttributes().stream()
+                      .anyMatch(e -> e.get().getString().equals(ldapUserPassword))) {
+                    existsPassword = true;
+                  }
+
+                  existsCn = true;
+                }
+
+                if (!(existsCn && existsPassword)) {
+                  connection.close();
+
+                  throw new InvalidLdapCredentialsException();
+                }
+
+                cursor.close();
+                connection.unBind();
+
+                log.info(
+                    "Private user connection created for user {} into the organization {}",
+                    userId,
+                    organizationId);
+              } catch (final LdapException e) {
+                log.error(
+                    e
+                        + "\nFailed to create private user connection for {}: the LDAP configuration is not valid.",
+                    userId);
+
+                throw new BadRequestException();
+              } catch (final IOException e) {
+                log.error(e);
+                throw new UnexpectedErrorException();
+              }
+
+              log.info(
+                  "no errors encountered while validating user with id {} and cn {}",
+                  userId,
+                  ldapUserCn);
+
+              return createConnection(userId, organizationId);
+            })
+        .then();
+  }
+
+  public Mono<Void> deleteConnection(final long userId, final long organizationId) {
 
     return connectionRepository
         .deleteByUserIdAndOrganizationId(userId, organizationId)
