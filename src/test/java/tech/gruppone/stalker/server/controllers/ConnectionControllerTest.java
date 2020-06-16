@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.controllers.ConnectionController.PostUserByIdOrganizationByIdConnectionBody;
 import tech.gruppone.stalker.server.model.db.ConnectionDao;
+import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.repositories.ConnectionRepository;
+import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
+import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 
 @Tag("integrationTest")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,6 +24,8 @@ class ConnectionControllerTest {
   @Autowired WebTestClient webTestClient;
 
   @MockBean ConnectionRepository connectionRepository;
+  @MockBean LdapConfigurationRepository ldapConfigurationRepository;
+  @MockBean OrganizationRepository organizationRepository;
 
   final long userId = 1L;
   final long organizationId = 1L;
@@ -33,6 +36,15 @@ class ConnectionControllerTest {
     final var connectionDao =
         ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
 
+    final var organization =
+        OrganizationDao.builder()
+            .id(organizationId)
+            .name("name")
+            .description(".description")
+            .organizationType("public")
+            .build();
+
+    when(organizationRepository.findById(organizationId)).thenReturn(Mono.just(organization));
     when(connectionRepository.save(connectionDao)).thenReturn(Mono.empty());
 
     webTestClient
@@ -44,35 +56,18 @@ class ConnectionControllerTest {
 
     // checks that the mock method has been called with the given parameters
     verify(connectionRepository).save(connectionDao);
+    verify(organizationRepository).findById(organizationId);
   }
 
   @Test
-  void testPostUserByIdOrganizationByIdConnectionExistingConnection() {
+  void testPostUserByIdOrganizationByIdConnectionPrivateOrganization() {
 
-    final var connectionDao =
-        ConnectionDao.builder().userId(userId).organizationId(organizationId).build();
-
-    when(connectionRepository.save(connectionDao))
-        .thenReturn(Mono.error(new DataIntegrityViolationException("message")));
-
-    webTestClient
-        .post()
-        .uri("/user/{userId}/organization/{organizationId}/connection", userId, organizationId)
-        .exchange()
-        .expectStatus()
-        .isBadRequest();
-
-    // checks that the mock method has been called with the given parameters
-    verify(connectionRepository).save(connectionDao);
-  }
-
-  @Test
-  void testPostUserByIdOrganizationByIdConnectionWithRequestBody() {
-
-    final String rdn = "rdn";
+    final String ldapCn = "ldapCn";
     final String ldapPassword = "ldapPassword";
 
-    final var requestBody = new PostUserByIdOrganizationByIdConnectionBody(rdn, ldapPassword);
+    final var requestBody = new PostUserByIdOrganizationByIdConnectionBody(ldapCn, ldapPassword);
+
+    when(ldapConfigurationRepository.findByOrganizationId(organizationId)).thenReturn(Mono.empty());
 
     webTestClient
         .post()
@@ -80,7 +75,9 @@ class ConnectionControllerTest {
         .body(Mono.just(requestBody), PostUserByIdOrganizationByIdConnectionBody.class)
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.NOT_IMPLEMENTED);
+        .isBadRequest();
+
+    verify(ldapConfigurationRepository).findByOrganizationId(organizationId);
   }
 
   @Test
