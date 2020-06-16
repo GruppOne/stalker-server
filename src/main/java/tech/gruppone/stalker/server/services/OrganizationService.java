@@ -7,12 +7,12 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import tech.gruppone.stalker.server.exceptions.BadRequestException;
-import tech.gruppone.stalker.server.exceptions.NotFoundException;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
@@ -22,6 +22,7 @@ import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
+@Log4j2
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
@@ -76,6 +77,7 @@ public class OrganizationService {
 
   public Mono<OrganizationDto> findById(final long id) {
     final Mono<OrganizationDao> organizationDao = organizationRepository.findById(id);
+
     final Flux<Long> placeIdsFlux =
         placeRepository.findAllByOrganizationId(id).map(PlaceDao::getId);
 
@@ -95,8 +97,8 @@ public class OrganizationService {
         .build();
   }
 
-  private LdapConfigurationDao fromLdapConfigurationDto(
-      final Long organizationId, final OrganizationDataDto.LdapConfiguration ldapConfiguration) {
+  private LdapConfigurationDao fromLdapConfigurationDtoWithoutId(
+      final Long organizationId, final OrganizationDataDto.LdapConfigurationDto ldapConfiguration) {
 
     final String url = ldapConfiguration.getUrl();
     final String baseDn = ldapConfiguration.getBaseDn();
@@ -116,62 +118,63 @@ public class OrganizationService {
 
     final OrganizationDao newOrganizationDao = fromDataDtoWithoutDates(organizationDataDto);
 
-    return organizationRepository
-        .save(newOrganizationDao)
-        .map(OrganizationDao::getId)
-        .flatMap(
+    final var createdOrganization = organizationRepository.save(newOrganizationDao);
+    final var createdId = createdOrganization.map(OrganizationDao::getId);
+
+    return createdOrganization
+        .filter(organization -> organization.getOrganizationType().equals("private"))
+        .map(
             organization -> {
-              if (newOrganizationDao.getOrganizationType().equals("private")) {
-                final LdapConfigurationDao newLdapConfigurationDao =
-                    fromLdapConfigurationDto(
-                        organization, organizationDataDto.getLdapConfiguration());
-                if (newLdapConfigurationDao == null) {
-                  throw new BadRequestException();
-                }
-                return ldapConfigurationRepository
-                    .save(newLdapConfigurationDao)
-                    .map(LdapConfigurationDao::getOrganizationId);
+              final var ldapConfiguration = organizationDataDto.getLdapConfiguration();
+
+              if (ldapConfiguration == null) {
+                log.error("cannot create private organization without LDAP configuration");
+
+                return Mono.error(BadRequestException::new);
               }
-              return Mono.just(organization);
-            });
+
+              final LdapConfigurationDao newLdapConfigurationDao =
+                  fromLdapConfigurationDtoWithoutId(organization.getId(), ldapConfiguration);
+
+              return ldapConfigurationRepository.save(newLdapConfigurationDao);
+            })
+        .then(createdId);
   }
 
-  public Mono<Void> updateById(final Long id, final OrganizationDataDto organizationDataDto) {
+  public Mono<Void> updateById(
+      final Long organizationId, final OrganizationDataDto organizationDataDto) {
 
     final OrganizationDao updatedOrganization =
         fromDataDtoWithoutDates(organizationDataDto)
-            .withId(id)
+            .withId(organizationId)
             .withCreatedDate(organizationDataDto.getCreationDateTime().toLocalDateTime())
             .withLastModifiedDate(LocalDateTime.now(clock));
 
-    final LdapConfigurationDao updatedLdapConfiguration =
-        fromLdapConfigurationDto(id, organizationDataDto.getLdapConfiguration());
-
     return organizationRepository
         .save(updatedOrganization)
+        .map(OrganizationDao::getOrganizationType)
+        .filter(organizationType -> organizationType.equals("private"))
         .flatMap(
-            o -> {
-              if (o.getOrganizationType().equals("private")) {
-                if (organizationDataDto.getLdapConfiguration() == null) {
-                  throw new BadRequestException();
-                }
+            organizationType -> {
+              final var ldapConfiguration = organizationDataDto.getLdapConfiguration();
 
-                return ldapConfigurationRepository
-                    .findByOrganizationId(id)
-                    .switchIfEmpty(Mono.error(NotFoundException::new))
-                    .flatMap(
-                        l ->
-                            ldapConfigurationRepository.update(
-                                l.getId(),
-                                updatedLdapConfiguration.getOrganizationId(),
-                                updatedLdapConfiguration.getUrl(),
-                                updatedLdapConfiguration.getBaseDn(),
-                                updatedLdapConfiguration.getBindRdn(),
-                                updatedLdapConfiguration.getBindPassword()))
-                    .then();
-              } else {
-                return Mono.empty();
+              if (ldapConfiguration == null) {
+                log.error("No LdapConfiguration object when modifying private organization");
+
+                throw new BadRequestException();
               }
-            });
+
+              final LdapConfigurationDao updatedLdapConfigurationWithoutId =
+                  fromLdapConfigurationDtoWithoutId(organizationId, ldapConfiguration);
+
+              return ldapConfigurationRepository
+                  .findByOrganizationId(organizationId)
+                  .map(LdapConfigurationDao::getId)
+                  .flatMap(
+                      ldapConfigurationId ->
+                          ldapConfigurationRepository.save(
+                              updatedLdapConfigurationWithoutId.withId(ldapConfigurationId)));
+            })
+        .then();
   }
 }

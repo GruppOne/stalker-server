@@ -20,6 +20,7 @@ import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
@@ -29,6 +30,7 @@ class OrganizationServiceTest {
 
   @MockBean OrganizationRepository organizationRepository;
   @MockBean PlaceRepository placeRepository;
+  @MockBean LdapConfigurationRepository ldapConfigurationRepository;
 
   @Autowired OrganizationService organizationService;
 

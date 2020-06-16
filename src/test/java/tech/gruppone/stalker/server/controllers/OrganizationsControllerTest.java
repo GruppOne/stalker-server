@@ -20,6 +20,7 @@ import tech.gruppone.stalker.server.model.AdministratorType;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 import tech.gruppone.stalker.server.services.ConnectionService;
@@ -33,6 +34,7 @@ class OrganizationsControllerTest {
 
   @MockBean OrganizationRepository organizationRepository;
   @MockBean PlaceRepository placeRepository;
+  @MockBean LdapConfigurationRepository ldapConfigurationRepository;
 
   @MockBean ConnectionService connectionService;
   @MockBean RoleService roleService;

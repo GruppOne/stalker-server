@@ -15,14 +15,14 @@ public class OrganizationDataDto {
 
   @NonNull @Builder.Default String organizationType = "public";
 
-  LdapConfiguration ldapConfiguration;
+  LdapConfigurationDto ldapConfiguration;
 
   Timestamp creationDateTime;
   Timestamp lastChangeDateTime;
 
   @Builder
   @Value
-  public static class LdapConfiguration {
+  public static class LdapConfigurationDto {
 
     @NonNull String url;
 
