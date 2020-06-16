@@ -32,15 +32,18 @@ public class ConnectionController {
       @PathVariable("organizationId") final long organizationId) {
 
     if (ldap == null) {
-      return connectionService.createPublicUserConnection(userId, organizationId);
+      return connectionService.createPublicConnection(userId, organizationId);
     } else {
-      return connectionService.createPrivateUserConnection(ldap, userId, organizationId);
+      final String ldapCn = ldap.getLdapCn();
+      final String ldapPassword = ldap.getLdapPassword();
+
+      return connectionService.createPrivateConnection(
+          ldapCn, ldapPassword, userId, organizationId);
     }
   }
 
-  // FIXME should not be public
   @Value
-  public static class PostUserByIdOrganizationByIdConnectionBody {
+  static class PostUserByIdOrganizationByIdConnectionBody {
 
     @NonNull String ldapCn;
     @NonNull String ldapPassword;
@@ -52,6 +55,6 @@ public class ConnectionController {
       @PathVariable("userId") final long userId,
       @PathVariable("organizationId") final long organizationId) {
 
-    return connectionService.deleteUserConnection(userId, organizationId);
+    return connectionService.deleteConnection(userId, organizationId);
   }
 }

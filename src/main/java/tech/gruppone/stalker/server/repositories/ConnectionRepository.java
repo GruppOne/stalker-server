@@ -20,8 +20,4 @@ public interface ConnectionRepository extends ReactiveCrudRepository<ConnectionD
 
   @Query("SELECT organizationId FROM Connection WHERE userId = :id")
   Flux<Long> findConnectedOrganizationIdsByUserId(Long id);
-
-  @Query("SELECT * FROM Connection WHERE userId = :userId AND organizationId = :organizationId")
-  Mono<ConnectionDao> findConnectionByUserIdAndOrganizationId(
-      @Param("userId") long userId, @Param("organizationId") long organizationId);
 }
