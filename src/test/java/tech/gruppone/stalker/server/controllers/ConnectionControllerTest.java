@@ -23,6 +23,7 @@ class ConnectionControllerTest {
   @Autowired WebTestClient webTestClient;
 
   @MockBean ConnectionRepository connectionRepository;
+
   final long userId = 1L;
   final long organizationId = 1L;
 
@@ -86,7 +87,7 @@ class ConnectionControllerTest {
   void testDeleteUserByIdOrganizationByIdConnection() {
 
     when(connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId))
-        .thenReturn(Mono.empty());
+        .thenReturn(Mono.just(1));
 
     webTestClient
         .delete()
