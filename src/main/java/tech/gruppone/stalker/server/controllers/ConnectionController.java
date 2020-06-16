@@ -38,18 +38,20 @@ public class ConnectionController {
     }
   }
 
-  @DeleteMapping
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> deleteUserByIdOrganizationByIdConnection(
-      @PathVariable("userId") final long userId,
-      @PathVariable("organizationId") final long organizationId) {
-    return connectionService.deleteUserConnection(userId, organizationId);
-  }
-
+  // FIXME should not be public
   @Value
   public static class PostUserByIdOrganizationByIdConnectionBody {
 
     @NonNull String ldapCn;
     @NonNull String ldapPassword;
+  }
+
+  @DeleteMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> deleteUserByIdOrganizationByIdConnection(
+      @PathVariable("userId") final long userId,
+      @PathVariable("organizationId") final long organizationId) {
+
+    return connectionService.deleteUserConnection(userId, organizationId);
   }
 }

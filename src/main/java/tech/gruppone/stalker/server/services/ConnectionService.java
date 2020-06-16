@@ -122,13 +122,9 @@ public class ConnectionService {
   public Mono<Void> deleteUserConnection(long userId, long organizationId) {
 
     return connectionRepository
-        .findConnectionByUserIdAndOrganizationId(userId, organizationId)
-        .filter(c -> c.getUserId().equals(userId) && c.getOrganizationId().equals(organizationId))
+        .deleteByUserIdAndOrganizationId(userId, organizationId)
+        .filter(rowsUpdated -> rowsUpdated == 1)
         .switchIfEmpty(Mono.error(NotFoundException::new))
-        .flatMap(
-            o -> {
-              log.info("User {} exited now by the organization {}", userId, organizationId);
-              return connectionRepository.deleteByUserIdAndOrganizationId(userId, organizationId);
-            });
+        .then();
   }
 }

@@ -9,6 +9,12 @@ import tech.gruppone.stalker.server.model.db.ConnectionDao;
 
 public interface ConnectionRepository extends ReactiveCrudRepository<ConnectionDao, Long> {
 
+  // the annotation is needed because the derived query does not work (??)
+  @Query("DELETE FROM Connection WHERE userId = :userId AND organizationId = :organizationId")
+  Mono<Integer> deleteByUserIdAndOrganizationId(
+      @Param("userId") long userId, @Param("organizationId") long organizationId);
+
+  // TODO these two could probably be refactored
   @Query("SELECT userId FROM Connection WHERE organizationId = :id")
   Flux<Long> findConnectedUserIdsByOrganizationId(Long id);
 
@@ -17,12 +23,5 @@ public interface ConnectionRepository extends ReactiveCrudRepository<ConnectionD
 
   @Query("SELECT * FROM Connection WHERE userId = :userId AND organizationId = :organizationId")
   Mono<ConnectionDao> findConnectionByUserIdAndOrganizationId(
-      @Param("userId") long userId, @Param("organizationId") long organizationId);
-
-  Mono<ConnectionDao> findById(
-      @Param("userId") long userId, @Param("organizationId") long organizationId);
-
-  @Query("DELETE FROM Connection WHERE userId = :userId AND organizationId = :organizationId")
-  Mono<Void> deleteByUserIdAndOrganizationId(
       @Param("userId") long userId, @Param("organizationId") long organizationId);
 }
