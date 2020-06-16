@@ -95,14 +95,13 @@ public class OrganizationService {
         .build();
   }
 
-  private LdapConfigurationDao fromLdapConfigurationDataDtoWithoutDates(
-      final Long newOrganizationId, final OrganizationDataDto organizationDataDto) {
+  private LdapConfigurationDao fromLdapConfigurationDto(
+      final Long organizationId, final OrganizationDataDto.LdapConfiguration ldapConfiguration) {
 
-    final Long organizationId = newOrganizationId;
-    final String url = organizationDataDto.getLdapConfiguration().getUrl();
-    final String baseDn = organizationDataDto.getLdapConfiguration().getBaseDn();
-    final String bindRdn = organizationDataDto.getLdapConfiguration().getBindRdn();
-    final String bindPassword = organizationDataDto.getLdapConfiguration().getBindPassword();
+    final String url = ldapConfiguration.getUrl();
+    final String baseDn = ldapConfiguration.getBaseDn();
+    final String bindRdn = ldapConfiguration.getBindRdn();
+    final String bindPassword = ldapConfiguration.getBindPassword();
 
     return LdapConfigurationDao.builder()
         .organizationId(organizationId)
@@ -121,16 +120,19 @@ public class OrganizationService {
         .save(newOrganizationDao)
         .map(OrganizationDao::getId)
         .flatMap(
-            o -> {
+            organization -> {
               if (newOrganizationDao.getOrganizationType().equals("private")) {
                 final LdapConfigurationDao newLdapConfigurationDao =
-                    fromLdapConfigurationDataDtoWithoutDates(o.longValue(), organizationDataDto);
-                if (newLdapConfigurationDao == null) throw new BadRequestException();
+                    fromLdapConfigurationDto(
+                        organization, organizationDataDto.getLdapConfiguration());
+                if (newLdapConfigurationDao == null) {
+                  throw new BadRequestException();
+                }
                 return ldapConfigurationRepository
                     .save(newLdapConfigurationDao)
                     .map(LdapConfigurationDao::getOrganizationId);
               }
-              return Mono.just(o);
+              return Mono.just(organization);
             });
   }
 
@@ -143,15 +145,17 @@ public class OrganizationService {
             .withLastModifiedDate(LocalDateTime.now(clock));
 
     final LdapConfigurationDao updatedLdapConfiguration =
-        fromLdapConfigurationDataDtoWithoutDates(id, organizationDataDto);
+        fromLdapConfigurationDto(id, organizationDataDto.getLdapConfiguration());
 
     return organizationRepository
         .save(updatedOrganization)
         .flatMap(
             o -> {
               if (o.getOrganizationType().equals("private")) {
-                if (organizationDataDto.getLdapConfiguration() == null)
+                if (organizationDataDto.getLdapConfiguration() == null) {
                   throw new BadRequestException();
+                }
+
                 return ldapConfigurationRepository
                     .findByOrganizationId(id)
                     .switchIfEmpty(Mono.error(NotFoundException::new))
@@ -165,7 +169,9 @@ public class OrganizationService {
                                 updatedLdapConfiguration.getBindRdn(),
                                 updatedLdapConfiguration.getBindPassword()))
                     .then();
-              } else return Mono.empty();
+              } else {
+                return Mono.empty();
+              }
             });
   }
 }

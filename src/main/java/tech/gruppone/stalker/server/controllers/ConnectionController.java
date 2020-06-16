@@ -1,5 +1,10 @@
 package tech.gruppone.stalker.server.controllers;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,12 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.experimental.FieldDefaults;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.services.ConnectionService;
 
@@ -32,8 +31,11 @@ public class ConnectionController {
       @PathVariable("userId") final long userId,
       @PathVariable("organizationId") final long organizationId) {
 
-    if (ldap == null) return connectionService.createPublicUserConnection(userId, organizationId);
-    else return connectionService.createPrivateUserConnection(ldap, userId, organizationId);
+    if (ldap == null) {
+      return connectionService.createPublicUserConnection(userId, organizationId);
+    } else {
+      return connectionService.createPrivateUserConnection(ldap, userId, organizationId);
+    }
   }
 
   @DeleteMapping
