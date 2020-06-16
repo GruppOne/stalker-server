@@ -17,7 +17,6 @@ public class OrganizationDataDto {
 
   LdapConfiguration ldapConfiguration;
 
-  // use timestamps in DTOs to serialize datetimes correctly
   Timestamp creationDateTime;
   Timestamp lastChangeDateTime;
 

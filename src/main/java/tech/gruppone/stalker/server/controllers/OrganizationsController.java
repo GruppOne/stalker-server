@@ -36,6 +36,7 @@ public class OrganizationsController {
     List<OrganizationDto> organizations;
   }
 
+  // TODO connect and set as owner the author of this request
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<PostOrganizationsResponse> postOrganizations(

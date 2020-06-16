@@ -37,8 +37,6 @@ dependencies {
 //  Supports built in (or custom) endpoints that let you monitor and manage your application - such as application health, metrics, sessions, etc.
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-//  implementation 'org.springframework.boot:spring-boot-starter-web'
-
 //  Provides Reactive Relational Database Connectivity to persist data in SQL stores using Spring Data in reactive applications.
   implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
 
@@ -49,15 +47,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 //  Highly customizable authentication and access-control framework for Spring applications.
- // implementation 'org.springframework.boot:spring-boot-starter-security'
- // implementation 'org.springframework.ldap:spring-ldap-core'
- // implementation 'org.springframework.security:spring-security-ldap'
-
-// Provides a platform neutral way for running an LDAP server in unit tests.
- // implementation 'com.unboundid:unboundid-ldapsdk'
-
-// Dependency for LDAP API
-  implementation 'org.apache.directory.api:api-all:2.0.1'
+  // implementation 'org.springframework.boot:spring-boot-starter-security'
 
 //  Java annotation library which helps to reduce boilerplate code.
   compileOnly 'org.projectlombok:lombok'
@@ -91,6 +81,11 @@ dependencies {
 
   // influxdb 1.x java client
   implementation 'org.influxdb:influxdb-java:2.17'
+
+  // ---------------------------------------------------------------------------------
+
+  // LDAP client
+  implementation 'org.apache.directory.api:api-all:2.0.1'
 }
 
 
