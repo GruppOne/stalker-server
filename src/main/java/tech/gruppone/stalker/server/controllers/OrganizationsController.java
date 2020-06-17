@@ -54,9 +54,11 @@ public class OrganizationsController {
     return organizationService
         .save(organizationDataDto)
         .doOnNext(
-            organizationId -> connectionService.forceCreateConnection(ownerId, organizationId))
+            organizationId ->
+                connectionService.forceCreateConnection(ownerId, organizationId).subscribe())
         .doOnNext(
-            organizationId -> roleService.create(organizationId, ownerId, AdministratorType.OWNER))
+            organizationId ->
+                roleService.create(organizationId, ownerId, AdministratorType.OWNER).subscribe())
         .map(PostOrganizationsResponse::new);
   }
 
