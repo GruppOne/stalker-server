@@ -14,7 +14,6 @@ public interface ConnectionRepository extends ReactiveCrudRepository<ConnectionD
   Mono<Integer> deleteByUserIdAndOrganizationId(
       @Param("userId") long userId, @Param("organizationId") long organizationId);
 
-  // TODO these two could probably be refactored
   @Query("SELECT userId FROM Connection WHERE organizationId = :id")
   Flux<Long> findConnectedUserIdsByOrganizationId(Long id);
 

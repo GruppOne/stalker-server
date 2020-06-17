@@ -33,7 +33,6 @@ public class OrganizationService {
   PlaceRepository placeRepository;
   LdapConfigurationRepository ldapConfigurationRepository;
 
-  // TODO will need to merge organization with ldapconfiguration when implementing private orgs
   private OrganizationDto fromTuple(final Tuple2<OrganizationDao, List<Long>> tuple) {
     final var organization = tuple.getT1();
     final List<Long> placeIds = tuple.getT2();

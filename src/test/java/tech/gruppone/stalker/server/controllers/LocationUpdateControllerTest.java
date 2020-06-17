@@ -31,7 +31,6 @@ class LocationUpdateControllerTest {
 
   @Autowired WebTestClient webTestClient;
 
-  // TODO should only mock the influxdbstuff, not the repository!
   @MockBean LocationInfoRepository locationinfoRepository;
   @MockBean PlaceRepository placeRepository;
 

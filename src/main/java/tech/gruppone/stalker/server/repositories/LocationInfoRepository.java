@@ -28,7 +28,6 @@ import tech.gruppone.stalker.server.model.db.LocationInfo;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Repository
-// TODO refactor so as to return monos and fluxes?
 public class LocationInfoRepository {
   InfluxDB influxDB;
   InfluxDBMapper influxDBMapper;
@@ -64,9 +63,6 @@ public class LocationInfoRepository {
 
     final Query query =
         QueryBuilder.select(INSIDE_FIELD_NAME)
-            // TODO check if this works and what changes
-            // QueryBuilder.select()
-            //     .column(INSIDE_FIELD_NAME)
             .from(database, measurement)
             .where(eq(USER_ID_TAG_NAME, userId))
             .and(eq(PLACE_ID_TAG_NAME, placeId))
