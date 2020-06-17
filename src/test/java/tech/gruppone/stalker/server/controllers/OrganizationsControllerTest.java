@@ -15,11 +15,16 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.gruppone.stalker.server.ApplicationTestConfiguration;
+import tech.gruppone.stalker.server.controllers.OrganizationsController.PostOrganizationsRequestBody;
+import tech.gruppone.stalker.server.model.AdministratorType;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
+import tech.gruppone.stalker.server.services.ConnectionService;
+import tech.gruppone.stalker.server.services.RoleService;
 
 @Tag("integrationTest")
 @Import(ApplicationTestConfiguration.class)
@@ -29,6 +34,10 @@ class OrganizationsControllerTest {
 
   @MockBean OrganizationRepository organizationRepository;
   @MockBean PlaceRepository placeRepository;
+  @MockBean LdapConfigurationRepository ldapConfigurationRepository;
+
+  @MockBean ConnectionService connectionService;
+  @MockBean RoleService roleService;
 
   @Autowired WebTestClient webTestClient;
 
@@ -104,13 +113,22 @@ class OrganizationsControllerTest {
     final OrganizationDao expectedOrganizationDao =
         OrganizationDao.builder().id(organizationId).name(name).description(description).build();
 
+    final var ownerId = 1L;
+
+    final PostOrganizationsRequestBody requestBody =
+        new PostOrganizationsRequestBody(ownerId, organizationDataDto);
+
     when(organizationRepository.save(expectedOrganizationDao.withId(null)))
         .thenReturn(Mono.just(expectedOrganizationDao));
+
+    when(connectionService.forceCreateConnection(ownerId, organizationId)).thenReturn(Mono.empty());
+    when(roleService.create(organizationId, ownerId, AdministratorType.OWNER))
+        .thenReturn(Mono.empty());
 
     webTestClient
         .post()
         .uri("/organizations")
-        .body(Mono.just(organizationDataDto), OrganizationDataDto.class)
+        .body(Mono.just(requestBody), OrganizationDataDto.class)
         .exchange()
         .expectStatus()
         .isCreated()
@@ -119,5 +137,8 @@ class OrganizationsControllerTest {
         .isEqualTo(organizationId);
 
     verify(organizationRepository).save(expectedOrganizationDao.withId(null));
+
+    verify(connectionService).forceCreateConnection(ownerId, organizationId);
+    verify(roleService).create(organizationId, ownerId, AdministratorType.OWNER);
   }
 }

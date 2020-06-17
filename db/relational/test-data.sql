@@ -31,15 +31,27 @@ START TRANSACTION;
 --
 
 INSERT INTO
-  `Organization`(`name`, `description`, `createdDate`)
+  `Organization` (
+    `name`,
+    `description`,
+    `organizationType`,
+    `createdDate`
+  )
 VALUES
   (
     'GruppOne',
     'Organizzazione del gruppo 1 per il progetto di Ingegneria del Software',
+    'public',
     '2020-01-01 01:01:01'
   ),(
     'Amici della Torre Archimede',
     'Organizzazione di prova, è un gruppo di amici di Informatica 🙊😡❤️',
+    'public',
+    '2020-01-01 01:01:01'
+  ),(
+    'Imola Informatica S.P.A.',
+    'Azienda proponente del progetto Stalker. Richiesta autenticazione in entrata e in uscita',
+    'private',
     '2020-01-01 01:01:01'
   );
 
@@ -153,5 +165,29 @@ VALUES
   (1, 2, 3, '2020-03-17 16:31:38'),
   (2, 4, 2, '2020-04-24 14:33:50'),
   (2, 2, 1, '2020-02-04 16:35:23');
+
+
+--
+-- Dump dei dati per la tabella `LdapConfiguration`
+--
+
+INSERT INTO
+  `LdapConfiguration` (
+    `id`,
+    `organizationId`,
+    `url`,
+    `baseDn`,
+    `bindRdn`,
+    `bindPassword`
+  )
+VALUES
+  (
+    1,
+    3,
+    '127.0.0.1',
+    'dc=stalker,dc=intern',
+    'cn=admin',
+    'adminPassword'
+  );
 
 COMMIT;

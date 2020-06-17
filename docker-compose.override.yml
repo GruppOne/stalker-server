@@ -2,7 +2,6 @@ version: "3.7"
 
 # TODO remove this file to expose rdb and tsdb only to the stack's internal network
 services:
-
   rdb:
     ports:
       - "3306:3306"

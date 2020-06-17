@@ -2,7 +2,6 @@ package tech.gruppone.stalker.server.configuration;
 
 // @EnableWebFluxSecurity
 // @EnableReactiveMethodSecurity
+// @Configuration
 // @PropertySource("classpath:application.properties")
-class SecurityConfiguration {
-  // TODO configure spring security here
-}
+public class SecurityConfiguration {}

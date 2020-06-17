@@ -47,9 +47,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 //  Highly customizable authentication and access-control framework for Spring applications.
-// implementation 'org.springframework.boot:spring-boot-starter-security'
-
-
+  // implementation 'org.springframework.boot:spring-boot-starter-security'
 
 //  Java annotation library which helps to reduce boilerplate code.
   compileOnly 'org.projectlombok:lombok'
@@ -76,16 +74,18 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
 
-  // Provides a platform neutral way for running an LDAP server in unit tests.
-  testImplementation 'com.unboundid:unboundid-ldapsdk'
-
   testImplementation 'io.projectreactor:reactor-test'
-  // testImplementation 'org.springframework.security:spring-security-test'
+  //testImplementation 'org.springframework.security:spring-security-test'
 
   // ---------------------------------------------------------------------------------
 
   // influxdb 1.x java client
   implementation 'org.influxdb:influxdb-java:2.17'
+
+  // ---------------------------------------------------------------------------------
+
+  // LDAP client
+  implementation 'org.apache.directory.api:api-all:2.0.1'
 }
 
 

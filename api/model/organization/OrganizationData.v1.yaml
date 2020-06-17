@@ -20,21 +20,21 @@ properties:
       url:
         type: string
         format: uri
-        description: "The organization's LDAP server URL."
-      searchQuery:
+        description: The organization's LDAP server URL.
+      baseDn:
         type: string
-        description: An LDAP search query that returns the list of users registered to the LDAP server.
-      bindDn:
+        description: The base DN to search query.
+      bindRdn:
         type: string
-        description: the fully qualified DN to use for binding the connection.
+        description: The admin RDN to bind LDAP connection.
       bindPassword:
         type: string
         format: password
-        description: The password for the bind DN.
+        description: The admin password to bind LDAP connection.
     required:
       - url
-      - searchQuery
-      - bindDn
+      - baseDn
+      - bindRdn
       - bindPassword
   creationDateTime:
     $ref: ../GenericTimestamp.v1.yaml

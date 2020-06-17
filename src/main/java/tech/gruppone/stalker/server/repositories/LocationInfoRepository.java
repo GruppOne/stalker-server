@@ -28,7 +28,6 @@ import tech.gruppone.stalker.server.model.db.LocationInfo;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Repository
-// TODO refactor so as to return monos and fluxes?
 public class LocationInfoRepository {
   InfluxDB influxDB;
   InfluxDBMapper influxDBMapper;
@@ -64,9 +63,6 @@ public class LocationInfoRepository {
 
     final Query query =
         QueryBuilder.select(INSIDE_FIELD_NAME)
-            // TODO check if this works and what changes
-            // QueryBuilder.select()
-            //     .column(INSIDE_FIELD_NAME)
             .from(database, measurement)
             .where(eq(USER_ID_TAG_NAME, userId))
             .and(eq(PLACE_ID_TAG_NAME, placeId))
@@ -78,8 +74,8 @@ public class LocationInfoRepository {
 
     // honestly whoever chose to return null instead of an empty list deserves to rot in hell
     if (series == null) {
-      log.info("user {} had no status in place {}", userId, placeId);
-      return Mono.empty();
+      log.info("user {} had no status in place {}, so we assume he was outside", userId, placeId);
+      return Mono.just(false);
     }
 
     final var firstSeries = series.get(0);

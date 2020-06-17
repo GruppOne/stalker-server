@@ -15,9 +15,21 @@ public class OrganizationDataDto {
 
   @NonNull @Builder.Default String organizationType = "public";
 
-  // TODO implement ldapConfiguration. might want to use inheritance instead of nullable fields
+  LdapConfigurationDto ldapConfiguration;
 
-  // use timestamps in DTOs to serialize datetimes correctly
   Timestamp creationDateTime;
   Timestamp lastChangeDateTime;
+
+  @Builder
+  @Value
+  public static class LdapConfigurationDto {
+
+    @NonNull String url;
+
+    @NonNull String baseDn;
+
+    @NonNull String bindRdn;
+
+    @NonNull String bindPassword;
+  }
 }

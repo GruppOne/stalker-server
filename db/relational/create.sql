@@ -51,8 +51,8 @@ CREATE TABLE `AdministratorType` (
 
 INSERT INTO `AdministratorType` (`id`, `name`, `role`) VALUES
 (1, 'Admin', 'ROLE_ADMIN'),
-(2, 'Manager', 'ROLE_MANAGER'),
-(3, 'Owner', 'ROLE_OWNER'),
+(2, 'Owner', 'ROLE_OWNER'),
+(3, 'Manager', 'ROLE_MANAGER'),
 (4, 'Viewer', 'ROLE_VIEWER');
 
 -- --------------------------------------------------------
@@ -71,10 +71,11 @@ CREATE TABLE `Connection` (
 -- Struttura della tabella `LdapConfiguration`
 --
 CREATE TABLE `LdapConfiguration` (
+  `id` int(11) NOT NULL,
   `organizationId` int(11) NOT NULL,
   `url` varchar(250) NOT NULL,
-  `searchQuery` varchar(250) NOT NULL,
-  `bindDn` varchar(250) NOT NULL,
+  `baseDn` varchar(250) NOT NULL,
+  `bindRdn` varchar(250) NOT NULL,
   `bindPassword` varchar(250) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -192,7 +193,9 @@ ADD
 ALTER TABLE
   `LdapConfiguration`
 ADD
-  PRIMARY KEY (`organizationId`);
+  PRIMARY KEY (`id`),
+ADD
+  KEY `organizationId` (`organizationId`);
 
 --
 -- Indici per le tabelle `OrganizationRole`
@@ -287,7 +290,7 @@ MODIFY
 ALTER TABLE
   `LdapConfiguration`
 MODIFY
-  `organizationId` int(11) NOT NULL AUTO_INCREMENT;
+  `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `OrganizationRole`

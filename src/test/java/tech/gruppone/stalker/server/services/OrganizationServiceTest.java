@@ -16,10 +16,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tech.gruppone.stalker.server.ApplicationTestConfiguration;
+import tech.gruppone.stalker.server.exceptions.BadRequestException;
 import tech.gruppone.stalker.server.model.api.OrganizationDataDto;
+import tech.gruppone.stalker.server.model.api.OrganizationDataDto.LdapConfigurationDto;
 import tech.gruppone.stalker.server.model.api.OrganizationDto;
+import tech.gruppone.stalker.server.model.db.LdapConfigurationDao;
 import tech.gruppone.stalker.server.model.db.OrganizationDao;
 import tech.gruppone.stalker.server.model.db.PlaceDao;
+import tech.gruppone.stalker.server.repositories.LdapConfigurationRepository;
 import tech.gruppone.stalker.server.repositories.OrganizationRepository;
 import tech.gruppone.stalker.server.repositories.PlaceRepository;
 
@@ -29,6 +33,7 @@ class OrganizationServiceTest {
 
   @MockBean OrganizationRepository organizationRepository;
   @MockBean PlaceRepository placeRepository;
+  @MockBean LdapConfigurationRepository ldapConfigurationRepository;
 
   @Autowired OrganizationService organizationService;
 
@@ -173,6 +178,103 @@ class OrganizationServiceTest {
     final var sut = organizationService.save(organizationDataDto);
 
     StepVerifier.create(sut).expectNext(newOrganizationId).verifyComplete();
+
+    verify(organizationRepository).save(organizationDao);
+  }
+
+  @Test
+  void testSavePrivate() {
+    final var newOrganizationId = 111L;
+
+    final var privateOrganizationType = "private";
+
+    String url = "url";
+    String baseDn = "baseDn";
+    String bindRdn = "bindRdn";
+    String bindPassword = "bindPassword";
+
+    final var ldapConfigurationDto =
+        LdapConfigurationDto.builder()
+            .url(url)
+            .baseDn(baseDn)
+            .bindRdn(bindRdn)
+            .bindPassword(bindPassword)
+            .build();
+
+    final var organizationDataDto =
+        OrganizationDataDto.builder()
+            .name(name)
+            .description(description)
+            .organizationType(privateOrganizationType)
+            .ldapConfiguration(ldapConfigurationDto)
+            .build();
+
+    final var organizationDao =
+        OrganizationDao.builder()
+            .name(name)
+            .description(description)
+            .organizationType(privateOrganizationType)
+            .build();
+
+    when(organizationRepository.save(organizationDao))
+        .thenReturn(
+            Mono.just(
+                organizationDao
+                    .withId(newOrganizationId)
+                    .withCreatedDate(LOCAL_DATETIME)
+                    .withLastModifiedDate(LOCAL_DATETIME)));
+
+    final var ldapConfiguration =
+        LdapConfigurationDao.builder()
+            .organizationId(newOrganizationId)
+            .url(url)
+            .baseDn(baseDn)
+            .bindRdn(bindRdn)
+            .bindPassword(bindPassword)
+            .build();
+
+    when(ldapConfigurationRepository.save(ldapConfiguration))
+        .thenReturn(Mono.just(ldapConfiguration));
+
+    final var sut = organizationService.save(organizationDataDto);
+
+    StepVerifier.create(sut).expectNext(newOrganizationId).verifyComplete();
+
+    verify(organizationRepository).save(organizationDao);
+    verify(ldapConfigurationRepository).save(ldapConfiguration);
+  }
+
+  @Test
+  void testSavePrivateWithoutLdapConfiguration() {
+    final var newOrganizationId = 111L;
+
+    final var privateOrganizationType = "private";
+
+    final var organizationDataDto =
+        OrganizationDataDto.builder()
+            .name(name)
+            .description(description)
+            .organizationType(privateOrganizationType)
+            .build();
+
+    final var organizationDao =
+        OrganizationDao.builder()
+            .name(name)
+            .description(description)
+            .organizationType(privateOrganizationType)
+            .build();
+
+    when(organizationRepository.save(organizationDao))
+        .thenReturn(
+            Mono.just(
+                organizationDao
+                    .withId(newOrganizationId)
+                    .withCreatedDate(LOCAL_DATETIME)
+                    .withLastModifiedDate(LOCAL_DATETIME)));
+
+    final var sut = organizationService.save(organizationDataDto);
+
+    StepVerifier.create(sut).verifyError(BadRequestException.class);
 
     verify(organizationRepository).save(organizationDao);
   }

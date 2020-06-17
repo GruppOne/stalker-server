@@ -1,0 +1,43 @@
+dn: dc=stalker,dc=intern
+dc: stalker
+o: Stalker
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+
+dn: cn=admin,dc=stalker,dc=intern
+cn: admin
+description: LDAP administrator
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+userPassword: adminPassword
+
+dn: ou=groups,dc=stalker,dc=intern
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: cn=admins,ou=groups,dc=stalker,dc=intern
+cn: admins
+gidNumber: 500
+objectClass: posixGroup
+objectClass: top
+
+dn: cn=users,ou=groups,dc=stalker,dc=intern
+cn: users
+gidNumber: 501
+objectClass: posixGroup
+objectClass: top
+
+dn: ou=users,dc=stalker,dc=intern
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: cn=utenteStalker,ou=users,dc=stalker,dc=intern
+cn: utenteStalker
+objectClass: inetOrgPerson
+sn: user
+uid: UtenteStalker
+userPassword: passwordStalker
+

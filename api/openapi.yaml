@@ -493,13 +493,13 @@ paths:
             schema:
               type: object
               properties:
-                rdn:
+                ldapCn:
                   type: string
                 ldapPassword:
                   type: string
                   format: password
               required:
-                - rdn
+                - ldapCn
                 - ldapPassword
         description: ''
       responses:
@@ -751,8 +751,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./model/organization/OrganizationData.v1.yaml
+              type: object
+              properties:
+                ownerId:
+                  $ref: ./model/GenericId.v1.yaml
+                organizationData:
+                  $ref: ./model/organization/OrganizationData.v1.yaml
+              required:
+                - ownerId
+                - organizationData
         required: true
+        description: ''
       responses:
         '201':
           content:
