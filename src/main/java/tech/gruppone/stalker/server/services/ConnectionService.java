@@ -83,9 +83,8 @@ public class ConnectionService {
               final var bindRdn = ldapConfiguration.getBindRdn();
               final var bindPassword = ldapConfiguration.getBindPassword();
 
-              try {
-                // FIXME RESOURCE LEAK: THE CONNECTION ISN'T CLOSED IN SOME OF THE BRANCHES
-                LdapConnection connection = new LdapNetworkConnection(url, 389);
+              // the try with resources ensures the connection is properly closed.
+              try (final LdapConnection connection = new LdapNetworkConnection(url, 389)) {
 
                 connection.bind(bindRdn + "," + baseDn, bindPassword);
 
@@ -106,7 +105,7 @@ public class ConnectionService {
                 }
 
                 if (!(existsCn && existsPassword)) {
-                  connection.close();
+                  // connection.close();
 
                   throw new InvalidLdapCredentialsException();
                 }
