@@ -10,6 +10,7 @@ import tech.gruppone.stalker.server.model.db.ConnectionDao;
 public interface ConnectionRepository extends ReactiveCrudRepository<ConnectionDao, Long> {
 
   // the annotation is needed because the derived query does not work (??)
+  @Modifying
   @Query("DELETE FROM Connection WHERE userId = :userId AND organizationId = :organizationId")
   Mono<Integer> deleteByUserIdAndOrganizationId(
       @Param("userId") long userId, @Param("organizationId") long organizationId);
