@@ -133,7 +133,7 @@ class LocationInfoRepositoryTest {
 
     final var sut = locationInfoRepository.findLastStatusByUserIdAndPlaceId(userId, placeId);
 
-    StepVerifier.create(sut).verifyComplete();
+    StepVerifier.create(sut).expectNext(false).verifyComplete();
 
     verify(influxDB).query(query);
   }

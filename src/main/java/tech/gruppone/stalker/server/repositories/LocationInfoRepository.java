@@ -74,8 +74,8 @@ public class LocationInfoRepository {
 
     // honestly whoever chose to return null instead of an empty list deserves to rot in hell
     if (series == null) {
-      log.info("user {} had no status in place {}", userId, placeId);
-      return Mono.empty();
+      log.info("user {} had no status in place {}, so we assume he was outside", userId, placeId);
+      return Mono.just(false);
     }
 
     final var firstSeries = series.get(0);
