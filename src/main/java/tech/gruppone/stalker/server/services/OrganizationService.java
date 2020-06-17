@@ -118,27 +118,27 @@ public class OrganizationService {
 
     final OrganizationDao newOrganizationDao = fromDataDtoWithoutDates(organizationDataDto);
 
-    final var createdOrganization = organizationRepository.save(newOrganizationDao);
-    final var createdId = createdOrganization.map(OrganizationDao::getId);
+    return organizationRepository
+        .save(newOrganizationDao)
+        .doOnNext(
+            createdOrganization -> {
+              if (createdOrganization.getOrganizationType().equals("private")) {
+                final var ldapConfiguration = organizationDataDto.getLdapConfiguration();
 
-    return createdOrganization
-        .filter(organization -> organization.getOrganizationType().equals("private"))
-        .map(
-            organization -> {
-              final var ldapConfiguration = organizationDataDto.getLdapConfiguration();
+                if (ldapConfiguration == null) {
+                  log.error("cannot create private organization without LDAP configuration");
 
-              if (ldapConfiguration == null) {
-                log.error("cannot create private organization without LDAP configuration");
+                  throw new BadRequestException();
+                }
 
-                return Mono.error(BadRequestException::new);
+                final LdapConfigurationDao newLdapConfigurationDao =
+                    fromLdapConfigurationDtoWithoutId(
+                        createdOrganization.getId(), ldapConfiguration);
+
+                ldapConfigurationRepository.save(newLdapConfigurationDao).subscribe();
               }
-
-              final LdapConfigurationDao newLdapConfigurationDao =
-                  fromLdapConfigurationDtoWithoutId(organization.getId(), ldapConfiguration);
-
-              return ldapConfigurationRepository.save(newLdapConfigurationDao);
             })
-        .then(createdId);
+        .map(OrganizationDao::getId);
   }
 
   public Mono<Void> updateById(
